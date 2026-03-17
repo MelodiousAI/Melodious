@@ -8,6 +8,28 @@ __pycache__/
 data/raw/
 data/processed/
 outputs/
+logs/
 tests/staff_debug_sample/
 tests/staff_debug_w14/
 tests/staff_debug_large_batch/
+
+# Dataset (too large for git)
+dataset_ds2_dense/
+yolo_dataset/
+
+# Notebooks with outputs
+notebooks/
+
+# Local docs (not pushed)
+Ahmad_Instructions.md
+Ahmad_Documentation.md
+instructions.md
+documentation.md
+
+# Debug/scratch files
+debug_shapes.py
+test_dataset.py
+
+# OS
+Thumbs.db
+.DS_Store
