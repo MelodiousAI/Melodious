@@ -1,3 +1,7 @@
+
+## `PROJECT_CONTEXT.md`
+
+```md
 # Project Context
 
 ## Project
@@ -13,8 +17,8 @@ My tasks are:
 1. Parse the MUSCIMA++ dataset
 2. Extract music symbols as nodes
 3. Extract symbol relationships as edges
-4. Later help detect staff regions from score images
-5. Later build graph objects for GNN input
+4. Detect staff regions from score images
+5. Build graph objects for GNN input
 6. Later align YOLO detections to MUSCIMA++ ground truth
 
 ## Current focus
@@ -22,12 +26,14 @@ Ignore all timelines and deadlines.
 Do not focus on deployment, UI, or final polishing.
 Do not focus on advanced GNN theory right now.
 
+The parsing step has already been completed.
+
 Right now the only goal is:
-- start with `src/parse_muscima.py`
-- successfully read one MUSCIMA++ XML annotation file
-- inspect a few nodes
-- then convert one file into node/edge dictionaries
-- then later scale to all files
+- work in `src/graph_builder.py`
+- implement `detect_staff_lines(image_path)`
+- test it on one MUSCIMA++ image
+- return staff regions as `(y_min, y_max)` tuples
+- keep the implementation simple and beginner-friendly
 
 ## Dataset
 We are using MUSCIMA++ v2.0.
@@ -45,10 +51,18 @@ When suggesting code:
 - test one thing at a time
 
 ## Desired immediate milestone
-First milestone:
-- load one XML file from MUSCIMA++
-- print how many nodes it contains
-- print the first 3 nodes with useful fields such as ID, class name, bounding box, and outlinks
+Current milestone:
+- load one MUSCIMA++ image
+- detect horizontal staff lines
+- group nearby detections
+- return staff regions in a simple format
+- print the result for one test image
+
+## What not to focus on yet
+- do not start `build_graph()` yet
+- do not start GNN code yet
+- do not start alignment code yet
+- do not add extra features unrelated to staff detection
 
 ## Repo structure
 - `src/` for source code

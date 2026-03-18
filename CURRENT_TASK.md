@@ -1,37 +1,34 @@
 # Current Task
 
 ## File to work on
-`src/parse_muscima.py`
+`src/graph_builder.py`
 
 ## Goal
-Write a beginner-friendly parser for MUSCIMA++.
+Implement a beginner-friendly function called `detect_staff_lines(image_path)`.
 
-## Step 1
-Load one XML file using the MUSCIMA / mung tools.
+## Purpose
+This function should take the path to a sheet music image and return the detected staff regions in the image.
 
-## Step 2
-Print:
-- number of nodes in the file
-- first 3 nodes
-- for each sample node, print:
-  - node ID
-  - class name
-  - bounding box values
-  - outlinks
+A staff region should be represented as:
+- `(y_min, y_max)`
 
-## Step 3
-Convert one file into:
-- a list of node dictionaries
-- a list of edge dictionaries
+This will later help determine which music symbols belong to which staff.
 
-## Step 4
-Later expand the script to loop over all XML files and save:
-- `muscima_nodes.json`
-- `muscima_edges.json`
+## Scope for this task only
+For now, only focus on staff-line detection.
+Do not move on to graph construction, GNN code, or alignment yet.
 
-## Constraints
-- keep code simple
-- add comments
-- explain any library-specific function used
-- avoid building the full graph pipeline yet
-- do not jump to GNN code yet
+## What the function should do
+1. Load one sheet music image from a file path.
+2. Convert it to grayscale.
+3. Apply light blur if needed.
+4. Detect horizontal lines that likely belong to musical staves.
+5. Group nearby horizontal line detections together.
+6. Convert those grouped lines into staff regions.
+7. Return a list of staff regions as `(y_min, y_max)` tuples.
+
+## Expected output
+Example of expected return format:
+
+```python
+[(45, 95), (140, 190), (240, 290)]
