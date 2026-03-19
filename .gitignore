@@ -8,4 +8,6 @@ __pycache__/
 data/raw/
 data/processed/
 outputs/
-tests/staff_debug/
+tests/staff_debug_sample/
+tests/staff_debug_w14/
+tests/staff_debug_large_batch/
