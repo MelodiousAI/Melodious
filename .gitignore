@@ -4,8 +4,9 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .env
+.DS_Store
 
+# Dataset and generated outputs
 data/raw/
 data/processed/
 outputs/
-tests/staff_debug/
