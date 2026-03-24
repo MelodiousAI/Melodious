@@ -30,6 +30,11 @@ documentation.md
 debug_shapes.py
 test_dataset.py
 
+# Downloaded YOLO base weights
+*.pt
+yolo11n.pt
+yolov8s.pt
+
 # OS
 Thumbs.db
 .DS_Store
