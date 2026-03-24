@@ -48,4 +48,5 @@ This folder defines the exact detector payload expected by the graph/GNN integra
 ## Current Status
 
 - Schema is frozen.
-- Real detector outputs still need to be generated from a trained checkpoint.
+- 5 real detector outputs in `sample_detections/model_outputs_quick/` from YOLOv8s best.pt (mAP50=0.584).
+- 5 ground-truth reference outputs in `sample_detections/reference/`.

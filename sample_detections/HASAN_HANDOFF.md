@@ -9,18 +9,19 @@ This folder contains the detector-side handoff package for graph integration.
 - Export helper for real detector outputs: `melodious/generate_detections.py`
 - Export helper for reference payloads from labeled pages: `melodious/export_reference_detections.py`
 
-## Payload Files For The Meeting
+## Payload Files
 
-- Reference payloads will be stored in `sample_detections/reference/`
-- Quick model payloads are stored in `sample_detections/model_outputs_quick/`
+- Reference payloads: `sample_detections/reference/` — ground-truth annotations from labeled DeepScores test pages
+- Model outputs: `sample_detections/model_outputs_quick/` — real YOLOv8s inference outputs
 - Each JSON file corresponds to one real DeepScores page image
 - `image_path` points to the matching source page
 
 ### Included Right Now
 
-- 5 reference payloads from labeled test pages for immediate graph integration work
-- 2 actual detector payloads exported from `outputs/meeting_run/yolo_scratch_best.pth`
-- The quick detector payloads are structurally valid but currently contain zero detections because the checkpoint comes from a one-epoch 8-image sanity run
+- 5 reference payloads from labeled test pages (ground-truth, confidence=1.0)
+- 5 real detector payloads from YOLOv8s (mAP50=0.584) trained 30 epochs on DeepScores v2 Dense
+- Model: `outputs/yolov8_runs/train/weights/best.pt`
+- Pages: 5 different pages from `dataset_ds2_dense/images/lg-101766503886095953-*`
 
 ## Stable Contract
 
@@ -32,9 +33,8 @@ This folder contains the detector-side handoff package for graph integration.
 
 ## Important Distinction
 
-- `reference-ground-truth` payloads are exported from dataset annotations and are safe for graph integration testing before detector retraining
-- `custom-yolo` or `yolov8` payloads are the real detector outputs to use once a trusted checkpoint exists
-- The current quick model outputs are only for contract verification, not for detector quality claims
+- `reference-ground-truth` payloads are exported from dataset annotations (confidence=1.0), safe for graph integration testing
+- `yolov8` payloads are from the real trained detector (mAP50=0.584) and are the primary integration target
 
 ## Matching Image Path Rule
 
