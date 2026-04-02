@@ -13,7 +13,7 @@ from pathlib import Path
 import json
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 NODES_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "muscima_nodes.json"
 CLASS_MAPPING_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "class_mapping.json"
 

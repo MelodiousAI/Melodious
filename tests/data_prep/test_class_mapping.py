@@ -3,13 +3,12 @@ import unittest
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-from class_mapping import (
+from src.data_prep.class_mapping import (
     build_class_mapping_payload,
     get_class_id,
     get_class_name,

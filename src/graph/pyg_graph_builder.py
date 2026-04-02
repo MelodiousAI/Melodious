@@ -13,11 +13,11 @@ import cv2
 import torch
 from torch_geometric.data import Data
 
-from staff_detection import detect_staff_lines
-from muscima_graph_builder import get_image_path_from_document
+from src.data_prep.staff_detection import detect_staff_lines
+from src.graph.muscima_graph_builder import get_image_path_from_document
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 # Each node stores a compact but richer description than the original 7-feature version.
 # These names are kept in one place so tests and debugging code can refer to them directly.

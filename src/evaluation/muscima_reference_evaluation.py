@@ -4,9 +4,13 @@ from pathlib import Path
 import argparse
 import json
 
-from detection_alignment import MUSCIMA_SHARED_CLASS_NAME_TO_ID, align_document_detections, load_muscima_nodes
-from muscima_graph_builder import get_image_path_from_document
-from pyg_graph_builder import (
+from src.graph.detection_alignment import (
+    MUSCIMA_SHARED_CLASS_NAME_TO_ID,
+    align_document_detections,
+    load_muscima_nodes,
+)
+from src.graph.muscima_graph_builder import get_image_path_from_document
+from src.graph.pyg_graph_builder import (
     build_graph_from_muscima_detection_json,
     build_graph_statistics,
     extract_payload_image_shape,
@@ -15,7 +19,7 @@ from pyg_graph_builder import (
 )
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_REFERENCE_DIR = PROJECT_ROOT / "sample_detections" / "muscima_reference"
 DEFAULT_OUTPUT_JSON = PROJECT_ROOT / "outputs" / "muscima_reference_integration" / "summary.json"
 

@@ -11,10 +11,10 @@ import csv
 import json
 import re
 
-from staff_detection import detect_staff_lines
+from src.data_prep.staff_detection import detect_staff_lines
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 NODES_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "muscima_nodes.json"
 EDGES_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "muscima_edges.json"
 IMAGE_ROOT = PROJECT_ROOT / "data" / "raw" / "Images" / "PNG_GT_Gray"

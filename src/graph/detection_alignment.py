@@ -13,10 +13,10 @@ from pathlib import Path
 import argparse
 import json
 
-from pyg_graph_builder import adapt_detections, extract_detection_sequence
+from src.graph.pyg_graph_builder import adapt_detections, extract_detection_sequence
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 NODES_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "muscima_nodes.json"
 
 # MUSCIMA ground-truth class names mapped into the reduced 15-class detector schema.

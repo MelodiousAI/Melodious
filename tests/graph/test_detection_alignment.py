@@ -3,13 +3,12 @@ import unittest
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-from detection_alignment import align_detections_to_ground_truth, align_document_detections
+from src.graph.detection_alignment import align_detections_to_ground_truth, align_document_detections
 
 
 class TestDetectionAlignment(unittest.TestCase):

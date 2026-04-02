@@ -15,7 +15,7 @@ import numpy as np
 from scipy.signal import find_peaks
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 IMAGE_ROOT = PROJECT_ROOT / "data" / "raw" / "Images" / "PNG_GT_Gray"
 
 

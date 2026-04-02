@@ -8,14 +8,13 @@ import cv2
 import numpy as np
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SAMPLE_DETECTIONS_DIR = PROJECT_ROOT / "sample_detections"
 
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-from pyg_graph_builder import (
+from src.graph.pyg_graph_builder import (
     EDGE_FEATURE_NAMES,
     NODE_FEATURE_NAMES,
     adapt_detections,
@@ -161,7 +160,7 @@ class TestPyGGraphBuilder(unittest.TestCase):
             image = np.full((240, 180), 255, dtype=np.uint8)
             cv2.imwrite(str(image_path), image)
 
-            with patch("pyg_graph_builder.detect_staff_lines", return_value=[(40, 90)]):
+            with patch("src.graph.pyg_graph_builder.detect_staff_lines", return_value=[(40, 90)]):
                 graph_data = build_graph_from_image_and_detections(image_path, detections)
 
         self.assertEqual(graph_data.num_nodes, 2)

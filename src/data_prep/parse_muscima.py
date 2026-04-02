@@ -17,11 +17,11 @@ try:
 except ImportError:
     print("Could not import 'mung'.")
     print("Activate the project virtual environment, or install the requirements first.")
-    print(r"Example: .\.venv\Scripts\python.exe src\parse_muscima.py")
+    print(r"Example: .\.venv\Scripts\python.exe -m src.data_prep.parse_muscima")
     sys.exit(1)
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 # This is the folder that contains all MUSCIMA++ annotation XML files.
 ANNOTATIONS_DIR = (
