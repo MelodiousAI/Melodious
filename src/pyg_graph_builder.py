@@ -14,6 +14,7 @@ import torch
 from torch_geometric.data import Data
 
 from staff_detection import detect_staff_lines
+from muscima_graph_builder import get_image_path_from_document
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -94,7 +95,7 @@ def extract_detection_sequence(raw_detections):
 
 
 def get_first_present(mapping, keys, required=False, default=None):
-    """Return the first key present in a mapping from a list of aliases."""
+    """Return the first present key from a mapping across a small alias list."""
     for key in keys:
         if key in mapping:
             return mapping[key]
@@ -105,22 +106,96 @@ def get_first_present(mapping, keys, required=False, default=None):
     return default
 
 
-def adapt_detection_to_canonical(detection):
-    """Convert a likely detector-output dictionary to the canonical schema.
+def extract_payload_image_shape(raw_detections):
+    """Extract `(height, width)` from a detector payload when available."""
+    if not isinstance(raw_detections, dict):
+        return None
 
-    The goal here is not to support every possible format. It is to accept a
-    few realistic aliases so the model-output side can plug into the graph
-    builder without changing the builder itself.
-    """
+    image_size = raw_detections.get("image_size")
+
+    if not isinstance(image_size, dict):
+        return None
+
+    width = image_size.get("width")
+    height = image_size.get("height")
+
+    if width is None or height is None:
+        return None
+
+    return int(height), int(width)
+
+
+def extract_payload_image_path(raw_detections):
+    """Extract the payload image path when the detector JSON includes one."""
+    if isinstance(raw_detections, dict):
+        image_path = raw_detections.get("image_path")
+
+        if image_path:
+            return Path(image_path)
+
+    return None
+
+
+def load_detection_payload(json_path):
+    """Load one raw detector payload JSON file from disk."""
+    json_path = Path(json_path)
+
+    with json_path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def is_normalized_bbox_dict(bbox):
+    """Check whether a bbox dictionary is the normalized handoff format."""
+    values = [
+        float(bbox["x_center"]),
+        float(bbox["y_center"]),
+        float(bbox["width"]),
+        float(bbox["height"]),
+    ]
+    return all(0.0 <= value <= 1.0 for value in values)
+
+
+def convert_bbox_pixels_to_xywh(bbox_pixels):
+    """Convert top-left pixel corners to center-based xywh pixels."""
+    x1 = float(bbox_pixels["x1"])
+    y1 = float(bbox_pixels["y1"])
+    x2 = float(bbox_pixels["x2"])
+    y2 = float(bbox_pixels["y2"])
+    width = x2 - x1
+    height = y2 - y1
+    x_center = x1 + (width / 2.0)
+    y_center = y1 + (height / 2.0)
+    return [x_center, y_center, width, height]
+
+
+def convert_bbox_object_to_xywh_pixels(bbox, image_shape=None):
+    """Convert a bbox object to canonical pixel-space center-based xywh."""
+    x_center = float(bbox["x_center"])
+    y_center = float(bbox["y_center"])
+    width = float(bbox["width"])
+    height = float(bbox["height"])
+
+    if is_normalized_bbox_dict(bbox):
+        if image_shape is None:
+            raise ValueError(
+                "Normalized bbox objects require image dimensions from image_shape or payload image_size."
+            )
+
+        image_height, image_width = image_shape
+        return [
+            x_center * image_width,
+            y_center * image_height,
+            width * image_width,
+            height * image_height,
+        ]
+
+    return [x_center, y_center, width, height]
+
+
+def adapt_detection_to_canonical(detection, image_shape=None):
+    """Convert likely detector-output dictionaries to the canonical internal schema."""
     if not isinstance(detection, dict):
         raise TypeError("Each detection must be a dictionary.")
-
-    if all(key in detection for key in ["class_id", "bbox", "conf"]):
-        return {
-            "class_id": int(detection["class_id"]),
-            "bbox": list(detection["bbox"]),
-            "conf": float(detection["conf"]),
-        }
 
     class_id = get_first_present(
         detection,
@@ -135,34 +210,45 @@ def adapt_detection_to_canonical(detection):
 
     bbox = get_first_present(detection, ["bbox", "xywh"], required=False)
 
-    if bbox is None:
-        x = get_first_present(detection, ["x", "x_center", "cx"], required=True)
-        y = get_first_present(detection, ["y", "y_center", "cy"], required=True)
+    if isinstance(bbox, (list, tuple)):
+        bbox_xywh = [float(value) for value in bbox]
+    elif isinstance(bbox, dict):
+        if all(key in bbox for key in ["x_center", "y_center", "width", "height"]):
+            bbox_xywh = convert_bbox_object_to_xywh_pixels(bbox, image_shape=image_shape)
+        else:
+            raise ValueError("bbox dictionaries must contain x_center, y_center, width, and height.")
+    elif bbox is None and "bbox_pixels" in detection:
+        bbox_xywh = convert_bbox_pixels_to_xywh(detection["bbox_pixels"])
+    elif bbox is None:
+        x_center = get_first_present(detection, ["x", "x_center", "cx"], required=True)
+        y_center = get_first_present(detection, ["y", "y_center", "cy"], required=True)
         width = get_first_present(detection, ["w", "width"], required=True)
         height = get_first_present(detection, ["h", "height"], required=True)
-        bbox = [x, y, width, height]
+        bbox_xywh = [float(x_center), float(y_center), float(width), float(height)]
+    else:
+        raise ValueError("bbox must be a list, tuple, or supported bbox dictionary.")
 
     return {
         "class_id": int(class_id),
-        "bbox": [float(value) for value in bbox],
+        "bbox": bbox_xywh,
         "conf": float(confidence),
     }
 
 
-def adapt_detections(raw_detections):
+def adapt_detections(raw_detections, image_shape=None):
     """Normalize raw detector output to the canonical list-of-dicts schema."""
+    if image_shape is None:
+        image_shape = extract_payload_image_shape(raw_detections)
+
     detections = extract_detection_sequence(raw_detections)
-    return [adapt_detection_to_canonical(detection) for detection in detections]
+    return [adapt_detection_to_canonical(detection, image_shape=image_shape) for detection in detections]
 
 
 def load_detections_from_json(json_path):
-    """Load saved detections from a JSON file and normalize them to canonical form."""
-    json_path = Path(json_path)
-
-    with json_path.open("r", encoding="utf-8") as handle:
-        raw_detections = json.load(handle)
-
-    return adapt_detections(raw_detections)
+    """Load saved detections from JSON and normalize them to canonical form."""
+    payload = load_detection_payload(json_path)
+    payload_image_shape = extract_payload_image_shape(payload)
+    return adapt_detections(payload, image_shape=payload_image_shape)
 
 
 def load_image_shape(image_path):
@@ -672,26 +758,117 @@ def build_graph_statistics(graph_data):
     }
 
 
-def build_graph_from_image_and_detections(image_path, raw_detections):
-    """Build a PyG graph directly from one image path and raw detector output.
+def scale_staff_regions(staff_regions, source_height, target_height):
+    """Scale staff regions from one image height into another coordinate space."""
+    if source_height <= 0 or target_height <= 0:
+        raise ValueError("source_height and target_height must be positive.")
 
-    This wrapper is the main integration point for the full pipeline:
-    - adapt real detector output to the canonical schema
-    - load the image shape from disk
-    - detect staff regions from the page image
-    - delegate graph construction to `build_graph(...)`
+    if source_height == target_height:
+        return [(int(y_min), int(y_max)) for y_min, y_max in staff_regions]
+
+    scale = target_height / source_height
+    scaled_regions = []
+
+    for y_min, y_max in staff_regions:
+        scaled_regions.append(
+            (
+                int(round(y_min * scale)),
+                int(round(y_max * scale)),
+            )
+        )
+
+    return scaled_regions
+
+
+def resolve_local_muscima_image_path(payload):
+    """Resolve a MUSCIMA payload's stem to the local grayscale page image path."""
+    payload_image_path = extract_payload_image_path(payload)
+
+    if payload_image_path is None:
+        raise ValueError("MUSCIMA payload must include image_path.")
+
+    document_name = payload_image_path.stem
+
+    if not document_name.startswith("CVC-MUSCIMA_"):
+        raise ValueError(f"Payload does not look like a MUSCIMA page: {payload_image_path}")
+
+    image_path = get_image_path_from_document(document_name)
+
+    if not image_path.exists():
+        raise FileNotFoundError(f"Could not resolve local MUSCIMA image: {image_path}")
+
+    return image_path
+
+
+def build_graph_from_detection_payload(payload, staff_regions=None):
+    """Build a graph directly from one full detector payload.
+
+    This path is useful for imported handoff JSON files where image dimensions are
+    present in the payload, but the referenced image may not exist locally.
     """
+    image_shape = extract_payload_image_shape(payload)
+
+    if image_shape is None:
+        raise ValueError("Detection payload must include image_size with width and height.")
+
+    detections = adapt_detections(payload, image_shape=image_shape)
+    return build_graph(detections, image_shape, staff_regions=staff_regions)
+
+
+def build_graph_from_muscima_detection_payload(payload):
+    """Build a graph from a MUSCIMA reference payload plus the local page image.
+
+    MUSCIMA reference payloads use annotation-space image dimensions, while the
+    local grayscale PNGs can differ slightly in pixel size. This wrapper runs
+    staff detection on the local image and then scales the detected staff regions
+    into the payload coordinate space before building the graph.
+    """
+    payload_shape = extract_payload_image_shape(payload)
+
+    if payload_shape is None:
+        raise ValueError("MUSCIMA payload must include image_size with width and height.")
+
+    local_image_path = resolve_local_muscima_image_path(payload)
+    local_image_shape = load_image_shape(local_image_path)
+    local_staff_regions = detect_staff_lines(local_image_path)
+    scaled_staff_regions = scale_staff_regions(
+        local_staff_regions,
+        source_height=local_image_shape[0],
+        target_height=payload_shape[0],
+    )
+
+    detections = adapt_detections(payload, image_shape=payload_shape)
+    return build_graph(detections, payload_shape, staff_regions=scaled_staff_regions)
+
+
+def build_graph_from_image_and_detections(image_path, raw_detections):
+    """Build a PyG graph directly from one image path and raw detector output."""
     image_path = Path(image_path)
-    detections = adapt_detections(raw_detections)
     image_shape = load_image_shape(image_path)
+    detections = adapt_detections(raw_detections, image_shape=image_shape)
     staff_regions = detect_staff_lines(image_path)
     return build_graph(detections, image_shape, staff_regions=staff_regions)
 
 
-def build_graph_from_detection_json(image_path, detections_json_path):
-    """Build a PyG graph from an image path and a JSON file of detections."""
-    detections = load_detections_from_json(detections_json_path)
-    return build_graph_from_image_and_detections(image_path, detections)
+def build_graph_from_detection_json(detections_json_path, image_path=None, detect_staff=False):
+    """Build a graph from one saved detector JSON payload."""
+    payload = load_detection_payload(detections_json_path)
+
+    if detect_staff:
+        resolved_image_path = Path(image_path) if image_path is not None else extract_payload_image_path(payload)
+
+        if resolved_image_path is None:
+            raise ValueError("Staff detection requires an explicit image path or a payload image_path.")
+
+        return build_graph_from_image_and_detections(resolved_image_path, payload)
+
+    return build_graph_from_detection_payload(payload)
+
+
+def build_graph_from_muscima_detection_json(detections_json_path):
+    """Build a graph from one MUSCIMA reference payload JSON file."""
+    payload = load_detection_payload(detections_json_path)
+    return build_graph_from_muscima_detection_payload(payload)
 
 
 def build_graph(detections, image_shape, staff_regions=None):

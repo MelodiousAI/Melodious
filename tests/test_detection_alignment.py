@@ -115,6 +115,39 @@ class TestDetectionAlignment(unittest.TestCase):
         self.assertEqual(result["summary"]["match_count"], 1)
         self.assertEqual(result["summary"]["false_negative_count"], 1)
 
+    def test_partner_payload_bbox_object_is_denormalized_before_alignment(self):
+        ground_truth_nodes = [
+            {
+                "document": "doc-1",
+                "id": 1,
+                "node_key": "doc-1::1",
+                "class_name": "clefG",
+                "bounding_box": {"top": 40, "left": 30, "bottom": 60, "right": 50},
+            }
+        ]
+        payload = {
+            "image_size": {"width": 100, "height": 100},
+            "detections": [
+                {
+                    "class_id": 3,
+                    "class_name": "clefG",
+                    "confidence": 0.98,
+                    "bbox": {
+                        "x_center": 0.4,
+                        "y_center": 0.5,
+                        "width": 0.2,
+                        "height": 0.2,
+                    },
+                }
+            ],
+        }
+
+        result = align_detections_to_ground_truth(payload, ground_truth_nodes, iou_threshold=0.5)
+
+        self.assertEqual(result["summary"]["match_count"], 1)
+        self.assertEqual(result["summary"]["false_positive_count"], 0)
+        self.assertEqual(result["summary"]["false_negative_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

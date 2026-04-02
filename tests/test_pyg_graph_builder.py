@@ -10,6 +10,7 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_DIR = PROJECT_ROOT / "src"
+SAMPLE_DETECTIONS_DIR = PROJECT_ROOT / "sample_detections"
 
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
@@ -20,7 +21,9 @@ from pyg_graph_builder import (
     adapt_detections,
     build_fake_test_detections,
     build_graph,
+    build_graph_from_detection_payload,
     build_graph_from_image_and_detections,
+    load_detection_payload,
 )
 
 
@@ -111,6 +114,41 @@ class TestPyGGraphBuilder(unittest.TestCase):
                 {"class_id": 2, "bbox": [80.0, 200.0, 30.0, 26.0], "conf": 0.93},
             ],
         )
+
+    def test_partner_payload_adapter_uses_image_size_to_denormalize_bbox(self):
+        payload = {
+            "image_size": {"width": 200, "height": 100},
+            "detections": [
+                {
+                    "class_id": 3,
+                    "class_name": "clefG",
+                    "confidence": 0.9,
+                    "bbox": {
+                        "x_center": 0.25,
+                        "y_center": 0.5,
+                        "width": 0.1,
+                        "height": 0.2,
+                    },
+                }
+            ],
+        }
+
+        adapted = adapt_detections(payload)
+
+        self.assertEqual(
+            adapted,
+            [{"class_id": 3, "bbox": [50.0, 50.0, 20.0, 20.0], "conf": 0.9}],
+        )
+
+    def test_build_graph_from_detection_payload_uses_payload_image_size(self):
+        payload_path = next((SAMPLE_DETECTIONS_DIR / "reference").glob("*.json"))
+        payload = load_detection_payload(payload_path)
+
+        graph_data = build_graph_from_detection_payload(payload)
+
+        self.assertGreater(graph_data.num_nodes, 0)
+        self.assertEqual(graph_data.x.shape[1], len(NODE_FEATURE_NAMES))
+        self.assertEqual(graph_data.edge_attr.shape[1], len(EDGE_FEATURE_NAMES))
 
     def test_build_graph_from_image_and_detections_uses_image_and_staff_wrapper(self):
         detections = [

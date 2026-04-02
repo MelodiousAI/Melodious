@@ -13,11 +13,32 @@ from pathlib import Path
 import argparse
 import json
 
-from pyg_graph_builder import extract_detection_sequence, adapt_detection_to_canonical
+from pyg_graph_builder import adapt_detections, extract_detection_sequence
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 NODES_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "muscima_nodes.json"
+
+# MUSCIMA ground-truth class names mapped into the reduced 15-class detector schema.
+# This is needed when reference payloads or detector outputs use the teammate's
+# compact taxonomy instead of the full MUSCIMA class-name set.
+MUSCIMA_SHARED_CLASS_NAME_TO_ID = {
+    "noteheadFull": 0,
+    "noteheadHalf": 1,
+    "noteheadWhole": 2,
+    "gClef": 3,
+    "fClef": 4,
+    "cClef": 5,
+    "rest8th": 6,
+    "restQuarter": 7,
+    "restHalf": 8,
+    "restWhole": 9,
+    "accidentalSharp": 10,
+    "accidentalFlat": 11,
+    "accidentalNatural": 12,
+    "beam": 13,
+    "stem": 14,
+}
 
 
 def load_muscima_nodes(nodes_json_path=NODES_JSON_PATH):
@@ -32,20 +53,15 @@ def get_document_nodes(all_nodes, document_name):
 
 
 def prepare_alignment_detections(raw_detections):
-    """Normalize raw detections while preserving optional class-name metadata.
-
-    The PyG builder already knows how to adapt several realistic detector output
-    aliases to the canonical detection schema. Alignment reuses that logic but
-    also keeps an optional `class_name` field when the caller provides it.
-    """
+    """Normalize raw detections while preserving optional class-name metadata."""
     raw_detection_list = extract_detection_sequence(raw_detections)
+    canonical_detections = adapt_detections(raw_detections)
     prepared_detections = []
 
-    for raw_detection in raw_detection_list:
-        canonical_detection = adapt_detection_to_canonical(raw_detection)
+    for raw_detection, canonical_detection in zip(raw_detection_list, canonical_detections):
         prepared_detection = dict(canonical_detection)
 
-        if "class_name" in raw_detection:
+        if isinstance(raw_detection, dict) and "class_name" in raw_detection:
             prepared_detection["class_name"] = raw_detection["class_name"]
 
         prepared_detections.append(prepared_detection)
@@ -102,15 +118,10 @@ def compute_iou(box_a, box_b):
 def classes_are_compatible(detection, ground_truth_node, class_name_to_id=None):
     """Check whether a detection and ground-truth node should be allowed to match.
 
-    Class-aware matching is enabled only when enough metadata exists:
-    - if the detection includes `class_name`, compare names directly
-    - else if `class_name_to_id` is provided, compare the detection `class_id`
-      to the mapped ID for the ground-truth class name
-    - otherwise, fall back to geometry-only matching
+    If a reduced class mapping is provided, it takes priority over direct class-name
+    equality. This is important when detector outputs use a compact taxonomy while
+    MUSCIMA ground truth keeps finer-grained class names.
     """
-    if "class_name" in detection:
-        return detection["class_name"] == ground_truth_node["class_name"]
-
     if class_name_to_id is not None:
         expected_class_id = class_name_to_id.get(ground_truth_node["class_name"])
 
@@ -118,6 +129,9 @@ def classes_are_compatible(detection, ground_truth_node, class_name_to_id=None):
             return False
 
         return int(detection["class_id"]) == int(expected_class_id)
+
+    if "class_name" in detection:
+        return detection["class_name"] == ground_truth_node["class_name"]
 
     return True
 
