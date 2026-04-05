@@ -23,8 +23,6 @@ notebooks/
 # Local docs (not pushed)
 Ahmad_Instructions.md
 Ahmad_Documentation.md
-instructions.md
-documentation.md
 
 # Debug/scratch files
 debug_shapes.py
