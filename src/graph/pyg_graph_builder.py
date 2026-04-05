@@ -313,7 +313,7 @@ def validate_detections(detections):
             raise ValueError(f"Detection {index} has invalid bbox size: {bbox}")
 
 
-def normalize_detection(detection, image_shape):
+def normalize_detection(detection, image_shape, input_index=None):
     """Convert one raw detection into a consistent internal representation.
 
     The builder keeps both pixel-space values and normalized values because:
@@ -329,7 +329,7 @@ def normalize_detection(detection, image_shape):
     y_min = float(y) - (float(height) / 2)
     y_max = float(y) + (float(height) / 2)
 
-    return {
+    normalized_detection = {
         "class_id": int(detection["class_id"]),
         "conf": float(detection["conf"]),
         "x": float(x),
@@ -348,12 +348,44 @@ def normalize_detection(detection, image_shape):
         "aspect_ratio": float(width) / float(height),
     }
 
+    if input_index is not None:
+        normalized_detection["input_index"] = int(input_index)
+
+    return normalized_detection
+
 
 def prepare_detections(detections, image_shape):
-    """Validate and normalize the raw detections before graph construction."""
+    """Validate and normalize the raw detections before graph construction.
+
+    The returned list preserves input order exactly. That order is the node
+    index space exposed through `/assemble` when graph data is serialized.
+    """
     validate_image_shape(image_shape)
     validate_detections(detections)
-    return [normalize_detection(detection, image_shape) for detection in detections]
+    return [
+        normalize_detection(detection, image_shape, input_index=index)
+        for index, detection in enumerate(detections)
+    ]
+
+
+def validate_detection_index_order(detections):
+    """Ensure processed detections still occupy their original input positions.
+
+    Future graph changes may add helper passes that sort or regroup detections.
+    This check makes the `/assemble` contract explicit: node row `i` must still
+    correspond to input detection `i`, and edge indices must refer to that same
+    row-index space.
+    """
+    for expected_index, detection in enumerate(detections):
+        input_index = detection.get("input_index")
+
+        if input_index is None:
+            continue
+
+        if int(input_index) != expected_index:
+            raise ValueError(
+                "Processed detections were reordered. Serialized graph rows must preserve input detection order."
+            )
 
 
 def get_detection_bounds(detection):
@@ -892,6 +924,7 @@ def build_graph(detections, image_shape, staff_regions=None):
 
     processed_detections = prepare_detections(detections, image_shape)
     processed_detections = attach_staff_info(processed_detections, staff_regions, image_shape)
+    validate_detection_index_order(processed_detections)
 
     node_features = build_node_features(processed_detections)
     knn_edges = build_knn_edges(processed_detections, image_shape)

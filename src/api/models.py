@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 
 PayloadKind = Literal["auto", "generic", "muscima_reference"]
+ExportFormat = Literal["midi", "musicxml"]
 
 
 class HealthResponse(BaseModel):
@@ -50,13 +51,26 @@ class AlignmentSummaryResponse(BaseModel):
 
 
 class SerializedGraphResponse(BaseModel):
-    """Optional full graph payload for callers that need tensor contents as JSON."""
+    """Optional full graph payload for callers that need tensor contents as JSON.
+
+    `node_features[i]` matches input detection `i` after normalization, and
+    every pair in `edge_index` refers to that same serialized node row space.
+    """
 
     node_feature_names: list[str]
     edge_feature_names: list[str]
     node_features: list[list[float]]
     edge_index: list[list[int]]
     edge_attr: list[list[float]]
+
+
+class AssemblySummaryResponse(BaseModel):
+    """Compact heuristic-assembly counts used by the export route."""
+
+    note_count: int
+    clef_count: int
+    rest_count: int
+    unmatched_count: int
 
 
 class AssembleResponse(BaseModel):
@@ -73,14 +87,25 @@ class AssembleResponse(BaseModel):
 
 
 class MidiRequest(BaseModel):
-    """Placeholder request contract for the future MIDI route."""
+    """Request contract for Week 3 score export."""
 
-    payload: dict[str, Any] | None = None
+    payload: dict[str, Any]
+    output_format: ExportFormat = "midi"
+    title: str | None = None
+    document_name: str | None = None
 
 
 class MidiResponse(BaseModel):
-    """Placeholder response for the Week 2 MIDI stub."""
+    """Inline export response for the `/midi` route."""
 
     status: str
     stage: str
-    message: str
+    output_format: ExportFormat
+    content_type: str
+    content_encoding: Literal["base64", "utf-8"]
+    document_name: str | None = None
+    title: str
+    detection_count: int
+    assembly_summary: AssemblySummaryResponse
+    content: str
+    warnings: list[str] = Field(default_factory=list)

@@ -147,24 +147,26 @@ Exports MUSCIMA XML annotations into the shared detector payload contract so bac
 | `tests/graph/test_muscima_graph_builder.py` | [x] Present |
 | `tests/graph/test_pyg_graph_builder.py` | [x] Present |
 | `tests/api/test_api_app.py` | [x] Present |
-| Last reported full suite checkpoint | Ran 24 tests, OK |
+| `tests/export/test_heuristic_assembler.py` | [x] Present |
+| `tests/export/test_musicxml_export.py` | [x] Present |
+| Last reported full suite checkpoint | Ran 25 tests, OK |
 | Repo cleanup completed | [x] |
 
 The repo has been reorganized into a cleaner structure with `src/api/`, `src/graph/`, `src/data_prep/`, `src/evaluation/`, grouped tests under `tests/`, status docs under `docs/status/`, and generated artifacts separated into `data/processed/`, `sample_detections/`, and `outputs/`.
 
 ---
 
-## 7. Week 2 Backend Skeleton
+## 7. Backend Service Layer and Export Routes
 
-**Implementations:** `src/api/models.py`, `src/api/service.py`, `src/api/app.py`, `docker/Dockerfile.api`, `docker-compose.yml`
+**Implementations:** `src/api/models.py`, `src/api/service.py`, `src/api/app.py`, `src/export/heuristic_assembler.py`, `src/export/musicxml_export.py`, `docker/Dockerfile.api`, `docker-compose.yml`
 
-The Week 2 backend wraps existing graph and alignment logic instead of duplicating it in route handlers.
+The backend now wraps existing graph, alignment, and export logic instead of duplicating it in route handlers.
 
 | Endpoint | Status | Notes |
 |-|-|-|
-| `GET /health` | [x] Implemented | Returns service status for the backend skeleton |
+| `GET /health` | [x] Implemented | Returns current backend stage |
 | `POST /assemble` | [x] Implemented | Builds graph outputs from one detector payload |
-| `POST /midi` | [x] Placeholder | Reserved for Week 3 export wiring |
+| `POST /midi` | [x] Implemented | Returns inline MusicXML or base64 MIDI from one detector payload |
 
 ### 7.1 Current `/assemble` behavior
 
@@ -174,6 +176,8 @@ The Week 2 backend wraps existing graph and alignment logic instead of duplicati
 | MUSCIMA reference payload auto-detection | [x] |
 | Optional alignment summary | [x] |
 | Optional serialized graph arrays in JSON | [x] |
+| Serialized node row order matches input detection order | [x] |
+| `edge_index` refers to the same serialized node row indices | [x] |
 | Request validation through FastAPI/Pydantic | [x] |
 
 ### 7.2 Container setup
@@ -183,6 +187,28 @@ The Week 2 backend wraps existing graph and alignment logic instead of duplicati
 | `docker/Dockerfile.api` | Builds the backend service image |
 | `docker-compose.yml` | Starts the API plus Redis for local development |
 | `.dockerignore` | Keeps build context small and avoids copying local clutter |
+
+### 7.3 Week 3 export integration
+
+The Week 3 path reuses only the portable parts of Ahmad's older branch instead of importing the old package layout directly.
+
+| Export asset | Status | Notes |
+|-|-|-|
+| Heuristic notation assembler | [x] Implemented | Adapted from Ahmad's baseline into `src/export/heuristic_assembler.py` |
+| MusicXML renderer | [x] Implemented | Adapted into `src/export/musicxml_export.py` using `music21` |
+| MIDI renderer | [x] Implemented | Returns base64 MIDI through `/midi` |
+| `/midi` API response contract | [x] Implemented | Includes output metadata, content, and heuristic assembly counts |
+| End-to-end API smoke check | [x] Verified | `POST /midi` returned `200` for both `musicxml` and `midi` formats through `TestClient` |
+
+### 7.4 Reuse decision
+
+The current repo now follows a selective adaptation strategy for Ahmad's Week 3 work:
+
+| Candidate from Ahmad's branch | Decision | Rationale |
+|-|-|-|
+| `melodious/baselines/heuristic_assembler.py` | Reused and adapted | Small, portable, already matches the detector payload contract |
+| `melodious/musicxml_export.py` | Reused and adapted | Export logic was portable after moving it behind the current `src/` layout |
+| `melodious/cli.py` and `melodious/pipeline.py` | Not integrated yet | Depend on Ahmad's old package layout and detector runtime responsibilities |
 
 ---
 
@@ -195,7 +221,9 @@ The Week 2 backend wraps existing graph and alignment logic instead of duplicati
 | Use greedy IoU alignment for initial matching | More complex assignment methods | Simple, testable, and adequate for current integration work |
 | Validate with shared MUSCIMA reference payloads | Wait for final model outputs first | Lets backend and graph code progress before model handoffs arrive |
 | Wrap existing graph code behind a small FastAPI service layer | Reimplement graph logic inside route handlers | Keeps API work thin and reduces duplication |
-| Keep `/midi` as a Week 2 placeholder | Wire MusicXML/MIDI export immediately | Matches the project timeline and preserves a stable route name early |
+| Keep `/midi` as a stable route name from Week 2 into Week 3 | Rename the export route during integration | Preserves the agreed backend entrypoint while adding real export behavior |
+| Selectively adapt Ahmad's Week 3 modules | Cherry-pick the old `melodious/` package or reimplement from scratch | Reuses proven logic without undoing the cleaned repo layout |
+| Return inline MusicXML/base64 MIDI content from the API | Write export files directly on the server | Keeps the backend stateless and easier to test on shared sample payloads |
 
 ---
 
@@ -204,10 +232,11 @@ The Week 2 backend wraps existing graph and alignment logic instead of duplicati
 | Item | Impact | Planned next step |
 |-|-|-|
 | Ahmad may still need a more specific graph/edge export | Could block GNN training on his side | Confirm exact artifact format and export it |
-| `/midi` is still a stub | Export pipeline is not backend-wired yet | Connect it to the Week 3 MusicXML/MIDI path |
-| Real detector payload handoff not wired into this repo yet | Full end-to-end integration still pending | Test with current sample payloads first, then wire Ahmad's outputs |
-| Docker stack has not been validated yet in this repo | Compose file could still need local adjustment | Run `docker compose up --build` and verify the routes |
+| Export remains heuristic-only | MusicXML/MIDI quality may be limited on complex notation | Decide whether to feed future GNN relationships into the export stage |
+| Real detector payload handoff not wired into this repo yet | Full end-to-end export quality is still pending | Test `/assemble` and `/midi` on Ahmad's real outputs once shared |
+| API returns inline content only | Large files or browser download flows may need a different contract later | Decide whether to keep inline responses or add file-oriented endpoints |
+| Docker build could not be run on April 5, 2026 | Container image was not runtime-verified after the Week 3 changes | Re-run `docker build` or `docker compose up --build` when Docker Desktop is available |
 
 ---
 
-*Last updated: April 2, 2026*
+*Last updated: April 5, 2026*

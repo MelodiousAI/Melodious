@@ -4,9 +4,9 @@
 
 ---
 
-## Current Phase: Week 2 (v0.2) - Backend and Integration Layer
+## Current Phase: Week 3 (v0.3) - Export Integration Layer
 
-**Status:** Week 1 data and graph deliverables are complete. The repo is ready to move from standalone graph utilities into the backend and handoff stage.
+**Status:** Week 2 backend work is complete. The repo now includes the first Week 3 export path on Hasan's side and can return inline MusicXML or MIDI from the shared detector payload contract.
 
 ---
 
@@ -30,13 +30,20 @@
 * [x] Saved integration summary under `outputs/muscima_reference_integration/summary.json`
 * [x] Shared MUSCIMA samples under `sample_detections/muscima_reference/` and `sample_detections/muscima_xml/`
 
-### Still to build for v0.2
+### Week 3 export checkpoint [x]
 
-* [x] FastAPI backend skeleton
-* [x] Docker Compose setup
-* [x] API request/response contracts for `/health`, `/assemble`, and `/midi`
-* [x] Service-layer smoke tests using sample payloads
+* [x] Heuristic notation assembler adapted into `src/export/heuristic_assembler.py`
+* [x] MusicXML export adapted into `src/export/musicxml_export.py`
+* [x] `/midi` route wired to real export behavior with `musicxml` and `midi` formats
+* [x] Export route returns inline content plus heuristic assembly summary metadata
+* [x] End-to-end `/midi` smoke check passed on shared sample payloads
+
+### Still to build after this checkpoint
+
 * [ ] Package MUSCIMA training artifacts if Ahmad still needs a more specific edge export
+* [ ] Validate export quality on Ahmad's real detector outputs
+* [ ] Decide whether export should stay heuristic-only or consume future graph/GNN relationships
+* [ ] Decide whether inline export content is sufficient or whether file-oriented download endpoints are needed
 
 ---
 
@@ -50,32 +57,33 @@
 | Average integration F1 | 0.691588 | 5-page MUSCIMA reference run |
 | Average integration recall | 0.531545 | 5-page MUSCIMA reference run |
 | Average graph edges per page | 15024 | 5-page MUSCIMA reference run |
-| Last reported full test suite | Ran 20 tests, OK | Repo checkpoint before Week 2 work |
+| Last reported full test suite | Ran 25 tests, OK | Week 3 export checkpoint |
 
 ---
 
 ## Next Steps
 
-### Immediate (Week 2 priorities)
+### Immediate (post-checkpoint priorities)
 
-1. **Verify the backend on real local runs** - start the FastAPI app and confirm the routes behave correctly outside unit tests
+1. **Run the export path on Ahmad's real detector outputs** - confirm the current heuristic export logic still behaves reasonably outside MUSCIMA reference samples
 2. **Package MUSCIMA training artifacts if needed** - give Ahmad the exact graph/edge export his GNN trainer expects
-3. **Decide the `/assemble` response shape for Ahmad's side** - keep the current contract stable before further integration
-4. **Prepare the Week 3 export wiring** - keep `/midi` as the reserved integration point for MusicXML/MIDI work
+3. **Decide whether export should use future graph/GNN relationships** - avoid hard-coding a heuristic-only path if a better assembly signal is coming
+4. **Decide whether the API should keep inline export content** - confirm whether the current JSON response is sufficient for the demo and handoff flow
 
 ### Blocked or dependent items
 
 * GNN training integration depends on Ahmad confirming the exact artifact format his trainer needs
-* Full detector-to-backend testing depends on Ahmad's real model output handoff
-* Final GNN inference wiring depends on Ahmad's trained checkpoint handoff
+* Full detector-to-backend export testing depends on Ahmad's real model output handoff
+* Container runtime verification is blocked locally until Docker Desktop is available again
 
 ### Coordination notes
 
 * The detector payload contract is now the main interface between Ahmad's side and Hasan's side
 * The backend should be built to run first on shared sample payloads, not on a final trained model
-* The current repo should remain the source of truth for MUSCIMA parsing, graph construction, and integration logic
-* The current Week 2 API exposes `/health`, `/assemble`, and a placeholder `/midi` route
+* The current repo should remain the source of truth for MUSCIMA parsing, graph construction, backend integration, and Hasan-side export wiring
+* Ahmad's older `melodious/` branch should be treated as a source of portable logic, not as a package layout to restore wholesale
+* The API now exposes `/health`, `/assemble`, and a real `/midi` export route
 
 ---
 
-*Last updated: April 2, 2026*
+*Last updated: April 5, 2026*

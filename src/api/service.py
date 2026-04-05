@@ -17,12 +17,16 @@ from src.graph.pyg_graph_builder import (
     extract_detection_sequence,
     extract_payload_image_path,
 )
+from src.export.heuristic_assembler import assemble_detections, summarize_assembled_output
+from src.export.musicxml_export import export_payload_content
 
 from src.api.models import (
+    AssemblySummaryResponse,
     AlignmentSummaryResponse,
     AssembleRequest,
     AssembleResponse,
     GraphStatisticsResponse,
+    MidiRequest,
     MidiResponse,
     SerializedGraphResponse,
 )
@@ -89,12 +93,38 @@ def serialize_graph(graph_data):
     )
 
 
-def build_midi_placeholder_response():
-    """Return the Week 2 MIDI placeholder response."""
+def export_from_request(request: MidiRequest):
+    """Build inline MusicXML or MIDI content from one detector payload."""
+    detection_sequence = extract_detection_sequence(request.payload)
+    document_name = request.document_name or infer_document_name(request.payload)
+    title = request.title or document_name or "Melodious Export"
+    warnings = []
+
+    if document_name is None and request.title is None:
+        warnings.append(
+            "document_name could not be inferred from payload.image_path, so a generic export title was used."
+        )
+
+    assembled_output = assemble_detections(detection_sequence)
+    assembly_summary = AssemblySummaryResponse(**summarize_assembled_output(assembled_output))
+    content, content_type, content_encoding = export_payload_content(
+        request.payload,
+        output_format=request.output_format,
+        title=title,
+    )
+
     return MidiResponse(
-        status="not_implemented",
-        stage="v0.2",
-        message="The /midi endpoint is reserved for Week 3 wiring to the MusicXML/MIDI export pipeline.",
+        status="ok",
+        stage="v0.3",
+        output_format=request.output_format,
+        content_type=content_type,
+        content_encoding=content_encoding,
+        document_name=document_name,
+        title=title,
+        detection_count=len(detection_sequence),
+        assembly_summary=assembly_summary,
+        content=content,
+        warnings=warnings,
     )
 
 
