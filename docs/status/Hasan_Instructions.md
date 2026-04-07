@@ -1,16 +1,16 @@
 # Hasan's Current Phase & Next Steps - Melodious OMR
 
-> Drafted from the current repo, Ahmad's integration replies, and the validated Week 3 checkpoint on April 7, 2026.
+> Drafted from the current repo state and the Week 4 implementation checkpoint completed on April 7, 2026.
 
 ---
 
-## Current Phase: Week 3 (v0.3) - Export and Training Handoff
+## Current Phase: Week 4 (v0.4) - GNN-Ready Integration Product
 
-**Status:** Hasan-side Week 3 deliverables are complete. The repo now includes backend export wiring, real-payload validation on Ahmad's YOLOv8 output, and a MUSCIMA page-level training export for GNN supervision.
+**Status:** Hasan-side Week 4 work is implemented as far as possible without Ahmad's final trained checkpoint. The repo now includes a GNN-ready backend scaffold, assembly-mode switching with clean fallback behavior, backend readiness reporting, and a Streamlit MVP on top of the existing Week 3 export path.
 
 ---
 
-## What's Done (Weeks 1-3)
+## What's Done (Weeks 1-4)
 
 ### Week 1 [x]
 
@@ -42,12 +42,23 @@
 * [x] MUSCIMA page-level training export implemented with `edge_type` and `edge_label`
 * [x] Full training-export batch generated under `data/processed/training_exports/`
 
-### Remaining work after Hasan's Week 3 closeout
+### Week 4 [x]
 
-* [ ] Hand the generated training exports to Ahmad and confirm they load cleanly into his trainer
-* [ ] Decide whether export should stay heuristic-only or consume future graph/GNN relationships
-* [ ] Decide whether inline export content is sufficient or whether file-oriented download endpoints are needed
-* [ ] If needed for demo convenience, change the compose host port from `8000` when another local project is already using it
+* [x] GNN inference/runtime scaffold added under `src/inference/gnn_service.py`
+* [x] `/health` now reports GNN checkpoint readiness plus supported assembly modes
+* [x] `/assemble` now accepts `assembly_mode` with `auto`, `heuristic`, and `gnn`
+* [x] `/assemble` now returns resolved mode, fallback metadata, heuristic assembly summary, and an attention-preview placeholder
+* [x] `/midi` now accepts the same Week 4 assembly-mode contract and surfaces the same fallback/status metadata
+* [x] Clean fallback behavior implemented when `gnn` is requested without a ready checkpoint
+* [x] Streamlit MVP added under `src/ui/streamlit_app.py`
+* [x] New API and inference-scaffold tests added for mode switching and missing-checkpoint behavior
+
+### Remaining work after Hasan's Week 4 checkpoint
+
+* [ ] Plug Ahmad's real trained GNN checkpoint into the Week 4 scaffold
+* [ ] Implement the model-specific inference adapter once Ahmad shares checkpoint wiring details
+* [ ] Decide whether `/midi` should remain heuristic-driven or consume future GNN relation outputs
+* [ ] Capture final combined YOLO + GNN metrics once Ahmad's checkpoint is available
 
 ---
 
@@ -64,34 +75,34 @@
 | MUSCIMA training export pages | 140 | `data/processed/training_exports/` |
 | MUSCIMA training export nodes | 58467 | `data/processed/training_exports/batch_stats.json` |
 | MUSCIMA training export edges | 2625480 | `data/processed/training_exports/batch_stats.json` |
-| Last reported full test suite | Ran 26 tests, OK | Week 3 training-export checkpoint |
+| Backend stage | `v0.4` | `src/api/app.py` |
+| Last reported full test suite | Ran 31 tests, OK | Week 4 scaffold checkpoint |
 
 ---
 
 ## Next Steps
 
-### Immediate (post-closeout handoff)
+### Immediate
 
-1. **Hand Ahmad the MUSCIMA training export path and schema** - point him to `data/processed/training_exports/` and the `edge_type`/`edge_label` vocabulary
-2. **Confirm trainer ingestion on Ahmad's side** - make sure the generated page JSONs load without schema changes
-3. **Decide whether export should use future graph/GNN relationships** - avoid hard-coding a heuristic-only path if a better assembly signal is coming
-4. **Decide whether the API should keep inline export content** - confirm whether the current JSON response is sufficient for the demo and handoff flow
+1. **Hand Ahmad the Week 4 backend contract** - point him to `assembly_mode`, `/health` readiness, and the fallback behavior already implemented
+2. **Get Ahmad's checkpoint path and adapter expectations** - identify what his saved checkpoint requires beyond a path on disk
+3. **Integrate the checkpoint into `src/inference/gnn_service.py`** - keep the current API/UI contract stable while swapping the scaffold adapter for a real one
+4. **Decide how GNN outputs should influence export** - confirm whether Week 5 should keep heuristic export or inject graph-model relationships into assembly/export
 
 ### Blocked or dependent items
 
-* Final GNN training integration depends on Ahmad loading the exported page JSONs successfully
-* Any future graph-aware exporter depends on whether Ahmad wants to move beyond detection-payload-based export
-* Full `docker compose up --build` on host port `8000` can still be blocked by unrelated local port usage
+* The real trained GNN checkpoint is still external
+* Any checkpoint-specific tensor decoding or model-class loading details are still external
+* Final combined YOLO + GNN metrics are still external
+* Real attention weights depend on Ahmad's trained model exposing them
 
 ### Coordination notes
 
-* The detector payload contract is now the main interface between Ahmad's side and Hasan's side
-* On April 7, 2026, Ahmad's real YOLOv8 payload `lg-101766503886095953-aug-gonville--page-1.json` returned `200` on `/assemble`, `/midi` with `musicxml`, and `/midi` with `midi`
-* On April 7, 2026, the API Docker image built successfully and the containerized backend returned `200` on `/health`, `/assemble`, and `/midi`
-* The current repo should remain the source of truth for MUSCIMA parsing, graph construction, backend integration, and Hasan-side export wiring
-* Ahmad's older `melodious/` branch should be treated as a source of portable logic, not as a package layout to restore wholesale
-* The MUSCIMA training export uses one JSON per page with `edge_type` in `{knn, same_staff_local, vertical_overlap, horizontal_neighbor}` and `edge_label` in `{no_relation, stem_notehead, beam_notegroup, slur_phrase, tie_sustained}`
-* The API exposes `/health`, `/assemble`, and a real `/midi` export route
+* The detector payload contract remains stable and unchanged from Week 3
+* The Week 4 backend intentionally treats Ahmad's future checkpoint as a plug-in to an already-stable API and UI surface
+* `assembly_mode="gnn"` currently falls back to `heuristic` with an explicit warning when no checkpoint is ready
+* The Streamlit MVP is already prepared to consume `/health`, `/assemble`, and `/midi` from the current backend
+* On April 7, 2026, the full local Python test suite passed with 31 tests after the Week 4 scaffold landed
 
 ---
 

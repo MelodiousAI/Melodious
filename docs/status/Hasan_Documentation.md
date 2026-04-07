@@ -205,26 +205,59 @@ This export uses one edge record per directed candidate-edge occurrence. If the 
 | `tests/export/test_heuristic_assembler.py` | [x] Present |
 | `tests/export/test_musicxml_export.py` | [x] Present |
 | `tests/evaluation/test_muscima_training_export.py` | [x] Present |
-| Last reported full suite checkpoint | Ran 26 tests, OK |
+| `tests/inference/test_gnn_service.py` | [x] Present |
+| Last reported full suite checkpoint | Ran 31 tests, OK |
 | Repo cleanup completed | [x] |
 
-The repo uses `src/api/`, `src/graph/`, `src/data_prep/`, `src/evaluation/`, grouped tests under `tests/`, status docs under `docs/status/`, and generated artifacts separated into `data/processed/`, `sample_detections/`, and `outputs/`.
+The repo now uses `src/api/`, `src/graph/`, `src/data_prep/`, `src/evaluation/`, `src/inference/`, and `src/ui/`, grouped tests under `tests/`, status docs under `docs/status/`, and generated artifacts separated into `data/processed/`, `sample_detections/`, and `outputs/`.
 
 ---
 
-## 8. Backend Service Layer and Export Routes
+## 8. Backend Service Layer, GNN Scaffold, and UI
 
-**Implementations:** `src/api/models.py`, `src/api/service.py`, `src/api/app.py`, `src/export/heuristic_assembler.py`, `src/export/musicxml_export.py`, `docker/Dockerfile.api`, `docker-compose.yml`
+**Implementations:** `src/api/models.py`, `src/api/service.py`, `src/api/app.py`, `src/inference/gnn_service.py`, `src/ui/streamlit_app.py`, `src/export/heuristic_assembler.py`, `src/export/musicxml_export.py`, `docker/Dockerfile.api`, `docker-compose.yml`
 
-The backend wraps existing graph, alignment, and export logic instead of duplicating it in route handlers.
+The backend still wraps existing graph, alignment, and export logic instead of duplicating it in route handlers. Week 4 extends that thin service layer with checkpoint readiness reporting, assembly-mode resolution, and a Streamlit client for demo use.
 
 | Endpoint | Status | Notes |
 |-|-|-|
-| `GET /health` | [x] Implemented | Returns current backend stage |
-| `POST /assemble` | [x] Implemented | Builds graph outputs from one detector payload |
-| `POST /midi` | [x] Implemented | Returns inline MusicXML or base64 MIDI from one detector payload |
+| `GET /health` | [x] Implemented | Returns backend stage plus GNN checkpoint readiness |
+| `POST /assemble` | [x] Implemented | Builds graph outputs and resolves `auto`, `heuristic`, or `gnn` assembly mode |
+| `POST /midi` | [x] Implemented | Returns inline MusicXML or base64 MIDI and now carries Week 4 assembly-mode metadata |
 
-### 8.1 Current `/assemble` behavior
+### 8.1 Week 4 GNN runtime scaffold
+
+**Implementation:** `src/inference/gnn_service.py`
+
+The GNN runtime layer intentionally avoids guessing Ahmad's final model class. Instead it freezes the handoff surface around readiness and fallback behavior.
+
+| Feature | Status |
+|-|-|
+| `MELODIOUS_GNN_CHECKPOINT` path resolution | [x] |
+| Checkpoint existence reporting | [x] |
+| Adapter readiness reporting | [x] |
+| `auto -> gnn` when runtime is ready | [x] |
+| `gnn -> heuristic` fallback when runtime is not ready | [x] |
+| Attention-preview placeholder contract | [x] |
+
+Current behavior:
+
+* If no checkpoint path is configured, `/health` reports that the backend is waiting on Ahmad's checkpoint
+* If `assembly_mode="gnn"` is requested before the runtime is ready, the backend returns `200` with a warning and a resolved mode of `heuristic`
+* If a future adapter becomes ready and a checkpoint exists, `assembly_mode="auto"` is already prepared to promote requests to the GNN path
+
+### 8.2 Current `/health` behavior
+
+| Field group | Status |
+|-|-|
+| Base service status (`status`, `service`, `stage`) | [x] |
+| Supported assembly modes | [x] |
+| Default assembly mode | [x] |
+| GNN checkpoint readiness block | [x] |
+
+The Week 4 `/health` contract is the main status surface for the API and Streamlit MVP. It exposes whether the checkpoint is configured, whether it exists on disk, whether the adapter is ready, and whether the runtime is fully ready for inference.
+
+### 8.3 Current `/assemble` behavior
 
 | Feature | Status |
 |-|-|
@@ -235,8 +268,24 @@ The backend wraps existing graph, alignment, and export logic instead of duplica
 | Serialized node row order matches input detection order | [x] |
 | `edge_index` refers to the same serialized node row indices | [x] |
 | Request validation through FastAPI/Pydantic | [x] |
+| `assembly_mode` request field | [x] |
+| Resolved assembly-mode response block | [x] |
+| Stable heuristic summary block for current baseline output | [x] |
+| Attention-preview placeholder block | [x] |
 
-### 8.2 Current `/midi` behavior
+The Week 4 `/assemble` response now carries:
+
+* `assembly_mode.requested_mode`
+* `assembly_mode.applied_mode`
+* `assembly_mode.fallback_applied`
+* `assembly_mode.fallback_reason`
+* `assembly_mode.checkpoint_ready`
+* `assembly_summary`
+* `attention_preview`
+
+This freezes the contract the future GNN path is expected to honor even before the real checkpoint is available.
+
+### 8.4 Current `/midi` behavior
 
 | Feature | Status |
 |-|-|
@@ -244,8 +293,32 @@ The backend wraps existing graph, alignment, and export logic instead of duplica
 | Inline base64 MIDI response | [x] |
 | Heuristic assembly summary in response | [x] |
 | Repo-local temp rendering fallback | [x] |
+| Week 4 `assembly_mode` request field | [x] |
+| Week 4 resolved assembly-mode metadata in response | [x] |
+| Attention-preview placeholder block | [x] |
 
-### 8.3 Docker verification
+Week 4 keeps the actual export generation heuristic-backed for now, but the export route is already carrying the same GNN readiness and fallback metadata as `/assemble`. This keeps the demo flow and future integration path consistent.
+
+### 8.5 Streamlit MVP
+
+**Implementation:** `src/ui/streamlit_app.py`
+
+The Streamlit app is a thin client over the FastAPI backend rather than a second backend.
+
+| Feature | Status |
+|-|-|
+| Upload detector payload JSON | [x] |
+| Select bundled sample payloads | [x] |
+| Call `/health` | [x] |
+| Call `/assemble` | [x] |
+| Call `/midi` | [x] |
+| Show graph statistics | [x] |
+| Show assembly-mode/fallback details | [x] |
+| Download MusicXML | [x] |
+| Download MIDI | [x] |
+| Attention-visualization placeholder panel | [x] |
+
+### 8.6 Docker verification and real YOLO payload validation
 
 On **April 7, 2026**, the API Docker image built successfully after adding the OpenCV runtime libraries required by `opencv-python` on `python:3.13-slim`.
 
@@ -260,9 +333,7 @@ On **April 7, 2026**, the API Docker image built successfully after adding the O
 
 The containerized route checks were run using Ahmad's real YOLOv8 payload. The only remaining Docker-specific local issue is that `docker compose up --build` on the default host port can conflict with unrelated containers already using port `8000`.
 
-### 8.4 Real YOLOv8 payload validation
-
-On **April 7, 2026**, the representative Ahmad payload `lg-101766503886095953-aug-gonville--page-1.json` was validated locally against the current backend.
+On **April 7, 2026**, the representative Ahmad payload `lg-101766503886095953-aug-gonville--page-1.json` was validated locally against the backend.
 
 | Route | Result |
 |-|-|
@@ -272,15 +343,16 @@ On **April 7, 2026**, the representative Ahmad payload `lg-101766503886095953-au
 
 This confirmed that Ahmad's real YOLOv8 output matches the current detector payload contract and that the backend export route accepts it directly.
 
-### 8.5 Reuse decision
+### 8.7 Reuse decision
 
-The current repo follows a selective adaptation strategy for Ahmad's Week 3 work:
+The current repo still follows a selective adaptation strategy for Ahmad's older work:
 
 | Candidate from Ahmad's branch | Decision | Rationale |
 |-|-|-|
 | `melodious/baselines/heuristic_assembler.py` | Reused and adapted | Small, portable, already matches the detector payload contract |
 | `melodious/musicxml_export.py` | Reused and adapted | Export logic was portable after moving it behind the current `src/` layout |
 | `melodious/cli.py` and `melodious/pipeline.py` | Not integrated | Depend on Ahmad's old package layout and detector runtime responsibilities |
+| Week 4 GNN inference class internals | Not guessed | Wait for Ahmad's actual checkpoint wiring instead of hard-coding speculative model logic |
 
 ---
 
@@ -293,12 +365,16 @@ The current repo follows a selective adaptation strategy for Ahmad's Week 3 work
 | Use greedy IoU alignment for initial matching | More complex assignment methods | Simple, testable, and adequate for current integration work |
 | Validate with shared MUSCIMA reference payloads first | Wait for final model outputs first | Lets backend and graph code progress before model handoffs arrive |
 | Wrap existing graph code behind a small FastAPI service layer | Reimplement graph logic inside route handlers | Keeps API work thin and reduces duplication |
-| Keep `/midi` as a stable route name from Week 2 into Week 3 | Rename the export route during integration | Preserves the agreed backend entrypoint while adding real export behavior |
+| Keep `/midi` as a stable route name from Week 2 into Week 3 and Week 4 | Rename the export route during integration | Preserves the agreed backend entrypoint while adding new capabilities incrementally |
 | Selectively adapt Ahmad's Week 3 modules | Cherry-pick the old `melodious/` package or reimplement from scratch | Reuses proven logic without undoing the cleaned repo layout |
 | Return inline MusicXML/base64 MIDI content from the API | Write export files directly on the server | Keeps the backend stateless and easier to test on shared sample payloads |
 | Export one record per directed candidate-edge type | Collapse all candidate types for a node pair into one record | Keeps `edge_type` unambiguous and matches Ahmad's request that it be a separate input feature |
 | Use the reduced shared detector taxonomy for training-export nodes | Export all 115 MUSCIMA classes directly | Keeps training artifacts aligned with the existing detector/backend contract |
 | Derive `slur_phrase` and `tie_sustained` between noteheads through shared connector nodes | Require explicit slur/tie nodes in the reduced export | Preserves the requested supervision labels without expanding the node taxonomy beyond the shared detector set |
+| Freeze `auto|heuristic|gnn` request handling before the real checkpoint exists | Wait for Ahmad's model and then redesign the contract | Lets Hasan-side API and UI progress now while minimizing later surface-area changes |
+| Use explicit fallback metadata rather than returning an error when `gnn` is unavailable | Fail `400`/`503` on missing checkpoint | Keeps the Week 4 demo usable while making the degraded path visible to callers |
+| Expose an attention-preview placeholder now | Omit explainability fields until the trained GAT arrives | Prevents the UI contract from changing again when attention becomes available |
+| Use an env-var checkpoint path instead of embedding a guessed repo-local path | Hard-code a likely checkpoint filename | Keeps the handoff explicit and avoids silent path mismatches |
 
 ---
 
@@ -306,10 +382,12 @@ The current repo follows a selective adaptation strategy for Ahmad's Week 3 work
 
 | Item | Impact | Planned next step |
 |-|-|-|
-| Export remains heuristic-only | MusicXML/MIDI quality may be limited on complex notation | Decide whether to feed future GNN relationships into the export stage |
+| The GNN runtime adapter is still a scaffold | The backend cannot execute real checkpoint inference yet | Replace the stub adapter once Ahmad shares the actual checkpoint and model-loading details |
+| Export remains heuristic-only | MusicXML/MIDI quality may be limited on complex notation even though the API is GNN-ready | Decide whether to feed future GNN relationships into the export stage |
 | Ahmad still needs to load the generated training exports on his side | Could reveal minor schema adjustments still needed for his trainer | Hand off one sample page JSON first, then the full directory if accepted |
 | API returns inline content only | Large files or browser download flows may need a different contract later | Decide whether to keep inline responses or add file-oriented endpoints |
 | `docker compose up --build` on host port `8000` can still fail locally | An unrelated local container may already own port `8000` | Change the compose host port or stop the conflicting local service when needed |
+| Real attention weights are still unavailable | Streamlit can only show the placeholder explainability surface today | Wire attention outputs into the existing `attention_preview` contract once Ahmad's model exposes them |
 
 ---
 

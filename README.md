@@ -9,8 +9,9 @@ This repo currently focuses on:
 - building PyTorch Geometric graphs from detections
 - aligning detections back to MUSCIMA ground truth
 - validating MUSCIMA reference payload integration
-- exposing backend routes for graph assembly and MusicXML/MIDI export
+- exposing backend routes for graph assembly, GNN-ready mode switching, and MusicXML/MIDI export
 - exporting page-level MUSCIMA training JSONs for GNN supervision
+- providing a Streamlit MVP for the Week 4 integration demo
 
 ## What Is Implemented
 
@@ -38,6 +39,10 @@ This repo currently focuses on:
   Wraps graph building, optional alignment, and export behind a small service layer.
 - `src/api/app.py`
   Exposes `/health`, `/assemble`, and `/midi` through FastAPI.
+- `src/inference/gnn_service.py`
+  Provides Week 4 checkpoint readiness, assembly-mode resolution, and GNN fallback scaffolding.
+- `src/ui/streamlit_app.py`
+  Provides a Streamlit MVP for payload selection, backend status, assembly, and export handling.
 - `tools/export_muscima_detections.py`
   Exports MUSCIMA XML annotations into the shared detector payload contract.
 - `tools/export_muscima_training_data.py`
@@ -92,7 +97,8 @@ This path works from detector outputs and produces model-ready graphs plus backe
 3. Use `src.graph.pyg_graph_builder` to build a PyTorch Geometric `Data` graph from the detections.
 4. Use `src.graph.detection_alignment` to compare detections against MUSCIMA ground truth.
 5. Use `src.evaluation.muscima_reference_evaluation` to validate the integrated MUSCIMA reference payload path end to end.
-6. Use the FastAPI backend to call `/assemble` or `/midi`.
+6. Use the FastAPI backend to call `/health`, `/assemble`, or `/midi`.
+7. Use `src.ui.streamlit_app` for the Week 4 demo flow on top of the backend.
 
 ### 3. MUSCIMA training-export path
 
@@ -168,6 +174,12 @@ This path works from MUSCIMA page graphs and produces one page-level JSON per sc
 docker compose up --build
 ```
 
+### Streamlit MVP
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run src\ui\streamlit_app.py
+```
+
 ## Tests
 
 ```powershell
@@ -177,6 +189,7 @@ docker compose up --build
 .\.venv\Scripts\python.exe -m unittest tests\graph\test_muscima_graph_builder.py
 .\.venv\Scripts\python.exe -m unittest tests\api\test_api_app.py
 .\.venv\Scripts\python.exe -m unittest tests\evaluation\test_muscima_training_export.py
+.\.venv\Scripts\python.exe -m unittest tests\inference\test_gnn_service.py
 .\.venv\Scripts\python.exe -m unittest discover tests
 ```
 
@@ -190,9 +203,11 @@ At the current checkpoint, the repo already has:
 - a detection-to-PyG graph builder
 - a detection-to-ground-truth alignment layer
 - MUSCIMA reference payload integration checks
-- a FastAPI backend for graph assembly plus MusicXML/MIDI export
+- a FastAPI backend for graph assembly, GNN-ready mode switching, and MusicXML/MIDI export
+- a Week 4 GNN inference scaffold with checkpoint readiness reporting and heuristic fallback
+- a Streamlit MVP for payload upload/selection plus backend health, assembly, and export calls
 - a page-level MUSCIMA training export with candidate edges and supervision labels
-- automated tests for graph, export, evaluation, and API modules
+- automated tests for graph, export, evaluation, API, and inference scaffold modules
 - smoke tests for `/assemble` and `/midi`
 - verified Docker image build for the API service
 - verified containerized `/health`, `/assemble`, and `/midi` using Ahmad's real YOLOv8 payload

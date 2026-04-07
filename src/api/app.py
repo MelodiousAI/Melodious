@@ -1,4 +1,4 @@
-"""FastAPI app for the Week 2 Melodious backend skeleton."""
+"""FastAPI app for the Week 4 Melodious backend."""
 
 from fastapi import FastAPI, HTTPException
 
@@ -9,24 +9,20 @@ from src.api.models import (
     MidiRequest,
     MidiResponse,
 )
-from src.api.service import assemble_from_request, export_from_request
+from src.api.service import assemble_from_request, build_health_response, export_from_request
 
 
 app = FastAPI(
     title="Melodious Backend",
-    version="0.3.0",
-    description="Week 3 FastAPI service for graph assembly plus MusicXML/MIDI export.",
+    version="0.4.0",
+    description="Week 4 FastAPI service for graph assembly, GNN readiness, and Streamlit-facing export flows.",
 )
 
 
 @app.get("/health", response_model=HealthResponse)
 def health_check():
-    """Return a minimal service-health payload."""
-    return HealthResponse(
-        status="ok",
-        service="melodious-backend",
-        stage="v0.3",
-    )
+    """Return service health plus Week 4 GNN readiness details."""
+    return build_health_response()
 
 
 @app.post("/assemble", response_model=AssembleResponse)
