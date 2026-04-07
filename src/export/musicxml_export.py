@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 import base64
-import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from uuid import uuid4
 from typing import Any, Literal
 
 
 ExportFormat = Literal["midi", "musicxml"]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+TEMP_EXPORT_DIR = PROJECT_ROOT / "outputs" / "export_temp"
 
 
 @dataclass
@@ -261,18 +263,45 @@ def assemble_score(
     return score
 
 
+def _render_with_temp_file(score, suffix: str, writer_format: str, read_mode: str):
+    """Render a score through one temporary file under the repo output directory.
+
+    Using a repo-local temp directory avoids Windows temp-directory cleanup issues
+    that were observed when `music21` wrote through `tempfile.TemporaryDirectory`.
+    """
+    TEMP_EXPORT_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = TEMP_EXPORT_DIR / f"{uuid4().hex}{suffix}"
+
+    try:
+        score.write(writer_format, fp=str(output_path))
+        if read_mode == "text":
+            return output_path.read_text(encoding="utf-8")
+        return output_path.read_bytes()
+    finally:
+        try:
+            output_path.unlink(missing_ok=True)
+        except PermissionError:
+            # If Windows keeps a short-lived file handle open, leave the temp file
+            # behind rather than failing the export request after successful render.
+            pass
+
+
 def _render_musicxml_text(score) -> str:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        output_path = Path(temp_dir) / "score.musicxml"
-        score.write("musicxml", fp=str(output_path))
-        return output_path.read_text(encoding="utf-8")
+    return _render_with_temp_file(
+        score,
+        suffix=".musicxml",
+        writer_format="musicxml",
+        read_mode="text",
+    )
 
 
 def _render_midi_bytes(score) -> bytes:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        output_path = Path(temp_dir) / "score.mid"
-        score.write("midi", fp=str(output_path))
-        return output_path.read_bytes()
+    return _render_with_temp_file(
+        score,
+        suffix=".mid",
+        writer_format="midi",
+        read_mode="bytes",
+    )
 
 
 def payload_to_musicxml_text(payload: dict[str, Any], title: str | None = None) -> str:

@@ -7,24 +7,7 @@ import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-
-MUSCIMA_TO_CLASS = {
-    "noteheadFull": (0, "notehead-full"),
-    "noteheadHalf": (1, "notehead-half"),
-    "noteheadWhole": (2, "notehead-whole"),
-    "gClef": (3, "clefG"),
-    "fClef": (4, "clefF"),
-    "cClef": (5, "clefC"),
-    "rest8th": (6, "rest-8th"),
-    "restQuarter": (7, "rest-quarter"),
-    "restHalf": (8, "rest-half"),
-    "restWhole": (9, "rest-whole"),
-    "accidentalSharp": (10, "accidentalSharp"),
-    "accidentalFlat": (11, "accidentalFlat"),
-    "accidentalNatural": (12, "accidentalNatural"),
-    "beam": (13, "beam"),
-    "stem": (14, "stem"),
-}
+from src.data_prep.shared_detection_contract import MUSCIMA_TO_SHARED_DETECTION_CLASS
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_XML_DIR = PROJECT_ROOT / "sample_detections" / "muscima_xml"
@@ -95,11 +78,11 @@ def parse_muscima_xml(xml_path: Path, image_path: str, page_width: int, page_hei
     for node in root.findall("Node"):
         class_name = node.find("ClassName").text
 
-        if class_name not in MUSCIMA_TO_CLASS:
+        if class_name not in MUSCIMA_TO_SHARED_DETECTION_CLASS:
             skipped += 1
             continue
 
-        class_id, detector_class_name = MUSCIMA_TO_CLASS[class_name]
+        class_id, detector_class_name = MUSCIMA_TO_SHARED_DETECTION_CLASS[class_name]
         top = int(node.find("Top").text)
         left = int(node.find("Left").text)
         width = int(node.find("Width").text)

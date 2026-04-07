@@ -1,7 +1,6 @@
 # Hasan's Experiment Documentation - Melodious OMR
 
-> This file tracks the parser, graph, alignment, and integration work on Hasan's side of the project.
-> It is intended to mirror Ahmad's documentation style for weekly coordination and handoffs.
+> This file tracks the parser, graph, alignment, backend, export, and training-handoff work on Hasan's side of the project.
 
 ---
 
@@ -80,7 +79,7 @@ Builds graph objects from detector payload dictionaries so symbol detections can
 
 **Implementation:** `src/graph/detection_alignment.py`
 
-Aligns detections back to MUSCIMA ground truth using greedy IoU matching. This provides a reusable comparison layer between detector outputs and dataset annotations.
+Aligns detections back to MUSCIMA ground truth using greedy IoU matching.
 
 | Feature | Status |
 |-|-|
@@ -120,13 +119,11 @@ Runs graph building plus alignment on the shared MUSCIMA reference payloads to v
 | `CVC-MUSCIMA_W-02_N-06_D-ideal` | 401 | 14576 | 0.430720 | 0.602102 |
 | `CVC-MUSCIMA_W-02_N-13_D-ideal` | 339 | 12390 | 0.499264 | 0.666012 |
 
-**Interpretation:** This run validates the current reference payload path and graph/alignment integration. It is an integration checkpoint, not the final end-to-end project score.
-
 ---
 
-## 5. Shared Detector Contract and Export Helper
+## 5. Shared Detector Contract and Export Helpers
 
-**Implementation:** `tools/export_muscima_detections.py`
+**Implementations:** `src/data_prep/shared_detection_contract.py`, `tools/export_muscima_detections.py`
 
 Exports MUSCIMA XML annotations into the shared detector payload contract so backend and graph code can be tested before full model handoff.
 
@@ -138,7 +135,65 @@ Exports MUSCIMA XML annotations into the shared detector payload contract so bac
 
 ---
 
-## 6. Test and Repo Status
+## 6. MUSCIMA Page-Level Training Export
+
+**Implementations:** `src/evaluation/muscima_training_export.py`, `tools/export_muscima_training_data.py`
+
+Exports one JSON per MUSCIMA page using the reduced shared detector taxonomy for nodes plus the candidate-edge and supervision-label format Ahmad requested for GNN training.
+
+### 6.1 Export schema and vocabularies
+
+Each page export contains:
+
+| Field | Purpose |
+|-|-|
+| `page_id` | MUSCIMA document id such as `CVC-MUSCIMA_W-01_N-10_D-ideal` |
+| `image_path` | Relative page image path |
+| `image_size` | Page width and height |
+| `nodes` | Reduced shared-taxonomy node records with stable `node_idx` and `node_id` |
+| `edges` | Directed candidate edges with `source_idx`, `target_idx`, `edge_type`, and `edge_label` |
+
+Current edge-type vocabulary:
+
+| Edge type | Meaning |
+|-|-|
+| `knn` | k-nearest-neighbor geometric candidate edge |
+| `same_staff_local` | local same-staff candidate edge |
+| `vertical_overlap` | strong vertical-overlap candidate edge |
+| `horizontal_neighbor` | immediate left-right same-staff candidate edge |
+
+Current supervision-label vocabulary:
+
+| Edge label | Meaning |
+|-|-|
+| `no_relation` | candidate edge with no positive supervision relation |
+| `stem_notehead` | notehead-stem relation |
+| `beam_notegroup` | notehead-beam relation |
+| `slur_phrase` | notehead-notehead relation induced through a shared slur |
+| `tie_sustained` | notehead-notehead relation induced through a shared tie |
+
+### 6.2 Full batch export result
+
+**Generated outputs:** `data/processed/training_exports/`
+
+| Artifact | Value |
+|-|-|
+| Page JSON files | 140 |
+| Total exported nodes | 58467 |
+| Total exported edges | 2625480 |
+| `stem_notehead` edges | 138456 |
+| `beam_notegroup` edges | 42860 |
+| `slur_phrase` edges | 30046 |
+| `tie_sustained` edges | 2660 |
+| `no_relation` edges | 2411458 |
+| Summary CSV | `data/processed/training_exports/summary.csv` |
+| Batch stats JSON | `data/processed/training_exports/batch_stats.json` |
+
+This export uses one edge record per directed candidate-edge occurrence. If the same node pair appears under multiple candidate-edge builders, each `edge_type` is exported separately with its own `edge_label`.
+
+---
+
+## 7. Test and Repo Status
 
 | Item | Status |
 |-|-|
@@ -149,18 +204,19 @@ Exports MUSCIMA XML annotations into the shared detector payload contract so bac
 | `tests/api/test_api_app.py` | [x] Present |
 | `tests/export/test_heuristic_assembler.py` | [x] Present |
 | `tests/export/test_musicxml_export.py` | [x] Present |
-| Last reported full suite checkpoint | Ran 25 tests, OK |
+| `tests/evaluation/test_muscima_training_export.py` | [x] Present |
+| Last reported full suite checkpoint | Ran 26 tests, OK |
 | Repo cleanup completed | [x] |
 
-The repo has been reorganized into a cleaner structure with `src/api/`, `src/graph/`, `src/data_prep/`, `src/evaluation/`, grouped tests under `tests/`, status docs under `docs/status/`, and generated artifacts separated into `data/processed/`, `sample_detections/`, and `outputs/`.
+The repo uses `src/api/`, `src/graph/`, `src/data_prep/`, `src/evaluation/`, grouped tests under `tests/`, status docs under `docs/status/`, and generated artifacts separated into `data/processed/`, `sample_detections/`, and `outputs/`.
 
 ---
 
-## 7. Backend Service Layer and Export Routes
+## 8. Backend Service Layer and Export Routes
 
 **Implementations:** `src/api/models.py`, `src/api/service.py`, `src/api/app.py`, `src/export/heuristic_assembler.py`, `src/export/musicxml_export.py`, `docker/Dockerfile.api`, `docker-compose.yml`
 
-The backend now wraps existing graph, alignment, and export logic instead of duplicating it in route handlers.
+The backend wraps existing graph, alignment, and export logic instead of duplicating it in route handlers.
 
 | Endpoint | Status | Notes |
 |-|-|-|
@@ -168,7 +224,7 @@ The backend now wraps existing graph, alignment, and export logic instead of dup
 | `POST /assemble` | [x] Implemented | Builds graph outputs from one detector payload |
 | `POST /midi` | [x] Implemented | Returns inline MusicXML or base64 MIDI from one detector payload |
 
-### 7.1 Current `/assemble` behavior
+### 8.1 Current `/assemble` behavior
 
 | Feature | Status |
 |-|-|
@@ -180,63 +236,81 @@ The backend now wraps existing graph, alignment, and export logic instead of dup
 | `edge_index` refers to the same serialized node row indices | [x] |
 | Request validation through FastAPI/Pydantic | [x] |
 
-### 7.2 Container setup
+### 8.2 Current `/midi` behavior
 
-| File | Purpose |
+| Feature | Status |
 |-|-|
-| `docker/Dockerfile.api` | Builds the backend service image |
-| `docker-compose.yml` | Starts the API plus Redis for local development |
-| `.dockerignore` | Keeps build context small and avoids copying local clutter |
+| Inline MusicXML response | [x] |
+| Inline base64 MIDI response | [x] |
+| Heuristic assembly summary in response | [x] |
+| Repo-local temp rendering fallback | [x] |
 
-### 7.3 Week 3 export integration
+### 8.3 Docker verification
 
-The Week 3 path reuses only the portable parts of Ahmad's older branch instead of importing the old package layout directly.
+On **April 7, 2026**, the API Docker image built successfully after adding the OpenCV runtime libraries required by `opencv-python` on `python:3.13-slim`.
 
-| Export asset | Status | Notes |
-|-|-|-|
-| Heuristic notation assembler | [x] Implemented | Adapted from Ahmad's baseline into `src/export/heuristic_assembler.py` |
-| MusicXML renderer | [x] Implemented | Adapted into `src/export/musicxml_export.py` using `music21` |
-| MIDI renderer | [x] Implemented | Returns base64 MIDI through `/midi` |
-| `/midi` API response contract | [x] Implemented | Includes output metadata, content, and heuristic assembly counts |
-| End-to-end API smoke check | [x] Verified | `POST /midi` returned `200` for both `musicxml` and `midi` formats through `TestClient` |
+| Check | Result |
+|-|-|
+| `docker build -f docker/Dockerfile.api -t melodious-api-local .` | Succeeded |
+| Container startup | Succeeded |
+| `GET /health` in-container | `200` |
+| `POST /assemble` in-container | `200` |
+| `POST /midi` with `musicxml` in-container | `200` |
+| `POST /midi` with `midi` in-container | `200` |
 
-### 7.4 Reuse decision
+The containerized route checks were run using Ahmad's real YOLOv8 payload. The only remaining Docker-specific local issue is that `docker compose up --build` on the default host port can conflict with unrelated containers already using port `8000`.
 
-The current repo now follows a selective adaptation strategy for Ahmad's Week 3 work:
+### 8.4 Real YOLOv8 payload validation
+
+On **April 7, 2026**, the representative Ahmad payload `lg-101766503886095953-aug-gonville--page-1.json` was validated locally against the current backend.
+
+| Route | Result |
+|-|-|
+| `POST /assemble` | `200`, `88` detections, `88` nodes, `1266` edges |
+| `POST /midi` with `musicxml` | `200` |
+| `POST /midi` with `midi` | `200` |
+
+This confirmed that Ahmad's real YOLOv8 output matches the current detector payload contract and that the backend export route accepts it directly.
+
+### 8.5 Reuse decision
+
+The current repo follows a selective adaptation strategy for Ahmad's Week 3 work:
 
 | Candidate from Ahmad's branch | Decision | Rationale |
 |-|-|-|
 | `melodious/baselines/heuristic_assembler.py` | Reused and adapted | Small, portable, already matches the detector payload contract |
 | `melodious/musicxml_export.py` | Reused and adapted | Export logic was portable after moving it behind the current `src/` layout |
-| `melodious/cli.py` and `melodious/pipeline.py` | Not integrated yet | Depend on Ahmad's old package layout and detector runtime responsibilities |
+| `melodious/cli.py` and `melodious/pipeline.py` | Not integrated | Depend on Ahmad's old package layout and detector runtime responsibilities |
 
 ---
 
-## 8. Decisions and Tradeoffs
+## 9. Decisions and Tradeoffs
 
 | Decision | Alternatives considered | Rationale |
 |-|-|-|
 | Separate `muscima_graph_builder.py` from `pyg_graph_builder.py` | One combined graph builder | Reference-data graphs and detector-input graphs serve different stages |
 | Keep outputs outside source directories | Mix generated files into source tree | Cleaner repo and easier handoff review |
 | Use greedy IoU alignment for initial matching | More complex assignment methods | Simple, testable, and adequate for current integration work |
-| Validate with shared MUSCIMA reference payloads | Wait for final model outputs first | Lets backend and graph code progress before model handoffs arrive |
+| Validate with shared MUSCIMA reference payloads first | Wait for final model outputs first | Lets backend and graph code progress before model handoffs arrive |
 | Wrap existing graph code behind a small FastAPI service layer | Reimplement graph logic inside route handlers | Keeps API work thin and reduces duplication |
 | Keep `/midi` as a stable route name from Week 2 into Week 3 | Rename the export route during integration | Preserves the agreed backend entrypoint while adding real export behavior |
 | Selectively adapt Ahmad's Week 3 modules | Cherry-pick the old `melodious/` package or reimplement from scratch | Reuses proven logic without undoing the cleaned repo layout |
 | Return inline MusicXML/base64 MIDI content from the API | Write export files directly on the server | Keeps the backend stateless and easier to test on shared sample payloads |
+| Export one record per directed candidate-edge type | Collapse all candidate types for a node pair into one record | Keeps `edge_type` unambiguous and matches Ahmad's request that it be a separate input feature |
+| Use the reduced shared detector taxonomy for training-export nodes | Export all 115 MUSCIMA classes directly | Keeps training artifacts aligned with the existing detector/backend contract |
+| Derive `slur_phrase` and `tie_sustained` between noteheads through shared connector nodes | Require explicit slur/tie nodes in the reduced export | Preserves the requested supervision labels without expanding the node taxonomy beyond the shared detector set |
 
 ---
 
-## 9. Known Issues and Next Work
+## 10. Known Issues and Next Work
 
 | Item | Impact | Planned next step |
 |-|-|-|
-| Ahmad may still need a more specific graph/edge export | Could block GNN training on his side | Confirm exact artifact format and export it |
 | Export remains heuristic-only | MusicXML/MIDI quality may be limited on complex notation | Decide whether to feed future GNN relationships into the export stage |
-| Real detector payload handoff not wired into this repo yet | Full end-to-end export quality is still pending | Test `/assemble` and `/midi` on Ahmad's real outputs once shared |
+| Ahmad still needs to load the generated training exports on his side | Could reveal minor schema adjustments still needed for his trainer | Hand off one sample page JSON first, then the full directory if accepted |
 | API returns inline content only | Large files or browser download flows may need a different contract later | Decide whether to keep inline responses or add file-oriented endpoints |
-| Docker build could not be run on April 5, 2026 | Container image was not runtime-verified after the Week 3 changes | Re-run `docker build` or `docker compose up --build` when Docker Desktop is available |
+| `docker compose up --build` on host port `8000` can still fail locally | An unrelated local container may already own port `8000` | Change the compose host port or stop the conflicting local service when needed |
 
 ---
 
-*Last updated: April 5, 2026*
+*Last updated: April 7, 2026*
