@@ -7,8 +7,6 @@ __pycache__/
 .DS_Store
 .tmp_test/
 
-# Dataset and generated outputs
 data/raw/
 data/processed/
 outputs/
-sample_detections/
