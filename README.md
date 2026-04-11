@@ -10,8 +10,10 @@ This repo currently focuses on:
 - aligning detections back to MUSCIMA ground truth
 - validating MUSCIMA reference payload integration
 - exposing backend routes for graph assembly, GNN-ready mode switching, and MusicXML/MIDI export
+- exposing public product routes for a musician-facing Week 5 sample-first experience
 - exporting page-level MUSCIMA training JSONs for GNN supervision
-- providing a Streamlit MVP for the Week 4 integration demo
+- providing a Streamlit MVP for internal/debug backend inspection
+- shipping a separate React frontend for the Week 5 polished product UI
 
 ## What Is Implemented
 
@@ -38,11 +40,15 @@ This repo currently focuses on:
 - `src/api/service.py`
   Wraps graph building, optional alignment, and export behind a small service layer.
 - `src/api/app.py`
-  Exposes `/health`, `/assemble`, and `/midi` through FastAPI.
+  Exposes `/health`, `/assemble`, `/midi`, and the public `/product/*` routes through FastAPI.
+- `src/api/product_models.py`, `src/api/product_service.py`, `src/api/product_routes.py`
+  Define the public Week 5 sample catalog, product-facing response contract, and download/image facade.
 - `src/inference/gnn_service.py`
   Provides Week 4 checkpoint readiness, assembly-mode resolution, and GNN fallback scaffolding.
 - `src/ui/streamlit_app.py`
-  Provides a Streamlit MVP for payload selection, backend status, assembly, and export handling.
+  Provides the internal/debug Streamlit MVP for payload selection, backend status, assembly, and export handling.
+- `frontend/`
+  Provides the Week 5 React + Vite + Tailwind public product frontend built from the Lovable design integration.
 - `tools/export_muscima_detections.py`
   Exports MUSCIMA XML annotations into the shared detector payload contract.
 - `tools/export_muscima_training_data.py`
@@ -60,6 +66,8 @@ This repo currently focuses on:
   Status and experiment documentation for Hasan's side of the project.
 - `docker/`
   Docker build files for the backend service.
+- `frontend/`
+  The public Week 5 product UI, API client, mock data, and Lovable handoff prompt.
 - `data/raw/`
   Raw MUSCIMA++ annotations and page images.
 - `data/processed/`
@@ -98,7 +106,9 @@ This path works from detector outputs and produces model-ready graphs plus backe
 4. Use `src.graph.detection_alignment` to compare detections against MUSCIMA ground truth.
 5. Use `src.evaluation.muscima_reference_evaluation` to validate the integrated MUSCIMA reference payload path end to end.
 6. Use the FastAPI backend to call `/health`, `/assemble`, or `/midi`.
-7. Use `src.ui.streamlit_app` for the Week 4 demo flow on top of the backend.
+7. Use the public `/product/*` routes for the musician-facing Week 5 sample flow.
+8. Use `src.ui.streamlit_app` for the internal/debug backend flow.
+9. Use `frontend/` for the polished public UI on top of the product routes.
 
 ### 3. MUSCIMA training-export path
 
@@ -174,10 +184,18 @@ This path works from MUSCIMA page graphs and produces one page-level JSON per sc
 docker compose up --build
 ```
 
-### Streamlit MVP
+### Streamlit MVP (internal/debug)
 
 ```powershell
 .\.venv\Scripts\python.exe -m streamlit run src\ui\streamlit_app.py
+```
+
+### Week 5 frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
 ```
 
 ## Tests
@@ -188,9 +206,13 @@ docker compose up --build
 .\.venv\Scripts\python.exe -m unittest tests\graph\test_detection_alignment.py
 .\.venv\Scripts\python.exe -m unittest tests\graph\test_muscima_graph_builder.py
 .\.venv\Scripts\python.exe -m unittest tests\api\test_api_app.py
+.\.venv\Scripts\python.exe -m unittest tests\api\test_product_routes.py
 .\.venv\Scripts\python.exe -m unittest tests\evaluation\test_muscima_training_export.py
 .\.venv\Scripts\python.exe -m unittest tests\inference\test_gnn_service.py
 .\.venv\Scripts\python.exe -m unittest discover tests
+cd frontend
+npm test
+npm run build
 ```
 
 ## Current State
@@ -204,10 +226,12 @@ At the current checkpoint, the repo already has:
 - a detection-to-ground-truth alignment layer
 - MUSCIMA reference payload integration checks
 - a FastAPI backend for graph assembly, GNN-ready mode switching, and MusicXML/MIDI export
+- a public Week 5 `/product/*` facade for sample catalog, preview images, downloads, and musician-facing transcription responses
 - a Week 4 GNN inference scaffold with checkpoint readiness reporting and heuristic fallback
-- a Streamlit MVP for payload upload/selection plus backend health, assembly, and export calls
+- a Streamlit MVP for payload upload/selection plus backend health, assembly, and export calls for internal/debug work
+- a separate React + Vite + Tailwind frontend under `frontend/` for the polished Week 5 product layer
 - a page-level MUSCIMA training export with candidate edges and supervision labels
-- automated tests for graph, export, evaluation, API, and inference scaffold modules
+- automated tests for graph, export, evaluation, API, inference scaffold modules, and the Week 5 product routes
 - smoke tests for `/assemble` and `/midi`
 - verified Docker image build for the API service
 - verified containerized `/health`, `/assemble`, and `/midi` using Ahmad's real YOLOv8 payload

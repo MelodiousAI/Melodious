@@ -1,6 +1,7 @@
-"""FastAPI app for the Week 4 Melodious backend."""
+"""FastAPI app for the Melodious backend and Week 5 product facade."""
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.models import (
     AssembleRequest,
@@ -9,14 +10,24 @@ from src.api.models import (
     MidiRequest,
     MidiResponse,
 )
+from src.api.product_routes import router as product_router
 from src.api.service import assemble_from_request, build_health_response, export_from_request
 
 
 app = FastAPI(
     title="Melodious Backend",
-    version="0.4.0",
-    description="Week 4 FastAPI service for graph assembly, GNN readiness, and Streamlit-facing export flows.",
+    version="0.5.0",
+    description="FastAPI service for the Week 4 engineering contract plus the Week 5 public product facade.",
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.include_router(product_router)
 
 
 @app.get("/health", response_model=HealthResponse)

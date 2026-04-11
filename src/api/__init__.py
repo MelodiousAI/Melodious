@@ -1,1 +1,1 @@
-"""API package for the Week 2 backend layer."""
+"""API package for the Melodious backend and product-facing routes."""

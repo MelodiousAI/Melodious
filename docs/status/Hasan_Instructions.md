@@ -1,16 +1,16 @@
 # Hasan's Current Phase & Next Steps - Melodious OMR
 
-> Drafted from the current repo state and the Week 4 implementation checkpoint completed on April 7, 2026.
+> Drafted from the current repo state after the Week 5 Lovable-frontend integration checkpoint on April 11, 2026.
 
 ---
 
-## Current Phase: Week 4 (v0.4) - GNN-Ready Integration Product
+## Current Phase: Week 5 (v0.5) - Public Product Frontend Integration
 
-**Status:** Hasan-side Week 4 work is implemented as far as possible without Ahmad's final trained checkpoint. The repo now includes a GNN-ready backend scaffold, assembly-mode switching with clean fallback behavior, backend readiness reporting, and a Streamlit MVP on top of the existing Week 3 export path.
+**Status:** Hasan-side Week 5 frontend integration is now in place on top of the completed Week 4 backend. The repo keeps the existing GNN-ready FastAPI + Streamlit MVP intact, keeps the public `/product/*` facade stable for musician-facing flows, and now uses the Lovable-derived multi-page React frontend under `frontend/` as the public product layer.
 
 ---
 
-## What's Done (Weeks 1-4)
+## What's Done (Weeks 1-5)
 
 ### Week 1 [x]
 
@@ -53,11 +53,26 @@
 * [x] Streamlit MVP added under `src/ui/streamlit_app.py`
 * [x] New API and inference-scaffold tests added for mode switching and missing-checkpoint behavior
 
-### Remaining work after Hasan's Week 4 checkpoint
+### Week 5 [x] (integration checkpoint)
+
+* [x] Public `/product/config`, `/product/samples`, `/product/samples/{sample_id}/image`, and `/product/transcribe` routes added
+* [x] Public sample catalog curated from MUSCIMA reference payloads with repo-local image previews
+* [x] Public download facade added for MusicXML and MIDI sample exports
+* [x] Local CORS enabled for React frontend development on `http://localhost:5173`
+* [x] Separate React + Vite + Tailwind frontend scaffolded under `frontend/`
+* [x] Lovable-generated product UI integrated into the repo as a routed frontend with home, library, workspace, and upload placeholder pages
+* [x] Lovable handoff prompt saved under `frontend/LOVABLE_PROMPT.md`
+* [x] Existing typed `/product/*` client retained while the UI layer was replaced
+* [x] New backend and frontend tests added for the Week 5 product layer
+* [x] Frontend validation re-run on April 11, 2026 with `npm test`, `npm run build`, and `npm run lint`
+
+### Remaining work after Hasan's Week 5 integration checkpoint
 
 * [ ] Plug Ahmad's real trained GNN checkpoint into the Week 4 scaffold
 * [ ] Implement the model-specific inference adapter once Ahmad shares checkpoint wiring details
+* [ ] Keep the integrated `/product/*` contract stable while public UI polish continues
 * [ ] Decide whether `/midi` should remain heuristic-driven or consume future GNN relation outputs
+* [ ] Wire real attention weights into the existing explainability surface once Ahmad's checkpoint exposes them
 * [ ] Capture final combined YOLO + GNN metrics once Ahmad's checkpoint is available
 
 ---
@@ -75,8 +90,8 @@
 | MUSCIMA training export pages | 140 | `data/processed/training_exports/` |
 | MUSCIMA training export nodes | 58467 | `data/processed/training_exports/batch_stats.json` |
 | MUSCIMA training export edges | 2625480 | `data/processed/training_exports/batch_stats.json` |
-| Backend stage | `v0.4` | `src/api/app.py` |
-| Last reported full test suite | Ran 31 tests, OK | Week 4 scaffold checkpoint |
+| Backend contract stage | `v0.4` core + `v0.5` product layer | `src/api/service.py`, `src/api/product_service.py` |
+| Last reported full test suite | Ran 36 tests, OK | Week 5 prep checkpoint, plus targeted frontend validation on April 11 |
 
 ---
 
@@ -84,26 +99,29 @@
 
 ### Immediate
 
-1. **Hand Ahmad the Week 4 backend contract** - point him to `assembly_mode`, `/health` readiness, and the fallback behavior already implemented
+1. **Keep the public `/product/*` contract stable** - let frontend polish continue without re-exposing backend/debug terminology
 2. **Get Ahmad's checkpoint path and adapter expectations** - identify what his saved checkpoint requires beyond a path on disk
-3. **Integrate the checkpoint into `src/inference/gnn_service.py`** - keep the current API/UI contract stable while swapping the scaffold adapter for a real one
-4. **Decide how GNN outputs should influence export** - confirm whether Week 5 should keep heuristic export or inject graph-model relationships into assembly/export
+3. **Integrate the checkpoint into `src/inference/gnn_service.py`** - keep both the internal and public UI contracts stable while swapping the scaffold adapter for a real one
+4. **Decide how GNN outputs should influence export quality** - confirm whether the future model path should remain heuristic-backed or feed downstream assembly/export
 
 ### Blocked or dependent items
 
 * The real trained GNN checkpoint is still external
 * Any checkpoint-specific tensor decoding or model-class loading details are still external
 * Final combined YOLO + GNN metrics are still external
-* Real attention weights depend on Ahmad's trained model exposing them
+* Real attention weights still depend on Ahmad's trained model exposing them
+* Public raw image upload is intentionally disabled until detector-side image ingestion exists in this repo
 
 ### Coordination notes
 
 * The detector payload contract remains stable and unchanged from Week 3
 * The Week 4 backend intentionally treats Ahmad's future checkpoint as a plug-in to an already-stable API and UI surface
 * `assembly_mode="gnn"` currently falls back to `heuristic` with an explicit warning when no checkpoint is ready
-* The Streamlit MVP is already prepared to consume `/health`, `/assemble`, and `/midi` from the current backend
-* On April 7, 2026, the full local Python test suite passed with 31 tests after the Week 4 scaffold landed
+* The Streamlit MVP remains the internal/debug tool and still consumes `/health`, `/assemble`, and `/midi`
+* The React frontend is now the public/product-facing layer and talks only to `/product/*`
+* On April 8, 2026, the full local Python test suite passed with 36 tests after the Week 5 prep layer landed
+* On April 11, 2026, the routed Lovable-based frontend passed `npm test`, `npm run build`, and `npm run lint`
 
 ---
 
-*Last updated: April 7, 2026*
+*Last updated: April 11, 2026*

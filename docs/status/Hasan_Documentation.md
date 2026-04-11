@@ -206,7 +206,7 @@ This export uses one edge record per directed candidate-edge occurrence. If the 
 | `tests/export/test_musicxml_export.py` | [x] Present |
 | `tests/evaluation/test_muscima_training_export.py` | [x] Present |
 | `tests/inference/test_gnn_service.py` | [x] Present |
-| Last reported full suite checkpoint | Ran 31 tests, OK |
+| Last reported full suite checkpoint | Ran 36 tests, OK |
 | Repo cleanup completed | [x] |
 
 The repo now uses `src/api/`, `src/graph/`, `src/data_prep/`, `src/evaluation/`, `src/inference/`, and `src/ui/`, grouped tests under `tests/`, status docs under `docs/status/`, and generated artifacts separated into `data/processed/`, `sample_detections/`, and `outputs/`.
@@ -391,4 +391,78 @@ The current repo still follows a selective adaptation strategy for Ahmad's older
 
 ---
 
-*Last updated: April 7, 2026*
+## 11. Week 5 Public Frontend Integration
+
+**Implementations:** `src/api/product_models.py`, `src/api/product_service.py`, `src/api/product_routes.py`, `frontend/`, `tests/api/test_product_routes.py`, `frontend/src/app/App.test.tsx`
+
+Week 5 keeps the Week 4 engineering routes intact and adds a separate public layer for the polished musician-facing experience. The current checkpoint replaces the temporary React shell with the routed Lovable-derived public UI while preserving the same `/product/*` facade and backend service helpers.
+
+### 11.1 Public product facade
+
+| Route | Status | Notes |
+|-|-|-|
+| `GET /product/config` | [x] Implemented | Exposes stage, upload status message, and public feature flags |
+| `GET /product/samples` | [x] Implemented | Lists curated MUSCIMA demo samples with titles, subtitles, and preview URLs |
+| `GET /product/samples/{sample_id}/image` | [x] Implemented | Serves repo-local MUSCIMA grayscale page previews |
+| `POST /product/transcribe` | [x] Implemented | Resolves one sample and returns a merged musician-facing response |
+| `GET /product/samples/{sample_id}/downloads/{format}` | [x] Implemented | Returns MusicXML or MIDI exports without exposing internal route semantics |
+
+The public contract intentionally hides `payload_kind`, `assembly_mode`, graph arrays, and other backend/debug details. Internally it still reuses the Week 4 service helpers and the existing heuristic-backed export path.
+
+### 11.2 Public sample catalog decision
+
+| Decision | Outcome |
+|-|-|
+| Public demo source | MUSCIMA reference payloads only |
+| Reason | Repo-local MUSCIMA page images can be resolved deterministically from the document name |
+| Deferred samples | `sample_detections/model_outputs_quick/` remains internal until matching local preview images are available |
+| Sample metadata | `id`, `title`, `subtitle`, `document_name`, `preview_image_url`, `description`, `tags` |
+
+### 11.3 Frontend integration
+
+**Implementation:** `frontend/`
+
+| Area | Status |
+|-|-|
+| Vite + React + TypeScript scaffold | [x] |
+| Tailwind-based styling | [x] |
+| Typed API client for `/product/*` | [x] |
+| Mock fallback data for offline/frontend-only work | [x] |
+| Lovable multi-page visual system adapted into repo-local components | [x] |
+| Routed home page | [x] |
+| Routed sample library page | [x] |
+| Routed sample workspace page | [x] |
+| Routed upload placeholder page | [x] |
+| MusicXML / MIDI download actions | [x] |
+| Confidence cue panel | [x] |
+| Explainability placeholder panel | [x] |
+| Future LLM/music explanation panel | [x] |
+| MIDI playback area scaffold | [x] |
+| Saved Lovable prompt | [x], `frontend/LOVABLE_PROMPT.md` |
+
+The integrated frontend intentionally keeps the backend-facing code thin. The merge reuses the existing DTOs and `frontend/src/lib/api.ts` client, maps Lovable's home/library/workspace/upload information architecture onto the current sample-first public contract, and avoids importing unused mock-only pages or backend terminology into the user-facing experience.
+
+### 11.4 Validation
+
+On **April 11, 2026**, the following Lovable-integration checks passed locally:
+
+| Check | Result |
+|-|-|
+| `.\.venv\Scripts\python.exe -m unittest tests\api\test_product_routes.py` | Passed, `5` tests |
+| `npm test` in `frontend/` | Passed |
+| `npm run build` in `frontend/` | Passed |
+| `npm run lint` in `frontend/` | Passed |
+
+### 11.5 Week 5 tradeoffs
+
+| Decision | Alternatives considered | Rationale |
+|-|-|-|
+| Keep Streamlit as the internal tool | Replace Streamlit with React entirely | Preserves the existing debug surface and avoids mixing product UI with backend inspection |
+| Add `/product/*` facade instead of calling `/assemble` and `/midi` directly from React | Let the public frontend call engineering routes directly | Keeps frontend code free of backend/debug terminology and stabilizes the future Lovable integration target |
+| Make the public UI sample-first | Fake full image-upload transcription before detector integration exists | Keeps the demo honest while still delivering a polished user-facing experience now |
+| Integrate only the Lovable routes that match the current backend reality | Copy every generated page and mock workflow verbatim | Avoids shipping unsupported projects/review/processing flows that the backend cannot currently honor |
+| Use a separate `frontend/` app | Extend Streamlit for public polish | Better match for Lovable-generated React code and future product iteration |
+
+---
+
+*Last updated: April 11, 2026*
