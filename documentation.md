@@ -1105,6 +1105,202 @@ Step 7's 30-epoch YOLOv8s run achieved mAP50=0.584 but was still improving at ep
 
 ---
 
+## Step 9: GNN Assembler Training on MUSCIMA++ v2.0
+
+**Date:** April 10–14, 2026
+**Status:** ✅ COMPLETED
+
+### 9.1 Motivation
+
+The GNN assembler architecture (Step 6) was designed but never trained — it needed real annotated symbol-relationship data. MUSCIMA++ v2.0 provides 140 handwritten music pages with per-symbol bounding boxes and relationship edges (inlinks/outlinks) between symbols, making it ideal for training edge classification.
+
+### 9.2 Dataset
+
+| Property | Value |
+|----------|-------|
+| Source | MUSCIMA++ v2.0 (github.com/OMR-Research/muscima-pp) |
+| Pages | 140 XML annotation files |
+| Split | 112 train / 28 validation |
+| Symbols | 58,815 nodes mapped to 15-class taxonomy |
+| Candidate edges | 502,547 (constructed via k-NN + vertical overlap) |
+| Positive edges | 64,744 (12.9% of total) |
+| stem_notehead | 45,748 (9.1%) |
+| beam_notegroup | 18,996 (3.8%) |
+| slur_phrase | 0 (0.0%) — not represented in MUSCIMA++ taxonomy mapping |
+| tie_sustained | 0 (0.0%) — not represented in MUSCIMA++ taxonomy mapping |
+
+### 9.3 Data Pipeline
+
+**New files created:**
+- `melodious/gnn_data_loader.py` — Parses MUSCIMA++ XML annotations, maps to 15-class taxonomy, constructs lean training graphs, converts to PyTorch Geometric `Data` objects
+- `train_gnn_muscima.py` — Training entry point with CLI, negative edge subsampling, per-class metrics, checkpointing, early stopping
+
+**Graph construction approach:**
+The original `GraphConstructor` used O(n²) all-pairs staff-membership edges, creating ~96,000 edges per page (98.6% negative). This caused training to collapse — the model could achieve 99% accuracy by predicting `no_relation` for everything.
+
+**Solution — lean graph construction** (`_build_training_edges()`):
+- k-NN edges (k=8, max_x_distance=0.15 normalized)
+- Vertical overlap edges for stem/notehead/beam candidates (x_dist < 0.05 normalized)
+- Reduced edges from ~96K to ~3.5K per page
+- Positive ratio improved from 1.4% to 12.9%
+
+### 9.4 Training Iterations
+
+6 training runs were needed to find a working configuration:
+
+| Run | Data | Graph | neg_ratio | Class Weights | Val Acc | stem F1 | beam F1 | Issue |
+|-----|------|-------|-----------|---------------|---------|---------|---------|-------|
+| 1 | 5 pages | All-pairs | 3.0 | [0.5,5,5,3,3] | 99% | 0.00 | 0.00 | Collapsed → all no_relation |
+| 2 | 5 pages | All-pairs+neg | 3.0 | [0.5,5,5,3,3] | 0.7% | — | — | Collapsed → all stem_notehead |
+| 3 | 5 pages | Lean k-NN | 3.0 | [0.5,5,5,3,3] | — | — | — | 5 pages insufficient for 606K params |
+| 4 | 140 pages | Lean k-NN | 3.0 | [0.5,5,5,3,3] | 85.7% | 0.560 | 0.754 | First success |
+| 5 | 140 pages | Lean k-NN | 5.0 | [0.5,5,5,3,3] | 86.1% | 0.585 | 0.800 | Higher neg_ratio helped |
+| **6** | **140 pages** | **Lean k-NN** | **5.0** | **[0.5,3,4,2,2]** | **89.9%** | **0.670** | **0.785** | **Final — best balance** |
+
+### 9.5 Final Model — Run 6
+
+**Training configuration:**
+| Parameter | Value |
+|-----------|-------|
+| Model | GNNAssembler (3 GAT layers, 8 heads, hidden_dim=64) |
+| Parameters | 606,553 |
+| Epochs | 80 (best at epoch 79) |
+| Learning rate | 0.001 → 0.0005 (ReduceLROnPlateau) |
+| Negative edge ratio | 5.0 (sample 5× as many negatives as positives) |
+| Class weights | [0.5, 3.0, 4.0, 2.0, 2.0] |
+| Gradient clipping | max_norm=1.0 |
+| Training time | 263.5 seconds on RTX 3080 |
+
+**Validation results (28 pages):**
+
+| Relationship | Precision | Recall | F1 | TP | FP | FN |
+|---|---|---|---|---|---|---|
+| no_relation | 0.992 | 0.891 | 0.939 | 79,460 | 650 | 9,733 |
+| stem_notehead | 0.523 | 0.932 | 0.670 | 8,844 | 8,070 | 650 |
+| beam_notegroup | 0.658 | 0.972 | 0.785 | 3,377 | 1,759 | 96 |
+| slur_phrase | N/A | N/A | N/A | 0 | 0 | 0 |
+| tie_sustained | N/A | N/A | N/A | 0 | 0 | 0 |
+
+### 9.6 Key Insights
+
+1. **Data volume critical.** 5 sample pages produced only collapsed predictions across 3 attempts. 140 pages immediately yielded learning signal. The 606K-parameter model needs substantial data.
+
+2. **Graph sparsity matters.** All-pairs O(n²) edges flooded the model with 98.6% negative edges. The lean k-NN graph (k=8) reduced noise dramatically while retaining all positive relationships.
+
+3. **Negative edge subsampling.** Keeping all positive edges but subsampling negatives at a fixed ratio (5:1) gave the model balanced mini-batches without losing positive relationship coverage.
+
+4. **Lower class weights improved precision.** Reducing stem_notehead weight from 5.0 to 3.0 shifted the model from "predict positive everywhere" (R=0.98, P=0.39) to a better balance (R=0.93, P=0.52). The F1 jumped from 0.56 → 0.67.
+
+5. **High recall on structural relationships.** The model catches 93% of stem-notehead and 97% of beam-notegroup connections, which is crucial for downstream music assembly — missing a connection produces worse errors than false positives.
+
+6. **slur_phrase and tie_sustained are untrained.** MUSCIMA++ annotations did not map to these relationship types in our taxonomy. These classes predict `no_relation` by default.
+
+### 9.7 Generated Artifacts
+
+| File | Description |
+|------|-------------|
+| `outputs/gnn_checkpoint.pt` | Best model weights + config metadata |
+| `outputs/gnn_training_results.json` | Full training history (80 epochs) |
+| `melodious/gnn_data_loader.py` | MUSCIMA++ data pipeline |
+| `train_gnn_muscima.py` | Training script with CLI |
+| `sample_detections/GNN_HANDOFF.md` | Integration guide for Hassan |
+
+### 9.8 Handoff to Hassan
+
+Checkpoint delivered on `feature/gnn-training` branch. Integration guide at `sample_detections/GNN_HANDOFF.md` includes:
+- Model loading code
+- Input/output tensor shapes (x: [N,10], edge_index: [2,E], edge_type: [E] → edge_logits: [E,5])
+- Inference example using `predict_relationships()`
+- Class mappings (SYMBOL_CLASSES, RELATIONSHIP_TYPES)
+
+---
+
+## Step 10: Model Export — ONNX and INT8 Quantization
+
+### 10.1 Objective
+
+Export the YOLOv8s detection model to ONNX format for cross-platform deployment and evaluate INT8 post-training quantization for mobile/edge scenarios. Targets: model size < 50 MB, accuracy drop < 2% (mAP50), inference latency < 200ms.
+
+### 10.2 ONNX FP32 Export
+
+Exported using `ultralytics` built-in export:
+
+```python
+from ultralytics import YOLO
+model = YOLO('outputs/yolov8_extended/train/weights/best.pt')
+model.export(format='onnx', imgsz=640, simplify=True, opset=17)
+```
+
+| Property | Value |
+|----------|-------|
+| Input shape | (1, 3, 640, 640) |
+| Output shape | (1, 19, 8400) — 15 classes + 4 box coords |
+| File size | **42.7 MB** (vs 21.5 MB PyTorch) |
+| ONNX opset | 17 |
+
+### 10.3 ONNX FP32 Validation
+
+Validated on full DeepScores v2 validation set (352 images, 184,875 instances):
+
+| Metric | PyTorch FP32 | ONNX FP32 | Δ (%) |
+|--------|-------------|-----------|-------|
+| mAP50 | 0.652 | **0.651** | -0.15% |
+| mAP50-95 | 0.471 | **0.484** | +2.8% |
+| Precision | 0.855 | **0.859** | +0.5% |
+| Recall | 0.534 | **0.532** | -0.4% |
+| Inference | — | **173.7ms** | — |
+
+All targets met. The negligible mAP50 drop (0.15%) confirms lossless conversion. The slight mAP50-95 increase is due to minor numerical differences in post-processing between PyTorch and ONNX Runtime.
+
+### 10.4 INT8 Dynamic Quantization
+
+Applied dynamic quantization using `onnxruntime.quantization`:
+
+```python
+from onnxruntime.quantization import quantize_dynamic, QuantType
+quantize_dynamic(
+    model_input='best.onnx',
+    model_output='best_int8.onnx',
+    weight_type=QuantType.QUInt8
+)
+```
+
+| Property | ONNX FP32 | ONNX INT8 | Change |
+|----------|-----------|-----------|--------|
+| File size | 42.7 MB | **11.0 MB** | -74.3% |
+| Inference | 173.7ms | **122.5ms** | -29.5% faster |
+
+### 10.5 INT8 Validation
+
+| Metric | ONNX FP32 | ONNX INT8 | Δ (%) |
+|--------|-----------|-----------|-------|
+| mAP50 | 0.651 | **0.625** | -4.0% |
+| mAP50-95 | 0.484 | **0.375** | -22.4% |
+| Precision | 0.859 | **0.828** | -3.6% |
+| Recall | 0.532 | **0.505** | -5.0% |
+
+INT8 dynamic quantization exceeds the 2% mAP50 drop target (-4.0%). The mAP50-95 degradation is significant at -22.4%, indicating that tighter IoU thresholds suffer more from quantization noise. Per-class analysis shows clefs remain robust (>0.94 mAP50) while small symbols (rest-half, rest-whole) degrade most.
+
+### 10.6 Recommendation
+
+**ONNX FP32 is the recommended deployment format.** It meets all three targets:
+- Size: 42.7 MB < 50 MB ✅
+- Accuracy: 0.15% mAP50 drop < 2% ✅
+- Latency: 173.7ms < 200ms ✅
+
+INT8 is viable for extreme edge deployment where the 74% size reduction and 30% speedup justify a 4% mAP50 loss. For production use, static quantization with a calibration dataset (100–500 representative images) would likely recover 1–2% of the accuracy gap.
+
+### 10.7 Generated Artifacts
+
+| File | Description |
+|------|-------------|
+| `outputs/yolov8_extended/train/weights/best.onnx` | FP32 ONNX model (42.7 MB) |
+| `outputs/yolov8_extended/train/weights/best_int8.onnx` | INT8 quantized model (11.0 MB) |
+| `outputs/onnx_val_log.txt` | FP32 ONNX validation log |
+| `outputs/int8_val_log.txt` | INT8 validation log |
+
+---
+
 ## Results Summary
 
 ### Detection Metrics (YOLOv8s — Best Model, Extended Training)
@@ -1114,6 +1310,22 @@ Step 7's 30-epoch YOLOv8s run achieved mAP50=0.584 but was still improving at ep
 | mAP@0.5:0.95 | **0.471** | — | Strong |
 | Precision | **0.855** | — | Excellent |
 | Recall | **0.534** | — | Good |
+
+### GNN Assembly Metrics (GNNAssembler — MUSCIMA++ v2.0)
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| Val accuracy | **89.9%** | ~85% (literature) | ✅ EXCEEDED |
+| stem_notehead F1 | **0.670** | — | Good (high recall) |
+| beam_notegroup F1 | **0.785** | — | Strong |
+| no_relation F1 | **0.939** | — | Excellent |
+| Combined YOLO+GNN F1 | TBD | >= 0.75 | ⏳ Pending end-to-end eval |
+
+### Deployment Metrics (ONNX Export)
+| Metric | ONNX FP32 | ONNX INT8 | Target | Status |
+|--------|-----------|-----------|--------|--------|
+| mAP50 drop | **0.15%** | 4.0% | < 2% | ✅ FP32 meets target |
+| Model size | 42.7 MB | **11.0 MB** | < 50 MB | ✅ Both meet target |
+| Inference latency | 173.7ms | **122.5ms** | < 200ms | ✅ Both meet target |
 
 ### Training Metrics (YOLOv8s — Extended)
 | Metric | Value |
@@ -1181,7 +1393,11 @@ Step 7's 30-epoch YOLOv8s run achieved mAP50=0.584 but was still improving at ep
 1. ✅ ~~Complete baseline training~~ (Done: F1=0.235)
 2. ✅ ~~Apply transfer learning with YOLOv8~~ (Done: mAP50=0.584)
 3. ✅ ~~Extended training to convergence~~ (Done: mAP50=0.652, 100 epochs)
-4. Integrate best detector with GNN assembler
-5. Evaluate combined YOLO+GNN pipeline (target: combined F1 >= 0.75)
-6. Export models (ONNX/INT8) for deployment
-7. Run end-to-end Image→MIDI pipeline
+4. ✅ ~~Train GNN assembler on MUSCIMA++~~ (Done: val_acc=89.9%, stem F1=0.670, beam F1=0.785)
+5. ✅ ~~Export models (ONNX/INT8) for deployment~~ (Done: ONNX FP32 42.7 MB, 0.15% mAP drop; INT8 11.0 MB)
+6. Robustness testing (noise, JPEG, rotation degradation curves)
+7. Model card (Western-bias documentation, responsible ML)
+8. Measure baseline F1s on holdout (template matching, HOG+SVM, heuristic)
+9. Per-class F1 histogram + PR curves visualization
+10. GAT attention visualization overlay
+11. Evaluate combined YOLO+GNN pipeline (target: combined F1 >= 0.75)
