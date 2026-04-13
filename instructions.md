@@ -1,6 +1,6 @@
 # Melodious: Optical Music Recognition Project - Instructions & Progress
 
-## Current Step: Step 11 - Robustness Testing ✅ COMPLETED
+## Current Step: Step 12 - Combined Pipeline Evaluation ✅ COMPLETED
 
 ### GNN Assembler (MUSCIMA++ v2.0):
 **Model:** GNNAssembler — 3 GAT layers, 8 heads, 606K params
