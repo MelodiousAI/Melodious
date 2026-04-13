@@ -61,8 +61,15 @@ class DetectionPipeline:
         self._load_model()
 
         if self.model_type == "custom":
-            return self._predict_custom(image_path)
-        return self._predict_yolov8(image_path)
+            payload = self._predict_custom(image_path)
+        else:
+            payload = self._predict_yolov8(image_path)
+
+        warning = self.check_distribution_warning(payload)
+        if warning:
+            payload["distribution_warning"] = warning
+
+        return payload
 
     def predict_batch(self, image_paths: Sequence[str]) -> List[Dict]:
         """Run detection on multiple images."""
@@ -132,6 +139,27 @@ class DetectionPipeline:
     # ------------------------------------------------------------------
     # Convenience I/O
     # ------------------------------------------------------------------
+    @staticmethod
+    def check_distribution_warning(payload: Dict, low_conf_threshold: float = 0.5,
+                                    warning_fraction: float = 0.5) -> Optional[str]:
+        """Check if detections suggest out-of-distribution input.
+
+        If more than ``warning_fraction`` of detections have confidence below
+        ``low_conf_threshold``, returns a warning string.  Otherwise returns
+        ``None``.  This implements the confidence-based non-Western notation
+        flag required by the responsible ML specification.
+        """
+        detections = payload.get("detections", [])
+        if not detections:
+            return None
+        low = sum(1 for d in detections if d.get("confidence", 1.0) < low_conf_threshold)
+        if low / len(detections) > warning_fraction:
+            return (
+                "This score may use notation outside the system's training "
+                "distribution. Results may be unreliable."
+            )
+        return None
+
     @staticmethod
     def save_payload(payload: Dict, path: str) -> None:
         out = Path(path)
