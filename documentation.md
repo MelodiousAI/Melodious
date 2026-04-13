@@ -1343,6 +1343,16 @@ INT8 is viable for extreme edge deployment where the 74% size reduction and 30% 
 | Precision | 0.243 | — | Low |
 | Recall | 0.227 | — | Low |
 
+### Baseline Comparison (Measured on DeepScores v2 Test Set)
+| Method | F1@0.25 | F1@0.50 | P@0.50 | R@0.50 | Notes |
+|--------|---------|---------|--------|--------|-------|
+| Template Matching | 0.460 | **0.165** | 0.159 | 0.171 | NCC matching, 20 templates/class |
+| HOG+SVM | 0.003 | **0.003** | 0.025 | 0.001 | Contour proposals fail on dense scores |
+| Custom YOLO (10 ep) | — | **0.235** | 0.243 | 0.227 | From scratch, no pretraining |
+| YOLOv8s (100 ep) | — | **0.652** | 0.855 | 0.534 | COCO pretrained, transfer learning |
+
+Template matching outperforms its 0.13 projection (actual: 0.165). HOG+SVM dramatically underperforms its 0.22 projection (actual: 0.003) because contour-based region proposals produce too few overlapping proposals on dense music scores.
+
 ### Architecture Comparison
 | Feature | Custom YOLO | YOLOv8s |
 |---------|-------------|---------|
@@ -1443,7 +1453,7 @@ Evaluated on a 50-image subset of the DeepScores v2 validation set. Each degrada
 5. ✅ ~~Export models (ONNX/INT8) for deployment~~ (Done: ONNX FP32 42.7 MB, 0.15% mAP drop; INT8 11.0 MB)
 6. ✅ ~~Robustness testing (noise, JPEG, rotation degradation curves)~~ (Done: JPEG-robust, noise-sensitive at σ>0.05)
 7. ✅ ~~Model card (Western-bias documentation, responsible ML)~~ (Done: MODEL_CARD.md)
-8. Measure baseline F1s on holdout (template matching, HOG+SVM, heuristic)
+8. ✅ ~~Measure baseline F1s on holdout (template matching, HOG+SVM, heuristic)~~ (Done: Template F1=0.165, HOG+SVM F1=0.003)
 9. Per-class F1 histogram + PR curves visualization
 10. GAT attention visualization overlay
 11. Evaluate combined YOLO+GNN pipeline (target: combined F1 >= 0.75)
