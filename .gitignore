@@ -7,7 +7,10 @@ __pycache__/
 
 data/raw/
 data/processed/
+data/muscima-pp/
 outputs/
+!outputs/gnn_checkpoint.pt
+!outputs/gnn_training_results.json
 logs/
 tests/staff_debug_sample/
 tests/staff_debug_w14/
@@ -32,6 +35,7 @@ test_dataset.py
 *.pt
 yolo11n.pt
 yolov8s.pt
+!outputs/gnn_checkpoint.pt
 
 # OS
 Thumbs.db
