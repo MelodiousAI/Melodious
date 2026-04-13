@@ -1,8 +1,26 @@
 # Melodious: Optical Music Recognition Project - Instructions & Progress
 
-## Current Step: Step 7 - YOLOv8 Transfer Learning ✅ COMPLETED
+## Current Step: Step 10 - ONNX Export & INT8 Quantization ✅ COMPLETED
 
-### YOLOv8s Fine-tuning Results:
+### GNN Assembler (MUSCIMA++ v2.0):
+**Model:** GNNAssembler — 3 GAT layers, 8 heads, 606K params
+**Dataset:** 140 MUSCIMA++ pages (112 train / 28 val) | **Training:** 80 epochs | **GPU:** RTX 3080
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| Val accuracy | **89.9%** | ✅ Exceeded 85% projection |
+| stem_notehead F1 | **0.670** (P=0.523, R=0.932) | ✅ Good |
+| beam_notegroup F1 | **0.785** (P=0.658, R=0.972) | ✅ Strong |
+| no_relation F1 | **0.939** (P=0.992, R=0.891) | ✅ Excellent |
+
+**Checkpoint:** `outputs/gnn_checkpoint.pt`
+**Handoff:** `sample_detections/GNN_HANDOFF.md`
+
+### Previous: YOLOv8s Extended Training ✅ COMPLETED
+**Best model:** mAP50=0.652, P=0.855, R=0.534 (100 epochs)
+**Checkpoint:** `outputs/yolov8_extended/train/weights/best.pt`
+
+### Previous: Step 7 - YOLOv8 Transfer Learning ✅ COMPLETED
 **Model:** YOLOv8s pretrained on COCO, fine-tuned on DeepScores v2 Dense
 **Epochs:** 30 | **GPU:** RTX 3080 Laptop | **Image size:** 640
 
@@ -131,7 +149,25 @@
 - [x] Identify areas for improvement (transfer learning with YOLOv8)
 - [x] Experiment with hyperparameters (30 epochs, 640px, batch 8, mosaic aug)
 - [x] Implement model enhancements (YOLOv8s pretrained on COCO)
-- [x] Document results (mAP50: 0.235 → 0.584, +148%)
+- [x] Extended training to 100 epochs (mAP50: 0.584 → 0.652)
+- [x] Document results (mAP50: 0.235 → 0.652, +177%)
+
+### Step 9: GNN Assembler Training ✅ COMPLETED
+- [x] Download MUSCIMA++ v2.0 (140 annotated pages)
+- [x] Create data loader (`melodious/gnn_data_loader.py`)
+- [x] Create training script (`train_gnn_muscima.py`)
+- [x] Train GNN on MUSCIMA++ (6 iterations, val_acc=89.9%)
+- [x] Package checkpoint for Hassan (`sample_detections/GNN_HANDOFF.md`)
+
+### Step 10: ONNX Export + INT8 Quantization
+- [ ] Export YOLOv8s best.pt to ONNX format
+- [ ] INT8 post-training quantization
+- [ ] Measure model size (< 50 MB) and accuracy drop (< 2%)
+
+### Step 11: Robustness Testing + Model Card
+- [ ] Test under noise, JPEG compression, rotation
+- [ ] Generate F1 vs degradation curves
+- [ ] Write model card (Western-bias documentation)
 
 ---
 
