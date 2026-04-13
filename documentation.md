@@ -1318,7 +1318,7 @@ INT8 is viable for extreme edge deployment where the 74% size reduction and 30% 
 | stem_notehead F1 | **0.670** | — | Good (high recall) |
 | beam_notegroup F1 | **0.785** | — | Strong |
 | no_relation F1 | **0.939** | — | Excellent |
-| Combined YOLO+GNN F1 | TBD | >= 0.75 | ⏳ Pending end-to-end eval |
+| Combined YOLO+GNN F1 | **0.358** (est.) | >= 0.75 | ⚠️ Below target — see Step 12 |
 
 ### Deployment Metrics (ONNX Export)
 | Metric | ONNX FP32 | ONNX INT8 | Target | Status |
@@ -1444,6 +1444,73 @@ Evaluated on a 50-image subset of the DeepScores v2 validation set. Each degrada
 
 ---
 
+## Step 12: Combined YOLO+GNN Pipeline Evaluation
+
+### 12.1 Objective
+
+Evaluate the full detection-to-assembly pipeline: YOLO detects symbols → GNN classifies relationships between them. Measure the combined F1 to assess end-to-end system quality (target: F1 ≥ 0.75).
+
+### 12.2 Methodology
+
+Evaluated the GNN assembler on the full (unsampled) MUSCIMA++ v2.0 validation set (28 pages). Unlike training, which used 3:1 negative sampling to balance classes, this evaluation uses the natural edge distribution (86.3% no_relation) to measure real-world performance.
+
+Combined F1 is estimated as: **F1_combined ≈ F1_detection × F1_assembly**, justified because missed detections remove all downstream relationships (multiplicative error propagation).
+
+### 12.3 GNN Assembly Results (Natural Distribution)
+
+| Metric | Neg-Sampled (Training) | Natural Distribution (Eval) |
+|--------|----------------------|---------------------------|
+| Overall accuracy | **89.9%** | 46.9% |
+| Weighted F1 | — | **0.548** |
+| Macro F1 | — | 0.275 |
+| Positive-only F1 | — | 0.631 |
+
+Per-class breakdown on natural distribution:
+
+| Relationship | Precision | Recall | F1 | Support |
+|-------------|-----------|--------|------|---------|
+| no_relation | 0.898 | 0.455 | 0.604 | 66,940 |
+| stem_notehead | 0.133 | 0.644 | 0.221 | 8,999 |
+| beam_notegroup | 0.000 | 0.000 | 0.000 | 1,376 |
+
+### 12.4 Combined Pipeline F1
+
+| Component | Metric | Value |
+|-----------|--------|-------|
+| Detection (YOLOv8s) | mAP50 | 0.652 |
+| Assembly (GNN) | Weighted F1 | 0.548 |
+| **Combined estimate** | **F1** | **0.358** |
+| Target | F1 | ≥ 0.75 |
+| Status | | ⚠️ Below target |
+
+### 12.5 Analysis: Why the Gap Exists
+
+The 89.9% training accuracy was inflated by negative sampling (3:1 ratio), which artificially balanced the class distribution. On the natural distribution:
+
+1. **Class imbalance is severe.** 86.3% of edges are no_relation. The GNN, trained with balanced sampling, over-predicts positive relationships, leading to low precision on stem_notehead (0.133) and missing beam_notegroup entirely.
+
+2. **Detection recall limits the ceiling.** YOLOv8s recall is 0.534 — nearly half of symbols are missed. Each missed symbol removes all its relationships from evaluation.
+
+3. **Cross-dataset gap.** YOLO was trained on DeepScores v2 (printed), GNN on MUSCIMA++ v2.0 (handwritten). In a real pipeline, YOLO detections on handwritten scores would be even worse.
+
+### 12.6 Path to ≥ 0.75
+
+To reach the combined F1 target, both components need improvement:
+
+- **Detection:** Increase recall from 0.534 → ~0.80 via SAHI tiling or YOLOv8m at higher resolution
+- **Assembly:** Retrain GNN with curriculum learning (gradually reduce negative sampling ratio from 3:1 → natural) to handle the real class distribution
+- **Joint fine-tuning:** Train on same dataset (e.g., MUSCIMA++ images → YOLO → GNN → end-to-end loss)
+
+### 12.7 Generated Artifacts
+
+| File | Description |
+|------|-------------|
+| `melodious/combined_eval.py` | End-to-end evaluation script |
+| `outputs/combined_eval_results.json` | Full numerical results |
+| `outputs/combined_eval_log.txt` | Evaluation log |
+
+---
+
 ## Next Steps
 
 1. ✅ ~~Complete baseline training~~ (Done: F1=0.235)
@@ -1456,4 +1523,4 @@ Evaluated on a 50-image subset of the DeepScores v2 validation set. Each degrada
 8. ✅ ~~Measure baseline F1s on holdout (template matching, HOG+SVM, heuristic)~~ (Done: Template F1=0.165, HOG+SVM F1=0.003)
 9. ✅ ~~Per-class F1 histogram + PR curves visualization~~ (Done: 4 plot types in outputs/visualizations/)
 10. ✅ ~~GAT attention visualization overlay~~ (Done: 3 MUSCIMA++ pages with attention arrows)
-11. Evaluate combined YOLO+GNN pipeline (target: combined F1 >= 0.75)
+11. ✅ ~~Evaluate combined YOLO+GNN pipeline~~ (Done: estimated F1=0.358, below 0.75 target — analysis in Step 12)
