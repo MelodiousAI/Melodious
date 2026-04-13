@@ -1442,7 +1442,7 @@ Evaluated on a 50-image subset of the DeepScores v2 validation set. Each degrada
 4. ✅ ~~Train GNN assembler on MUSCIMA++~~ (Done: val_acc=89.9%, stem F1=0.670, beam F1=0.785)
 5. ✅ ~~Export models (ONNX/INT8) for deployment~~ (Done: ONNX FP32 42.7 MB, 0.15% mAP drop; INT8 11.0 MB)
 6. ✅ ~~Robustness testing (noise, JPEG, rotation degradation curves)~~ (Done: JPEG-robust, noise-sensitive at σ>0.05)
-7. Model card (Western-bias documentation, responsible ML)
+7. ✅ ~~Model card (Western-bias documentation, responsible ML)~~ (Done: MODEL_CARD.md)
 8. Measure baseline F1s on holdout (template matching, HOG+SVM, heuristic)
 9. Per-class F1 histogram + PR curves visualization
 10. GAT attention visualization overlay
