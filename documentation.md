@@ -1454,6 +1454,6 @@ Evaluated on a 50-image subset of the DeepScores v2 validation set. Each degrada
 6. ✅ ~~Robustness testing (noise, JPEG, rotation degradation curves)~~ (Done: JPEG-robust, noise-sensitive at σ>0.05)
 7. ✅ ~~Model card (Western-bias documentation, responsible ML)~~ (Done: MODEL_CARD.md)
 8. ✅ ~~Measure baseline F1s on holdout (template matching, HOG+SVM, heuristic)~~ (Done: Template F1=0.165, HOG+SVM F1=0.003)
-9. Per-class F1 histogram + PR curves visualization
-10. GAT attention visualization overlay
+9. ✅ ~~Per-class F1 histogram + PR curves visualization~~ (Done: 4 plot types in outputs/visualizations/)
+10. ✅ ~~GAT attention visualization overlay~~ (Done: 3 MUSCIMA++ pages with attention arrows)
 11. Evaluate combined YOLO+GNN pipeline (target: combined F1 >= 0.75)
