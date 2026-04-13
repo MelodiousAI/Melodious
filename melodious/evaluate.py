@@ -230,7 +230,7 @@ def evaluate_template_matching(
 
     n = min(len(dataset), limit) if limit else len(dataset)
     for i in range(n):
-        sample = dataset[i]
+        _, target = dataset[i]
         img_path = dataset.annotations[i]["image_path"]
         image = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
         if image is None:
@@ -253,8 +253,14 @@ def evaluate_template_matching(
             "scores": np.array(pred_scores) if pred_scores else np.zeros(0),
         })
 
-        gt_boxes = sample["boxes"].numpy() if isinstance(sample["boxes"], torch.Tensor) else np.array(sample["boxes"])
-        gt_labels = sample["labels"].numpy() if isinstance(sample["labels"], torch.Tensor) else np.array(sample["labels"])
+        gt_boxes = target["boxes"].numpy() if isinstance(target["boxes"], torch.Tensor) else np.array(target["boxes"])
+        gt_labels = target["labels"].numpy() if isinstance(target["labels"], torch.Tensor) else np.array(target["labels"])
+        # Scale GT boxes from resized space back to original pixel coordinates
+        if len(gt_boxes) > 0 and "orig_size" in target and "img_size" in target:
+            orig_w, orig_h = target["orig_size"]
+            img_w, img_h = target["img_size"]
+            gt_boxes[:, [0, 2]] *= orig_w / img_w
+            gt_boxes[:, [1, 3]] *= orig_h / img_h
         all_targets.append({
             "boxes": gt_boxes,
             "labels": gt_labels,
@@ -281,7 +287,7 @@ def evaluate_hog_svm(
 
     n = min(len(dataset), limit) if limit else len(dataset)
     for i in range(n):
-        sample = dataset[i]
+        _, target = dataset[i]
         img_path = dataset.annotations[i]["image_path"]
         image = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
         if image is None:
@@ -304,8 +310,14 @@ def evaluate_hog_svm(
             "scores": np.array(pred_scores) if pred_scores else np.zeros(0),
         })
 
-        gt_boxes = sample["boxes"].numpy() if isinstance(sample["boxes"], torch.Tensor) else np.array(sample["boxes"])
-        gt_labels = sample["labels"].numpy() if isinstance(sample["labels"], torch.Tensor) else np.array(sample["labels"])
+        gt_boxes = target["boxes"].numpy() if isinstance(target["boxes"], torch.Tensor) else np.array(target["boxes"])
+        gt_labels = target["labels"].numpy() if isinstance(target["labels"], torch.Tensor) else np.array(target["labels"])
+        # Scale GT boxes from resized space back to original pixel coordinates
+        if len(gt_boxes) > 0 and "orig_size" in target and "img_size" in target:
+            orig_w, orig_h = target["orig_size"]
+            img_w, img_h = target["img_size"]
+            gt_boxes[:, [0, 2]] *= orig_w / img_w
+            gt_boxes[:, [1, 3]] *= orig_h / img_h
         all_targets.append({
             "boxes": gt_boxes,
             "labels": gt_labels,
