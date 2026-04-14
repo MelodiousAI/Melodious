@@ -8,6 +8,7 @@ Run with: python main.py
 import argparse
 import torch
 
+from melodious.seed import set_seed
 from melodious.dataset import create_dataloaders
 from melodious.model import create_yolo_model
 from melodious.train import Trainer
@@ -43,6 +44,8 @@ def main():
                        help='Directory for logs')
     
     args = parser.parse_args()
+
+    set_seed(42)
     
     # Check CUDA availability
     if not torch.cuda.is_available():

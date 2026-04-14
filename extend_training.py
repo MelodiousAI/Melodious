@@ -10,8 +10,11 @@ from multiprocessing import freeze_support
 from ultralytics import YOLO
 import os
 
+from melodious.seed import set_seed
+
 def main():
     os.chdir(r"c:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code")
+    set_seed(42)
 
     model = YOLO("outputs/yolov8_extended/train/weights/last.pt")
     print("Phase 2: resuming training from extended/last.pt (epoch 44)...")

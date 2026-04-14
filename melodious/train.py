@@ -21,6 +21,7 @@ from tqdm import tqdm
 
 from .model import YOLODetector
 from .dataset import create_dataloaders, NUM_CLASSES
+from .seed import set_seed
 
 
 class FocalLoss(nn.Module):

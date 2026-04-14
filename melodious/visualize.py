@@ -233,10 +233,126 @@ def plot_gnn_metrics(output_dir: str):
     print(f"Saved gnn_relationship_f1.png")
 
 
+def plot_confidence_overlay(
+    image_paths: list,
+    model_checkpoint: str,
+    output_dir: str,
+    img_size: int = 1024,
+    conf_thresh: float = 0.25,
+):
+    """Draw bounding boxes on score images color-coded by detection confidence.
+
+    Green  = high confidence  (≥ 0.7)
+    Yellow = medium confidence (0.5 – 0.7)
+    Red    = low confidence   (< 0.5)
+
+    Generates one annotated PNG per input image plus a summary histogram of
+    confidence scores across all detections.
+    """
+    from ultralytics import YOLO
+    from PIL import Image, ImageDraw, ImageFont
+
+    os.makedirs(output_dir, exist_ok=True)
+    model = YOLO(model_checkpoint)
+
+    all_confs: list = []
+
+    for img_path in image_paths:
+        results = model.predict(img_path, imgsz=img_size, conf=conf_thresh, verbose=False)
+        result = results[0]
+
+        img = Image.open(img_path).convert("RGB")
+        draw = ImageDraw.Draw(img)
+
+        boxes = result.boxes
+        for box in boxes:
+            conf = float(box.conf[0])
+            cls_id = int(box.cls[0])
+            cls_name = CLASS_NAMES[cls_id] if cls_id < len(CLASS_NAMES) else f"cls{cls_id}"
+            x1, y1, x2, y2 = box.xyxy[0].tolist()
+
+            all_confs.append(conf)
+
+            # Color by confidence tier
+            if conf >= 0.7:
+                color = (34, 139, 34)   # forest green
+                tier = "high"
+            elif conf >= 0.5:
+                color = (255, 200, 0)   # yellow
+                tier = "med"
+            else:
+                color = (220, 20, 60)   # crimson
+                tier = "low"
+
+            lw = 2
+            draw.rectangle([x1, y1, x2, y2], outline=color, width=lw)
+            label = f"{cls_name} {conf:.2f}"
+            draw.text((x1, max(y1 - 12, 0)), label, fill=color)
+
+        # Legend box in top-left
+        legend_y = 10
+        for label_text, lc in [("≥0.7 high", (34, 139, 34)),
+                                ("0.5–0.7 med", (255, 200, 0)),
+                                ("<0.5 low", (220, 20, 60))]:
+            draw.rectangle([10, legend_y, 26, legend_y + 12], fill=lc, outline="black")
+            draw.text((30, legend_y), label_text, fill="black")
+            legend_y += 18
+
+        stem = os.path.splitext(os.path.basename(img_path))[0]
+        out_path = os.path.join(output_dir, f"conf_overlay_{stem}.png")
+        img.save(out_path)
+        print(f"  Saved {out_path}  ({len(boxes)} detections)")
+
+    # Confidence histogram across all images
+    if all_confs:
+        fig, ax = plt.subplots(figsize=(7, 4))
+        bins = np.arange(conf_thresh, 1.01, 0.05)
+        n, _, patches = ax.hist(all_confs, bins=bins, edgecolor="white", linewidth=0.5)
+        for patch, left in zip(patches, bins):
+            mid = left + 0.025
+            if mid >= 0.7:
+                patch.set_facecolor("#228B22")
+            elif mid >= 0.5:
+                patch.set_facecolor("#FFC800")
+            else:
+                patch.set_facecolor("#DC143C")
+        ax.set_xlabel("Detection Confidence", fontsize=12)
+        ax.set_ylabel("Count", fontsize=12)
+        ax.set_title("Confidence Score Distribution (YOLOv8s)", fontsize=14, fontweight="bold")
+        ax.axvline(0.7, color="green", ls="--", lw=1, label="High ≥ 0.7")
+        ax.axvline(0.5, color="orange", ls="--", lw=1, label="Med ≥ 0.5")
+        ax.legend(fontsize=9)
+        ax.grid(axis="y", alpha=0.3)
+        plt.tight_layout()
+        hist_path = os.path.join(output_dir, "confidence_histogram.png")
+        plt.savefig(hist_path, dpi=150, bbox_inches="tight")
+        plt.close()
+        print(f"  Saved {hist_path}")
+
+        total = len(all_confs)
+        high = sum(1 for c in all_confs if c >= 0.7)
+        med = sum(1 for c in all_confs if 0.5 <= c < 0.7)
+        low = sum(1 for c in all_confs if c < 0.5)
+        print(f"\n  Confidence breakdown ({total} detections):")
+        print(f"    High (≥0.7): {high} ({100*high/total:.1f}%)")
+        print(f"    Med  (0.5–0.7): {med} ({100*med/total:.1f}%)")
+        print(f"    Low  (<0.5): {low} ({100*low/total:.1f}%)")
+
+
 if __name__ == "__main__":
     output_dir = "outputs/visualizations"
     plot_per_class_f1(output_dir)
     plot_precision_recall_scatter(output_dir)
     plot_baseline_comparison(output_dir)
     plot_gnn_metrics(output_dir)
+
+    # Confidence overlay on a sample of validation images
+    import glob
+    val_images = sorted(glob.glob("yolo_dataset/images/val/*.png"))[:5]
+    if val_images:
+        checkpoint = "outputs/yolov8_extended/train/weights/best.pt"
+        if os.path.exists(checkpoint):
+            print("\nGenerating confidence overlays...")
+            plot_confidence_overlay(val_images, checkpoint, output_dir)
+
     print(f"\nAll plots saved to {output_dir}/")

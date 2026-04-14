@@ -22,6 +22,7 @@ from torch_geometric.data import Data
 
 from melodious.gnn import GNNAssembler, RELATIONSHIP_TYPES
 from melodious.gnn_data_loader import load_muscima_dataset
+from melodious.seed import set_seed
 
 
 def evaluate_gnn_on_val(
@@ -111,6 +112,8 @@ def estimate_combined_f1(
 
 
 def main():
+    set_seed(42)
+
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
 

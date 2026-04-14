@@ -288,6 +288,9 @@ def _plot_results(results: dict, output_dir: str):
 
 
 if __name__ == "__main__":
+    from melodious.seed import set_seed
+    set_seed(42)
+
     parser = argparse.ArgumentParser(description="Robustness evaluation")
     parser.add_argument("--model", default="outputs/yolov8_extended/train/weights/best.pt")
     parser.add_argument("--dataset", default="yolo_dataset")

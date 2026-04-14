@@ -373,6 +373,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    from .seed import set_seed
+    set_seed(42)
+
     args = parse_args()
     dataset = DeepScoresDataset(args.dataset_root, split=args.split, augment=False)
 
