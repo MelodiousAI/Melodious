@@ -14,9 +14,17 @@ from src.evaluation.muscima_training_export import (
     build_document_training_export,
     build_raw_relation_maps,
 )
+from src.graph.muscima_graph_builder import get_graph_output_path
+
+_GRAPH_FIXTURE = get_graph_output_path("CVC-MUSCIMA_W-01_N-10_D-ideal")
+_SKIP_GRAPH_MSG = (
+    f"Requires graph JSON at {_GRAPH_FIXTURE} "
+    "(build MUSCIMA graphs first; see muscima_graph_builder)."
+)
 
 
 class TestMuscimaTrainingExport(unittest.TestCase):
+    @unittest.skipUnless(_GRAPH_FIXTURE.exists(), _SKIP_GRAPH_MSG)
     def test_build_document_training_export_matches_expected_schema(self):
         training_export = build_document_training_export("CVC-MUSCIMA_W-01_N-10_D-ideal")
 
@@ -44,6 +52,7 @@ class TestMuscimaTrainingExport(unittest.TestCase):
         self.assertLess(edge["source_idx"], len(training_export["nodes"]))
         self.assertLess(edge["target_idx"], len(training_export["nodes"]))
 
+    @unittest.skipUnless(_GRAPH_FIXTURE.exists(), _SKIP_GRAPH_MSG)
     def test_build_document_training_export_contains_positive_relation_labels(self):
         training_export = build_document_training_export("CVC-MUSCIMA_W-01_N-10_D-ideal")
         edge_labels = {edge["edge_label"] for edge in training_export["edges"]}
