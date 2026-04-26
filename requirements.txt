@@ -17,6 +17,7 @@ Jinja2==3.1.6
 lazy-loader==0.5
 lxml==6.0.2
 MarkupSafe==3.0.3
+music21>=9.1
 mpmath==1.3.0
 multidict==6.7.1
 mung==1.2.1

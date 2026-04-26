@@ -24,6 +24,15 @@ CVCMUSCIMA_WI.zip
 
 # Generated outputs and logs
 outputs/
+!outputs/gnn_checkpoint.pt
+!outputs/gnn_training_results.json
+!outputs/baseline_hog_results.json
+!outputs/baseline_template_results.json
+!outputs/onnx_val_log.txt
+!outputs/int8_val_log.txt
+!outputs/robustness/
+!outputs/visualizations/
+!outputs/yolov8_extended/
 logs/
 runs/
 
@@ -32,11 +41,9 @@ tests/staff_debug_sample/
 tests/staff_debug_w14/
 tests/staff_debug_large_batch/
 
-# Local docs and scratch files
+# Local docs and scratch files (per repo workflow)
 Ahmad_Instructions.md
 Ahmad_Documentation.md
-instructions.md
-documentation.md
 debug_shapes.py
 test_dataset.py
 
@@ -44,6 +51,7 @@ test_dataset.py
 *.pt
 yolo11n.pt
 yolov8s.pt
+!outputs/gnn_checkpoint.pt
 
 # Notebooks with outputs
 notebooks/
