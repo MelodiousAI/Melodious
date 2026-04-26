@@ -1,10 +1,10 @@
-"""Compatibility wrapper for graph-building imports.
+"""Compatibility wrapper for old graph-building imports.
 
-The staff detector now lives in `staff_detection.py` so graph-building code can
-stay separate from image-processing code.
+Newer code lives under `src.data_prep` and `src.graph`. This module is kept so
+older imports of `src.graph_builder` still resolve.
 """
 
-from staff_detection import IMAGE_ROOT, detect_staff_lines, save_staff_debug_image
+from src.data_prep.staff_detection import IMAGE_ROOT, detect_staff_lines, save_staff_debug_image
 
 __all__ = [
     "IMAGE_ROOT",
