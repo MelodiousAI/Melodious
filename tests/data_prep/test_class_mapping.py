@@ -16,6 +16,10 @@ from src.data_prep.class_mapping import (
 )
 
 
+NODES_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "muscima_nodes.json"
+
+
+@unittest.skipUnless(NODES_JSON_PATH.exists(), "MUSCIMA processed node fixture is not available.")
 class TestClassMapping(unittest.TestCase):
     def test_mapping_payload_is_deterministic_and_round_trips(self):
         nodes = load_muscima_nodes()

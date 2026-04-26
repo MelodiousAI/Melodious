@@ -9,6 +9,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.graph.muscima_graph_builder import (
+    EDGES_JSON_PATH,
+    NODES_JSON_PATH,
     build_graph_for_document,
     build_summary_row,
     compute_graph_statistics,
@@ -21,6 +23,9 @@ from src.graph.muscima_graph_builder import (
 class TestMuscimaGraphBuilder(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if not NODES_JSON_PATH.exists() or not EDGES_JSON_PATH.exists():
+            raise unittest.SkipTest("MUSCIMA processed graph fixtures are not available in this checkout.")
+
         cls.all_nodes, cls.all_edges = load_muscima_data()
         cls.document_name = "CVC-MUSCIMA_W-01_N-10_D-ideal"
         cls.graph_data = build_graph_for_document(
