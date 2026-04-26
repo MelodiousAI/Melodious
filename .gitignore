@@ -1,35 +1,49 @@
 .venv/
 venv/
+node_modules/
+frontend/node_modules/
+frontend/dist/
 __pycache__/
 *.pyc
+*.pyo
+*.tsbuildinfo
 .ipynb_checkpoints/
 .env
+.DS_Store
+Thumbs.db
+.tmp_test/
 
+# Local datasets and generated data
 data/raw/
 data/processed/
+data/muscima-pp/
+data/cvc-muscima/
+dataset_ds2_dense/
+yolo_dataset/
+CVCMUSCIMA_WI.zip
+
+# Generated outputs and logs
 outputs/
 logs/
+runs/
+
+# Debug output folders
 tests/staff_debug_sample/
 tests/staff_debug_w14/
 tests/staff_debug_large_batch/
 
-# Dataset (too large for git)
-dataset_ds2_dense/
-yolo_dataset/
-
-# Notebooks with outputs
-notebooks/
-
-# Local docs (not pushed)
+# Local docs and scratch files
 Ahmad_Instructions.md
 Ahmad_Documentation.md
 instructions.md
 documentation.md
-
-# Debug/scratch files
 debug_shapes.py
 test_dataset.py
 
-# OS
-Thumbs.db
-.DS_Store
+# Downloaded YOLO base weights and ad hoc checkpoints
+*.pt
+yolo11n.pt
+yolov8s.pt
+
+# Notebooks with outputs
+notebooks/

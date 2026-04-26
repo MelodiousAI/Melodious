@@ -1,118 +1,75 @@
 # Melodious
 
-Melodious is an optical music recognition (OMR) system that detects musical symbols in sheet music and assembles them into structured data using deep learning.
+Melodious is an optical music recognition (OMR) project built around MUSCIMA++.
 
-The project combines two main components:
-1. **Detection** — A custom YOLO detector (trained from scratch) and a YOLOv8 fine-tuning pipeline for locating music notation symbols in page images.
-2. **Graph Construction** — Staff detection, MUSCIMA++ parsing, and a GNN-based assembler that links detected symbols into musical structures.
+This consolidation branch intentionally excludes the `feature/eval-improvements` branch family. It combines `origin/main` with Hasan's live `hassan/week-5` branch, which already contains `hassan/week-1` through `hassan/week-4`.
 
-## Repository Structure
+## What Is Implemented
 
-```
-melodious/              # Core detection package
-  model.py              # Custom YOLO detector (12.9M params, 3-scale heads)
-  train.py              # Training loop, loss functions, metrics
-  dataset.py            # DeepScores v2 data loader (15 target classes)
-  inference.py          # Model loading and single-image inference
-  gnn.py                # GNN assembler (3-layer GAT, PyTorch Geometric)
-  pipeline.py           # End-to-end detection pipeline
-  export.py             # Checkpoint and ONNX export utilities
-  detection_contract.py # Stable JSON contract for graph integration
-  convert_dataset.py    # DeepScores -> YOLO format converter
-  yolov8_detect.py      # YOLOv8 fine-tuning wrapper (Ultralytics)
-  generate_detections.py        # Export detector outputs as JSON
-  export_reference_detections.py # Export ground-truth as reference JSON
-  baselines/            # Baseline comparison methods
-    template_matching.py  # OpenCV template matching
-    hog_svm.py            # HOG + linear SVM
-    heuristic_assembler.py # Rule-based symbol grouping
-src/                    # Graph construction modules
-  parse_muscima.py      # MUSCIMA++ XML parser and JSON export
-  staff_detection.py    # Staff line detection (OpenCV + scipy)
-  graph_builder.py      # Compatibility wrapper for graph construction
-sample_detections/      # Detection contract and sample outputs
-  FORMAT.md             # JSON schema documentation
-  class_mapping.json    # Class ID -> name mapping (15 classes)
-  reference/            # Ground-truth reference payloads
-main.py                 # CLI training entrypoint
-Claude.md               # Agent workspace rules
-```
+- `src/data_prep/parse_muscima.py`: parses MUSCIMA++ XML annotations into JSON-friendly node and edge files.
+- `src/data_prep/class_mapping.py`: builds and saves a stable class-name to class-id mapping for parsed MUSCIMA nodes.
+- `src/data_prep/staff_detection.py`: detects staff regions from grayscale score images and can save debug overlays.
+- `src/data_prep/shared_detection_contract.py`: stores the shared MUSCIMA-to-detector class mapping reused by payload and training exports.
+- `src/graph/muscima_graph_builder.py`: builds document-level reference graph JSON files from MUSCIMA data.
+- `src/graph/pyg_graph_builder.py`: builds GNN-ready graphs from detection dictionaries.
+- `src/graph/detection_alignment.py`: aligns detections to MUSCIMA ground-truth nodes using greedy IoU matching.
+- `src/evaluation/muscima_reference_evaluation.py`: runs graph building plus alignment on the shared MUSCIMA reference payloads.
+- `src/evaluation/muscima_training_export.py`: exports one JSON per MUSCIMA page for GNN supervision with `edge_type` and `edge_label`.
+- `src/api/`: FastAPI backend routes for health, graph assembly, MIDI export, and public product samples.
+- `src/inference/gnn_service.py`: checkpoint-readiness and heuristic-fallback scaffolding for GNN mode.
+- `src/ui/streamlit_app.py`: internal/debug Streamlit MVP.
+- `frontend/`: React + Vite + Tailwind public product frontend.
+- `tools/`: helper scripts for MUSCIMA payload and training-data export.
 
-## Target Classes (15)
+## Repo Structure
 
-| ID | Class | ID | Class |
-|----|-------|----|-------|
-| 0 | notehead-full | 8 | rest-half |
-| 1 | notehead-half | 9 | rest-whole |
-| 2 | notehead-whole | 10 | accidentalSharp |
-| 3 | clefG | 11 | accidentalFlat |
-| 4 | clefF | 12 | accidentalNatural |
-| 5 | clefC | 13 | beam |
-| 6 | rest-8th | 14 | stem |
-| 7 | rest-quarter | | |
+- `src/`: backend, data prep, graph, export, inference, and UI modules.
+- `tools/`: workflow helper scripts.
+- `tests/`: unit tests for API, graph, data prep, export, evaluation, and inference scaffold modules.
+- `docs/status/`: Hasan-side status and experiment documentation.
+- `docker/`: backend Docker build files.
+- `frontend/`: public Week 5 product UI.
+- `sample_detections/`: detector payload examples, MUSCIMA reference payloads, and XML samples.
 
-## Quick Start
+## Local Data Layout
 
-### Setup
+This checkout uses the local dataset layout already present on this machine:
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-pip install -r requirements.txt
+- MUSCIMA++ XML annotations: `data/muscima-pp/v2.0/data/annotations`
+- CVC-MUSCIMA grayscale images: `data/cvc-muscima/CVCMUSCIMA_WI/PNG_GT_Gray`
+- Processed parsed JSONs: `data/processed/muscima_nodes.json` and `data/processed/muscima_edges.json`
+
+The data and generated outputs are ignored by Git.
+
+## Main Commands
+
+```powershell
+.\.venv\Scripts\python.exe -m src.data_prep.parse_muscima --limit 5
+.\.venv\Scripts\python.exe -m src.data_prep.class_mapping
+.\.venv\Scripts\python.exe -m src.graph.muscima_graph_builder --limit 5
+.\.venv\Scripts\python.exe -m src.evaluation.muscima_reference_evaluation
+.\.venv\Scripts\python.exe -m uvicorn src.api.app:app --host 127.0.0.1 --port 8000
 ```
 
-### Train Custom YOLO
+Frontend:
 
-```bash
-python main.py --epochs 50 --batch-size 4 --img-size 640 --lr 0.001
+```powershell
+cd frontend
+npm install
+npm run dev
 ```
 
-### Train YOLOv8
+## Tests
 
-```bash
-# Convert dataset to YOLO format first
-python -m melodious.convert_dataset --dataset-root dataset_ds2_dense --output-root yolo_dataset
-
-# Fine-tune YOLOv8
-python -m melodious.yolov8_detect train --data yolo_dataset/data.yaml --epochs 50
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover tests
+cd frontend
+npm test
+npm run build
 ```
 
-### Export Detection Payloads
+## Current Consolidation Notes
 
-```bash
-# From trained custom model
-python -m melodious.generate_detections --model-type custom --checkpoint outputs/best.pth --image-dir dataset_ds2_dense/images --limit 5
-
-# From ground-truth labels (for integration testing)
-python -m melodious.export_reference_detections --limit 5
-```
-
-### Run Staff Detection
-
-```bash
-python tests/test_graph_builder.py
-```
-
-## Detection Contract
-
-The detector outputs JSON files in a stable format that the graph/GNN side consumes. See [sample_detections/FORMAT.md](sample_detections/FORMAT.md) for the full schema.
-
-Key fields per detection:
-- `class_id` / `class_name` — symbol identity
-- `confidence` — detector score
-- `bbox` — normalised center-based box (`x_center`, `y_center`, `width`, `height`)
-- `bbox_pixels` — pixel box for debugging (`x1`, `y1`, `x2`, `y2`)
-
-## Dataset
-
-- **DeepScores v2 Dense** — 1362 train / 352 test score images with COCO-format annotations, filtered to 15 target classes.
-- **MUSCIMA++** — XML annotations and grayscale page images for staff detection and graph construction.
-
-## Status
-
-- Custom YOLO detector: implemented and training
-- YOLOv8 pipeline: conversion and training wrappers ready
-- GNN assembler: architecture implemented, awaiting trained detector outputs
-- Staff detection: implemented and tested
-- MUSCIMA++ parser: implemented and tested
-- Detection contract: frozen and shared with graph side
+- `hassan/week-5` is the effective GitHub head for the non-eval line.
+- The `feature/eval-improvements` branch family is intentionally excluded from this branch.
+- No expensive model training or full dataset regeneration is required for normal smoke checks.
