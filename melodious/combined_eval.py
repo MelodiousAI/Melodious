@@ -132,7 +132,8 @@ def main():
         dropout=0.0,
     )
     model.load_state_dict(checkpoint["model_state_dict"])
-    print(f"Model loaded — {sum(p.numel() for p in model.parameters()):,} parameters")
+    n_params = sum(p.numel() for p in model.parameters())
+    print(f"Model loaded - {n_params:,} parameters")
 
     # Load validation data
     print("\nLoading MUSCIMA++ validation data...")
@@ -144,7 +145,7 @@ def main():
     gnn_results = evaluate_gnn_on_val(model, val_data)
 
     print(f"\n{'='*60}")
-    print("GNN ASSEMBLY EVALUATION — MUSCIMA++ Val Set")
+    print("GNN ASSEMBLY EVALUATION - MUSCIMA++ Val Set")
     print(f"{'='*60}")
     print(f"  Overall accuracy:      {gnn_results['accuracy']:.4f}")
     print(f"  Weighted F1:           {gnn_results['weighted_f1']:.4f}")
@@ -177,12 +178,13 @@ def main():
     print(f"  Estimated combined F1:         {combined['estimated_combined_f1']:.3f}")
     print(f"  Target:                        >= 0.75")
     target_met = combined["estimated_combined_f1"] >= 0.75
-    print(f"  Status:                        {'✅ MET' if target_met else '⚠️ Below target'}")
+    status_txt = "MET" if target_met else "Below target"
+    print(f"  Status:                        {status_txt}")
 
     if not target_met:
         # Calculate what detection mAP50 would be needed
         needed_map = 0.75 / gnn_results["weighted_f1"] if gnn_results["weighted_f1"] > 0 else float("inf")
-        print(f"\n  Note: To reach combined F1 ≥ 0.75, detection mAP50 would need to be ≥ {needed_map:.3f}")
+        print(f"\n  Note: To reach combined F1 >= 0.75, detection mAP50 would need to be >= {needed_map:.3f}")
         print(f"  Current gap: {0.75 - combined['estimated_combined_f1']:.3f}")
 
     # Save full results
