@@ -196,10 +196,11 @@ if nn is not None and GATConv is not None:
             if not detections:
                 return torch.zeros((0, self.feature_dim), dtype=torch.float32)
 
+            device = self.symbol_embedding.embedding.weight.device
             features = []
             for detection in detections:
                 class_embed = self.symbol_embedding(
-                    torch.tensor([detection.class_id], dtype=torch.long)
+                    torch.tensor([detection.class_id], dtype=torch.long, device=device)
                 ).squeeze(0)
                 spatial = torch.tensor(
                     [
@@ -211,6 +212,7 @@ if nn is not None and GATConv is not None:
                         float(detection.staff_index),
                     ],
                     dtype=torch.float32,
+                    device=device,
                 )
                 features.append(torch.cat([class_embed, spatial]))
             return torch.stack(features)
@@ -538,12 +540,14 @@ class LegacyGnnAdapter:
         device: str = "cpu",
         confidence_threshold: float = 0.5,
         k_neighbors: int = 8,
+        feature_encoder_seed: int | None = 42,
     ) -> None:
         _require_torch()
         self.checkpoint_path = Path(checkpoint_path).expanduser().resolve()
         self.device = torch.device(device)
         self.confidence_threshold = confidence_threshold
         self.k_neighbors = k_neighbors
+        self.feature_encoder_seed = feature_encoder_seed
         if not self.checkpoint_path.exists():
             raise FileNotFoundError(f"Legacy GNN checkpoint not found: {self.checkpoint_path}")
         self.checkpoint_sha256 = sha256_file(self.checkpoint_path)
@@ -559,6 +563,19 @@ class LegacyGnnAdapter:
         ).to(self.device)
         self.model.load_state_dict(self.checkpoint["model_state_dict"])
         self.model.eval()
+        if feature_encoder_seed is None:
+            self.feature_encoder = self.model.node_encoder
+            self.feature_encoder_source = "checkpoint_model_node_encoder"
+        else:
+            rng_state = torch.random.get_rng_state()
+            torch.manual_seed(feature_encoder_seed)
+            self.feature_encoder = NodeFeatureEncoder(
+                num_classes=int(config.get("num_classes", 15)),
+                embed_dim=4,
+            )
+            torch.random.set_rng_state(rng_state)
+            self.feature_encoder_source = f"reconstructed_training_node_encoder_seed_{feature_encoder_seed}"
+        self.feature_encoder.eval()
 
     def is_ready(self) -> bool:
         return True
@@ -584,7 +601,7 @@ class LegacyGnnAdapter:
         edge_index = torch.tensor(candidate_graph.edges, dtype=torch.long, device=self.device).t().contiguous()
         edge_type = torch.tensor(candidate_graph.edge_types, dtype=torch.long, device=self.device)
         with torch.no_grad():
-            node_features = self.model.node_encoder(detections).to(self.device)
+            node_features = self.feature_encoder(detections).to(self.device)
             data = Data(x=node_features, edge_index=edge_index, edge_type=edge_type)
             data.detections = detections
             edge_logits = self.model(data)
