@@ -13,6 +13,10 @@ class ExportAndReportTests(unittest.TestCase):
         content = payload_to_musicxml(_sample_payload())
         self.assertTrue(validate_musicxml(content))
 
+    def test_invalid_musicxml_returns_false(self):
+        self.assertFalse(validate_musicxml("<score-partwise>"))
+        self.assertFalse(validate_musicxml("<not-score/>"))
+
     def test_rejects_map_f1_comparison(self):
         with self.assertRaises(ValueError):
             assert_no_cross_metric_claims("mAP50 >= 0.27 F1 target")
