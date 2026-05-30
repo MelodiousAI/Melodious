@@ -75,7 +75,10 @@ def payload_to_musicxml(
 
 def validate_musicxml(content: str) -> bool:
     """Return whether the MusicXML string is parseable XML with score root."""
-    root = ET.fromstring(content)
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError:
+        return False
     return root.tag == "score-partwise"
 
 
@@ -96,4 +99,3 @@ def minimal_midi_bytes() -> bytes:
 def minimal_midi_base64() -> str:
     """Return base64 for a minimal valid MIDI file."""
     return base64.b64encode(minimal_midi_bytes()).decode("ascii")
-
