@@ -17,7 +17,7 @@
 - `evaluation`: reproducible milestone evaluation pipelines that convert source artifacts into metric records.
 - `datasets`: DeepScores conversion and leakage checks.
 - `detector`: inference adapters and bootstrap detector.
-- `assembly`: relationship inference and fallback mode resolution.
+- `assembly`: relationship inference, checkpoint-gated legacy GNN runtime, and fallback mode resolution.
 - `export`: MusicXML/MIDI generation and validation.
 - `api`: product service endpoints.
 - `reports`: generated metric and experiment report helpers.
@@ -28,4 +28,15 @@ Fallbacks are allowed for demo resilience but must be explicit:
 
 - detector fallback: `detector_mode = "heuristic_bootstrap"`;
 - assembly fallback: `applied_mode = "heuristic_fallback"`;
-- unsupported GNN path never reports itself as active GNN inference.
+- missing GNN checkpoint: `applied_mode = "checkpoint_missing"`;
+- unsupported GNN path never reports itself as active GNN inference;
+- `applied_mode = "gnn"` is allowed only when a real checkpoint loads and inference runs.
+
+## Current Graph Runtime
+
+- Adapter: `src/melodious_v2/assembly/legacy_gnn.py`.
+- Checkpoint source: `..\outputs\gnn_checkpoint.pt`.
+- Configuration: set `MELODIOUS_GNN_CHECKPOINT` or pass an explicit checkpoint path.
+- Evaluation: `scripts/evaluate_gnn_muscima.py`.
+- Current graph run: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- Limitation: the legacy model uses a 15-class graph contract and reconstructs the legacy training node encoder from seed `42`.

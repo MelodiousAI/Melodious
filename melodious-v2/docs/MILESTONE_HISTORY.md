@@ -352,7 +352,7 @@ $env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claim
 
 ## M4 - Real Assembly Runtime
 
-Status: active. M3 has selected the full YOLOv8m detector artifact, so M4 now starts from real detector evidence and focuses on graph/relationship runtime.
+Status: done. M4 wired a real legacy MUSCIMA GNN checkpoint into the V2 assembly runtime, added explicit checkpoint/fallback metadata, evaluated the model on the fixed M1 MUSCIMA validation manifest, and regenerated the experiment index from the graph run.
 
 Detailed goal:
 
@@ -362,23 +362,104 @@ Detailed goal:
 - Report positive-class macro F1 as the graph primary metric.
 - Keep `no_relation` precision, recall, F1, and support separate from the positive-class headline metric.
 
-Implementation checklist:
+Source inputs:
 
-- Read the MUSCIMA graph manifest from M1.
-- Define the graph evaluation input contract and preserve detector payload compatibility.
-- Add a model adapter under `src/melodious_v2/assembly/`.
-- Add tests proving `applied_mode = "gnn"` only when a real checkpoint is loaded and inference succeeds.
-- Add fallback tests proving failed checkpoint loading returns explicit fallback metadata.
-- Write graph metrics to `runs/graph/{run_id}/metrics.json`.
-- Regenerate `docs/EXPERIMENTS.md` and update `MODEL_CARD.md`.
+- MUSCIMA validation manifest: `runs/data/muscima_graph_manifest/val.json`.
+- MUSCIMA root manifest: `runs/data/muscima_graph_manifest/manifest.json`.
+- Legacy checkpoint: `..\outputs\gnn_checkpoint.pt`.
+- Legacy training summary: `..\outputs\gnn_training_results.json`.
+- Legacy handoff: `..\sample_detections\GNN_HANDOFF.md`.
 
-Main risk:
+Implemented code:
 
-- A GNN checkpoint exists in the parent workspace, but V2 has not yet proven an adapter, feature contract, or natural-distribution evaluation path.
+- `src/melodious_v2/assembly/legacy_gnn.py`.
+- `src/melodious_v2/assembly/service.py`.
+- `scripts/evaluate_gnn_muscima.py`.
+- `tests/test_assembly_gnn_runtime.py`.
+- API metadata coverage in `tests/test_api.py`.
+- Additional graph metric coverage in `tests/test_graph_metrics.py`.
+
+Checkpoint contract:
+
+- Model class: legacy 3-layer GAT edge classifier.
+- Input symbol contract: 15 classes (`notehead-full`, `notehead-half`, `notehead-whole`, clefs, rests, accidentals, `beam`, `stem`).
+- Relationship classes: `no_relation`, `stem_notehead`, `beam_notegroup`, `slur_phrase`, `tie_sustained`.
+- Candidate graph: k-nearest plus vertical-overlap edges with `k_neighbors=8`.
+- Checkpoint SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+- Important feature-contract caveat: the legacy training data used a separate seeded node feature encoder that was not saved in the checkpoint. V2 reconstructs it from seed `42` and records this in metrics/artifacts. Using the checkpoint model's unused internal node encoder predicts only `no_relation`, so the reconstructed encoder is required for the legacy contract to be meaningful.
+
+Generated run:
+
+- Run id: `graph_legacy_gnn_muscima_val_v1`.
+- Run directory: `runs/graph/graph_legacy_gnn_muscima_val_v1/`.
+- Metrics: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- Report: `runs/graph/graph_legacy_gnn_muscima_val_v1/report.md`.
+- Manifest: `runs/graph/graph_legacy_gnn_muscima_val_v1/manifest.json`.
+- Artifacts: `runs/graph/graph_legacy_gnn_muscima_val_v1/artifacts.json`.
+- Config copy: `runs/graph/graph_legacy_gnn_muscima_val_v1/config.yaml`.
+
+M4 metric provenance:
+
+- Commit in metrics: `ab2d550`.
+- Dataset id: `muscima_graph_manifest`.
+- Split: `val`.
+- Taxonomy id: `semantic_omr_v2`.
+- Metric version: `v2.0`.
+- Artifact SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+
+M4 graph metrics:
+
+- Primary `positive_macro_f1`: 0.7590456327823909.
+- Accuracy, reported only as a secondary diagnostic: 0.9049902436999211.
+- Separate `no_relation` precision: 0.997066197258228.
+- Separate `no_relation` recall: 0.8936271931921403.
+- Separate `no_relation` F1: 0.9425171440096813.
+- Separate `no_relation` support: 41834.
+- `stem_notehead` precision: 0.5416510083928348.
+- `stem_notehead` recall: 0.9736545823012835.
+- `stem_notehead` F1: 0.6960721184803607.
+- `stem_notehead` support: 4441.
+- `beam_notegroup` precision: 0.7004078605858362.
+- `beam_notegroup` recall: 0.9947340705634544.
+- `beam_notegroup` F1: 0.8220191470844213.
+- `beam_notegroup` support: 1899.
+- `slur_phrase` and `tie_sustained` have zero validation support in this legacy 15-class graph contract.
+
+M4 evaluated distribution:
+
+- Distribution label: `natural_candidate_edges`.
+- Negative sampling: none.
+- Validation pages: 14.
+- Candidate edges: 48174.
+- Positive candidate edges: 6340.
+- Predicted positive candidate edges: 10680.
+
+API/runtime behavior:
+
+- `MELODIOUS_GNN_CHECKPOINT` or an explicit checkpoint path enables the real adapter.
+- `applied_mode = "gnn"` is returned only after checkpoint loading and inference both succeed.
+- Missing checkpoint with requested `gnn` returns `applied_mode = "checkpoint_missing"` and heuristic fallback relationships.
+- Bad checkpoint or inference failure returns `applied_mode = "heuristic_fallback"` with explicit reason text.
+- API smoke with `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt` returned `applied_mode=gnn`, `fallback_applied=False`, `checkpoint_ready=True`, `inference_ran=True`, `adapter_name=legacy_muscima_gat`, and `relationship_count=4`.
+
+M4 verification commands:
+
+```powershell
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\evaluate_gnn_muscima.py --split val --device cpu
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py
+```
+
+M4 remaining risk:
+
+- The GNN is a legacy 15-class graph model, not a full 136-class V2 relationship model.
+- The feature encoder reconstruction is deterministic and documented, but a future retrain should save a self-contained checkpoint that includes all feature-transform state.
+- The graph result is a validation result on MUSCIMA-derived graph inputs, not a measured uploaded-image end-to-end result.
 
 ## M5 - End-to-End Export Quality
 
-Status: planned.
+Status: active.
 
 Detailed goal:
 

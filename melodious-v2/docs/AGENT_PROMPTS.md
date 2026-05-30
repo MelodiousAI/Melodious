@@ -1,6 +1,6 @@
 # Agent Prompts
 
-Use this file when starting a new coding-agent session for Melodious V2. Copy the relevant prompt exactly, then paste it into the agent. The current active milestone is **M4 - Real Assembly Runtime**.
+Use this file when starting a new coding-agent session for Melodious V2. Copy the relevant prompt exactly, then paste it into the agent. The current active milestone is **M5 - End-to-End Export Quality**.
 
 ## Universal Rules For Every Agent Prompt
 
@@ -16,7 +16,133 @@ Every coding agent must obey these project rules:
 - If blocked, write the blocker, exact attempted commands, and next command to `docs/HANDOFF.md` and `docs/STATUS.md`.
 - Before ending, run relevant tests and documentation guards, then update `docs/HANDOFF.md`.
 
-## Exact Prompt For Current Milestone: M4 - Real Assembly Runtime
+## Exact Prompt For Current Milestone: M5 - End-to-End Export Quality
+
+Copy and paste this whole prompt into the next coding agent:
+
+```text
+You are the coding agent for Melodious V2. Work in this exact directory only:
+
+C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+
+The parent legacy workspace is read-only context:
+
+C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code
+
+Do not edit legacy files outside `melodious-v2`.
+
+Current milestone: M5 - End-to-End Export Quality.
+
+Before coding, read:
+
+- AGENTS.md
+- docs/STATUS.md
+- docs/ROADMAP.md
+- docs/METRICS.md
+- docs/DATA_CARD.md
+- docs/HANDOFF.md
+- docs/EXPERIMENTS.md
+- docs/RUBRIC_MAP.md
+- docs/MILESTONE_HISTORY.md
+- MODEL_CARD.md
+- src/melodious_v2/api/service.py
+- src/melodious_v2/assembly/
+- src/melodious_v2/export/
+- runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json if it exists locally
+- runs/detection/detection_136class_yolov8m_v1/metrics.json if it exists locally
+- artifacts/models/detection_136class_yolov8m_v1/metadata.json if it exists locally
+
+Goal:
+
+Measure and improve the real upload-to-export product path. M5 should produce a fixed end-to-end evaluation run that exercises detector payloads, assembly relationships, MusicXML export, and MIDI export with honest provenance and failure notes.
+
+Current detector handoff:
+
+- Full detector run id: `detection_136class_yolov8m_v1`.
+- Detector metrics: `runs/detection/detection_136class_yolov8m_v1/metrics.json`.
+- Detector model metadata: `artifacts/models/detection_136class_yolov8m_v1/metadata.json`.
+- Selected detector checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Selected detector ONNX: `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
+- Detector validation `mAP@0.5:0.95 = 0.4747370751116288`.
+- Detector validation `mAP@0.5 = 0.5853211368313491`.
+- Detector validation `precision@0.5 = 0.8274236461250144`.
+- Detector validation `recall@0.5 = 0.4909790740632496`.
+- Detector validation `F1@0.5 = 0.6162725385980492`.
+- API uploaded-image inference still uses `heuristic_bootstrap`; do not claim non-bootstrap uploaded-image detector inference unless a tested ONNX adapter is added.
+
+Current assembly handoff:
+
+- Real legacy GNN checkpoint source: `..\outputs\gnn_checkpoint.pt`.
+- Checkpoint SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+- Runtime adapter: `src/melodious_v2/assembly/legacy_gnn.py`.
+- API mode gating: `src/melodious_v2/assembly/service.py`.
+- Graph run id: `graph_legacy_gnn_muscima_val_v1`.
+- Graph metrics: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- Graph primary validation metric: positive-class macro F1 `0.7590456327823909`.
+- Graph no-relation F1: `0.9425171440096813`, reported separately.
+- Stem-notehead F1: `0.6960721184803607`.
+- Beam-notegroup F1: `0.8220191470844213`.
+- The legacy GNN supports a 15-class graph contract and reconstructs the legacy training node encoder from seed `42` because that encoder was not saved as a separate artifact.
+
+Do all of the following:
+
+1. Confirm prerequisites.
+   - Verify M3 detector artifacts exist locally.
+   - Verify M4 graph metrics exist locally.
+   - Verify `docs/EXPERIMENTS.md` includes `graph_legacy_gnn_muscima_val_v1`.
+   - Verify API sample transcription still works.
+
+2. Define a fixed end-to-end evaluation set.
+   - Prefer the M1 MUSCIMA holdout split when using ground-truth XML-derived payloads.
+   - If real uploaded-image detector inference is still bootstrap-only, keep the detector path labeled `heuristic_bootstrap` or use ground-truth-derived detector payload fixtures and label them as such.
+   - Do not claim trained uploaded-image detector performance until a non-bootstrap ONNX detector adapter is wired and tested.
+
+3. Implement an end-to-end evaluator under `scripts/` and reusable code under `src/melodious_v2/` as needed.
+   - It should create detector-like payloads or use tested detector outputs.
+   - It should run assembly through the V2 assembly service.
+   - It should write MusicXML and MIDI artifacts.
+   - It should validate MusicXML parseability.
+   - It should record relationship counts, export success, failure reasons, and artifact hashes.
+
+4. Write an end-to-end run under `runs/e2e/{run_id}/`.
+   - Required files: `metrics.json`, `report.md`, `manifest.json`, `artifacts.json`, copied config, and representative exported artifacts.
+   - Required provenance: run id, commit, config path, dataset id, split, taxonomy id, metric version, created-at timestamp, and upstream detector/GNN artifact hashes when used.
+   - Primary metric should be a measured end-to-end quality/export metric, not an estimate. If only export validity is measured, label it honestly.
+
+5. Add tests.
+   - Test MusicXML validation failure/success handling.
+   - Test end-to-end artifact manifest writing on a tiny fixture.
+   - Preserve API, graph, detector metric, and contract tests.
+
+6. Optional detector API wiring if time and scope allow.
+   - Add a non-bootstrap ONNX detector adapter for `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
+   - Keep `heuristic_bootstrap` as an explicit fallback.
+   - Smoke `GET /health`, `GET /version`, sample transcription, and uploaded-image inference if this is wired.
+   - If deferred, document the exact reason and next step.
+
+7. Update documentation before ending.
+   - Regenerate `docs/EXPERIMENTS.md` from `runs/**/metrics.json`.
+   - Update `docs/STATUS.md`, `docs/ROADMAP.md`, `docs/RUBRIC_MAP.md`, `docs/MILESTONE_HISTORY.md`, `MODEL_CARD.md`, and `docs/HANDOFF.md`.
+   - If M5 completes, update `docs/AGENT_PROMPTS.md` so the next active prompt is M6 - AWS Public Demo.
+   - If M5 is blocked, document the exact blocker and next command/action.
+
+Verification commands before ending:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests`
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md`
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`
+- If API changed, smoke `GET /health`, `GET /version`, sample transcription, and the relevant inference route.
+
+Milestone acceptance criteria:
+
+- A fixed end-to-end run emits `runs/e2e/{run_id}/metrics.json`.
+- MusicXML and MIDI generation success are measured and backed by artifacts.
+- Failure cases include root-cause notes.
+- The frontend/API story can show at least one real sample-to-artifact path.
+- Tests and metric-claim validation pass.
+```
+
+## Archived Prompt: M4 - Real Assembly Runtime
 
 Copy and paste this whole prompt into the next coding agent:
 

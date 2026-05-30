@@ -105,6 +105,16 @@ not fully explicit in separate metadata.
   - `holdout`: 14 pages, 10199 parsed nodes.
 - Leakage result:
   - duplicate page ids across train/val/holdout: passed.
+- M4 graph evaluation:
+  - output: `runs/graph/graph_legacy_gnn_muscima_val_v1/`,
+  - split: M1 `val`,
+  - checkpoint: `..\outputs\gnn_checkpoint.pt`,
+  - checkpoint SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`,
+  - metric distribution: natural candidate-edge distribution with no negative subsampling,
+  - candidate edges: 48174,
+  - positive candidate edges: 6340,
+  - primary graph metric: positive-class macro F1 0.7590456327823909,
+  - limitation: legacy 15-class graph contract and reconstructed seed-42 node feature encoder.
 
 ## Taxonomies
 

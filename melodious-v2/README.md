@@ -8,6 +8,7 @@ Melodious V2 is a clean rebuild of the original OMR project. It targets a full-g
 - Strict metric registry so `mAP`, `F1`, precision, and recall are never mixed.
 - Versioned detector payload contract with taxonomy, run id, model id, and artifact hash provenance.
 - FastAPI product service with sample and upload transcription routes.
+- Checkpoint-gated legacy GNN assembly runtime with explicit fallback metadata.
 - AWS ECS/Fargate deployment templates instead of local-only demo claims.
 - Governance docs from day one: metrics, data card, experiments, rubric map, status, model card, and agent rules.
 
@@ -82,12 +83,20 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 5. Evaluate with `mAP@0.5:0.95` as the primary detector metric.
 6. Store every run under `runs/detection/{run_id}/` with config, metrics JSON, plots, and artifact hashes.
 
+## Graph Assembly Path
+
+1. Load the legacy MUSCIMA GNN checkpoint from `..\outputs\gnn_checkpoint.pt` through `MELODIOUS_GNN_CHECKPOINT`.
+2. Convert detector payloads into the legacy 15-class graph feature contract.
+3. Return `applied_mode = "gnn"` only when checkpoint inference runs; missing or failed checkpoints return explicit fallback metadata.
+4. Evaluate graph relationships with positive-class macro F1 on the natural candidate-edge distribution.
+5. Current graph run: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+
 ## Deployment Path
 
 Backend deployment targets Dockerized FastAPI + ONNX CPU inference on ECS Express Mode or ECS Fargate with images in ECR. The frontend deploys to S3 + CloudFront. See `infra/aws/README.md`.
 
 ## Current Status
 
-This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run now has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`.
+This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run now has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`.
 
-Current active milestone: M4 - Real Assembly Runtime. See `docs/ROADMAP.md` and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
+Current active milestone: M5 - End-to-End Export Quality. See `docs/ROADMAP.md` and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
