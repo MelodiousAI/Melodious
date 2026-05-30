@@ -1,0 +1,44 @@
+name: Deploy AWS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr
+      - name: Build and push API image
+        run: |
+          cd melodious-v2
+          IMAGE="${{ steps.ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}"
+          docker build -f infra/docker/Dockerfile.api -t "$IMAGE" .
+          docker push "$IMAGE"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+      - name: Build frontend
+        run: |
+          cd melodious-v2/frontend
+          npm install
+          npm run build
+      - name: Sync frontend to S3
+        run: |
+          aws s3 sync melodious-v2/frontend/dist "s3://${{ vars.S3_FRONTEND_BUCKET }}" --delete
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*"
+      - name: ECS deploy placeholder
+        run: |
+          echo "Register infra/aws/task-definition.template.json with IMAGE=$IMAGE, then update ECS service."
+
