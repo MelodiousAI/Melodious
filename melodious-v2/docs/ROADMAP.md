@@ -21,8 +21,8 @@ This document is the project execution plan after the V2 foundation. It turns th
 | M1 - Dataset Manifests | Done | Fixed DeepScores 136-class and MUSCIMA graph splits with leakage checks | manifest JSONs, class counts, leakage report |
 | M2 - Metric Reproduction | Done | Reproduce reduced-class baseline with V2 metric code | `runs/detection/detection_15class_repro_sample_v1/metrics.json`, generated report |
 | M3 - Full 136-Class Detector | Done | Train and evaluate full-taxonomy detector | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, model metadata |
-| M4 - Real Assembly Runtime | Active | Wire trained GNN adapter and natural-distribution graph evaluation | graph metrics, adapter tests, API mode proof |
-| M5 - End-to-End Export Quality | Planned | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | validity rate, structure metrics, artifact samples |
+| M4 - Real Assembly Runtime | Done | Wire trained GNN adapter and natural-distribution graph evaluation | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
+| M5 - End-to-End Export Quality | Active | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | validity rate, structure metrics, artifact samples |
 | M6 - AWS Public Demo | Planned | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront evidence, smoke logs |
 | M7 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
 
@@ -85,41 +85,58 @@ M3 acceptance status:
 - Analysis artifacts exist.
 - API detector wiring is still bootstrap/heuristic. This is documented as a follow-up because the M3 prompt allowed precise blocker documentation instead of forcing detector adapter work into the training milestone.
 
-## Immediate Next Work
+## Completed M4 - Real Assembly Runtime
 
-### M4 - Real Assembly Runtime
+Goal: replace graph/assembly scaffold risk with a real relationship runtime and a measured graph result.
 
-Goal: remove the current graph/assembly scaffold risk and prove a real relationship model path.
+Final graph run:
 
-Implementation tasks:
+- Run id: `graph_legacy_gnn_muscima_val_v1`.
+- Dataset: `muscima_graph_manifest`.
+- Split used for reported metrics: validation.
+- Taxonomy: `semantic_omr_v2`.
+- Metric distribution: natural candidate-edge distribution with no negative subsampling.
+- Candidate graph: legacy k-nearest plus vertical-overlap graph, `k_neighbors=8`.
+- Pages evaluated: 14.
+- Candidate edges: 48174.
+- Positive candidate edges: 6340.
+- Predicted positive candidate edges: 10680.
 
-- Read the MUSCIMA graph manifest generated in M1.
-- Identify the available trained GNN checkpoint or legacy graph model in the parent workspace, if present.
-- Define the V2 graph feature/input contract under `src/melodious_v2/assembly/`.
-- Add model loading through a clear configuration path such as `MELODIOUS_GNN_CHECKPOINT`.
-- Evaluate on the natural edge distribution.
-- Report positive-class macro F1 as the primary graph metric.
-- Keep `no_relation` metrics separate.
-- Add API tests proving `applied_mode = "gnn"` only when real inference is active.
-- Preserve explicit fallback metadata when no checkpoint is configured or loading fails.
-- Write graph metrics to `runs/graph/{run_id}/metrics.json`.
-- Regenerate `docs/EXPERIMENTS.md` from run artifacts.
-- Update `MODEL_CARD.md`, `docs/RUBRIC_MAP.md`, `docs/MILESTONE_HISTORY.md`, `docs/STATUS.md`, and `docs/HANDOFF.md`.
+GNN checkpoint evidence:
 
-Acceptance criteria:
+- Source checkpoint: `..\outputs\gnn_checkpoint.pt`.
+- Checkpoint SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+- Runtime adapter: `src/melodious_v2/assembly/legacy_gnn.py`.
+- Evaluation script: `scripts/evaluate_gnn_muscima.py`.
+- Feature encoder: reconstructed from legacy training seed `42` because the legacy checkpoint did not save the separate node encoder used to build training tensors.
 
-- GNN mode no longer silently falls back when a valid checkpoint and adapter are configured.
-- Graph evaluation emits `runs/graph/{run_id}/metrics.json`.
-- API response includes relationship outputs and real mode metadata.
-- `no_relation` is reported separately from positive-class macro F1.
+Graph metrics from `metrics.json`:
+
+- Primary `positive_macro_f1`: 0.7590456327823909.
+- Separate `no_relation` precision: 0.997066197258228.
+- Separate `no_relation` recall: 0.8936271931921403.
+- Separate `no_relation` F1: 0.9425171440096813.
+- Separate `no_relation` support: 41834.
+- `stem_notehead` F1: 0.6960721184803607.
+- `beam_notegroup` F1: 0.8220191470844213.
+- `slur_phrase` and `tie_sustained` have zero support in this legacy 15-class validation contract.
+
+API/runtime proof:
+
+- `assemble_payload` only reports `applied_mode = "gnn"` when checkpoint inference runs.
+- Missing checkpoint requests report `applied_mode = "checkpoint_missing"` and return heuristic fallback relationships.
+- Bad checkpoint or inference errors report `heuristic_fallback`.
+- API sample smoke with `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt` returned `applied_mode=gnn`, `fallback_applied=False`, `checkpoint_ready=True`, `inference_ran=True`, `adapter_name=legacy_muscima_gat`, and `relationship_count=4`.
+
+M4 acceptance status:
+
+- A real GNN/relationship checkpoint is loaded through the V2 adapter.
+- Graph evaluation emits `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- API response metadata includes relationship outputs and truthful runtime mode metadata.
+- Positive-class macro F1 is the graph headline metric, with `no_relation` reported separately.
 - Tests and metric-claim validation pass.
 
-Recommended optional detector follow-up during M4:
-
-- Add a non-bootstrap ONNX detector adapter for `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
-- Keep `heuristic_bootstrap` as an explicit fallback.
-- Smoke `/health`, `/version`, and uploaded-image inference after adapter wiring.
-- Do not hide detector limitations: high precision with weaker recall, 16 supported zero-mAP classes, and weak ledger/stem behavior.
+## Immediate Next Work
 
 ### M5 - End-to-End Export Quality
 
@@ -140,6 +157,13 @@ Acceptance criteria:
 - MusicXML and MIDI generation success rates are reported.
 - Failures include examples and root-cause notes.
 - The frontend can show at least one uploaded-image result end to end.
+
+Recommended optional detector follow-up during M5:
+
+- Add a non-bootstrap ONNX detector adapter for `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
+- Keep `heuristic_bootstrap` as an explicit fallback.
+- Smoke `/health`, `/version`, and uploaded-image inference after adapter wiring.
+- Do not hide detector limitations: high precision with weaker recall, 16 supported zero-mAP classes, and weak ledger/stem behavior.
 
 ### M6 - AWS Public Demo
 
@@ -194,6 +218,7 @@ Acceptance criteria:
 | Graph primary metric | positive-class macro F1 | Prevents `no_relation` inflation |
 | Deployment path | ECS/Fargate/ECR, S3, CloudFront | Low-cost public demo path |
 | Current upload detector | `heuristic_bootstrap` | Integration-only path until trained ONNX detector adapter is wired |
+| Current assembly runtime | `legacy_muscima_gat` via `MELODIOUS_GNN_CHECKPOINT` | Real checkpoint path exists; legacy 15-class contract remains a limitation |
 
 ## Weekly Operating Rhythm
 

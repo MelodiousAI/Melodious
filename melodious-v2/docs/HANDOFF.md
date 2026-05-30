@@ -4,7 +4,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M4 - Real Assembly Runtime is active. M1 - Dataset Manifests, M2 - Metric Reproduction, and M3 - Full 136-Class Detector are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`.
+Active milestone: M5 - End-to-End Export Quality is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, and M4 - Real Assembly Runtime are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M4 loaded the legacy MUSCIMA GNN checkpoint through a V2 adapter, added truth-preserving runtime metadata, evaluated graph assembly on the fixed M1 MUSCIMA validation split, and regenerated `docs/EXPERIMENTS.md`.
 
 Current state:
 
@@ -25,6 +25,16 @@ Current state:
 - M3 full YOLOv8m run exists under `runs/detection/detection_136class_yolov8m_v1/`.
 - M3 full YOLOv8m model artifacts exist under `artifacts/models/detection_136class_yolov8m_v1/`.
 - Detailed milestone ledger exists at `docs/MILESTONE_HISTORY.md`.
+- M4 legacy GNN checkpoint source: `..\outputs\gnn_checkpoint.pt`.
+- M4 legacy GNN checkpoint SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+- M4 runtime adapter: `src/melodious_v2/assembly/legacy_gnn.py`.
+- M4 graph evaluation script: `scripts/evaluate_gnn_muscima.py`.
+- M4 graph run: `runs/graph/graph_legacy_gnn_muscima_val_v1/`.
+- M4 graph metrics: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- M4 graph primary metric: positive-class macro F1 `0.7590456327823909`.
+- M4 graph separate `no_relation` F1: `0.9425171440096813` with support `41834`.
+- M4 `stem_notehead` F1: `0.6960721184803607`; `beam_notegroup` F1: `0.8220191470844213`.
+- M4 graph caveat: the legacy checkpoint did not save the separate seeded node feature encoder; V2 reconstructs it from seed `42` and records that in the graph run artifacts.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -63,21 +73,107 @@ Current state:
 - Detector limitation evidence: 16 supported validation classes still have zero mAP, including `ledgerLine`, `stem`, and `ottavaBracket`.
 - ONNX parity passed on one fixed validation image; PyTorch and ONNX both returned 300 boxes with identical class-count totals.
 - M1 was re-verified on 2026-05-12 in this workspace. The manifest CLI completed against the local parent datasets and refreshed ignored `runs/data/` artifacts.
-- `docs/AGENT_PROMPTS.md` now says the current active milestone is M4.
+- `docs/AGENT_PROMPTS.md` now says the current active milestone is M5.
 
 Next exact prompt:
 
-- Use the active M4 prompt in `docs/AGENT_PROMPTS.md`.
+- Use the active M5 prompt in `docs/AGENT_PROMPTS.md`.
 
 Next exact implementation target:
 
-1. Start M4 from the active prompt in `docs/AGENT_PROMPTS.md`.
-2. Search the V2 repo and read-only parent workspace for an existing GNN/relationship checkpoint and graph feature contract.
-3. Implement or wire the real assembly adapter under `src/melodious_v2/assembly/`.
-4. Evaluate graph assembly on the fixed MUSCIMA graph manifest and write `runs/graph/{run_id}/metrics.json`.
-5. Keep `no_relation` metrics separate and report positive-class macro F1 as the graph primary metric.
-6. Add API mode tests so `applied_mode = "gnn"` is only returned when real checkpoint inference runs.
-7. Optionally wire `artifacts/models/detection_136class_yolov8m_v1/best.onnx` into a non-bootstrap detector adapter; keep `heuristic_bootstrap` explicit until tested.
+1. Start M5 from the active prompt in `docs/AGENT_PROMPTS.md`.
+2. Confirm `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` and `runs/detection/detection_136class_yolov8m_v1/metrics.json` exist locally.
+3. Define a fixed end-to-end evaluation set, preferably from the M1 MUSCIMA holdout split.
+4. Implement an end-to-end evaluator that runs detector-like payloads through assembly and export, validates MusicXML, writes MIDI, records failure reasons, and writes `runs/e2e/{run_id}/metrics.json`.
+5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-05-30 - Agent Handoff - M4 Real Assembly Runtime Complete
+
+Milestone worked:
+
+- M4 - Real Assembly Runtime
+
+Files changed:
+
+- `README.md`
+- `MODEL_CARD.md`
+- `docs/AGENT_PROMPTS.md`
+- `docs/EXPERIMENTS.md`
+- `docs/HANDOFF.md`
+- `docs/MILESTONE_HISTORY.md`
+- `docs/ROADMAP.md`
+- `docs/RUBRIC_MAP.md`
+- `docs/STATUS.md`
+- `scripts/evaluate_gnn_muscima.py`
+- `src/melodious_v2/api/models.py`
+- `src/melodious_v2/assembly/legacy_gnn.py`
+- `src/melodious_v2/assembly/service.py`
+- `tests/test_api.py`
+- `tests/test_assembly_gnn_runtime.py`
+- `tests/test_graph_metrics.py`
+
+Commands run:
+
+- `git switch -c phase-04-assembly` - completed in an earlier step; current branch is `phase-04-assembly`.
+- `git commit -m "Initialize Melodious V2 through M3 detector"` - completed in an earlier step with commit `085b049`, scoped to `melodious-v2`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -c "import torch; ... import torch_geometric"` - passed; torch `2.9.0+cu128`, torch_geometric `2.7.0`.
+- Checkpoint inspection for `..\outputs\gnn_checkpoint.pt` - passed; SHA256 `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`, checkpoint keys `config`, `epoch`, `model_state_dict`, `train_acc`, `train_loss`, `val_acc`, `val_loss`, epoch `79`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\assembly\legacy_gnn.py src\melodious_v2\assembly\service.py scripts\evaluate_gnn_muscima.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_assembly_gnn_runtime.py` - passed, 3 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_graph_metrics.py` - passed, 2 tests.
+- `git commit -m "Add checkpoint-gated GNN assembly runtime"` - passed with commit `f1ab688`.
+- Initial `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\evaluate_gnn_muscima.py --split val --device cpu` - produced a graph run but revealed a legacy feature-encoder mismatch because the checkpoint's internal unused encoder predicted only `no_relation`.
+- Feature-encoder probe with a reconstructed seed-42 encoder - passed; positive-class macro F1 was `0.7590456327823909`.
+- `git commit -m "Add MUSCIMA GNN evaluation pipeline"` - passed with commit `0f36b73`.
+- API sample smoke with `$env:MELODIOUS_GNN_CHECKPOINT='..\outputs\gnn_checkpoint.pt'` - passed; `applied_mode=gnn`, `fallback_applied=False`, `checkpoint_ready=True`, `inference_ran=True`, `adapter_name=legacy_muscima_gat`, `relationship_count=4`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_api.py` - passed, 4 tests.
+- `git commit -m "Test API GNN mode metadata"` - passed with commit `ab2d550`.
+- Final `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\evaluate_gnn_muscima.py --split val --device cpu` - passed; metrics provenance commit is `ab2d550`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` - passed; index includes `graph_legacy_gnn_muscima_val_v1`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 30 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 12 documentation files.
+
+Generated artifacts:
+
+- `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`
+- `runs/graph/graph_legacy_gnn_muscima_val_v1/report.md`
+- `runs/graph/graph_legacy_gnn_muscima_val_v1/manifest.json`
+- `runs/graph/graph_legacy_gnn_muscima_val_v1/artifacts.json`
+- `runs/graph/graph_legacy_gnn_muscima_val_v1/config.yaml`
+
+What is complete:
+
+- A real legacy GNN checkpoint is wired into the V2 assembly runtime.
+- `applied_mode = "gnn"` is gated on actual checkpoint inference.
+- Missing checkpoint and bad checkpoint paths return explicit fallback metadata.
+- Graph evaluation runs on the fixed M1 MUSCIMA validation manifest and writes project-standard metrics.
+- `no_relation` metrics are reported separately from the graph primary metric.
+- `docs/EXPERIMENTS.md` includes the M4 graph run.
+- `docs/AGENT_PROMPTS.md` now points the next agent to M5.
+
+Final graph metrics:
+
+- Primary `positive_macro_f1`: 0.7590456327823909.
+- Separate `no_relation` F1: 0.9425171440096813.
+- `stem_notehead` F1: 0.6960721184803607.
+- `beam_notegroup` F1: 0.8220191470844213.
+- Candidate edges: 48174.
+- Positive candidate edges: 6340.
+
+Important limitations:
+
+- This is a validation graph result, not an end-to-end uploaded-image result.
+- The GNN is a legacy 15-class relationship model, not a full 136-class relationship model.
+- The legacy checkpoint did not save the separate node feature encoder used to build training tensors. V2 reconstructs it from seed `42`; this is documented in the metrics.
+- API uploaded-image detector inference still uses `heuristic_bootstrap`.
+
+What failed:
+
+- The first graph evaluation using the checkpoint model's internal node encoder predicted only `no_relation`, giving positive-class macro F1 `0.0`. This exposed the legacy feature-encoder artifact gap. Reconstructing the legacy seed-42 feature encoder fixed the evaluated runtime path and is now documented.
+
+Next exact step:
+
+- Start M5 with the active prompt in `docs/AGENT_PROMPTS.md`. Build a fixed end-to-end evaluator that writes `runs/e2e/{run_id}/metrics.json`, validates MusicXML, writes MIDI artifacts, records export/relationship failures, and keeps uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is added.
 
 ## 2026-05-30 - Agent Handoff - M3 Finalized and M4 Activated
 
