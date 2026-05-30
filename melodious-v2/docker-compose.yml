@@ -1,0 +1,10 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    environment:
+      MELODIOUS_ENV: local-docker
+    ports:
+      - "8000:8000"
+

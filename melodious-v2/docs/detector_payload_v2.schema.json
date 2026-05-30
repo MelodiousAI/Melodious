@@ -1,0 +1,238 @@
+{
+  "$defs": {
+    "DetectionV2": {
+      "description": "Single detector output record.",
+      "properties": {
+        "class_id": {
+          "minimum": 0,
+          "title": "Class Id",
+          "type": "integer"
+        },
+        "class_name": {
+          "title": "Class Name",
+          "type": "string"
+        },
+        "semantic_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Group"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "bbox": {
+          "$ref": "#/$defs/NormalizedBBox"
+        },
+        "bbox_pixels": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PixelBBox"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "class_id",
+        "class_name",
+        "confidence",
+        "bbox"
+      ],
+      "title": "DetectionV2",
+      "type": "object"
+    },
+    "ImageSize": {
+      "description": "Image dimensions in pixels.",
+      "properties": {
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ],
+      "title": "ImageSize",
+      "type": "object"
+    },
+    "NormalizedBBox": {
+      "description": "Center-based normalized bounding box in `[0, 1]` coordinates.",
+      "properties": {
+        "x_center": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "X Center",
+          "type": "number"
+        },
+        "y_center": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Y Center",
+          "type": "number"
+        },
+        "width": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Width",
+          "type": "number"
+        },
+        "height": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Height",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_center",
+        "y_center",
+        "width",
+        "height"
+      ],
+      "title": "NormalizedBBox",
+      "type": "object"
+    },
+    "PixelBBox": {
+      "description": "Axis-aligned pixel bounding box.",
+      "properties": {
+        "x1": {
+          "minimum": 0.0,
+          "title": "X1",
+          "type": "number"
+        },
+        "y1": {
+          "minimum": 0.0,
+          "title": "Y1",
+          "type": "number"
+        },
+        "x2": {
+          "minimum": 0.0,
+          "title": "X2",
+          "type": "number"
+        },
+        "y2": {
+          "minimum": 0.0,
+          "title": "Y2",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2"
+      ],
+      "title": "PixelBBox",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Canonical detector payload stored by runs and exchanged with the API.",
+  "properties": {
+    "schema_version": {
+      "const": "2.0",
+      "default": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "model_id": {
+      "minLength": 1,
+      "title": "Model Id",
+      "type": "string"
+    },
+    "taxonomy_id": {
+      "enum": [
+        "deepscores_136",
+        "semantic_omr_v2"
+      ],
+      "title": "Taxonomy Id",
+      "type": "string"
+    },
+    "image_size": {
+      "$ref": "#/$defs/ImageSize"
+    },
+    "detections": {
+      "items": {
+        "$ref": "#/$defs/DetectionV2"
+      },
+      "title": "Detections",
+      "type": "array"
+    },
+    "model_artifact_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Artifact Sha256"
+    },
+    "source_image_uri": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Image Uri"
+    },
+    "inference_ms": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inference Ms"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "model_id",
+    "taxonomy_id",
+    "image_size",
+    "detections"
+  ],
+  "title": "DetectorPayloadV2",
+  "type": "object"
+}

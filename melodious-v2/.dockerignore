@@ -1,0 +1,14 @@
+.venv
+frontend/node_modules
+frontend/dist
+runs
+artifacts
+outputs
+data
+checkpoints
+*.pt
+*.pth
+*.onnx
+.env
+.git
+

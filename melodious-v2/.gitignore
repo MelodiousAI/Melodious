@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+
+# Generated project artifacts
+runs/
+artifacts/
+outputs/
+logs/
+data/
+checkpoints/
+*.pt
+*.pth
+*.onnx
+*.engine
+*.tflite
+
+# Local secrets and deployment state
+.env
+.env.*
+!.env.example
+infra/**/*.tfstate
+infra/**/*.tfstate.*
+*.pem
+*.key
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
