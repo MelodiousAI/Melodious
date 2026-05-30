@@ -1,11 +1,13 @@
 import base64
 import io
 import unittest
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from PIL import Image, ImageDraw
 
 from melodious_v2.api.app import app
+from melodious_v2.assembly.service import AssemblyModeStatus, Relationship
 
 
 class ApiTests(unittest.TestCase):
@@ -33,6 +35,34 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(musicxml.status_code, 200)
         self.assertIn(b"score-partwise", musicxml.content)
 
+    def test_sample_transcription_can_return_gnn_mode_metadata(self):
+        fake_mode = AssemblyModeStatus(
+            requested_mode="gnn",
+            applied_mode="gnn",
+            fallback_applied=False,
+            fallback_reason=None,
+            checkpoint_ready=True,
+            checkpoint_path="fake-checkpoint.pt",
+            adapter_name="fake-ready-adapter",
+            inference_ran=True,
+        )
+        fake_relationships = [Relationship(0, 1, "stem_notehead", 0.9)]
+        with patch(
+            "melodious_v2.api.service.assemble_payload",
+            return_value=(fake_mode, fake_relationships),
+        ):
+            response = self.client.post(
+                "/transcriptions",
+                json={"sample_id": "sample-notation-1", "requested_assembly_mode": "gnn"},
+            )
+
+        self.assertEqual(response.status_code, 200)
+        mode = response.json()["assembly_mode"]
+        self.assertEqual(mode["applied_mode"], "gnn")
+        self.assertTrue(mode["checkpoint_ready"])
+        self.assertTrue(mode["inference_ran"])
+        self.assertEqual(mode["adapter_name"], "fake-ready-adapter")
+
     def test_upload_transcription_is_labeled_bootstrap(self):
         image = Image.new("L", (120, 80), 255)
         draw = ImageDraw.Draw(image)
@@ -52,4 +82,3 @@ class ApiTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
