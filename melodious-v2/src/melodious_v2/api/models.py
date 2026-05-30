@@ -45,6 +45,9 @@ class AssemblyModeResponse(BaseModel):
     fallback_applied: bool
     fallback_reason: str | None
     checkpoint_ready: bool
+    checkpoint_path: str | None = None
+    adapter_name: str | None = None
+    inference_ran: bool = False
     warnings: list[str] = Field(default_factory=list)
 
 
@@ -59,4 +62,3 @@ class TranscriptionResponse(BaseModel):
     artifacts: list[ArtifactRecord]
     metric_provenance: dict
     warnings: list[str] = Field(default_factory=list)
-
