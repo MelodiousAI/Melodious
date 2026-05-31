@@ -643,6 +643,9 @@ Implemented code/docs:
 - `scripts/run_detection_136class_yolo.py` now supports `--max-det` and `--nms-iou` so dense-page inference settings are explicit and recorded.
 - `tests/test_full_detector_m3.py` covers the new argument parsing.
 - `docs/METRIC_IMPROVEMENT.md` records the sweep, interpretation, caveats, and next training command.
+- `src/melodious_v2/evaluation/class_coverage.py` adds reusable split/metric coverage auditing.
+- `scripts/audit_detector_class_coverage.py` writes ignored `class_coverage.json` and `class_coverage.md` evidence under `runs/detection/`.
+- `tests/test_detector_class_coverage.py` verifies that the audit separates training gaps, validation blind spots, unsupported raw metric values, and supported zero-map classes.
 
 Generated M7 detector evaluation runs:
 
@@ -706,11 +709,29 @@ Sweep interpretation:
 - Validation-time augmentation at 1280 regressed and should not be used for the current detector.
 - This is an inference-configuration improvement on validation, not a newly trained detector.
 
+Class coverage audit:
+
+- Audit artifacts: `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.json` and `class_coverage.md`.
+- Source metrics: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+- Detector taxonomy/model head: 136 classes.
+- Any local label support across train/validation/test: 115 classes.
+- Zero-label taxonomy classes across train/validation/test: 21.
+- Split support: train 115 classes, validation 103 classes, test 110 classes.
+- Validation blind spots: 33 taxonomy classes.
+- Training-supported but validation-absent classes: 12.
+- Validation-supported classes absent from training: 0.
+- Test-supported classes absent from training: 0.
+- Best primary M7 validation run still has seven supported zero-map classes: `stem`, `ledgerLine`, `articTenutoBelow`, `dynamicR`, `tremolo3`, `tuplet1`, and `tuplet5`.
+- High-support zero-map validation classes: `ledgerLine` and `stem`.
+- Interpretation: the next fine-tune can improve supported-class validation metrics, but it cannot teach the 21 zero-label classes without additional data or a narrower supported-class claim.
+
 M7 remaining risk:
 
 - High-support classes such as `ledgerLine` and `stem` remain unresolved.
 - Test-set performance is intentionally still unreported.
 - More real improvement likely requires fine-tuning or a special treatment for thin line-like symbols.
+- Twenty-one taxonomy classes have no local labels and cannot be learned by another run on the same dataset.
+- The current validation split cannot measure 33 taxonomy classes, so validation-selected settings are not proof that all 136 classes work.
 
 Exact next metric action:
 

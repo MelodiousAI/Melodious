@@ -88,6 +88,17 @@
   - best secondary maximum detections per image: 2000,
   - validation secondary metric from best secondary `metrics.json`: `mAP@0.5` 0.7920129156176505,
   - caveat: this is validation-time inference tuning on the existing checkpoint, not a newly trained model and not test-set performance.
+- M7 class coverage audit:
+  - output: `runs/detection/detection_136class_class_coverage_audit_v1/`,
+  - source metrics: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`,
+  - taxonomy classes: 136,
+  - local label support across train/validation/test: 115 classes,
+  - zero-label taxonomy classes across all local splits: 21,
+  - split support: train 115 classes, validation 103 classes, test 110 classes,
+  - validation blind spots: 33 taxonomy classes,
+  - training-supported but validation-absent classes: 12,
+  - high-support zero-map validation classes: `ledgerLine` and `stem`,
+  - caveat: fine-tuning on the same local labels can improve supported-class metrics but cannot teach zero-label classes without additional labeled data.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.

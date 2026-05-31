@@ -18,6 +18,7 @@ Graph project: yes.
 - Preprocessing/leakage: dataset conversion tests and manifests.
 - Splits/metrics/protocol: docs/METRICS.md, dataset manifests, and run manifests.
 - Error analysis: model card plus generated detector analysis at `runs/detection/detection_136class_yolov8s_smoke_v1/analysis.json` and `runs/detection/detection_136class_yolov8m_v1/analysis.json`.
+- Class coverage evidence: `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.json` and `class_coverage.md`; the audit separates supported classes, validation blind spots, zero-label taxonomy classes, and high-support zero-map classes.
 - Metric improvement evidence: `docs/METRIC_IMPROVEMENT.md`, `configs/detection_136class_eval_resolution_sweep.yaml`, `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`, and `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`.
 - End-to-end evidence: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, `report.md`, `manifest.json`, and exported artifacts.
 - Limitations/tradeoffs: MODEL_CARD.md.
@@ -53,6 +54,7 @@ Graph project: yes.
   - generated full-taxonomy detector smoke checkpoint and ONNX artifact,
   - full YOLOv8m 136-class detector checkpoint and ONNX artifact,
   - improved full YOLOv8m validation inference configuration at image size 1248,
+  - detector class-coverage audit that prevents unsupported-class metric claims,
   - real legacy GNN assembly runtime with natural-distribution graph metrics,
   - fixed holdout MusicXML/MIDI export evaluation with generated artifacts,
   - public AWS deployment path with smoke tooling and cost-control runbook,

@@ -59,6 +59,10 @@ Current state:
 - M7 best secondary `mAP@0.5`: `0.7920129156176505`.
 - M7 best `F1@0.5`: `0.7746130448554269`.
 - M7 caveat: this is validation inference tuning on the existing checkpoint, not a newly trained model or test-set result.
+- M7 class coverage audit: `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.json`.
+- M7 class coverage finding: the detector head preserves 136 classes, but the local train/validation/test labels support 115 classes, validation supports 103 classes, and 21 taxonomy classes have zero local labels.
+- M7 class coverage finding: no validation-supported or test-supported class is absent from training, but 12 train-supported classes are absent from validation.
+- M7 class coverage finding: high-support zero-map validation classes remain `ledgerLine` and `stem`.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -106,10 +110,80 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. If GPU time is available, launch `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` with the exact command in `docs/METRIC_IMPROVEMENT.md`.
-3. If not launching training, document the blocker and exact next command in `docs/HANDOFF.md` and `docs/STATUS.md`.
+2. Launch `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` with the exact command in `docs/METRIC_IMPROVEMENT.md`; GPU availability was checked and the RTX 3080 Laptop GPU had 16 GB VRAM with no active Python training process.
+3. If training is interrupted, preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, and the PID/log metadata before stopping.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-06-01 - Agent Handoff - M7 Class Coverage Audit
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement
+
+Files changed:
+
+- `src/melodious_v2/evaluation/class_coverage.py`
+- `scripts/audit_detector_class_coverage.py`
+- `tests/test_detector_class_coverage.py`
+- `docs/DATA_CARD.md`
+- `docs/HANDOFF.md`
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/STATUS.md`
+- `MODEL_CARD.md`
+
+Generated ignored evidence:
+
+- `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.json`
+- `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.md`
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\evaluation\class_coverage.py scripts\audit_detector_class_coverage.py tests\test_detector_class_coverage.py` - passed.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_detector_class_coverage.py` - passed, 2 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\audit_detector_class_coverage.py --metrics runs\detection\detection_136class_yolov8m_eval_img1472_maxdet2000_v1\metrics.json --output-dir runs\detection\detection_136class_class_coverage_audit_v1` - passed.
+- `nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv,noheader` - passed; GPU is NVIDIA GeForce RTX 3080 Laptop GPU with 16384 MiB VRAM and 455 MiB used at check time.
+- `Get-Process python -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,CPU,WorkingSet,Path` - returned no active Python training process.
+- `Test-Path runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` - returned `False`.
+- `Test-Path artifacts\models\detection_136class_yolov8m_v1\best.pt` - returned `True`.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 36 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 13 documentation files.
+
+Coverage findings:
+
+- Detector taxonomy/model head: 136 classes.
+- Any local label support across train/validation/test: 115 classes.
+- Zero-label taxonomy classes across all local splits: 21.
+- Split support: train 115 classes, validation 103 classes, test 110 classes.
+- Validation blind spots: 33 taxonomy classes.
+- Training-supported but validation-absent classes: 12.
+- Validation-supported classes absent from training: 0.
+- Test-supported classes absent from training: 0.
+- Best primary M7 validation run still has seven supported zero-map classes: `stem`, `ledgerLine`, `articTenutoBelow`, `dynamicR`, `tremolo3`, `tuplet1`, and `tuplet5`.
+- High-support zero-map validation classes: `ledgerLine` and `stem`.
+
+Engineering decision:
+
+- Continue with `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` because GPU is available and the current best honest path for higher measured validation metrics is fine-tuning from the selected checkpoint using the corrected dense-page inference cap.
+- Do not present the fine-tune as a fix for all 136 classes. Fine-tuning on the same labels can improve supported classes but cannot teach the 21 zero-label classes.
+- Keep the test split untouched until the detector model and inference configuration are frozen.
+
+Next exact step:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 `
+  --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
+  --epochs 50 `
+  --imgsz 1472 `
+  --batch 1 `
+  --workers 0 `
+  --device 0 `
+  --patience 15 `
+  --max-det 2000
+```
 
 ## 2026-06-01 - Agent Handoff - M7 Dense-Page Metric Improvement
 

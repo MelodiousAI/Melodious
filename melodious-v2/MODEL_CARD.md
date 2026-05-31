@@ -27,6 +27,7 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - Best current validation precision and recall at IoU 0.5: `precision@0.5 = 0.8166240104606699`, `recall@0.5 = 0.7367130723503518`.
 - Best current validation detector `F1@0.5 = 0.7746130448554269`.
 - The best current secondary `mAP@0.5` validation configuration is `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, with `mAP@0.5 = 0.7920129156176505`.
+- The M7 class coverage audit is recorded under `runs/detection/detection_136class_class_coverage_audit_v1/`; it shows that the model head preserves the 136-class taxonomy, but local labels contain support for 115 classes across train/validation/test and validation measures 103 classes.
 - Graph assembly now has a real legacy GNN runtime path. With `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt`, the API sample path can report `applied_mode = "gnn"` only after checkpoint inference runs.
 - The current graph evaluation run is `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 - Primary graph metric: `positive_macro_f1 = 0.7590456327823909`.
@@ -58,6 +59,8 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - The `detection_136class_yolov8m_eval_img1472_maxdet2000_v1` and `detection_136class_yolov8m_eval_img1536_maxdet2000_v1` results are validation-time inference tuning on the existing checkpoint. They are not newly trained models and must not be reported as test performance.
 - The full YOLOv8m analysis shows 103 supported validation classes, 16 supported classes with zero mAP, and small-symbol mean `mAP@0.5:0.95 = 0.3194606161321027`. Problem classes include `ledgerLine`, `stem`, `ottavaBracket`, several articulation classes, and fingering classes. See `runs/detection/detection_136class_yolov8m_v1/analysis.json`.
 - The improved dense-page inference runs still leave high-support classes such as `ledgerLine` and `stem` unresolved; see `docs/METRIC_IMPROVEMENT.md`.
+- The local DeepScores labels do not cover all 136 taxonomy classes: 21 classes have zero labels across train/validation/test. Another fine-tune on the same labels cannot teach those classes; future full-taxonomy improvement needs added labels, external data, synthetic-but-verified examples, or a narrower supported-class claim.
+- Current validation metrics are blind to 33 taxonomy classes because those classes have zero validation support. Validation-selected settings must not be presented as proof that every class works.
 - API inference still uses the bootstrap detector path until a selected ONNX artifact is intentionally wired into a non-bootstrap detector adapter.
 - The current GNN is a legacy 15-class relationship model. It does not cover every V2 detector class and has zero validation support for `slur_phrase` and `tie_sustained` in the current graph evaluation.
 - The legacy GNN checkpoint did not save the separate node feature encoder used to build training tensors. V2 reconstructs that encoder from seed `42`; this is documented in `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` and should be replaced by a self-contained graph artifact in a future retrain.
