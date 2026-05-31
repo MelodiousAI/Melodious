@@ -21,11 +21,12 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - Primary detector metric: `mAP@0.5:0.95 = 0.4747370751116288`.
 - Secondary detector metrics: `mAP@0.5 = 0.5853211368313491`, `precision@0.5 = 0.8274236461250144`, and `recall@0.5 = 0.4909790740632496`.
 - Secondary detector F1: `F1@0.5 = 0.6162725385980492`.
-- The best current validation inference configuration for the same checkpoint is `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
-- Best current validation detector metric: `mAP@0.5:0.95 = 0.5058429013539956`.
-- Best current validation secondary detector `mAP@0.5 = 0.6069618791829888`.
-- Best current validation precision and recall at IoU 0.5: `precision@0.5 = 0.8637798517406144`, `recall@0.5 = 0.4994362851193167`.
-- Best current validation detector `F1@0.5 = 0.6329194449061496`.
+- The best current primary validation inference configuration for the same checkpoint is `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+- Best current validation detector metric: `mAP@0.5:0.95 = 0.6204968163150985`.
+- Best current validation secondary detector `mAP@0.5 = 0.7833788545364062`.
+- Best current validation precision and recall at IoU 0.5: `precision@0.5 = 0.8166240104606699`, `recall@0.5 = 0.7367130723503518`.
+- Best current validation detector `F1@0.5 = 0.7746130448554269`.
+- The best current secondary `mAP@0.5` validation configuration is `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, with `mAP@0.5 = 0.7920129156176505`.
 - Graph assembly now has a real legacy GNN runtime path. With `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt`, the API sample path can report `applied_mode = "gnn"` only after checkpoint inference runs.
 - The current graph evaluation run is `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 - Primary graph metric: `positive_macro_f1 = 0.7590456327823909`.
@@ -54,9 +55,9 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - The M2 reduced-class sample is a metric-pipeline reproduction run and should not be treated as a final full-taxonomy detector result.
 - The M3 YOLOv8s smoke artifact proves the full-taxonomy training/evaluation/export path, but it is superseded by the full YOLOv8m detector for detector-quality claims.
 - The full YOLOv8m detector is a validation-split artifact. Test-set detector performance has not been reported yet and should be produced only once the team freezes the model family.
-- The `detection_136class_yolov8m_eval_img1248_v1` result is validation-time inference-resolution tuning on the existing checkpoint. It is not a newly trained model and must not be reported as test performance.
+- The `detection_136class_yolov8m_eval_img1472_maxdet2000_v1` and `detection_136class_yolov8m_eval_img1536_maxdet2000_v1` results are validation-time inference tuning on the existing checkpoint. They are not newly trained models and must not be reported as test performance.
 - The full YOLOv8m analysis shows 103 supported validation classes, 16 supported classes with zero mAP, and small-symbol mean `mAP@0.5:0.95 = 0.3194606161321027`. Problem classes include `ledgerLine`, `stem`, `ottavaBracket`, several articulation classes, and fingering classes. See `runs/detection/detection_136class_yolov8m_v1/analysis.json`.
-- The improved 1248 inference run still leaves high-support classes such as `ledgerLine` and `stem` unresolved; see `docs/METRIC_IMPROVEMENT.md`.
+- The improved dense-page inference runs still leave high-support classes such as `ledgerLine` and `stem` unresolved; see `docs/METRIC_IMPROVEMENT.md`.
 - API inference still uses the bootstrap detector path until a selected ONNX artifact is intentionally wired into a non-bootstrap detector adapter.
 - The current GNN is a legacy 15-class relationship model. It does not cover every V2 detector class and has zero validation support for `slur_phrase` and `tie_sustained` in the current graph evaluation.
 - The legacy GNN checkpoint did not save the separate node feature encoder used to build training tensors. V2 reconstructs that encoder from seed `42`; this is documented in `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` and should be replaced by a self-contained graph artifact in a future retrain.

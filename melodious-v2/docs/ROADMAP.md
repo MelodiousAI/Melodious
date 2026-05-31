@@ -24,7 +24,7 @@ This document is the project execution plan after the V2 foundation. It turns th
 | M4 - Real Assembly Runtime | Done | Wire trained GNN adapter and natural-distribution graph evaluation | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported artifacts |
 | M6 - AWS Public Demo | Prepared / blocked on AWS values | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront runbook, local smoke logs, public smoke pending |
-| M7 - Detector Metric Improvement | Active | Improve professor-facing detector metrics without losing provenance | `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
+| M7 - Detector Metric Improvement | Active | Improve professor-facing detector metrics without losing provenance | `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`, `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
 | M8 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
 
 ## Completed M3 - Full 136-Class Detector
@@ -237,20 +237,25 @@ Goal: raise the measured detector result while preserving metric provenance and 
 
 Current M7 result:
 
-- Best run: `detection_136class_yolov8m_eval_img1248_v1`.
-- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
-- Primary `mAP@0.5:0.95`: 0.5058429013539956.
-- Secondary `mAP@0.5`: 0.6069618791829888.
-- `F1@0.5`: 0.6329194449061496.
-- Improvement type: validation-time inference-resolution sweep on the existing YOLOv8m checkpoint.
+- Best primary run: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
+- Primary metric source: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+- Primary `mAP@0.5:0.95`: 0.6204968163150985.
+- Secondary `mAP@0.5` on that run: 0.7833788545364062.
+- Best secondary `mAP@0.5` run: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+- Best secondary `mAP@0.5`: 0.7920129156176505.
+- `F1@0.5` on the best primary run: 0.7746130448554269.
+- Improvement type: validation-time dense-page inference sweep on the existing YOLOv8m checkpoint.
 - Sweep ledger: `docs/METRIC_IMPROVEMENT.md` and `configs/detection_136class_eval_resolution_sweep.yaml`.
 
 Implementation tasks:
 
 - Done: run validation-only inference-resolution sweep at 1152, 1248, 1280, and 1536.
 - Done: test validation-time augmentation at 1280; it regressed.
+- Done: identify that the default 300 detection cap is too low for dense pages and add `--max-det`.
+- Done: run validation-only dense-page cap sweep at `max_det=2000`.
+- Done: add `--nms-iou` and test 1536 with NMS IoU 0.8; it regressed.
 - Done: regenerate `docs/EXPERIMENTS.md`.
-- Pending: decide whether to launch real 1248 fine-tuning from `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Pending: decide whether to launch real 1472/max-det fine-tuning from `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
 - Pending: if fine-tuning completes, compare validation metrics and update model card/status/handoff.
 - Pending: freeze one final model/inference configuration before any test-set evaluation.
 
@@ -267,14 +272,15 @@ Exact next action:
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $env:PYTHONPATH='src'
 ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
-  --run-id detection_136class_yolov8m_finetune_img1248_v1 `
+  --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 `
   --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
   --epochs 50 `
-  --imgsz 1248 `
-  --batch 2 `
+  --imgsz 1472 `
+  --batch 1 `
   --workers 0 `
   --device 0 `
-  --patience 15
+  --patience 15 `
+  --max-det 2000
 ```
 
 ### M8 - Final Grading Package

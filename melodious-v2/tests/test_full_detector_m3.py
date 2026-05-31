@@ -95,10 +95,12 @@ class FullDetectorM3Tests(unittest.TestCase):
             self.assertAlmostEqual(summary["best_by_mAP@0.5:0.95"]["mAP@0.5:0.95"], 0.4)
 
     def test_parse_args_accepts_validation_augmentation_flag(self):
-        args = parse_args(["--finalize-existing-run", "--val-augment"])
+        args = parse_args(["--finalize-existing-run", "--val-augment", "--max-det", "2000", "--nms-iou", "0.8"])
 
         self.assertTrue(args.finalize_existing_run)
         self.assertTrue(args.val_augment)
+        self.assertEqual(args.max_det, 2000)
+        self.assertAlmostEqual(args.nms_iou, 0.8)
 
     def test_write_detector_run_analysis_uses_metrics_and_split_support(self):
         with tempfile.TemporaryDirectory() as tmp:

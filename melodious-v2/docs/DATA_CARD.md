@@ -75,13 +75,18 @@
   - validation secondary F1 from `metrics.json`: `F1@0.5` 0.6162725385980492,
   - analysis summary: 103 supported validation classes, 16 supported validation classes with zero mAP, 35 supported small-symbol classes, and small-symbol mean `mAP@0.5:0.95` 0.3194606161321027,
   - ONNX parity status: `runs/detection/detection_136class_yolov8m_v1/onnx_parity.json` passed on one fixed validation image; PyTorch and ONNX both returned 300 boxes with identical class-count totals.
-- M7 validation inference-resolution improvement:
-  - best evaluation run: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/`,
+- M7 validation dense-page inference improvement:
+  - best primary evaluation run: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/`,
+  - best secondary `mAP@0.5` evaluation run: `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/`,
   - source checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`,
   - split: validation,
-  - inference image size: 1248,
-  - validation primary metric from `metrics.json`: `mAP@0.5:0.95` 0.5058429013539956,
-  - validation secondary metric from `metrics.json`: `mAP@0.5` 0.6069618791829888,
+  - validation object density: average 705.448529411765 labels per image, max 2011 labels, and 109 of 136 pages above the default 300 detection cap,
+  - best primary inference image size: 1472,
+  - best primary maximum detections per image: 2000,
+  - validation primary metric from best primary `metrics.json`: `mAP@0.5:0.95` 0.6204968163150985,
+  - best secondary inference image size: 1536,
+  - best secondary maximum detections per image: 2000,
+  - validation secondary metric from best secondary `metrics.json`: `mAP@0.5` 0.7920129156176505,
   - caveat: this is validation-time inference tuning on the existing checkpoint, not a newly trained model and not test-set performance.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as

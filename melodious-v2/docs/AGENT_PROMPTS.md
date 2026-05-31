@@ -47,6 +47,8 @@ Before coding, read:
 - README.md
 - configs/detection_136class_eval_resolution_sweep.yaml
 - scripts/run_detection_136class_yolo.py
+- runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json if it exists locally
+- runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_v1/metrics.json if it exists locally
 
@@ -59,28 +61,30 @@ Current handoff:
 - Original M3 detector run: `detection_136class_yolov8m_v1`.
 - Original M3 primary validation `mAP@0.5:0.95 = 0.4747370751116288`.
 - Original M3 secondary validation `mAP@0.5 = 0.5853211368313491`.
-- Best current M7 validation inference run: `detection_136class_yolov8m_eval_img1248_v1`.
-- Best current M7 primary validation `mAP@0.5:0.95 = 0.5058429013539956`.
-- Best current M7 secondary validation `mAP@0.5 = 0.6069618791829888`.
-- Best current M7 `F1@0.5 = 0.6329194449061496`.
-- The improvement came from validation inference-resolution tuning on the existing checkpoint, not a new trained model.
+- Best current M7 primary validation run: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
+- Best current M7 primary validation `mAP@0.5:0.95 = 0.6204968163150985`.
+- Best current M7 secondary validation run for `mAP@0.5`: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+- Best current M7 secondary validation `mAP@0.5 = 0.7920129156176505`.
+- Best current M7 `F1@0.5 = 0.7746130448554269`.
+- The improvement came from validation inference tuning on the existing checkpoint, especially raising `max_det` from the Ultralytics default of 300 to 2000 for dense music pages; it is not a new trained model.
 - `ledgerLine` and `stem` remain important high-support zero-mAP limitations.
 - Test-set detector performance is still intentionally unreported.
 
 Do all of the following:
 
 1. Confirm current evidence.
-   - Verify `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json` exists.
+   - Verify `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json` exists.
+   - Verify `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json` exists.
    - Verify `docs/EXPERIMENTS.md` includes the M7 detector sweep runs.
    - Run tests before significant detector code changes.
 
 2. Decide the next honest improvement path.
-   - If GPU time is available, launch the 1248 fine-tune command from `docs/METRIC_IMPROVEMENT.md`.
+   - If GPU time is available, launch the 1472/max-det fine-tune command from `docs/METRIC_IMPROVEMENT.md`.
    - If not launching training, document the exact blocker and next command.
    - Keep generated training outputs under ignored `runs/` and `artifacts/`.
 
 3. If training is launched.
-   - Use a new run id, preferably `detection_136class_yolov8m_finetune_img1248_v1`.
+   - Use a new run id, preferably `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
    - Save/stop only at clean checkpoints.
    - Preserve `last.pt`, `best.pt`, `results.csv`, logs, and metadata before stopping.
    - Do not overwrite `detection_136class_yolov8m_v1`.
@@ -88,7 +92,7 @@ Do all of the following:
 4. If training completes.
    - Finalize through `scripts/run_detection_136class_yolo.py`.
    - Regenerate `docs/EXPERIMENTS.md`.
-   - Compare validation metrics against `detection_136class_yolov8m_eval_img1248_v1`.
+   - Compare validation metrics against `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
    - Update `docs/METRIC_IMPROVEMENT.md`, `docs/STATUS.md`, `docs/HANDOFF.md`, `MODEL_CARD.md`, and `docs/RUBRIC_MAP.md`.
 
 5. Preserve metric discipline.

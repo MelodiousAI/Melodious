@@ -640,6 +640,7 @@ Source inputs:
 Implemented code/docs:
 
 - `scripts/run_detection_136class_yolo.py` now supports `--val-augment` for explicit validation-time augmentation comparisons.
+- `scripts/run_detection_136class_yolo.py` now supports `--max-det` and `--nms-iou` so dense-page inference settings are explicit and recorded.
 - `tests/test_full_detector_m3.py` covers the new argument parsing.
 - `docs/METRIC_IMPROVEMENT.md` records the sweep, interpretation, caveats, and next training command.
 
@@ -651,31 +652,57 @@ Generated M7 detector evaluation runs:
 - `runs/detection/detection_136class_yolov8m_eval_img1280_v1/metrics.json`.
 - `runs/detection/detection_136class_yolov8m_eval_img1536_v1/metrics.json`.
 - `runs/detection/detection_136class_yolov8m_eval_img1280_aug_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1248_maxdet2000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1248_maxdet3000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1280_maxdet2000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1344_maxdet2000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1408_maxdet2000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_iou08_v1/metrics.json`.
 
-Best current result:
+Best current primary result:
 
-- Run id: `detection_136class_yolov8m_eval_img1248_v1`.
-- Inference image size: 1248.
+- Run id: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
+- Inference image size: 1472.
+- Maximum detections per image: 2000.
 - Validation augmentation: false.
-- Primary `mAP@0.5:0.95`: 0.5058429013539956.
-- Secondary `mAP@0.5`: 0.6069618791829888.
-- `precision@0.5`: 0.8637798517406144.
-- `recall@0.5`: 0.4994362851193167.
-- `F1@0.5`: 0.6329194449061496.
-- Small-symbol mean `mAP@0.5:0.95`: 0.34224209611777584.
+- Primary `mAP@0.5:0.95`: 0.6204968163150985.
+- Secondary `mAP@0.5`: 0.7833788545364062.
+- `precision@0.5`: 0.8166240104606699.
+- `recall@0.5`: 0.7367130723503518.
+- `F1@0.5`: 0.7746130448554269.
+- Small-symbol mean `mAP@0.5:0.95`: 0.4832789581411164.
+
+Best current secondary `mAP@0.5` result:
+
+- Run id: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+- Inference image size: 1536.
+- Maximum detections per image: 2000.
+- Primary `mAP@0.5:0.95`: 0.6203204846063568.
+- Secondary `mAP@0.5`: 0.7920129156176505.
+- `precision@0.5`: 0.8107734656247262.
+- `recall@0.5`: 0.7331813762215841.
+- `F1@0.5`: 0.7700277096444413.
+- Small-symbol mean `mAP@0.5:0.95`: 0.4987375853530484.
+- Supported validation classes with zero mAP: 6.
 
 Improvement over original M3 validation:
 
-- Primary `mAP@0.5:0.95`: +0.0311058262423668.
-- Secondary `mAP@0.5`: +0.0216407423516397.
-- `F1@0.5`: +0.0166469063081004.
-- Small-symbol mean `mAP@0.5:0.95`: +0.0227814799856731.
+- Best primary `mAP@0.5:0.95`: +0.1457597412034697.
+- Best secondary `mAP@0.5`: +0.2066917787863014.
+- Best recall: +0.2625252988473996.
+- Best detector F1: +0.1583405062573777.
+- Best small-symbol mean `mAP@0.5:0.95`: +0.1792769692209457.
+- Supported validation classes with zero mAP decreased from 16 to 6.
 
 Sweep interpretation:
 
-- 1248 is the best measured validation inference size so far.
-- 1152 improved secondary metrics but did not beat 1248 on the primary metric.
-- 1536 regressed, so simply increasing resolution is not monotonic.
+- The default Ultralytics 300 detection cap was too low for DeepScores validation pages, which average 705.448529411765 labels and reach 2011 labels on the densest page.
+- 1472 with `max_det=2000` is the best measured primary validation configuration.
+- 1536 with `max_det=2000` is the best measured secondary `mAP@0.5` configuration.
+- 3000 detections did not improve over 2000 at image size 1248.
+- NMS IoU 0.8 regressed at image size 1536, so default NMS IoU remains selected.
 - Validation-time augmentation at 1280 regressed and should not be used for the current detector.
 - This is an inference-configuration improvement on validation, not a newly trained detector.
 
@@ -691,14 +718,15 @@ Exact next metric action:
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $env:PYTHONPATH='src'
 ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
-  --run-id detection_136class_yolov8m_finetune_img1248_v1 `
+  --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 `
   --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
   --epochs 50 `
-  --imgsz 1248 `
-  --batch 2 `
+  --imgsz 1472 `
+  --batch 1 `
   --workers 0 `
   --device 0 `
-  --patience 15
+  --patience 15 `
+  --max-det 2000
 ```
 
 ## M8 - Final Grading Package

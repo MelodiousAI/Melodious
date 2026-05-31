@@ -5,10 +5,18 @@ Generated from `runs/**/metrics.json`. Do not hand-edit metric values.
 | run_id | dataset | split | primary metric | value | metrics file |
 |---|---|---|---|---|---|
 | detection_136class_yolov8m_eval_img1152_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.491592825206654 | runs\detection\detection_136class_yolov8m_eval_img1152_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1248_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.5963368958356667 | runs\detection\detection_136class_yolov8m_eval_img1248_maxdet2000_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1248_maxdet3000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.5961042813834952 | runs\detection\detection_136class_yolov8m_eval_img1248_maxdet3000_v1\metrics.json |
 | detection_136class_yolov8m_eval_img1248_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.5058429013539956 | runs\detection\detection_136class_yolov8m_eval_img1248_v1\metrics.json |
 | detection_136class_yolov8m_eval_img1264_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.49475049942969357 | runs\detection\detection_136class_yolov8m_eval_img1264_v1\metrics.json |
 | detection_136class_yolov8m_eval_img1280_aug_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.46735702840326376 | runs\detection\detection_136class_yolov8m_eval_img1280_aug_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1280_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6015765296461454 | runs\detection\detection_136class_yolov8m_eval_img1280_maxdet2000_v1\metrics.json |
 | detection_136class_yolov8m_eval_img1280_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.49475049942969357 | runs\detection\detection_136class_yolov8m_eval_img1280_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1344_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6117073791668945 | runs\detection\detection_136class_yolov8m_eval_img1344_maxdet2000_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1408_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6171871717140972 | runs\detection\detection_136class_yolov8m_eval_img1408_maxdet2000_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1472_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6204968163150985 | runs\detection\detection_136class_yolov8m_eval_img1472_maxdet2000_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1536_maxdet2000_iou08_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6192197532779491 | runs\detection\detection_136class_yolov8m_eval_img1536_maxdet2000_iou08_v1\metrics.json |
+| detection_136class_yolov8m_eval_img1536_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6203204846063568 | runs\detection\detection_136class_yolov8m_eval_img1536_maxdet2000_v1\metrics.json |
 | detection_136class_yolov8m_eval_img1536_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.4801245622281405 | runs\detection\detection_136class_yolov8m_eval_img1536_v1\metrics.json |
 | detection_136class_yolov8m_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.4747370751116288 | runs\detection\detection_136class_yolov8m_v1\metrics.json |
 | detection_136class_yolov8s_smoke_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.00814658592551654 | runs\detection\detection_136class_yolov8s_smoke_v1\metrics.json |

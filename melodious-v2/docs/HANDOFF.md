@@ -4,7 +4,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M7 improved the best validation detector configuration by re-evaluating the selected checkpoint at image size 1248; the best current validation detector run is `detection_136class_yolov8m_eval_img1248_v1`.
+Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M7 improved the best validation detector configuration by correcting dense-page inference settings for the selected checkpoint. The best current primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the best current secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
 
 Current state:
 
@@ -53,11 +53,12 @@ Current state:
 - M6 public deployment blocker: AWS CLI was not found locally, and account-specific ECR/ECS/S3/CloudFront values are unavailable and must not be committed.
 - M7 metric improvement doc: `docs/METRIC_IMPROVEMENT.md`.
 - M7 sweep config: `configs/detection_136class_eval_resolution_sweep.yaml`.
-- M7 best validation detector run: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/`.
-- M7 best primary `mAP@0.5:0.95`: `0.5058429013539956`.
-- M7 best secondary `mAP@0.5`: `0.6069618791829888`.
-- M7 best `F1@0.5`: `0.6329194449061496`.
-- M7 caveat: this is validation inference-resolution tuning on the existing checkpoint, not a newly trained model or test-set result.
+- M7 best primary validation detector run: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/`.
+- M7 best primary `mAP@0.5:0.95`: `0.6204968163150985`.
+- M7 best secondary validation detector run for `mAP@0.5`: `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/`.
+- M7 best secondary `mAP@0.5`: `0.7920129156176505`.
+- M7 best `F1@0.5`: `0.7746130448554269`.
+- M7 caveat: this is validation inference tuning on the existing checkpoint, not a newly trained model or test-set result.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -105,10 +106,119 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. If GPU time is available, launch `detection_136class_yolov8m_finetune_img1248_v1` with the exact command in `docs/METRIC_IMPROVEMENT.md`.
+2. If GPU time is available, launch `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` with the exact command in `docs/METRIC_IMPROVEMENT.md`.
 3. If not launching training, document the blocker and exact next command in `docs/HANDOFF.md` and `docs/STATUS.md`.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-06-01 - Agent Handoff - M7 Dense-Page Metric Improvement
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement
+
+Files changed:
+
+- `configs/detection_136class_eval_resolution_sweep.yaml`
+- `docs/AGENT_PROMPTS.md`
+- `docs/DATA_CARD.md`
+- `docs/EXPERIMENTS.md`
+- `docs/HANDOFF.md`
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/MILESTONE_HISTORY.md`
+- `docs/ROADMAP.md`
+- `docs/RUBRIC_MAP.md`
+- `docs/STATUS.md`
+- `MODEL_CARD.md`
+- `README.md`
+- `scripts/run_detection_136class_yolo.py`
+- `tests/test_full_detector_m3.py`
+
+Detector runs generated:
+
+- `detection_136class_yolov8m_eval_img1248_maxdet2000_v1`
+- `detection_136class_yolov8m_eval_img1248_maxdet3000_v1`
+- `detection_136class_yolov8m_eval_img1280_maxdet2000_v1`
+- `detection_136class_yolov8m_eval_img1344_maxdet2000_v1`
+- `detection_136class_yolov8m_eval_img1408_maxdet2000_v1`
+- `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`
+- `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`
+- `detection_136class_yolov8m_eval_img1536_maxdet2000_iou08_v1`
+
+Commands run:
+
+- Validation label-density PowerShell summary - passed; 136 validation images average 705.448529411765 labels, max 2011 labels, 109 pages above 300 labels, and 28 pages above 1000 labels.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py tests\test_full_detector_m3.py` - passed after fixing one indentation mistake introduced while adding `--nms-iou`.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py` - passed, 5 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_eval_img1248_maxdet2000_v1 --finalize-existing-run --checkpoint artifacts\models\detection_136class_yolov8m_v1\best.pt --imgsz 1248 --batch 2 --workers 0 --device 0 --skip-export --max-det 2000` - passed.
+- Same command pattern for `imgsz 1248 --max-det 3000` - passed; no metric gain over 2000.
+- Same command pattern for `imgsz 1280 --max-det 2000` - passed.
+- Same command pattern for `imgsz 1344 --max-det 2000`, batch 1 - passed.
+- Same command pattern for `imgsz 1408 --max-det 2000`, batch 1 - passed.
+- Same command pattern for `imgsz 1472 --max-det 2000`, batch 1 - passed and produced the best primary metric.
+- Same command pattern for `imgsz 1536 --max-det 2000`, batch 1 - passed and produced the best secondary `mAP@0.5`.
+- Same command pattern for `imgsz 1536 --max-det 2000 --nms-iou 0.8`, batch 1 - passed; metric regressed against default NMS IoU.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` - passed.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 34 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 13 documentation files.
+
+Best current primary result:
+
+- Run id: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
+- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+- Primary `mAP@0.5:0.95`: `0.6204968163150985`.
+- Secondary `mAP@0.5`: `0.7833788545364062`.
+- `precision@0.5`: `0.8166240104606699`.
+- `recall@0.5`: `0.7367130723503518`.
+- `F1@0.5`: `0.7746130448554269`.
+- Small-symbol mean `mAP@0.5:0.95`: `0.4832789581411164`.
+- Supported validation classes with zero mAP: `7`.
+
+Best current secondary `mAP@0.5` result:
+
+- Run id: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`.
+- Primary `mAP@0.5:0.95`: `0.6203204846063568`.
+- Secondary `mAP@0.5`: `0.7920129156176505`.
+- `precision@0.5`: `0.8107734656247262`.
+- `recall@0.5`: `0.7331813762215841`.
+- `F1@0.5`: `0.7700277096444413`.
+- Small-symbol mean `mAP@0.5:0.95`: `0.4987375853530484`.
+- Supported validation classes with zero mAP: `6`.
+
+What improved:
+
+- Best primary `mAP@0.5:0.95` improved by `0.1457597412034697` over the original M3 validation run.
+- Best secondary `mAP@0.5` improved by `0.2066917787863014`.
+- Best recall improved by `0.2625252988473996`.
+- Best detector F1 improved by `0.1583405062573777`.
+- Best small-symbol mean `mAP@0.5:0.95` improved by `0.1792769692209457`.
+- Supported validation classes with zero mAP decreased from 16 to 6.
+
+What failed or stayed weak:
+
+- The requested absolute +0.2 precision gain is mathematically impossible from the original precision `0.8274236461250144` because precision is capped at 1.0.
+- `max_det=3000` did not beat `max_det=2000` at image size 1248.
+- NMS IoU 0.8 regressed at image size 1536.
+- `ledgerLine` and `stem` remain high-support zero-mAP classes.
+- This is not a new trained model and not a test-set result.
+
+Next exact step:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 `
+  --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
+  --epochs 50 `
+  --imgsz 1472 `
+  --batch 1 `
+  --workers 0 `
+  --device 0 `
+  --patience 15 `
+  --max-det 2000
+```
 
 ## 2026-05-31 - Agent Handoff - M7 Detector Metric Sweep Improved
 
