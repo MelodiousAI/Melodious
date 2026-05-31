@@ -67,6 +67,11 @@ Current handoff:
 - Best current M7 secondary validation `mAP@0.5 = 0.7920129156176505`.
 - Best current M7 `F1@0.5 = 0.7746130448554269`.
 - The improvement came from validation inference tuning on the existing checkpoint, especially raising `max_det` from the Ultralytics default of 300 to 2000 for dense music pages; it is not a new trained model.
+- Class coverage audit exists under `runs/detection/detection_136class_class_coverage_audit_v1/`.
+- The detector model head preserves all 136 classes, but the local DeepScores labels support 115 classes across train/validation/test.
+- Validation supports 103 classes and has 33 taxonomy-class blind spots.
+- Twenty-one taxonomy classes have zero local labels across train/validation/test, so another fine-tune on the same data cannot teach them.
+- No validation-supported or test-supported class is absent from training.
 - `ledgerLine` and `stem` remain important high-support zero-mAP limitations.
 - Test-set detector performance is still intentionally unreported.
 

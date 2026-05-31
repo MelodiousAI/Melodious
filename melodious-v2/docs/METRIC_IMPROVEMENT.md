@@ -120,6 +120,42 @@ The professor-facing detector result should now use `detection_136class_yolov8m_
 
 This is still not a test-set result. The test set should stay untouched until the team freezes the final model and inference configuration.
 
+## Class Coverage Audit
+
+Before launching another fine-tune, M7 added and ran a class-coverage audit so the metric-improvement work does not hide rare-class or unsupported-class issues.
+
+Audit command:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\audit_detector_class_coverage.py --metrics runs\detection\detection_136class_yolov8m_eval_img1472_maxdet2000_v1\metrics.json --output-dir runs\detection\detection_136class_class_coverage_audit_v1
+```
+
+Generated audit artifacts:
+
+- `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.json`.
+- `runs/detection/detection_136class_class_coverage_audit_v1/class_coverage.md`.
+
+Main findings:
+
+- The detector taxonomy and model head still contain all 136 classes.
+- The local DeepScores labels contain support for 115 of 136 taxonomy classes across train/validation/test.
+- `train` supports 115 classes, `val` supports 103 classes, and `test` supports 110 classes.
+- The validation split has 33 taxonomy-class blind spots, so it cannot honestly measure all 136 classes.
+- No validation-supported or test-supported class is absent from training, which means validation/test are not evaluating classes the model never saw in train.
+- Twelve training-supported classes are absent from validation: `timeSig5`, `timeSig7`, `tremolo1`, `tremolo4`, `flag32ndUp`, `accidentalDoubleFlat`, `articStaccatissimoBelow`, `fingering5`, `tuplet4`, `tuplet7`, `tuplet8`, and `tuplet9`.
+- Twenty-one taxonomy classes have zero local labels across train/validation/test: `clefUnpitchedPercussion`, `noteheadBlackOnLineSmall`, `noteheadBlackInSpaceSmall`, `noteheadHalfOnLineSmall`, `noteheadHalfInSpaceSmall`, `noteheadWholeOnLineSmall`, `noteheadWholeInSpaceSmall`, `noteheadDoubleWholeOnLineSmall`, `noteheadDoubleWholeInSpaceSmall`, `tremolo5`, `flag8thUpSmall`, `flag8thDownSmall`, `accidentalFlatSmall`, `accidentalNaturalSmall`, `accidentalSharpSmall`, `restHNr`, `graceNoteAcciaccaturaStemUp`, `graceNoteAppoggiaturaStemUp`, `graceNoteAcciaccaturaStemDown`, `graceNoteAppoggiaturaStemDown`, and `tuplet2`.
+- The best primary M7 run still has seven validation-supported zero-map classes: `stem`, `ledgerLine`, `articTenutoBelow`, `dynamicR`, `tremolo3`, `tuplet1`, and `tuplet5`.
+- The high-support zero-map validation failures are `ledgerLine` and `stem`.
+- Raw per-class map values for validation-unsupported classes are ignored by the audit because Ultralytics can emit placeholder values for classes with zero ground-truth support in the evaluated split.
+
+Engineering decision:
+
+- Fine-tuning from the selected checkpoint at image size 1472 with `max_det=2000` is still the best next experiment for improving supported-class validation metrics.
+- Fine-tuning on the same local data cannot make the 21 zero-data classes learned classes. Improving full 136-class coverage later requires adding or generating real training labels for those classes, or explicitly narrowing the supported-class claim while preserving the 136-class output contract.
+- The test split must remain untouched until the final model and inference configuration are frozen.
+
 ## Remaining Weaknesses
 
 - `ledgerLine` and `stem` still have zero mAP despite high support.
@@ -127,6 +163,8 @@ This is still not a test-set result. The test set should stay untouched until th
 - Higher resolution and a realistic detection cap improve the headline metric but do not solve thin-symbol modeling.
 - Validation-time augmentation did not help in this experiment.
 - The uploaded-image API still uses `heuristic_bootstrap`; detector metric improvement and API detector wiring are separate tasks.
+- Twenty-one taxonomy classes have no local labels, so another fine-tune on the same data cannot teach those classes.
+- Current validation metrics only measure 103 of 136 classes because 33 taxonomy classes are absent from validation.
 
 ## Next High-Impact Experiment
 
