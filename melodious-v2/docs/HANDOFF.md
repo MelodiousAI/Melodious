@@ -63,6 +63,9 @@ Current state:
 - M7 class coverage finding: the detector head preserves 136 classes, but the local train/validation/test labels support 115 classes, validation supports 103 classes, and 21 taxonomy classes have zero local labels.
 - M7 class coverage finding: no validation-supported or test-supported class is absent from training, but 12 train-supported classes are absent from validation.
 - M7 class coverage finding: high-support zero-map validation classes remain `ledgerLine` and `stem`.
+- M7 fine-tune currently running: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
+- M7 fine-tune launch: 2026-06-01 local time `02:46:32`, parent PID `34780`, active child PID observed after launch `23612`.
+- M7 fine-tune logs: `finetune_stdout.log`, `finetune_stderr.log`, `finetune.pid`, `finetune_child.pid`, and `finetune_launch_metadata.json` under the run directory.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -110,10 +113,62 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. Launch `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` with the exact command in `docs/METRIC_IMPROVEMENT.md`; GPU availability was checked and the RTX 3080 Laptop GPU had 16 GB VRAM with no active Python training process.
-3. If training is interrupted, preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, and the PID/log metadata before stopping.
+2. Monitor the running `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` process using the exact monitor command in `docs/METRIC_IMPROVEMENT.md`.
+3. If training is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, and the PID/log metadata before stopping.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-06-01 - Agent Handoff - M7 Fine-Tune Launched
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement
+
+Files changed:
+
+- `docs/HANDOFF.md`
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/STATUS.md`
+
+Generated ignored evidence:
+
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_command.txt`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune.pid`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_child.pid`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_stdout.log`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_stderr.log`
+
+Commands run:
+
+- Fine-tune launch through `Start-Process -WindowStyle Hidden` - passed.
+- `Get-Content -Path runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\finetune_stdout.log -Tail 120` - passed; startup logs show CUDA on RTX 3080 Laptop GPU, 475/475 pretrained items transferred, and epoch `1/50` started.
+- `Get-Content -Path runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\finetune_stderr.log -Tail 120` - passed; no stderr output at startup.
+- `Get-CimInstance Win32_Process -Filter "ProcessId = 34780 or ProcessId = 23612" | Format-List ProcessId,ParentProcessId,CommandLine` - passed; documented parent and active child command lines.
+
+Fine-tune status:
+
+- Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- Launch local time: `2026-06-01T02:46:32`.
+- Parent PID at launch: `34780`.
+- Active Python child PID observed after launch: `23612`.
+- Command: `..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 --model artifacts\models\detection_136class_yolov8m_v1\best.pt --epochs 50 --imgsz 1472 --batch 1 --workers 0 --device 0 --patience 15 --max-det 2000`.
+- Startup evidence: training reached epoch `1/50`; no completed epoch metric row had been documented yet in this handoff.
+
+Monitor command:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$run='runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1'
+Get-Process -Id ([int](Get-Content "$run\finetune.pid")) -ErrorAction SilentlyContinue
+Get-Process -Id ([int](Get-Content "$run\finetune_child.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\finetune_stdout.log"
+if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
+```
+
+Next exact step:
+
+- Keep monitoring the fine-tune. When it finishes, the runner should finalize the run by writing `metrics.json`, `report.md`, `manifest.json`, `analysis.json`, `artifacts.json`, model artifacts, and an ONNX/parity artifact unless export fails. Then regenerate `docs/EXPERIMENTS.md`, compare validation metrics against `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, and update docs.
 
 ## 2026-06-01 - Agent Handoff - M7 Class Coverage Audit
 

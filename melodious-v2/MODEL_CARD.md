@@ -28,6 +28,7 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - Best current validation detector `F1@0.5 = 0.7746130448554269`.
 - The best current secondary `mAP@0.5` validation configuration is `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, with `mAP@0.5 = 0.7920129156176505`.
 - The M7 class coverage audit is recorded under `runs/detection/detection_136class_class_coverage_audit_v1/`; it shows that the model head preserves the 136-class taxonomy, but local labels contain support for 115 classes across train/validation/test and validation measures 103 classes.
+- The next M7 fine-tune, `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, is running from the selected YOLOv8m checkpoint at image size 1472 with `max_det=2000`; final metrics are not available until its generated `metrics.json` exists.
 - Graph assembly now has a real legacy GNN runtime path. With `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt`, the API sample path can report `applied_mode = "gnn"` only after checkpoint inference runs.
 - The current graph evaluation run is `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 - Primary graph metric: `positive_macro_f1 = 0.7590456327823909`.

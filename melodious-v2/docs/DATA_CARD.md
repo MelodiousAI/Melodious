@@ -99,6 +99,13 @@
   - training-supported but validation-absent classes: 12,
   - high-support zero-map validation classes: `ledgerLine` and `stem`,
   - caveat: fine-tuning on the same local labels can improve supported-class metrics but cannot teach zero-label classes without additional labeled data.
+- M7 fine-tune in progress:
+  - run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`,
+  - source checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`,
+  - image size: 1472,
+  - max detections per image: 2000,
+  - launch status: started on 2026-06-01 local time `02:46:32`,
+  - metric status: pending until `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json` exists.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.
