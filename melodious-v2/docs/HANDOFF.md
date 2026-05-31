@@ -4,7 +4,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M5 - End-to-End Export Quality is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, and M4 - Real Assembly Runtime are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M4 loaded the legacy MUSCIMA GNN checkpoint through a V2 adapter, added truth-preserving runtime metadata, evaluated graph assembly on the fixed M1 MUSCIMA validation split, and regenerated `docs/EXPERIMENTS.md`.
+Active milestone: M6 - AWS Public Demo is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M4 loaded the legacy MUSCIMA GNN checkpoint through a V2 adapter, added truth-preserving runtime metadata, evaluated graph assembly on the fixed M1 MUSCIMA validation split, and regenerated `docs/EXPERIMENTS.md`. M5 measured the MUSCIMA holdout export path from XML-derived payload fixtures and regenerated `docs/EXPERIMENTS.md`.
 
 Current state:
 
@@ -35,6 +35,13 @@ Current state:
 - M4 graph separate `no_relation` F1: `0.9425171440096813` with support `41834`.
 - M4 `stem_notehead` F1: `0.6960721184803607`; `beam_notegroup` F1: `0.8220191470844213`.
 - M4 graph caveat: the legacy checkpoint did not save the separate seeded node feature encoder; V2 reconstructs it from seed `42` and records that in the graph run artifacts.
+- M5 end-to-end run: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
+- M5 end-to-end metrics: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- M5 primary export metric: MusicXML validity rate `1.0`.
+- M5 MIDI generation success rate: `1.0`.
+- M5 page success rate: `1.0`.
+- M5 generated artifacts: per-page MusicXML, MIDI, detector payload JSON, and relationship JSON for 14 MUSCIMA holdout pages.
+- M5 caveat: this is export-validity evidence from MUSCIMA XML-derived payload fixtures, not trained uploaded-image detector quality.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -73,19 +80,102 @@ Current state:
 - Detector limitation evidence: 16 supported validation classes still have zero mAP, including `ledgerLine`, `stem`, and `ottavaBracket`.
 - ONNX parity passed on one fixed validation image; PyTorch and ONNX both returned 300 boxes with identical class-count totals.
 - M1 was re-verified on 2026-05-12 in this workspace. The manifest CLI completed against the local parent datasets and refreshed ignored `runs/data/` artifacts.
-- `docs/AGENT_PROMPTS.md` now says the current active milestone is M5.
+- `docs/AGENT_PROMPTS.md` now says the current active milestone is M6.
 
 Next exact prompt:
 
-- Use the active M5 prompt in `docs/AGENT_PROMPTS.md`.
+- Use the active M6 prompt in `docs/AGENT_PROMPTS.md`.
 
 Next exact implementation target:
 
-1. Start M5 from the active prompt in `docs/AGENT_PROMPTS.md`.
-2. Confirm `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` and `runs/detection/detection_136class_yolov8m_v1/metrics.json` exist locally.
-3. Define a fixed end-to-end evaluation set, preferably from the M1 MUSCIMA holdout split.
-4. Implement an end-to-end evaluator that runs detector-like payloads through assembly and export, validates MusicXML, writes MIDI, records failure reasons, and writes `runs/e2e/{run_id}/metrics.json`.
-5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+1. Start M6 from the active prompt in `docs/AGENT_PROMPTS.md`.
+2. Confirm M3, M4, and M5 metrics exist locally.
+3. Read `infra/`, `frontend/`, and API deployment docs.
+4. Prepare or verify the low-cost AWS deployment path for Dockerized FastAPI plus static frontend.
+5. Document smoke commands for `/health`, `/version`, sample transcription, and artifact download.
+6. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-05-30 - Agent Handoff - M5 End-to-End Export Complete
+
+Milestone worked:
+
+- M5 - End-to-End Export Quality
+
+Files changed:
+
+- `configs/e2e_muscima_holdout.yaml`
+- `scripts/run_e2e_export_eval.py`
+- `src/melodious_v2/evaluation/e2e_export.py`
+- `src/melodious_v2/export/musicxml.py`
+- `tests/test_e2e_export.py`
+- `tests/test_export_and_reports.py`
+- `README.md`
+- `MODEL_CARD.md`
+- `docs/AGENT_PROMPTS.md`
+- `docs/ARCHITECTURE.md`
+- `docs/DATA_CARD.md`
+- `docs/EXPERIMENTS.md`
+- `docs/HANDOFF.md`
+- `docs/MILESTONE_HISTORY.md`
+- `docs/ROADMAP.md`
+- `docs/RUBRIC_MAP.md`
+- `docs/STATUS.md`
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\evaluation\e2e_export.py scripts\run_e2e_export_eval.py src\melodious_v2\export\musicxml.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_e2e_export.py` - passed, 1 test.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_export_and_reports.py` - passed, 4 tests.
+- `git commit -m "Add M5 end-to-end export evaluator"` - passed with commit `9c0ddc9`.
+- Prerequisite checks - passed; M3 metrics, M3 model metadata, M4 graph metrics, and `docs/EXPERIMENTS.md` graph row all exist.
+- API local smoke - passed; `/health` returned `200 ok`, `/version` returned schema `2.0`, sample transcription returned `200 complete`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_e2e_export_eval.py --split holdout --assembly-mode gnn` - passed; wrote M5 run artifacts.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` - passed; index includes `e2e_muscima_holdout_xml_fixture_v1`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 32 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 12 documentation files.
+
+Generated artifacts:
+
+- `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`
+- `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/report.md`
+- `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/manifest.json`
+- `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/artifacts.json`
+- `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/config.yaml`
+- Per-page exports under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/exports/`
+
+What is complete:
+
+- A fixed end-to-end holdout run exists.
+- MusicXML generation and validation are measured.
+- MIDI generation is measured.
+- Artifact hashes are recorded for MusicXML, MIDI, payload JSON, and relationship JSON.
+- `docs/EXPERIMENTS.md` includes the M5 run.
+- `docs/AGENT_PROMPTS.md` now points the next agent to M6.
+
+Final M5 metrics:
+
+- Primary `musicxml_validity_rate`: 1.0.
+- `midi_generation_success_rate`: 1.0.
+- `page_success_rate`: 1.0.
+- `page_count`: 14.
+- `failure_count`: 0.
+- `relationship_count_total`: 10637.
+- `detection_count_total`: 6348.
+- `note_like_count_total`: 2563.
+
+Important limitations:
+
+- The run uses MUSCIMA XML-derived payload fixtures, not trained detector outputs.
+- The exporter is syntactically valid but musically minimal. This does not prove complete pitch/rhythm/measure correctness.
+- Uploaded-image detector inference still uses `heuristic_bootstrap`.
+
+What failed:
+
+- Nothing blocking. The main limitation is scope: M5 measures export validity, not trained detector uploaded-image quality.
+
+Next exact step:
+
+- Start M6 with the active prompt in `docs/AGENT_PROMPTS.md`. Prepare the AWS public demo path, document `/health`, `/version`, sample transcription, and artifact-download smoke commands, and include cost-control/shutdown steps.
 
 ## 2026-05-30 - Agent Handoff - M4 Real Assembly Runtime Complete
 

@@ -26,6 +26,8 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - Primary graph metric: `positive_macro_f1 = 0.7590456327823909`.
 - Separate graph `no_relation` F1: `0.9425171440096813`.
 - Positive relationship F1 values: `stem_notehead = 0.6960721184803607`, `beam_notegroup = 0.8220191470844213`.
+- The current end-to-end export run is `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- M5 measured `musicxml_validity_rate = 1.0`, `midi_generation_success_rate = 1.0`, and `page_success_rate = 1.0` on 14 MUSCIMA holdout XML-derived payload fixtures.
 
 ## Metrics Policy
 
@@ -49,6 +51,7 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - API inference still uses the bootstrap detector path until a selected ONNX artifact is intentionally wired into a non-bootstrap detector adapter.
 - The current GNN is a legacy 15-class relationship model. It does not cover every V2 detector class and has zero validation support for `slur_phrase` and `tie_sustained` in the current graph evaluation.
 - The legacy GNN checkpoint did not save the separate node feature encoder used to build training tensors. V2 reconstructs that encoder from seed `42`; this is documented in `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` and should be replaced by a self-contained graph artifact in a future retrain.
+- The M5 end-to-end result measures export validity from ground-truth XML-derived payload fixtures. It does not prove trained detector uploaded-image transcription quality.
 
 ## Bias and Fairness
 

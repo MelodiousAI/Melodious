@@ -22,8 +22,8 @@ This document is the project execution plan after the V2 foundation. It turns th
 | M2 - Metric Reproduction | Done | Reproduce reduced-class baseline with V2 metric code | `runs/detection/detection_15class_repro_sample_v1/metrics.json`, generated report |
 | M3 - Full 136-Class Detector | Done | Train and evaluate full-taxonomy detector | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, model metadata |
 | M4 - Real Assembly Runtime | Done | Wire trained GNN adapter and natural-distribution graph evaluation | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
-| M5 - End-to-End Export Quality | Active | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | validity rate, structure metrics, artifact samples |
-| M6 - AWS Public Demo | Planned | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront evidence, smoke logs |
+| M5 - End-to-End Export Quality | Done | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported artifacts |
+| M6 - AWS Public Demo | Active | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront evidence, smoke logs |
 | M7 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
 
 ## Completed M3 - Full 136-Class Detector
@@ -136,34 +136,51 @@ M4 acceptance status:
 - Positive-class macro F1 is the graph headline metric, with `no_relation` reported separately.
 - Tests and metric-claim validation pass.
 
+## Completed M5 - End-to-End Export Quality
+
+Goal: make the product export claim measurable instead of sample-only.
+
+Final end-to-end run:
+
+- Run id: `e2e_muscima_holdout_xml_fixture_v1`.
+- Dataset: `muscima_graph_manifest`.
+- Split used for reported metrics: holdout.
+- Payload source: MUSCIMA XML-derived detector payload fixtures.
+- Requested assembly mode: `gnn`.
+- Export artifacts: MusicXML, MIDI, detector payload JSON, and relationship JSON per page under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/exports/`.
+- Metrics: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- Report: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/report.md`.
+- Manifest: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/manifest.json`.
+- Artifacts index: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/artifacts.json`.
+
+M5 metrics from `metrics.json`:
+
+- Primary `musicxml_validity_rate`: 1.0.
+- `midi_generation_success_rate`: 1.0.
+- `page_success_rate`: 1.0.
+- `page_count`: 14.
+- `musicxml_valid_count`: 14.
+- `midi_success_count`: 14.
+- `failure_count`: 0.
+- `detection_count_total`: 6348.
+- `note_like_count_total`: 2563.
+- `relationship_count_total`: 10637.
+- `assembly_gnn_page_count`: 14.
+
+M5 acceptance status:
+
+- Fixed end-to-end run emits `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- MusicXML and MIDI generation success are measured and backed by artifacts.
+- Failure list exists; the completed run had no export failures.
+- API sample path still works locally.
+- Tests and metric-claim validation pass.
+
+M5 caveat:
+
+- This run measures export validity and artifact generation from fixed ground-truth XML-derived payload fixtures. It is not trained detector uploaded-image quality.
+- Uploaded-image detector inference remains `heuristic_bootstrap` until a tested ONNX detector adapter is implemented.
+
 ## Immediate Next Work
-
-### M5 - End-to-End Export Quality
-
-Goal: make the product claim measurable instead of sample-only.
-
-Implementation tasks:
-
-- Define a fixed end-to-end holdout manifest.
-- Run detector, assembly, MusicXML export, and MIDI export on every holdout page.
-- Validate MusicXML parseability.
-- Generate MIDI smoke artifacts.
-- Compute structure-level comparison where ground truth is available.
-- Save representative artifacts for presentation.
-
-Acceptance criteria:
-
-- `runs/e2e/{run_id}/metrics.json` exists.
-- MusicXML and MIDI generation success rates are reported.
-- Failures include examples and root-cause notes.
-- The frontend can show at least one uploaded-image result end to end.
-
-Recommended optional detector follow-up during M5:
-
-- Add a non-bootstrap ONNX detector adapter for `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
-- Keep `heuristic_bootstrap` as an explicit fallback.
-- Smoke `/health`, `/version`, and uploaded-image inference after adapter wiring.
-- Do not hide detector limitations: high precision with weaker recall, 16 supported zero-mAP classes, and weak ledger/stem behavior.
 
 ### M6 - AWS Public Demo
 

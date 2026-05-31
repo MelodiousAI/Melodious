@@ -19,6 +19,7 @@
 - `detector`: inference adapters and bootstrap detector.
 - `assembly`: relationship inference, checkpoint-gated legacy GNN runtime, and fallback mode resolution.
 - `export`: MusicXML/MIDI generation and validation.
+- `evaluation.e2e_export`: fixed holdout export evaluation using detector payload fixtures.
 - `api`: product service endpoints.
 - `reports`: generated metric and experiment report helpers.
 
@@ -40,3 +41,12 @@ Fallbacks are allowed for demo resilience but must be explicit:
 - Evaluation: `scripts/evaluate_gnn_muscima.py`.
 - Current graph run: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 - Limitation: the legacy model uses a 15-class graph contract and reconstructs the legacy training node encoder from seed `42`.
+
+## Current End-to-End Evaluation
+
+- Evaluator: `scripts/run_e2e_export_eval.py`.
+- Reusable code: `src/melodious_v2/evaluation/e2e_export.py`.
+- Input split: `runs/data/muscima_graph_manifest/holdout.json`.
+- Payload source: MUSCIMA XML-derived detector payload fixtures.
+- Current run: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- Limitation: this measures export validity and artifact generation, not trained uploaded-image detector quality.

@@ -2,9 +2,9 @@
 
 ## Current Phase
 
-M5 - End-to-End Export Quality is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, and M4 - Real Assembly Runtime are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run.
+M6 - AWS Public Demo is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M5 should measure the end-to-end export path with honest provenance and can optionally add a non-bootstrap ONNX detector adapter if the team wants uploaded-image inference to use the new detector before deployment.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M6 should prepare the low-cost AWS public demo path and document smoke evidence, deployment limits, and shutdown steps.
 
 ## Completed
 
@@ -32,7 +32,10 @@ The current detector artifact is ready for integration work, but the API still u
 - M4 API assembly mode metadata now includes checkpoint path, adapter name, and whether inference actually ran.
 - M4 graph evaluation run exists under `runs/graph/graph_legacy_gnn_muscima_val_v1/`.
 - `docs/EXPERIMENTS.md` includes `graph_legacy_gnn_muscima_val_v1`.
-- `docs/AGENT_PROMPTS.md` now points the next agent to M5.
+- M5 end-to-end run exists under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
+- M5 exported MusicXML, MIDI, payload, and relationship artifacts for 14 MUSCIMA holdout XML-derived payload fixtures.
+- `docs/EXPERIMENTS.md` includes `e2e_muscima_holdout_xml_fixture_v1`.
+- `docs/AGENT_PROMPTS.md` now points the next agent to M6.
 
 ## Latest Detector Result
 
@@ -130,13 +133,50 @@ Important graph caveat:
 
 - The legacy checkpoint did not save the separate node feature encoder used to build training tensors. V2 reconstructs that encoder from seed `42`, matching the legacy training pipeline. This is documented in the run metrics and should be preserved until the graph model is retrained with a fully self-contained artifact.
 
+## Latest End-to-End Export Result
+
+Run id: `e2e_muscima_holdout_xml_fixture_v1`.
+
+Metric source: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+
+Evaluation split: `holdout` from `muscima_graph_manifest`.
+
+Payload source: MUSCIMA XML-derived detector payload fixtures.
+
+Assembly mode requested: `gnn`.
+
+Primary end-to-end export metric:
+
+- `musicxml_validity_rate`: 1.0.
+
+Supporting export metrics:
+
+- `midi_generation_success_rate`: 1.0.
+- `page_success_rate`: 1.0.
+- `page_count`: 14.
+- `musicxml_valid_count`: 14.
+- `midi_success_count`: 14.
+- `failure_count`: 0.
+
+Run volume:
+
+- `detection_count_total`: 6348.
+- `note_like_count_total`: 2563.
+- `relationship_count_total`: 10637.
+- `assembly_gnn_page_count`: 14.
+
+Important end-to-end caveat:
+
+- This is measured export validity and artifact generation from fixed ground-truth XML-derived payload fixtures. It is not trained detector uploaded-image quality. Uploaded-image detector inference remains `heuristic_bootstrap` until a tested ONNX detector adapter is added.
+
 ## Latest Verification
 
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py`.
-- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` with 30 tests.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` with 32 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py src\melodious_v2\evaluation\full_detector.py`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_v1 --finalize-existing-run --workers 0 --device 0`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\evaluate_gnn_muscima.py --split val --device cpu`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_e2e_export_eval.py --split holdout --assembly-mode gnn`.
 - Passed: API sample transcription smoke with `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt`; response reported `applied_mode=gnn`, `fallback_applied=False`, `checkpoint_ready=True`, `inference_ran=True`, `adapter_name=legacy_muscima_gat`, and `relationship_count=4`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`.
@@ -150,8 +190,8 @@ Important graph caveat:
 | M2 - Metric Reproduction | Done | `runs/detection/detection_15class_repro_sample_v1/metrics.json`, generated experiment index |
 | M3 - Full 136-Class Detector | Done | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, `artifacts/models/detection_136class_yolov8m_v1/metadata.json` |
 | M4 - Real Assembly Runtime | Done | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
-| M5 - End-to-End Export Quality | Active | Holdout export metrics and artifacts |
-| M6 - AWS Public Demo | Planned | Public smoke-test evidence |
+| M5 - End-to-End Export Quality | Done | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported MusicXML/MIDI artifacts |
+| M6 - AWS Public Demo | Active | Public smoke-test evidence |
 | M7 - Final Grading Package | Planned | Frozen docs and presentation evidence |
 
 ## Active Blockers
@@ -162,15 +202,16 @@ Important graph caveat:
 - Full detector metrics are validation-split metrics. Test-set detector performance should be produced only after the team freezes the detector family and avoids iterative tuning on test data.
 - Several high-support symbol classes still have zero detector mAP on validation, especially `ledgerLine` and `stem`; this is a real model limitation and should not be hidden in the final report.
 - The M4 GNN is a legacy 15-class relationship model. It cannot represent every V2 detector class, and its feature encoder is reconstructed from seed `42` because the legacy checkpoint did not save that encoder as a separate artifact.
+- The M5 end-to-end run measures export validity from XML-derived payload fixtures, not trained uploaded-image detector quality.
 
 ## Next Actions
 
-1. Start M5 from `docs/AGENT_PROMPTS.md`.
-2. Read `docs/MILESTONE_HISTORY.md`, `docs/METRICS.md`, `docs/DATA_CARD.md`, `MODEL_CARD.md`, and this file before changing export or API code.
-3. Define a fixed end-to-end evaluation set, preferably from the M1 MUSCIMA holdout split.
-4. Implement an end-to-end evaluator that produces MusicXML and MIDI artifacts, validates MusicXML, records relationship/export success, and writes `runs/e2e/{run_id}/metrics.json`.
+1. Start M6 from `docs/AGENT_PROMPTS.md`.
+2. Read `infra/`, `frontend/`, `docs/MILESTONE_HISTORY.md`, `docs/METRICS.md`, `docs/DATA_CARD.md`, `MODEL_CARD.md`, and this file before changing deployment code.
+3. Prepare or verify the low-cost AWS deployment path for Dockerized FastAPI plus static frontend.
+4. Document smoke commands for `/health`, `/version`, sample transcription, and artifact download.
 5. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-6. Regenerate `docs/EXPERIMENTS.md`, rerun all tests and metric-claim validation, then update `docs/HANDOFF.md`.
+6. Rerun tests, metric-claim validation, frontend build if frontend changed, and update `docs/HANDOFF.md`.
 
 ## Roadmap
 
