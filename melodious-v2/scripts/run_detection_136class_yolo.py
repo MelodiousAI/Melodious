@@ -78,6 +78,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--device", default="0")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--patience", type=int, default=None)
+    parser.add_argument(
+        "--max-det",
+        type=int,
+        default=None,
+        help="Maximum detections per image for training validation/final validation. Defaults to Ultralytics behavior.",
+    )
+    parser.add_argument(
+        "--nms-iou",
+        type=float,
+        default=None,
+        help="NMS IoU threshold for training validation/final validation. Defaults to Ultralytics behavior.",
+    )
     parser.add_argument("--split", default="val", choices=["val", "test"])
     parser.add_argument("--materialize-only", action="store_true")
     parser.add_argument(
@@ -133,6 +145,8 @@ def write_onnx_parity_artifact(
     split: str,
     imgsz: int,
     device: str,
+    max_det: int | None = None,
+    nms_iou: float | None = None,
 ) -> dict:
     """Run a lightweight fixed-image PyTorch/ONNX prediction comparison."""
     parity_path = run_root / "onnx_parity.json"
@@ -164,22 +178,20 @@ def write_onnx_parity_artifact(
         from ultralytics import YOLO
 
         image = sample_images[0]
-        torch_result = pytorch_model.predict(
-            source=str(image),
-            imgsz=imgsz,
-            conf=0.25,
-            iou=0.7,
-            device=device,
-            verbose=False,
-        )[0]
+        predict_kwargs = {
+            "source": str(image),
+            "imgsz": imgsz,
+            "conf": 0.25,
+            "iou": 0.7 if nms_iou is None else nms_iou,
+            "device": device,
+            "verbose": False,
+        }
+        if max_det is not None:
+            predict_kwargs["max_det"] = max_det
+        torch_result = pytorch_model.predict(**predict_kwargs)[0]
         onnx_model = YOLO(str(onnx_path))
-        onnx_result = onnx_model.predict(
-            source=str(image),
-            imgsz=imgsz,
-            conf=0.25,
-            iou=0.7,
-            verbose=False,
-        )[0]
+        onnx_predict_kwargs = {key: value for key, value in predict_kwargs.items() if key != "device"}
+        onnx_result = onnx_model.predict(**onnx_predict_kwargs)[0]
         torch_summary = _prediction_summary(torch_result)
         onnx_summary = _prediction_summary(onnx_result)
         payload.update(
@@ -256,19 +268,24 @@ def main() -> None:
         trained_model = YOLO(str(selected_checkpoint))
     else:
         model = YOLO(model_path)
-        train_result = model.train(
-            data=str(dataset_yaml),
-            epochs=epochs,
-            imgsz=imgsz,
-            batch=batch,
-            project=str(train_project),
-            name="train",
-            exist_ok=True,
-            device=args.device,
-            workers=args.workers,
-            patience=patience,
-            seed=args.seed,
-        )
+        train_kwargs = {
+            "data": str(dataset_yaml),
+            "epochs": epochs,
+            "imgsz": imgsz,
+            "batch": batch,
+            "project": str(train_project),
+            "name": "train",
+            "exist_ok": True,
+            "device": args.device,
+            "workers": args.workers,
+            "patience": patience,
+            "seed": args.seed,
+        }
+        if args.max_det is not None:
+            train_kwargs["max_det"] = args.max_det
+        if args.nms_iou is not None:
+            train_kwargs["iou"] = args.nms_iou
+        train_result = model.train(**train_kwargs)
         save_dir = Path(getattr(train_result, "save_dir", train_project / "train"))
         best_checkpoint = save_dir / "weights" / "best.pt"
         last_checkpoint = save_dir / "weights" / "last.pt"
@@ -278,18 +295,23 @@ def main() -> None:
         trained_model = YOLO(str(selected_checkpoint))
 
     training_results_summary = summarize_ultralytics_results_csv(save_dir / "results.csv")
-    val_result = trained_model.val(
-        data=str(dataset_yaml),
-        split=args.split,
-        imgsz=imgsz,
-        batch=batch,
-        project=str(train_project),
-        name=f"val_{args.split}",
-        exist_ok=True,
-        device=args.device,
-        workers=args.workers,
-        augment=args.val_augment,
-    )
+    val_kwargs = {
+        "data": str(dataset_yaml),
+        "split": args.split,
+        "imgsz": imgsz,
+        "batch": batch,
+        "project": str(train_project),
+        "name": f"val_{args.split}",
+        "exist_ok": True,
+        "device": args.device,
+        "workers": args.workers,
+        "augment": args.val_augment,
+    }
+    if args.max_det is not None:
+        val_kwargs["max_det"] = args.max_det
+    if args.nms_iou is not None:
+        val_kwargs["iou"] = args.nms_iou
+    val_result = trained_model.val(**val_kwargs)
     metrics = detector_metrics_from_ultralytics(val_result)
 
     onnx_path = None
@@ -309,6 +331,8 @@ def main() -> None:
         split=args.split,
         imgsz=imgsz,
         device=args.device,
+        max_det=args.max_det,
+        nms_iou=args.nms_iou,
     )
 
     provenance = MetricProvenance(
@@ -358,6 +382,8 @@ def main() -> None:
             "device": args.device,
             "seed": args.seed,
             "patience": patience,
+            "max_det": args.max_det,
+            "nms_iou": args.nms_iou,
             "split": args.split,
             "val_augment": bool(args.val_augment),
             "smoke": bool(args.smoke),

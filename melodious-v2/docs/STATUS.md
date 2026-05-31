@@ -4,7 +4,7 @@
 
 M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has already improved the best validation detector configuration by re-evaluating the selected YOLOv8m checkpoint at higher inference resolution. The current best validation detector run is `detection_136class_yolov8m_eval_img1248_v1`, with primary `mAP@0.5:0.95 = 0.5058429013539956` and secondary `mAP@0.5 = 0.6069618791829888`. This is an inference-configuration improvement on validation, not a newly trained model and not a test-set result.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has now improved the best validation detector configuration by correcting dense-page inference settings for the selected YOLOv8m checkpoint. The best primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, with primary `mAP@0.5:0.95 = 0.6204968163150985`. The best secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`, with `mAP@0.5 = 0.7920129156176505`. These are inference-configuration improvements on validation, not a newly trained model and not a test-set result.
 
 ## Completed
 
@@ -45,43 +45,62 @@ The current detector artifact is ready for integration work, but the API still u
 - M7 added sweep config ledger at `configs/detection_136class_eval_resolution_sweep.yaml`.
 - M7 added `--val-augment` support to `scripts/run_detection_136class_yolo.py`.
 - M7 generated validation-only detector evaluation runs for image sizes 1152, 1248, 1280, 1536, plus a 1280 validation-augmentation comparison.
+- M7 added `--max-det` and `--nms-iou` detector-runner controls and found the default 300 detection cap was too low for dense validation pages.
+- M7 generated validation-only detector runs with `max_det=2000` for image sizes 1248, 1280, 1344, 1408, 1472, and 1536.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 
 ## Latest Detector Result
 
-Best validation inference run id: `detection_136class_yolov8m_eval_img1248_v1`.
+Best primary validation inference run id: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
 
-Metric source: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
+Metric source: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
 
 Evaluation split: `val` from `deepscores_136_yolo_materialized`.
 
 Checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
 
-Inference image size: 1248.
+Inference image size: 1472.
+
+Maximum detections per image: 2000.
 
 Validation augmentation: disabled.
 
 Primary detector metric:
 
-- `mAP@0.5:0.95`: 0.5058429013539956.
+- `mAP@0.5:0.95`: 0.6204968163150985.
 
 Secondary detector metrics:
 
-- `mAP@0.5`: 0.6069618791829888.
-- `precision@0.5`: 0.8637798517406144.
-- `recall@0.5`: 0.4994362851193167.
-- `F1@0.5`: 0.6329194449061496.
+- `mAP@0.5`: 0.7833788545364062.
+- `precision@0.5`: 0.8166240104606699.
+- `recall@0.5`: 0.7367130723503518.
+- `F1@0.5`: 0.7746130448554269.
+
+Best secondary `mAP@0.5` validation run:
+
+- Run id: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`.
+- Image size: 1536.
+- Maximum detections per image: 2000.
+- Primary `mAP@0.5:0.95`: 0.6203204846063568.
+- Secondary `mAP@0.5`: 0.7920129156176505.
+- `precision@0.5`: 0.8107734656247262.
+- `recall@0.5`: 0.7331813762215841.
+- `F1@0.5`: 0.7700277096444413.
 
 Measured gain over original M3 validation at image size 1024:
 
-- Primary `mAP@0.5:0.95`: +0.0311058262423668.
-- Secondary `mAP@0.5`: +0.0216407423516397.
-- `F1@0.5`: +0.0166469063081004.
-- Small-symbol mean `mAP@0.5:0.95`: +0.0227814799856731.
+- Best primary `mAP@0.5:0.95`: +0.1457597412034697.
+- Best secondary `mAP@0.5`: +0.2066917787863014.
+- Best recall: +0.2625252988473996.
+- Best detector F1: +0.1583405062573777.
+- Best small-symbol mean `mAP@0.5:0.95`: +0.1792769692209457.
+- Supported validation classes with zero mAP decreased from 16 to 6.
 
 Important detector-result caveat:
 
-- This is a validation-set inference-resolution sweep on the existing checkpoint, not a new trained model and not a test-set result.
+- This is a validation-set inference sweep on the existing checkpoint, not a new trained model and not a test-set result.
+- Precision cannot improve by an absolute 0.2 from the original 0.8274236461250144 because metric values are capped at 1.0.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -230,6 +249,11 @@ Important end-to-end caveat:
 - Passed: `cd frontend; npm run build`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 12 documentation files.
+- Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py tests\test_full_detector_m3.py` after adding `--max-det` and `--nms-iou`.
+- Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py`, 5 tests.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` after the dense-page sweep.
+- Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests`, 34 tests.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 13 documentation files.
 
 ## Milestone Tracker
 
@@ -242,7 +266,7 @@ Important end-to-end caveat:
 | M4 - Real Assembly Runtime | Done | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported MusicXML/MIDI artifacts |
 | M6 - AWS Public Demo | Prepared / blocked on AWS values | `infra/aws/README.md`, `scripts/smoke_public_demo.py`, local smoke evidence; public smoke pending |
-| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
+| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`, `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
 | M8 - Final Grading Package | Planned | Frozen docs and presentation evidence |
 
 ## Active Blockers
@@ -261,7 +285,7 @@ Important end-to-end caveat:
 ## Next Actions
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. If more detector quality is needed, launch `detection_136class_yolov8m_finetune_img1248_v1` from the exact command in `docs/METRIC_IMPROVEMENT.md`.
+2. If more detector quality is needed, launch `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from the exact command in `docs/METRIC_IMPROVEMENT.md`.
 3. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
 4. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
 5. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
