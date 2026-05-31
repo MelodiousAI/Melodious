@@ -544,26 +544,80 @@ M5 remaining risk:
 
 ## M6 - AWS Public Demo
 
-Status: active.
+Status: active / blocked on AWS values. The deployment path, smoke tooling, CORS configuration, and shutdown runbook are prepared. A real public AWS smoke has not run from this workspace because AWS CLI was not found locally and account-local AWS resource values are unavailable.
 
 Detailed goal:
 
 - Deploy the API and frontend publicly at low cost.
 - Keep model artifacts private and serve generated outputs through controlled links.
 
-Implementation checklist:
+M6 implementation completed in repo:
 
-- Build and push API image to ECR.
-- Deploy FastAPI on ECS Express Mode or ECS Fargate.
-- Deploy frontend to S3 and CloudFront.
-- Configure private artifact storage.
-- Run public `/health`, `/version`, sample transcription, and uploaded-image smoke tests.
-- Save smoke-test output as deployment evidence.
-- Document shutdown and cost controls.
+- `src/melodious_v2/api/app.py` now resolves CORS origins from `MELODIOUS_CORS_ORIGINS`, defaulting to local Vite origins.
+- `src/melodious_v2/deployment/smoke.py` provides reusable smoke-test logic for HTTP deployments and local FastAPI `TestClient` checks.
+- `scripts/smoke_public_demo.py` exposes the smoke test as a CLI.
+- `tests/test_deployment_smoke.py` verifies the local smoke contract and artifact downloads.
+- `infra/aws/smoke_test.ps1` now validates `/health`, `/version`, `/samples`, sample transcription, and MusicXML/MIDI artifact downloads. It can also write JSON evidence.
+- `infra/aws/README.md` now documents ECR build/push, ECS/Fargate task/service deployment, S3/CloudFront frontend publish, CORS, `MELODIOUS_GNN_CHECKPOINT`, public smoke, and scale-to-zero shutdown commands.
+- `infra/aws/task-definition.template.json` now includes `MELODIOUS_CORS_ORIGINS` and `MELODIOUS_GNN_CHECKPOINT` placeholders.
+- `.gitignore` now excludes `infra/aws/generated/` for local task definitions and account-specific deployment state.
+- `.env.example` now includes local CORS, GNN checkpoint, and `VITE_API_BASE_URL` guidance.
+
+M6 local smoke command:
+
+```powershell
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json
+```
+
+Local smoke result:
+
+- `/health`: passed with `status = ok`.
+- `/version`: passed with schema version `2.0`.
+- `/samples`: returned `sample-notation-1`.
+- Sample transcription: completed with `detector_mode = sample_payload`.
+- MusicXML artifact download: passed with 721 bytes.
+- MIDI artifact download: passed with 26 bytes.
+- Evidence path: `runs/deploy/m6_local_smoke/smoke.json` is generated and ignored.
+
+M6 verification commands run:
+
+```powershell
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests
+Test-Path runs\detection\detection_136class_yolov8m_v1\metrics.json
+Test-Path runs\graph\graph_legacy_gnn_muscima_val_v1\metrics.json
+Test-Path runs\e2e\e2e_muscima_holdout_xml_fixture_v1\metrics.json
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -c "from fastapi.testclient import TestClient; from melodious_v2.api.app import app; c=TestClient(app); h=c.get('/health').json(); v=c.get('/version').json(); s=c.get('/samples').json()[0]['sample_id']; r=c.post('/transcriptions', json={'sample_id': s, 'requested_assembly_mode': 'auto'}).json(); a=c.get(r['artifacts'][0]['uri']); print({'health': h['status'], 'schema_version': v['schema_version'], 'sample_id': s, 'status': r['status'], 'detector_mode': r['detector_mode'], 'artifact_status': a.status_code, 'artifact_bytes': len(a.content)})"
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\deployment\smoke.py scripts\smoke_public_demo.py src\melodious_v2\api\app.py
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_deployment_smoke.py
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json
+Get-Command aws -ErrorAction SilentlyContinue
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests
+cd frontend; npm run build
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py
+```
+
+M6 blocker:
+
+- `Get-Command aws -ErrorAction SilentlyContinue` returned no AWS CLI path.
+- Final full unit test pass after M6 changes ran 33 tests.
+- Frontend production build passed with Vite.
+- Metric-claim validation checked 12 documentation files.
+- No AWS profile, role, region, ECS roles, subnet IDs, security group IDs, ALB target group/listener, frontend bucket, CloudFront distribution, or public API host is available in committed project state.
+- Those values should not be committed because they are account-local deployment state.
+
+Exact next deployment action:
+
+1. Install/configure AWS CLI or run from an AWS-enabled environment.
+2. Run the local smoke command above.
+3. Follow `infra/aws/README.md` from "Backend Build And Push" through "Public Smoke Test".
+4. Save public smoke output under `runs/deploy/m6_public_smoke/`.
+5. Update `docs/STATUS.md`, `docs/HANDOFF.md`, `docs/RUBRIC_MAP.md`, and `docs/AGENT_PROMPTS.md`; move the active prompt to M7 only after public smoke evidence exists or the instructor accepts the documented fallback.
 
 Main risk:
 
 - Large detector artifacts and CPU inference latency may require ONNX optimization or constrained upload limits.
+- The current uploaded-image path remains `heuristic_bootstrap`; public upload demos must show the warning metadata and must not be described as trained detector inference.
+- The current API stores transcription jobs in memory. Artifact links are valid for a short demo on one running task, not for durable multi-task production.
 
 ## M7 - Final Grading Package
 

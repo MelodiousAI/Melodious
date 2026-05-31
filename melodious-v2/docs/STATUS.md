@@ -2,9 +2,9 @@
 
 ## Current Phase
 
-M6 - AWS Public Demo is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
+M6 - AWS Public Demo is active and deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M6 should prepare the low-cost AWS public demo path and document smoke evidence, deployment limits, and shutdown steps.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M6 now has a concrete low-cost AWS runbook, environment-driven CORS for a deployed frontend, ECS task-template guidance, and reusable smoke tooling for `/health`, `/version`, sample transcription, and MusicXML/MIDI artifact download. The public URL smoke has not run because AWS CLI was not found locally and account-specific ECS/ECR/S3/CloudFront values are not available in the repository.
 
 ## Completed
 
@@ -36,6 +36,11 @@ The current detector artifact is ready for integration work, but the API still u
 - M5 exported MusicXML, MIDI, payload, and relationship artifacts for 14 MUSCIMA holdout XML-derived payload fixtures.
 - `docs/EXPERIMENTS.md` includes `e2e_muscima_holdout_xml_fixture_v1`.
 - `docs/AGENT_PROMPTS.md` now points the next agent to M6.
+- M6 added environment-driven API CORS through `MELODIOUS_CORS_ORIGINS` for public frontend deployment.
+- M6 added Python smoke tooling at `scripts/smoke_public_demo.py` and `src/melodious_v2/deployment/smoke.py`.
+- M6 expanded `infra/aws/smoke_test.ps1` to verify sample transcription plus MusicXML/MIDI artifact downloads and optional JSON evidence output.
+- M6 expanded `infra/aws/README.md` with ECR, ECS/Fargate, S3/CloudFront, smoke-test, and shutdown/cost-control commands.
+- M6 updated `infra/aws/task-definition.template.json` with `MELODIOUS_CORS_ORIGINS` and `MELODIOUS_GNN_CHECKPOINT` placeholders.
 
 ## Latest Detector Result
 
@@ -172,14 +177,20 @@ Important end-to-end caveat:
 ## Latest Verification
 
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py`.
-- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` with 32 tests.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` with 32 tests before M6 deployment changes.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py src\melodious_v2\evaluation\full_detector.py`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_v1 --finalize-existing-run --workers 0 --device 0`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\evaluate_gnn_muscima.py --split val --device cpu`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_e2e_export_eval.py --split holdout --assembly-mode gnn`.
 - Passed: API sample transcription smoke with `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt`; response reported `applied_mode=gnn`, `fallback_applied=False`, `checkpoint_ready=True`, `inference_ran=True`, `adapter_name=legacy_muscima_gat`, and `relationship_count=4`.
+- Passed: local API sample smoke without starting Uvicorn; `/health` returned `ok`, `/version` returned schema `2.0`, sample transcription completed, and the first artifact download returned 721 bytes.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\deployment\smoke.py scripts\smoke_public_demo.py src\melodious_v2\api\app.py`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_deployment_smoke.py`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json`; verified `/health`, `/version`, sample transcription, MusicXML download, and MIDI download.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` with 33 tests after M6 deployment changes.
+- Passed: `cd frontend; npm run build`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md`.
-- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 12 documentation files.
 
 ## Milestone Tracker
 
@@ -191,13 +202,15 @@ Important end-to-end caveat:
 | M3 - Full 136-Class Detector | Done | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, `artifacts/models/detection_136class_yolov8m_v1/metadata.json` |
 | M4 - Real Assembly Runtime | Done | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported MusicXML/MIDI artifacts |
-| M6 - AWS Public Demo | Active | Public smoke-test evidence |
+| M6 - AWS Public Demo | Active / blocked on AWS values | `infra/aws/README.md`, `scripts/smoke_public_demo.py`, local smoke evidence; public smoke pending |
 | M7 - Final Grading Package | Planned | Frozen docs and presentation evidence |
 
 ## Active Blockers
 
 - API detector runtime is still bootstrap/heuristic for uploaded images; the new YOLOv8m ONNX artifact exists but is not yet used by a non-bootstrap detector adapter.
 - AWS resources are not provisioned from this workspace.
+- AWS CLI was not found by `Get-Command aws -ErrorAction SilentlyContinue`, so no ECR/ECS/S3/CloudFront deployment command was run locally.
+- Account-local AWS values are unavailable and must not be committed: region/profile, execution role ARN, task role ARN, subnet IDs, security group IDs, ALB target group/listener, S3 frontend bucket, CloudFront distribution ID, and public API host.
 - DeepScores leakage report is `warning` because 202 filename-inferred work groups repeat across splits. Duplicate image ids and duplicate filenames passed.
 - Full detector metrics are validation-split metrics. Test-set detector performance should be produced only after the team freezes the detector family and avoids iterative tuning on test data.
 - Several high-support symbol classes still have zero detector mAP on validation, especially `ledgerLine` and `stem`; this is a real model limitation and should not be hidden in the final report.
@@ -206,12 +219,12 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Start M6 from `docs/AGENT_PROMPTS.md`.
-2. Read `infra/`, `frontend/`, `docs/MILESTONE_HISTORY.md`, `docs/METRICS.md`, `docs/DATA_CARD.md`, `MODEL_CARD.md`, and this file before changing deployment code.
-3. Prepare or verify the low-cost AWS deployment path for Dockerized FastAPI plus static frontend.
-4. Document smoke commands for `/health`, `/version`, sample transcription, and artifact download.
+1. Install/configure AWS CLI or run from an environment with AWS access.
+2. Fill local generated deployment state from `infra/aws/task-definition.template.json`; keep it under ignored `infra/aws/generated/`.
+3. Run the Backend Build And Push, ECS Task Definition, ECS Service, and Frontend Build And Publish sections in `infra/aws/README.md`.
+4. Run `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --api-base-url https://REPLACE_WITH_PUBLIC_API_HOST --output runs\deploy\m6_public_smoke\smoke.json`.
 5. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-6. Rerun tests, metric-claim validation, frontend build if frontend changed, and update `docs/HANDOFF.md`.
+6. After public smoke passes, update `docs/AGENT_PROMPTS.md` to M7 - Final Grading Package.
 
 ## Roadmap
 

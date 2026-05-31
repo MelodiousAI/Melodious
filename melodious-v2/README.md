@@ -102,7 +102,23 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 
 ## Deployment Path
 
-Backend deployment targets Dockerized FastAPI + ONNX CPU inference on ECS Express Mode or ECS Fargate with images in ECR. The frontend deploys to S3 + CloudFront. See `infra/aws/README.md`.
+Backend deployment targets Dockerized FastAPI + CPU inference on ECS Express Mode or ECS Fargate with images in ECR. The frontend deploys to S3 + CloudFront. See `infra/aws/README.md` for the M6 runbook, public smoke commands, CORS configuration, `MELODIOUS_GNN_CHECKPOINT` guidance, and scale-to-zero shutdown steps.
+
+Local deployment smoke:
+
+```powershell
+$env:PYTHONPATH="src"
+python scripts/smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json
+```
+
+Public deployment smoke after AWS deploy:
+
+```powershell
+$env:PYTHONPATH="src"
+python scripts/smoke_public_demo.py --api-base-url https://REPLACE_WITH_PUBLIC_API_HOST --output runs\deploy\m6_public_smoke\smoke.json
+```
+
+Current M6 status: deployment path and local smoke tooling are ready, but actual AWS public smoke is blocked until AWS CLI access and account-local ECS/ECR/S3/CloudFront values are provided. Uploaded images remain labeled `heuristic_bootstrap`.
 
 ## Current Status
 

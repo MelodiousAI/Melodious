@@ -70,6 +70,13 @@ Current handoff:
 - M5 measured `page_success_rate = 1.0`.
 - M5 scope caveat: this is export validity from ground-truth XML-derived payload fixtures, not trained uploaded-image detector quality.
 - API uploaded-image detector inference still uses `heuristic_bootstrap` unless a tested ONNX detector adapter is added.
+- M6 deployment path work has started.
+- M6 local/public smoke tooling exists at `scripts/smoke_public_demo.py` and `src/melodious_v2/deployment/smoke.py`.
+- M6 PowerShell smoke tooling exists at `infra/aws/smoke_test.ps1`.
+- M6 AWS runbook exists at `infra/aws/README.md`.
+- M6 local smoke evidence can be regenerated with `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json`.
+- M6 public deployment is currently blocked in this workspace because AWS CLI was not found and account-local ECS/ECR/S3/CloudFront values are unavailable.
+- Do not move the active prompt to M7 until public smoke evidence exists or the team intentionally accepts the documented AWS blocker as the final fallback.
 
 Do all of the following:
 
@@ -78,6 +85,7 @@ Do all of the following:
    - Verify M3, M4, and M5 metrics exist locally.
    - Verify sample API transcription still works.
    - Verify frontend build works if frontend deployment files are touched.
+   - Regenerate M6 local smoke evidence if continuing deployment from a new shell.
 
 2. Inspect deployment scaffolding.
    - Read existing `infra/` files.
@@ -95,6 +103,7 @@ Do all of the following:
    - Add environment variable guidance for `MELODIOUS_GNN_CHECKPOINT`.
    - Add shutdown/cost-control steps.
    - If an actual AWS deploy is not run, document exactly what remains to run.
+   - Preserve the existing smoke CLI and PowerShell smoke behavior unless replacing them with a tested better path.
 
 5. Optional detector API wiring if time and scope allow.
    - Add a non-bootstrap ONNX detector adapter for `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.

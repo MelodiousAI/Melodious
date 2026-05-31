@@ -28,6 +28,8 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - Positive relationship F1 values: `stem_notehead = 0.6960721184803607`, `beam_notegroup = 0.8220191470844213`.
 - The current end-to-end export run is `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
 - M5 measured `musicxml_validity_rate = 1.0`, `midi_generation_success_rate = 1.0`, and `page_success_rate = 1.0` on 14 MUSCIMA holdout XML-derived payload fixtures.
+- M6 prepared the public demo deployment path with Dockerized FastAPI, ECS/Fargate guidance, S3/CloudFront frontend guidance, environment-driven CORS, and local/public smoke tooling.
+- The public AWS demo has not been deployed from this workspace because AWS CLI and account-local AWS resource values are unavailable locally.
 
 ## Metrics Policy
 
@@ -52,6 +54,8 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - The current GNN is a legacy 15-class relationship model. It does not cover every V2 detector class and has zero validation support for `slur_phrase` and `tie_sustained` in the current graph evaluation.
 - The legacy GNN checkpoint did not save the separate node feature encoder used to build training tensors. V2 reconstructs that encoder from seed `42`; this is documented in `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` and should be replaced by a self-contained graph artifact in a future retrain.
 - The M5 end-to-end result measures export validity from ground-truth XML-derived payload fixtures. It does not prove trained detector uploaded-image transcription quality.
+- Public demo smoke has local evidence only until an AWS-enabled environment runs the ECR/ECS/S3/CloudFront steps in `infra/aws/README.md`.
+- The API stores transcription jobs in memory. Artifact URLs are suitable for a single-task short demo but not durable multi-task production storage.
 
 ## Bias and Fairness
 
@@ -60,6 +64,13 @@ The main data sources overrepresent Western classical and contemporary notation.
 ## Privacy
 
 The target deployment stores uploaded images only long enough to produce artifacts. Private S3 buckets and short-lived presigned URLs are used for cloud artifacts. No raw image should be committed to the repository.
+
+## Deployment Notes
+
+- API CORS origins are controlled by `MELODIOUS_CORS_ORIGINS`; include the CloudFront frontend origin for public browser demos.
+- Graph assembly can use `MELODIOUS_GNN_CHECKPOINT` only if the private checkpoint is mounted or copied into the container at that path.
+- Public smoke should run `scripts/smoke_public_demo.py --api-base-url ...` and verify `/health`, `/version`, sample transcription, MusicXML download, and MIDI download.
+- The current public-demo path is deployment-prepared but blocked on AWS CLI/account values, not on model training.
 
 ## Robustness
 
