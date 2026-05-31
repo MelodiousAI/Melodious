@@ -1,6 +1,6 @@
 # Agent Prompts
 
-Use this file when starting a new coding-agent session for Melodious V2. Copy the relevant prompt exactly, then paste it into the agent. The current active milestone is **M6 - AWS Public Demo**.
+Use this file when starting a new coding-agent session for Melodious V2. Copy the relevant prompt exactly, then paste it into the agent. The current active milestone is **M7 - Detector Metric Improvement**.
 
 ## Universal Rules For Every Agent Prompt
 
@@ -16,7 +16,100 @@ Every coding agent must obey these project rules:
 - If blocked, write the blocker, exact attempted commands, and next command to `docs/HANDOFF.md` and `docs/STATUS.md`.
 - Before ending, run relevant tests and documentation guards, then update `docs/HANDOFF.md`.
 
-## Exact Prompt For Current Milestone: M6 - AWS Public Demo
+## Exact Prompt For Current Milestone: M7 - Detector Metric Improvement
+
+Copy and paste this whole prompt into the next coding agent:
+
+```text
+You are the coding agent for Melodious V2. Work in this exact directory only:
+
+C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+
+The parent legacy workspace is read-only context:
+
+C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code
+
+Do not edit legacy files outside `melodious-v2`.
+
+Current milestone: M7 - Detector Metric Improvement.
+
+Before coding, read:
+
+- AGENTS.md
+- docs/STATUS.md
+- docs/METRICS.md
+- docs/METRIC_IMPROVEMENT.md
+- docs/HANDOFF.md
+- docs/EXPERIMENTS.md
+- docs/RUBRIC_MAP.md
+- docs/MILESTONE_HISTORY.md
+- MODEL_CARD.md
+- README.md
+- configs/detection_136class_eval_resolution_sweep.yaml
+- scripts/run_detection_136class_yolo.py
+- runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json if it exists locally
+- runs/detection/detection_136class_yolov8m_v1/metrics.json if it exists locally
+
+Goal:
+
+Improve detector metrics honestly enough for professor review while preserving validation/test separation and generated metric provenance. Do not hand-edit metric numbers. Do not claim test-set performance until the final model and inference configuration are frozen.
+
+Current handoff:
+
+- Original M3 detector run: `detection_136class_yolov8m_v1`.
+- Original M3 primary validation `mAP@0.5:0.95 = 0.4747370751116288`.
+- Original M3 secondary validation `mAP@0.5 = 0.5853211368313491`.
+- Best current M7 validation inference run: `detection_136class_yolov8m_eval_img1248_v1`.
+- Best current M7 primary validation `mAP@0.5:0.95 = 0.5058429013539956`.
+- Best current M7 secondary validation `mAP@0.5 = 0.6069618791829888`.
+- Best current M7 `F1@0.5 = 0.6329194449061496`.
+- The improvement came from validation inference-resolution tuning on the existing checkpoint, not a new trained model.
+- `ledgerLine` and `stem` remain important high-support zero-mAP limitations.
+- Test-set detector performance is still intentionally unreported.
+
+Do all of the following:
+
+1. Confirm current evidence.
+   - Verify `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json` exists.
+   - Verify `docs/EXPERIMENTS.md` includes the M7 detector sweep runs.
+   - Run tests before significant detector code changes.
+
+2. Decide the next honest improvement path.
+   - If GPU time is available, launch the 1248 fine-tune command from `docs/METRIC_IMPROVEMENT.md`.
+   - If not launching training, document the exact blocker and next command.
+   - Keep generated training outputs under ignored `runs/` and `artifacts/`.
+
+3. If training is launched.
+   - Use a new run id, preferably `detection_136class_yolov8m_finetune_img1248_v1`.
+   - Save/stop only at clean checkpoints.
+   - Preserve `last.pt`, `best.pt`, `results.csv`, logs, and metadata before stopping.
+   - Do not overwrite `detection_136class_yolov8m_v1`.
+
+4. If training completes.
+   - Finalize through `scripts/run_detection_136class_yolo.py`.
+   - Regenerate `docs/EXPERIMENTS.md`.
+   - Compare validation metrics against `detection_136class_yolov8m_eval_img1248_v1`.
+   - Update `docs/METRIC_IMPROVEMENT.md`, `docs/STATUS.md`, `docs/HANDOFF.md`, `MODEL_CARD.md`, and `docs/RUBRIC_MAP.md`.
+
+5. Preserve metric discipline.
+   - Never compare `mAP` directly to graph F1.
+   - Never present validation-selected settings as test performance.
+   - Never hide weak classes or zero-mAP supported classes.
+
+Verification commands before ending:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests`
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`
+- If a detector run completes: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md`
+
+Milestone acceptance criteria:
+
+- A better detector metric exists with generated `runs/**/metrics.json`, or the next training command/blocker is documented exactly.
+- `docs/METRIC_IMPROVEMENT.md` is current.
+- `docs/HANDOFF.md` and `docs/STATUS.md` tell the next agent exactly what to do.
+```
+
+## Archived Prompt: M6 - AWS Public Demo
 
 Copy and paste this whole prompt into the next coding agent:
 

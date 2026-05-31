@@ -2,9 +2,9 @@
 
 ## Current Phase
 
-M6 - AWS Public Demo is active and deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
+M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M6 now has a concrete low-cost AWS runbook, environment-driven CORS for a deployed frontend, ECS task-template guidance, and reusable smoke tooling for `/health`, `/version`, sample transcription, and MusicXML/MIDI artifact download. The public URL smoke has not run because AWS CLI was not found locally and account-specific ECS/ECR/S3/CloudFront values are not available in the repository.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has already improved the best validation detector configuration by re-evaluating the selected YOLOv8m checkpoint at higher inference resolution. The current best validation detector run is `detection_136class_yolov8m_eval_img1248_v1`, with primary `mAP@0.5:0.95 = 0.5058429013539956` and secondary `mAP@0.5 = 0.6069618791829888`. This is an inference-configuration improvement on validation, not a newly trained model and not a test-set result.
 
 ## Completed
 
@@ -41,10 +41,49 @@ The current detector artifact is ready for integration work, but the API still u
 - M6 expanded `infra/aws/smoke_test.ps1` to verify sample transcription plus MusicXML/MIDI artifact downloads and optional JSON evidence output.
 - M6 expanded `infra/aws/README.md` with ECR, ECS/Fargate, S3/CloudFront, smoke-test, and shutdown/cost-control commands.
 - M6 updated `infra/aws/task-definition.template.json` with `MELODIOUS_CORS_ORIGINS` and `MELODIOUS_GNN_CHECKPOINT` placeholders.
+- M7 added validation-time detector resolution sweep documentation at `docs/METRIC_IMPROVEMENT.md`.
+- M7 added sweep config ledger at `configs/detection_136class_eval_resolution_sweep.yaml`.
+- M7 added `--val-augment` support to `scripts/run_detection_136class_yolo.py`.
+- M7 generated validation-only detector evaluation runs for image sizes 1152, 1248, 1280, 1536, plus a 1280 validation-augmentation comparison.
+- `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 
 ## Latest Detector Result
 
-Run id: `detection_136class_yolov8m_v1`.
+Best validation inference run id: `detection_136class_yolov8m_eval_img1248_v1`.
+
+Metric source: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
+
+Evaluation split: `val` from `deepscores_136_yolo_materialized`.
+
+Checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+
+Inference image size: 1248.
+
+Validation augmentation: disabled.
+
+Primary detector metric:
+
+- `mAP@0.5:0.95`: 0.5058429013539956.
+
+Secondary detector metrics:
+
+- `mAP@0.5`: 0.6069618791829888.
+- `precision@0.5`: 0.8637798517406144.
+- `recall@0.5`: 0.4994362851193167.
+- `F1@0.5`: 0.6329194449061496.
+
+Measured gain over original M3 validation at image size 1024:
+
+- Primary `mAP@0.5:0.95`: +0.0311058262423668.
+- Secondary `mAP@0.5`: +0.0216407423516397.
+- `F1@0.5`: +0.0166469063081004.
+- Small-symbol mean `mAP@0.5:0.95`: +0.0227814799856731.
+
+Important detector-result caveat:
+
+- This is a validation-set inference-resolution sweep on the existing checkpoint, not a new trained model and not a test-set result.
+
+Original M3 training run id: `detection_136class_yolov8m_v1`.
 
 Metric source: `runs/detection/detection_136class_yolov8m_v1/metrics.json`.
 
@@ -202,8 +241,9 @@ Important end-to-end caveat:
 | M3 - Full 136-Class Detector | Done | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, `artifacts/models/detection_136class_yolov8m_v1/metadata.json` |
 | M4 - Real Assembly Runtime | Done | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported MusicXML/MIDI artifacts |
-| M6 - AWS Public Demo | Active / blocked on AWS values | `infra/aws/README.md`, `scripts/smoke_public_demo.py`, local smoke evidence; public smoke pending |
-| M7 - Final Grading Package | Planned | Frozen docs and presentation evidence |
+| M6 - AWS Public Demo | Prepared / blocked on AWS values | `infra/aws/README.md`, `scripts/smoke_public_demo.py`, local smoke evidence; public smoke pending |
+| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
+| M8 - Final Grading Package | Planned | Frozen docs and presentation evidence |
 
 ## Active Blockers
 
@@ -214,17 +254,17 @@ Important end-to-end caveat:
 - DeepScores leakage report is `warning` because 202 filename-inferred work groups repeat across splits. Duplicate image ids and duplicate filenames passed.
 - Full detector metrics are validation-split metrics. Test-set detector performance should be produced only after the team freezes the detector family and avoids iterative tuning on test data.
 - Several high-support symbol classes still have zero detector mAP on validation, especially `ledgerLine` and `stem`; this is a real model limitation and should not be hidden in the final report.
+- The improved M7 detector metric is validation-only inference tuning. Test-set detector performance remains intentionally unreported.
 - The M4 GNN is a legacy 15-class relationship model. It cannot represent every V2 detector class, and its feature encoder is reconstructed from seed `42` because the legacy checkpoint did not save that encoder as a separate artifact.
 - The M5 end-to-end run measures export validity from XML-derived payload fixtures, not trained uploaded-image detector quality.
 
 ## Next Actions
 
-1. Install/configure AWS CLI or run from an environment with AWS access.
-2. Fill local generated deployment state from `infra/aws/task-definition.template.json`; keep it under ignored `infra/aws/generated/`.
-3. Run the Backend Build And Push, ECS Task Definition, ECS Service, and Frontend Build And Publish sections in `infra/aws/README.md`.
-4. Run `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --api-base-url https://REPLACE_WITH_PUBLIC_API_HOST --output runs\deploy\m6_public_smoke\smoke.json`.
-5. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-6. After public smoke passes, update `docs/AGENT_PROMPTS.md` to M7 - Final Grading Package.
+1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
+2. If more detector quality is needed, launch `detection_136class_yolov8m_finetune_img1248_v1` from the exact command in `docs/METRIC_IMPROVEMENT.md`.
+3. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
+4. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
+5. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 
 ## Roadmap
 

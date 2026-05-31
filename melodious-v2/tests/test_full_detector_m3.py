@@ -8,6 +8,7 @@ from melodious_v2.evaluation.full_detector import (
     summarize_ultralytics_results_csv,
     write_detector_run_analysis,
 )
+from scripts.run_detection_136class_yolo import parse_args
 
 
 class FullDetectorM3Tests(unittest.TestCase):
@@ -92,6 +93,12 @@ class FullDetectorM3Tests(unittest.TestCase):
             self.assertEqual(summary["last_completed"]["epoch"], 2)
             self.assertEqual(summary["best_by_mAP@0.5:0.95"]["epoch"], 2)
             self.assertAlmostEqual(summary["best_by_mAP@0.5:0.95"]["mAP@0.5:0.95"], 0.4)
+
+    def test_parse_args_accepts_validation_augmentation_flag(self):
+        args = parse_args(["--finalize-existing-run", "--val-augment"])
+
+        self.assertTrue(args.finalize_existing_run)
+        self.assertTrue(args.val_augment)
 
     def test_write_detector_run_analysis_uses_metrics_and_split_support(self):
         with tempfile.TemporaryDirectory() as tmp:
