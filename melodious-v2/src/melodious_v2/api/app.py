@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -22,6 +24,14 @@ from melodious_v2.api.service import (
 )
 
 
+def _cors_origins_from_env() -> list[str]:
+    """Return allowed CORS origins for local and deployed frontends."""
+    raw = os.getenv("MELODIOUS_CORS_ORIGINS")
+    if raw:
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
+    return ["http://localhost:5173", "http://127.0.0.1:5173"]
+
+
 app = FastAPI(
     title="Melodious V2 API",
     version="0.1.0",
@@ -30,7 +40,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_cors_origins_from_env(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -78,4 +88,3 @@ def artifact(job_id: str, artifact_format: str) -> Response:
         raise HTTPException(status_code=404, detail="Transcription not found.")
     content, media_type = artifact_result
     return Response(content=content, media_type=media_type)
-
