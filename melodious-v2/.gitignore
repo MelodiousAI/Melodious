@@ -31,6 +31,7 @@ checkpoints/
 !.env.example
 infra/**/*.tfstate
 infra/**/*.tfstate.*
+infra/aws/generated/
 *.pem
 *.key
 

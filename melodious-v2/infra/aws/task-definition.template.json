@@ -21,6 +21,14 @@
         {
           "name": "MELODIOUS_ENV",
           "value": "aws"
+        },
+        {
+          "name": "MELODIOUS_CORS_ORIGINS",
+          "value": "https://REPLACE_WITH_CLOUDFRONT_DOMAIN"
+        },
+        {
+          "name": "MELODIOUS_GNN_CHECKPOINT",
+          "value": "/app/artifacts/graph/gnn_checkpoint.pt"
         }
       ],
       "logConfiguration": {
@@ -34,4 +42,3 @@
     }
   ]
 }
-
