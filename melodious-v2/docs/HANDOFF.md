@@ -4,7 +4,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M6 - AWS Public Demo is active and deployment-prepared, but actual public deployment is blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M4 loaded the legacy MUSCIMA GNN checkpoint through a V2 adapter, added truth-preserving runtime metadata, evaluated graph assembly on the fixed M1 MUSCIMA validation split, and regenerated `docs/EXPERIMENTS.md`. M5 measured the MUSCIMA holdout export path from XML-derived payload fixtures and regenerated `docs/EXPERIMENTS.md`. M6 added public-demo smoke tooling, deployment CORS configuration, and a detailed AWS runbook, but public AWS smoke has not run.
+Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M7 improved the best validation detector configuration by re-evaluating the selected checkpoint at image size 1248; the best current validation detector run is `detection_136class_yolov8m_eval_img1248_v1`.
 
 Current state:
 
@@ -51,6 +51,13 @@ Current state:
 - M6 GNN deployment env var: `MELODIOUS_GNN_CHECKPOINT`.
 - M6 local smoke evidence path: `runs/deploy/m6_local_smoke/smoke.json` (ignored).
 - M6 public deployment blocker: AWS CLI was not found locally, and account-specific ECR/ECS/S3/CloudFront values are unavailable and must not be committed.
+- M7 metric improvement doc: `docs/METRIC_IMPROVEMENT.md`.
+- M7 sweep config: `configs/detection_136class_eval_resolution_sweep.yaml`.
+- M7 best validation detector run: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/`.
+- M7 best primary `mAP@0.5:0.95`: `0.5058429013539956`.
+- M7 best secondary `mAP@0.5`: `0.6069618791829888`.
+- M7 best `F1@0.5`: `0.6329194449061496`.
+- M7 caveat: this is validation inference-resolution tuning on the existing checkpoint, not a newly trained model or test-set result.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -89,20 +96,104 @@ Current state:
 - Detector limitation evidence: 16 supported validation classes still have zero mAP, including `ledgerLine`, `stem`, and `ottavaBracket`.
 - ONNX parity passed on one fixed validation image; PyTorch and ONNX both returned 300 boxes with identical class-count totals.
 - M1 was re-verified on 2026-05-12 in this workspace. The manifest CLI completed against the local parent datasets and refreshed ignored `runs/data/` artifacts.
-- `docs/AGENT_PROMPTS.md` now says the current active milestone is M6.
+- `docs/AGENT_PROMPTS.md` now says the current active milestone is M7.
 
 Next exact prompt:
 
-- Use the active M6 prompt in `docs/AGENT_PROMPTS.md`.
+- Use the active M7 prompt in `docs/AGENT_PROMPTS.md`.
 
 Next exact implementation target:
 
-1. Install/configure AWS CLI or move to an AWS-enabled environment.
-2. Run `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json`.
-3. Fill ignored `infra/aws/generated/task-definition.json` from `infra/aws/task-definition.template.json`.
-4. Follow the ECR/ECS/Fargate and S3/CloudFront sections in `infra/aws/README.md`.
-5. Run `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --api-base-url https://REPLACE_WITH_PUBLIC_API_HOST --output runs\deploy\m6_public_smoke\smoke.json`.
-6. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
+2. If GPU time is available, launch `detection_136class_yolov8m_finetune_img1248_v1` with the exact command in `docs/METRIC_IMPROVEMENT.md`.
+3. If not launching training, document the blocker and exact next command in `docs/HANDOFF.md` and `docs/STATUS.md`.
+4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
+5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-05-31 - Agent Handoff - M7 Detector Metric Sweep Improved
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement
+
+Files changed:
+
+- `configs/detection_136class_eval_resolution_sweep.yaml`
+- `docs/AGENT_PROMPTS.md`
+- `docs/EXPERIMENTS.md`
+- `docs/HANDOFF.md`
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/MILESTONE_HISTORY.md`
+- `docs/ROADMAP.md`
+- `docs/RUBRIC_MAP.md`
+- `docs/STATUS.md`
+- `MODEL_CARD.md`
+- `README.md`
+- `scripts/run_detection_136class_yolo.py`
+- `tests/test_full_detector_m3.py`
+
+Detector runs generated:
+
+- `detection_136class_yolov8m_eval_img1152_v1`
+- `detection_136class_yolov8m_eval_img1248_v1`
+- `detection_136class_yolov8m_eval_img1264_v1`; Ultralytics rounded 1264 to 1280.
+- `detection_136class_yolov8m_eval_img1280_v1`
+- `detection_136class_yolov8m_eval_img1536_v1`
+- `detection_136class_yolov8m_eval_img1280_aug_v1`
+
+Commands run:
+
+- `nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv,noheader` - passed; GPU is NVIDIA GeForce RTX 3080 Laptop GPU with 16 GB VRAM.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -c "import torch; ..."` - passed; CUDA available.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_eval_img1280_v1 --finalize-existing-run --checkpoint artifacts\models\detection_136class_yolov8m_v1\best.pt --imgsz 1280 --batch 2 --workers 0 --device 0 --skip-export` - passed.
+- Same command pattern for `imgsz 1536`, batch 1 - passed.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py tests\test_full_detector_m3.py` - passed.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py` - passed, 5 tests.
+- Same command pattern for `imgsz 1280 --val-augment`, batch 1 - passed; metric regressed.
+- Same command pattern for `imgsz 1152`, batch 2 - passed.
+- Same command pattern for `imgsz 1248`, batch 2 - passed and produced the best run.
+- Same command pattern for `imgsz 1264`, batch 2 - passed, but Ultralytics rounded to 1280.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` - passed.
+
+Best result:
+
+- Run id: `detection_136class_yolov8m_eval_img1248_v1`.
+- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
+- Primary `mAP@0.5:0.95`: `0.5058429013539956`.
+- Secondary `mAP@0.5`: `0.6069618791829888`.
+- `precision@0.5`: `0.8637798517406144`.
+- `recall@0.5`: `0.4994362851193167`.
+- `F1@0.5`: `0.6329194449061496`.
+
+What improved:
+
+- Primary `mAP@0.5:0.95` improved by `0.0311058262423668` over the original `detection_136class_yolov8m_v1` validation result.
+- Secondary `mAP@0.5` improved by `0.0216407423516397`.
+- `F1@0.5` improved by `0.0166469063081004`.
+- Small-symbol mean `mAP@0.5:0.95` improved by `0.0227814799856731`.
+
+What failed or stayed weak:
+
+- 1536 inference size regressed.
+- 1280 validation-time augmentation regressed.
+- `ledgerLine` and `stem` remain zero-mAP high-support classes.
+- This is not a new trained model and not a test-set result.
+
+Next exact step:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1248_v1 `
+  --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
+  --epochs 50 `
+  --imgsz 1248 `
+  --batch 2 `
+  --workers 0 `
+  --device 0 `
+  --patience 15
+```
 
 ## 2026-05-31 - Agent Handoff - M6 Deployment Path Prepared
 

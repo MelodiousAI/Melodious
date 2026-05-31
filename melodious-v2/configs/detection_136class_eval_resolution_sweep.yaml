@@ -1,0 +1,47 @@
+run_family: detection_136class_yolov8m_eval_resolution_sweep
+taxonomy_id: deepscores_136
+base_detector_run_id: detection_136class_yolov8m_v1
+checkpoint: artifacts/models/detection_136class_yolov8m_v1/best.pt
+dataset:
+  dataset_id: deepscores_136_yolo_materialized
+  split: val
+  materialized_dataset_config: runs/data/deepscores_136_yolo_materialized/dataset.yaml
+metric_policy:
+  primary: mAP@0.5:0.95
+  secondary:
+    - mAP@0.5
+    - precision@0.5
+    - recall@0.5
+    - F1@0.5
+  selection_split: validation
+  test_set_status: untouched
+experiments:
+  - run_id: detection_136class_yolov8m_eval_img1152_v1
+    image_size: 1152
+    batch_size: 2
+    val_augment: false
+    result: kept_for_comparison
+  - run_id: detection_136class_yolov8m_eval_img1248_v1
+    image_size: 1248
+    batch_size: 2
+    val_augment: false
+    result: best_primary_metric
+  - run_id: detection_136class_yolov8m_eval_img1280_v1
+    image_size: 1280
+    batch_size: 2
+    val_augment: false
+    result: kept_for_comparison
+  - run_id: detection_136class_yolov8m_eval_img1536_v1
+    image_size: 1536
+    batch_size: 1
+    val_augment: false
+    result: regressed_primary_metric
+  - run_id: detection_136class_yolov8m_eval_img1280_aug_v1
+    image_size: 1280
+    batch_size: 1
+    val_augment: true
+    result: regressed_primary_metric
+notes:
+  - This sweep does not train a new model.
+  - It measures the existing best YOLOv8m checkpoint under validation-only inference-resolution settings.
+  - The selected 1248 setting improves validation mAP@0.5:0.95 but still leaves high-support classes such as ledgerLine and stem at zero mAP.

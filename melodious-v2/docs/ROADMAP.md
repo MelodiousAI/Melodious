@@ -23,8 +23,9 @@ This document is the project execution plan after the V2 foundation. It turns th
 | M3 - Full 136-Class Detector | Done | Train and evaluate full-taxonomy detector | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, model metadata |
 | M4 - Real Assembly Runtime | Done | Wire trained GNN adapter and natural-distribution graph evaluation | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported artifacts |
-| M6 - AWS Public Demo | Active / blocked on AWS values | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront runbook, local smoke logs, public smoke pending |
-| M7 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
+| M6 - AWS Public Demo | Prepared / blocked on AWS values | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront runbook, local smoke logs, public smoke pending |
+| M7 - Detector Metric Improvement | Active | Improve professor-facing detector metrics without losing provenance | `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
+| M8 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
 
 ## Completed M3 - Full 136-Class Detector
 
@@ -230,7 +231,53 @@ $env:PYTHONPATH='src'
 
 Then install/configure AWS CLI or move to an environment with AWS access, fill `infra/aws/generated/task-definition.json` from the template, and follow `infra/aws/README.md`.
 
-### M7 - Final Grading Package
+### M7 - Detector Metric Improvement
+
+Goal: raise the measured detector result while preserving metric provenance and validation/test separation.
+
+Current M7 result:
+
+- Best run: `detection_136class_yolov8m_eval_img1248_v1`.
+- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
+- Primary `mAP@0.5:0.95`: 0.5058429013539956.
+- Secondary `mAP@0.5`: 0.6069618791829888.
+- `F1@0.5`: 0.6329194449061496.
+- Improvement type: validation-time inference-resolution sweep on the existing YOLOv8m checkpoint.
+- Sweep ledger: `docs/METRIC_IMPROVEMENT.md` and `configs/detection_136class_eval_resolution_sweep.yaml`.
+
+Implementation tasks:
+
+- Done: run validation-only inference-resolution sweep at 1152, 1248, 1280, and 1536.
+- Done: test validation-time augmentation at 1280; it regressed.
+- Done: regenerate `docs/EXPERIMENTS.md`.
+- Pending: decide whether to launch real 1248 fine-tuning from `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Pending: if fine-tuning completes, compare validation metrics and update model card/status/handoff.
+- Pending: freeze one final model/inference configuration before any test-set evaluation.
+
+Acceptance criteria:
+
+- Every metric improvement has a `runs/**/metrics.json` artifact.
+- Validation-selected inference/training choices are documented.
+- Test split remains untouched until final model freeze.
+- Remaining weaknesses such as `ledgerLine` and `stem` are still documented.
+
+Exact next action:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1248_v1 `
+  --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
+  --epochs 50 `
+  --imgsz 1248 `
+  --batch 2 `
+  --workers 0 `
+  --device 0 `
+  --patience 15
+```
+
+### M8 - Final Grading Package
 
 Goal: make the professor see a coherent story and evidence trail.
 
@@ -277,4 +324,4 @@ Acceptance criteria:
 
 ## Agent Prompt Source
 
-Use `docs/AGENT_PROMPTS.md` to start future coding-agent sessions. It contains the exact current M4 prompt and archived prompts for prior milestones. See `docs/MILESTONE_HISTORY.md` for detailed evidence and next-step context across M1 through M7.
+Use `docs/AGENT_PROMPTS.md` to start future coding-agent sessions. It contains the exact current M7 prompt and archived prompts for prior milestones. See `docs/MILESTONE_HISTORY.md` for detailed evidence and next-step context across M1 through M8.

@@ -56,7 +56,7 @@ def configure_ultralytics_dirs(run_root: Path) -> None:
     os.environ["MPLCONFIGDIR"] = str(config_dir / "matplotlib")
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default=str(PROJECT_ROOT / "configs" / "detection_136class_yolov8m.yaml"))
     parser.add_argument("--manifest-dir", default=str(PROJECT_ROOT / "runs" / "data" / "deepscores_136_manifest"))
@@ -96,8 +96,13 @@ def parse_args() -> argparse.Namespace:
         help="Checkpoint to evaluate for --finalize-existing-run. Defaults to best.pt, then last.pt.",
     )
     parser.add_argument("--skip-export", action="store_true")
+    parser.add_argument(
+        "--val-augment",
+        action="store_true",
+        help="Enable Ultralytics validation-time augmentation for an evaluation-only comparison.",
+    )
     parser.add_argument("--commit", default=None)
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
 def _config_training_value(config: dict, name: str, fallback: int) -> int:
@@ -283,6 +288,7 @@ def main() -> None:
         exist_ok=True,
         device=args.device,
         workers=args.workers,
+        augment=args.val_augment,
     )
     metrics = detector_metrics_from_ultralytics(val_result)
 
@@ -353,6 +359,7 @@ def main() -> None:
             "seed": args.seed,
             "patience": patience,
             "split": args.split,
+            "val_augment": bool(args.val_augment),
             "smoke": bool(args.smoke),
             "smoke_overrides": smoke_overrides,
             "finalize_existing_run": bool(args.finalize_existing_run),

@@ -611,7 +611,7 @@ Exact next deployment action:
 2. Run the local smoke command above.
 3. Follow `infra/aws/README.md` from "Backend Build And Push" through "Public Smoke Test".
 4. Save public smoke output under `runs/deploy/m6_public_smoke/`.
-5. Update `docs/STATUS.md`, `docs/HANDOFF.md`, `docs/RUBRIC_MAP.md`, and `docs/AGENT_PROMPTS.md`; move the active prompt to M7 only after public smoke evidence exists or the instructor accepts the documented fallback.
+5. Update `docs/STATUS.md`, `docs/HANDOFF.md`, `docs/RUBRIC_MAP.md`, and `docs/AGENT_PROMPTS.md`; public smoke evidence is still needed before the final grading package.
 
 Main risk:
 
@@ -619,7 +619,89 @@ Main risk:
 - The current uploaded-image path remains `heuristic_bootstrap`; public upload demos must show the warning metadata and must not be described as trained detector inference.
 - The current API stores transcription jobs in memory. Artifact links are valid for a short demo on one running task, not for durable multi-task production.
 
-## M7 - Final Grading Package
+## M7 - Detector Metric Improvement
+
+Status: active. The first sweep improved the professor-facing detector validation metric without training a new model.
+
+Detailed goal:
+
+- Improve measured detector quality while keeping validation/test separation clean.
+- Track every metric change through generated `runs/**/metrics.json` artifacts.
+- Avoid hiding weak classes or relabeling validation as test performance.
+
+Source inputs:
+
+- Base detector run: `detection_136class_yolov8m_v1`.
+- Base checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Dataset: `deepscores_136_yolo_materialized`.
+- Split: validation.
+- Sweep config ledger: `configs/detection_136class_eval_resolution_sweep.yaml`.
+
+Implemented code/docs:
+
+- `scripts/run_detection_136class_yolo.py` now supports `--val-augment` for explicit validation-time augmentation comparisons.
+- `tests/test_full_detector_m3.py` covers the new argument parsing.
+- `docs/METRIC_IMPROVEMENT.md` records the sweep, interpretation, caveats, and next training command.
+
+Generated M7 detector evaluation runs:
+
+- `runs/detection/detection_136class_yolov8m_eval_img1152_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1264_v1/metrics.json`; Ultralytics rounded 1264 to 1280 because the image size must be stride-aligned.
+- `runs/detection/detection_136class_yolov8m_eval_img1280_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1536_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_eval_img1280_aug_v1/metrics.json`.
+
+Best current result:
+
+- Run id: `detection_136class_yolov8m_eval_img1248_v1`.
+- Inference image size: 1248.
+- Validation augmentation: false.
+- Primary `mAP@0.5:0.95`: 0.5058429013539956.
+- Secondary `mAP@0.5`: 0.6069618791829888.
+- `precision@0.5`: 0.8637798517406144.
+- `recall@0.5`: 0.4994362851193167.
+- `F1@0.5`: 0.6329194449061496.
+- Small-symbol mean `mAP@0.5:0.95`: 0.34224209611777584.
+
+Improvement over original M3 validation:
+
+- Primary `mAP@0.5:0.95`: +0.0311058262423668.
+- Secondary `mAP@0.5`: +0.0216407423516397.
+- `F1@0.5`: +0.0166469063081004.
+- Small-symbol mean `mAP@0.5:0.95`: +0.0227814799856731.
+
+Sweep interpretation:
+
+- 1248 is the best measured validation inference size so far.
+- 1152 improved secondary metrics but did not beat 1248 on the primary metric.
+- 1536 regressed, so simply increasing resolution is not monotonic.
+- Validation-time augmentation at 1280 regressed and should not be used for the current detector.
+- This is an inference-configuration improvement on validation, not a newly trained detector.
+
+M7 remaining risk:
+
+- High-support classes such as `ledgerLine` and `stem` remain unresolved.
+- Test-set performance is intentionally still unreported.
+- More real improvement likely requires fine-tuning or a special treatment for thin line-like symbols.
+
+Exact next metric action:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1248_v1 `
+  --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
+  --epochs 50 `
+  --imgsz 1248 `
+  --batch 2 `
+  --workers 0 `
+  --device 0 `
+  --patience 15
+```
+
+## M8 - Final Grading Package
 
 Status: planned.
 

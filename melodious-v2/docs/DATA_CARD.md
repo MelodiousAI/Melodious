@@ -75,6 +75,14 @@
   - validation secondary F1 from `metrics.json`: `F1@0.5` 0.6162725385980492,
   - analysis summary: 103 supported validation classes, 16 supported validation classes with zero mAP, 35 supported small-symbol classes, and small-symbol mean `mAP@0.5:0.95` 0.3194606161321027,
   - ONNX parity status: `runs/detection/detection_136class_yolov8m_v1/onnx_parity.json` passed on one fixed validation image; PyTorch and ONNX both returned 300 boxes with identical class-count totals.
+- M7 validation inference-resolution improvement:
+  - best evaluation run: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/`,
+  - source checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`,
+  - split: validation,
+  - inference image size: 1248,
+  - validation primary metric from `metrics.json`: `mAP@0.5:0.95` 0.5058429013539956,
+  - validation secondary metric from `metrics.json`: `mAP@0.5` 0.6069618791829888,
+  - caveat: this is validation-time inference tuning on the existing checkpoint, not a newly trained model and not test-set performance.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.

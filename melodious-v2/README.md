@@ -81,7 +81,8 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 3. Materialize the M1 manifest into a YOLO-standard ignored dataset under `runs/data/deepscores_136_yolo_materialized/`.
 4. Train the full-class detector with validation-only threshold selection. Done for the full configured YOLOv8m run under `runs/detection/detection_136class_yolov8m_v1/`; it completed 150 epochs, selected `best.pt`, wrote V2 `metrics.json`, exported `best.onnx`, and copied artifact metadata to `artifacts/models/detection_136class_yolov8m_v1/`.
 5. Evaluate with `mAP@0.5:0.95` as the primary detector metric.
-6. Store every run under `runs/detection/{run_id}/` with config, metrics JSON, plots, and artifact hashes.
+6. Improve inference configuration only through validation-provenance runs. Current best validation inference run: `runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json`, with `mAP@0.5:0.95 = 0.5058429013539956` and `mAP@0.5 = 0.6069618791829888`.
+7. Store every run under `runs/detection/{run_id}/` with config, metrics JSON, plots, and artifact hashes.
 
 ## Graph Assembly Path
 
@@ -122,6 +123,6 @@ Current M6 status: deployment path and local smoke tooling are ready, but actual
 
 ## Current Status
 
-This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run now has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
+This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best validation inference configuration is `detection_136class_yolov8m_eval_img1248_v1`. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
 
-Current active milestone: M6 - AWS Public Demo. See `docs/ROADMAP.md` and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
+Current active milestone: M7 - Detector Metric Improvement. See `docs/METRIC_IMPROVEMENT.md`, `docs/ROADMAP.md`, and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
