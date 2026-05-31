@@ -4,7 +4,7 @@
 
 M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has now improved the best validation detector configuration by correcting dense-page inference settings for the selected YOLOv8m checkpoint. The best primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, with primary `mAP@0.5:0.95 = 0.6204968163150985`. The best secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`, with `mAP@0.5 = 0.7920129156176505`. These are inference-configuration improvements on validation, not a newly trained model and not a test-set result. M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has now improved the best validation detector configuration by correcting dense-page inference settings for the selected YOLOv8m checkpoint. The best primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, with primary `mAP@0.5:0.95 = 0.6204968163150985`. The best secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`, with `mAP@0.5 = 0.7920129156176505`. These are inference-configuration improvements on validation, not a newly trained model and not a test-set result. M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The next real-training experiment, `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, was launched on 2026-06-01 at local time `02:46:32` and is running from the selected `best.pt` checkpoint.
 
 ## Completed
 
@@ -50,6 +50,7 @@ The current detector artifact is ready for integration work, but the API still u
 - M7 added reusable class-coverage audit tooling at `src/melodious_v2/evaluation/class_coverage.py` and `scripts/audit_detector_class_coverage.py`.
 - M7 generated a class-coverage audit under `runs/detection/detection_136class_class_coverage_audit_v1/`.
 - M7 verified that validation/test do not contain supported classes that are absent from training, but the current validation split cannot measure 33 taxonomy classes.
+- M7 launched fine-tuning run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `artifacts/models/detection_136class_yolov8m_v1/best.pt` at image size 1472, batch 1, and `max_det=2000`.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 
 ## Latest Detector Result
@@ -105,6 +106,18 @@ Important detector-result caveat:
 - This is a validation-set inference sweep on the existing checkpoint, not a new trained model and not a test-set result.
 - Precision cannot improve by an absolute 0.2 from the original 0.8274236461250144 because metric values are capped at 1.0.
 - The class-coverage audit shows the local labels support 115 of 136 taxonomy classes across all splits, 21 taxonomy classes have zero local labels, and validation measures 103 classes. Fine-tuning on the same labels can improve supported classes but cannot teach zero-label classes.
+
+Fine-tune currently running:
+
+- Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
+- Launch command saved at `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_command.txt`.
+- Launch metadata saved at `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`.
+- Parent PID at launch: `34780`, saved in `finetune.pid`.
+- Active Python child PID observed after launch: `23612`, saved in `finetune_child.pid`.
+- Stdout log: `finetune_stdout.log`.
+- Stderr log: `finetune_stderr.log`.
+- Startup evidence: epoch `1/50` started after loading the selected YOLOv8m checkpoint and transferring 475/475 pretrained items.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -258,6 +271,7 @@ Important end-to-end caveat:
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` after the dense-page sweep.
 - Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests`, 34 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 13 documentation files.
+- Passed: fine-tune launch command for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; startup logs show CUDA training reached epoch `1/50`.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\evaluation\class_coverage.py scripts\audit_detector_class_coverage.py tests\test_detector_class_coverage.py`.
 - Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_detector_class_coverage.py`, 2 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\audit_detector_class_coverage.py --metrics runs\detection\detection_136class_yolov8m_eval_img1472_maxdet2000_v1\metrics.json --output-dir runs\detection\detection_136class_class_coverage_audit_v1`.
@@ -295,12 +309,13 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. Launch `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from the exact command in `docs/METRIC_IMPROVEMENT.md`; GPU availability was checked and the RTX 3080 Laptop GPU had 16 GB VRAM with no active Python training process.
+1. Monitor `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` until it completes, fails, or the user requests a clean save/stop.
+2. Use the monitor command in `docs/METRIC_IMPROVEMENT.md` to check the parent PID, child PID, stdout tail, and latest `results.csv` row.
 3. Treat the fine-tune as an attempt to improve the 115 locally supported classes, not as a solution for the 21 zero-label taxonomy classes.
 4. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
-5. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-6. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
+5. After the fine-tune completes, regenerate `docs/EXPERIMENTS.md`, compare validation metrics against `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, update docs, and run the full test suite plus `scripts/validate_metric_claims.py`.
+6. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
+7. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 
 ## Roadmap
 

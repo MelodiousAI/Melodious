@@ -73,6 +73,8 @@ Current handoff:
 - Twenty-one taxonomy classes have zero local labels across train/validation/test, so another fine-tune on the same data cannot teach them.
 - No validation-supported or test-supported class is absent from training.
 - `ledgerLine` and `stem` remain important high-support zero-mAP limitations.
+- Fine-tune run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` was launched on 2026-06-01 at local time `02:46:32`; monitor it before launching any duplicate run.
+- Fine-tune launch artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`, including `finetune.pid`, `finetune_child.pid`, `finetune_stdout.log`, `finetune_stderr.log`, and `finetune_launch_metadata.json`.
 - Test-set detector performance is still intentionally unreported.
 
 Do all of the following:
@@ -84,7 +86,9 @@ Do all of the following:
    - Run tests before significant detector code changes.
 
 2. Decide the next honest improvement path.
-   - If GPU time is available, launch the 1472/max-det fine-tune command from `docs/METRIC_IMPROVEMENT.md`.
+   - If `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` is still running, monitor it instead of launching a duplicate run.
+   - If it is not running and no completed `metrics.json` exists, resume or relaunch from the most recent clean checkpoint according to `docs/HANDOFF.md`.
+   - If GPU time is available and no fine-tune is active, launch the 1472/max-det fine-tune command from `docs/METRIC_IMPROVEMENT.md`.
    - If not launching training, document the exact blocker and next command.
    - Keep generated training outputs under ignored `runs/` and `artifacts/`.
 

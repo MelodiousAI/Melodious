@@ -725,6 +725,21 @@ Class coverage audit:
 - High-support zero-map validation classes: `ledgerLine` and `stem`.
 - Interpretation: the next fine-tune can improve supported-class validation metrics, but it cannot teach the 21 zero-label classes without additional data or a narrower supported-class claim.
 
+Fine-tune launch:
+
+- Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- Launch local time: `2026-06-01T02:46:32`.
+- Source checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Epochs requested: 50.
+- Image size: 1472.
+- Batch size: 1.
+- Max detections per image: 2000.
+- Parent PID at launch: `34780`.
+- Active child PID observed after launch: `23612`.
+- Launch metadata: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`.
+- Startup evidence: CUDA training started and reached epoch `1/50`.
+- Completion status: pending at this milestone update; no final fine-tune `metrics.json` has been documented yet.
+
 M7 remaining risk:
 
 - High-support classes such as `ledgerLine` and `stem` remain unresolved.

@@ -170,6 +170,17 @@ Engineering decision:
 
 The next experiment should be a real fine-tune from the selected YOLOv8m checkpoint using the best measured primary-metric scale and the corrected dense-page detection cap:
 
+Launch status:
+
+- Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- Launched on 2026-06-01 at local time `02:46:32`.
+- Parent PID at launch: `34780`, saved in `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune.pid`.
+- Active Python child PID observed after launch: `23612`, saved in `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_child.pid`.
+- Stdout log: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_stdout.log`.
+- Stderr log: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_stderr.log`.
+- Launch metadata: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`.
+- Startup evidence: Ultralytics loaded `artifacts/models/detection_136class_yolov8m_v1/best.pt`, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and started epoch `1/50`.
+
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $env:PYTHONPATH='src'
@@ -185,7 +196,18 @@ $env:PYTHONPATH='src'
   --max-det 2000
 ```
 
-If the run is interrupted, preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt` before stopping.
+Monitor command:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$run='runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1'
+Get-Process -Id ([int](Get-Content "$run\finetune.pid")) -ErrorAction SilentlyContinue
+Get-Process -Id ([int](Get-Content "$run\finetune_child.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\finetune_stdout.log"
+if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
+```
+
+If the run is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, `args.yaml`, `finetune_stdout.log`, `finetune_stderr.log`, `finetune.pid`, `finetune_child.pid`, and `finetune_launch_metadata.json` before stopping.
 
 After training completes, finalize normally through the same script, regenerate `docs/EXPERIMENTS.md`, and compare only validation metrics until the model family is frozen.
 
