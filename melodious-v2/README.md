@@ -91,12 +91,21 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 4. Evaluate graph relationships with positive-class macro F1 on the natural candidate-edge distribution.
 5. Current graph run: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 
+## End-to-End Export Evaluation
+
+1. Use the fixed MUSCIMA holdout split from `runs/data/muscima_graph_manifest/holdout.json`.
+2. Build detector-like payload fixtures from MUSCIMA XML annotations.
+3. Run assembly through the V2 assembly service.
+4. Export MusicXML, MIDI, detector payload JSON, and relationship JSON artifacts.
+5. Current end-to-end run: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+6. Scope caveat: this measures export validity from XML-derived payload fixtures, not trained uploaded-image detector quality.
+
 ## Deployment Path
 
 Backend deployment targets Dockerized FastAPI + ONNX CPU inference on ECS Express Mode or ECS Fargate with images in ECR. The frontend deploys to S3 + CloudFront. See `infra/aws/README.md`.
 
 ## Current Status
 
-This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run now has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`.
+This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run now has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
 
-Current active milestone: M5 - End-to-End Export Quality. See `docs/ROADMAP.md` and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
+Current active milestone: M6 - AWS Public Demo. See `docs/ROADMAP.md` and `docs/MILESTONE_HISTORY.md` before starting new implementation work.

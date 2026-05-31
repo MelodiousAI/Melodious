@@ -115,6 +115,17 @@ not fully explicit in separate metadata.
   - positive candidate edges: 6340,
   - primary graph metric: positive-class macro F1 0.7590456327823909,
   - limitation: legacy 15-class graph contract and reconstructed seed-42 node feature encoder.
+- M5 end-to-end export evaluation:
+  - output: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`,
+  - split: M1 `holdout`,
+  - payload source: MUSCIMA XML-derived detector payload fixtures,
+  - pages: 14,
+  - mapped detections: 6348,
+  - note-like symbols: 2563,
+  - relationship outputs: 10637,
+  - primary export metric: MusicXML validity rate 1.0,
+  - MIDI generation success rate: 1.0,
+  - limitation: this is export-validity evidence from fixed XML-derived payloads, not trained uploaded-image detector quality.
 
 ## Taxonomies
 

@@ -1,6 +1,6 @@
 # Agent Prompts
 
-Use this file when starting a new coding-agent session for Melodious V2. Copy the relevant prompt exactly, then paste it into the agent. The current active milestone is **M5 - End-to-End Export Quality**.
+Use this file when starting a new coding-agent session for Melodious V2. Copy the relevant prompt exactly, then paste it into the agent. The current active milestone is **M6 - AWS Public Demo**.
 
 ## Universal Rules For Every Agent Prompt
 
@@ -16,7 +16,114 @@ Every coding agent must obey these project rules:
 - If blocked, write the blocker, exact attempted commands, and next command to `docs/HANDOFF.md` and `docs/STATUS.md`.
 - Before ending, run relevant tests and documentation guards, then update `docs/HANDOFF.md`.
 
-## Exact Prompt For Current Milestone: M5 - End-to-End Export Quality
+## Exact Prompt For Current Milestone: M6 - AWS Public Demo
+
+Copy and paste this whole prompt into the next coding agent:
+
+```text
+You are the coding agent for Melodious V2. Work in this exact directory only:
+
+C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+
+The parent legacy workspace is read-only context:
+
+C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code
+
+Do not edit legacy files outside `melodious-v2`.
+
+Current milestone: M6 - AWS Public Demo.
+
+Before coding, read:
+
+- AGENTS.md
+- docs/STATUS.md
+- docs/ROADMAP.md
+- docs/METRICS.md
+- docs/DATA_CARD.md
+- docs/HANDOFF.md
+- docs/EXPERIMENTS.md
+- docs/RUBRIC_MAP.md
+- docs/MILESTONE_HISTORY.md
+- MODEL_CARD.md
+- README.md
+- infra/
+- frontend/
+- src/melodious_v2/api/
+- runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json if it exists locally
+- runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json if it exists locally
+- runs/detection/detection_136class_yolov8m_v1/metrics.json if it exists locally
+
+Goal:
+
+Prepare and document a public demo deployment path for the FastAPI backend and frontend. The target is a low-cost AWS demo with clear smoke-test evidence, not new model training.
+
+Current handoff:
+
+- M3 detector run: `detection_136class_yolov8m_v1`.
+- M3 detector metrics: `runs/detection/detection_136class_yolov8m_v1/metrics.json`.
+- M4 graph run: `graph_legacy_gnn_muscima_val_v1`.
+- M4 graph metrics: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- M5 end-to-end run: `e2e_muscima_holdout_xml_fixture_v1`.
+- M5 end-to-end metrics: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- M5 measured `musicxml_validity_rate = 1.0` on 14 MUSCIMA holdout XML-derived payload fixtures.
+- M5 measured `midi_generation_success_rate = 1.0`.
+- M5 measured `page_success_rate = 1.0`.
+- M5 scope caveat: this is export validity from ground-truth XML-derived payload fixtures, not trained uploaded-image detector quality.
+- API uploaded-image detector inference still uses `heuristic_bootstrap` unless a tested ONNX detector adapter is added.
+
+Do all of the following:
+
+1. Confirm prerequisites.
+   - Verify tests pass locally before deployment changes.
+   - Verify M3, M4, and M5 metrics exist locally.
+   - Verify sample API transcription still works.
+   - Verify frontend build works if frontend deployment files are touched.
+
+2. Inspect deployment scaffolding.
+   - Read existing `infra/` files.
+   - Do not commit AWS secrets, account IDs, presigned URLs, private bucket names, or `.env` files.
+   - Keep generated deployment state outside Git.
+
+3. Prepare a low-cost public demo path.
+   - Prefer Dockerized FastAPI backend on ECS Express Mode or ECS Fargate with ECR.
+   - Prefer frontend static deployment to S3 and CloudFront.
+   - Keep model artifacts private and serve generated artifacts through controlled links or local API routes.
+   - Document CPU inference and bootstrap detector limitations honestly.
+
+4. Add or update deployment scripts/docs where useful.
+   - Add smoke-test commands for `/health`, `/version`, sample transcription, and artifact download.
+   - Add environment variable guidance for `MELODIOUS_GNN_CHECKPOINT`.
+   - Add shutdown/cost-control steps.
+   - If an actual AWS deploy is not run, document exactly what remains to run.
+
+5. Optional detector API wiring if time and scope allow.
+   - Add a non-bootstrap ONNX detector adapter for `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
+   - Keep `heuristic_bootstrap` as an explicit fallback.
+   - Smoke uploaded-image inference if this adapter is wired.
+   - If deferred, document the exact reason and next step.
+
+6. Update documentation before ending.
+   - Update `docs/STATUS.md`, `docs/ROADMAP.md`, `docs/RUBRIC_MAP.md`, `docs/MILESTONE_HISTORY.md`, `MODEL_CARD.md`, and `docs/HANDOFF.md`.
+   - If M6 completes, update `docs/AGENT_PROMPTS.md` so the next active prompt is M7 - Final Grading Package.
+   - If M6 is blocked, document the exact blocker and next command/action.
+
+Verification commands before ending:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests`
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`
+- If frontend changed: `cd frontend; npm run build`
+- If deployment changed: run the relevant local Docker/AWS smoke command and document the result.
+
+Milestone acceptance criteria:
+
+- Deployment path is concrete enough for a public demo or clearly blocked with exact next command/action.
+- API `/health`, `/version`, and sample transcription smoke commands are documented.
+- Frontend deployment path is documented.
+- Cost-control and shutdown steps are documented.
+- Tests and metric-claim validation pass.
+```
+
+## Archived Prompt: M5 - End-to-End Export Quality
 
 Copy and paste this whole prompt into the next coding agent:
 

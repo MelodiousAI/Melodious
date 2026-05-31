@@ -459,7 +459,7 @@ M4 remaining risk:
 
 ## M5 - End-to-End Export Quality
 
-Status: active.
+Status: done. M5 created a fixed holdout export evaluator, generated MusicXML/MIDI/payload/relationship artifacts for every page in the M1 MUSCIMA holdout split, and wrote project-standard metrics.
 
 Detailed goal:
 
@@ -467,23 +467,84 @@ Detailed goal:
 - Use real detector outputs and real assembly mode where available.
 - Keep estimates separate from measured end-to-end results.
 
-Implementation checklist:
+Source inputs:
 
-- Define an end-to-end holdout manifest.
-- Run detector, assembly, MusicXML export, and MIDI export on every holdout page.
-- Validate MusicXML parseability.
-- Generate MIDI smoke artifacts.
-- Save example failures with root-cause notes.
-- Write `runs/e2e/{run_id}/metrics.json`.
-- Update frontend evidence if uploaded-image transcription is demonstrated end to end.
+- MUSCIMA holdout manifest: `runs/data/muscima_graph_manifest/holdout.json`.
+- MUSCIMA XML annotations referenced by the M1 manifest.
+- Legacy GNN checkpoint: `..\outputs\gnn_checkpoint.pt`.
+- M3 detector metrics: `runs/detection/detection_136class_yolov8m_v1/metrics.json`.
+- M4 graph metrics: `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 
-Main risk:
+Implemented code:
 
-- MusicXML can be structurally valid while musically incomplete, so the report needs structure-level checks and examples, not only parse success.
+- `src/melodious_v2/evaluation/e2e_export.py`.
+- `scripts/run_e2e_export_eval.py`.
+- `configs/e2e_muscima_holdout.yaml`.
+- `tests/test_e2e_export.py`.
+- Invalid MusicXML validation coverage in `tests/test_export_and_reports.py`.
+
+Generated run:
+
+- Run id: `e2e_muscima_holdout_xml_fixture_v1`.
+- Run directory: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
+- Metrics: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- Report: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/report.md`.
+- Manifest: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/manifest.json`.
+- Artifacts: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/artifacts.json`.
+- Config copy: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/config.yaml`.
+- Per-page exports: MusicXML, MIDI, detector payload JSON, and relationship JSON under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/exports/`.
+
+M5 metric provenance:
+
+- Commit in metrics: `9c0ddc9`.
+- Dataset id: `muscima_graph_manifest`.
+- Split: `holdout`.
+- Taxonomy id: `deepscores_136_to_semantic_omr_v2`.
+- Artifact SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab` from the upstream GNN checkpoint.
+
+M5 metrics:
+
+- Primary `musicxml_validity_rate`: 1.0.
+- `midi_generation_success_rate`: 1.0.
+- `page_success_rate`: 1.0.
+- `page_count`: 14.
+- `musicxml_valid_count`: 14.
+- `midi_success_count`: 14.
+- `page_success_count`: 14.
+- `failure_count`: 0.
+- `detection_count_total`: 6348.
+- `detection_count_mean`: 453.42857142857144.
+- `note_like_count_total`: 2563.
+- `note_like_count_mean`: 183.07142857142858.
+- `relationship_count_total`: 10637.
+- `relationship_count_mean`: 759.7857142857143.
+- `assembly_gnn_page_count`: 14.
+
+M5 scope:
+
+- Payload source: MUSCIMA XML-derived detector payload fixtures.
+- Detector mode recorded in metrics: `muscima_xml_ground_truth_payload_fixture`.
+- This run measures export validity and artifact generation, not trained detector uploaded-image quality.
+- Uploaded-image detector inference remains `heuristic_bootstrap` until a tested ONNX detector adapter is added.
+
+M5 verification commands:
+
+```powershell
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_e2e_export.py
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_export_and_reports.py
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_e2e_export_eval.py --split holdout --assembly-mode gnn
+$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md
+```
+
+M5 remaining risk:
+
+- MusicXML validity is a syntax/export-validity metric. It does not prove musical correctness.
+- The current MusicXML exporter is intentionally minimal and does not yet encode complete pitch, rhythm, voice, measure, or staff semantics.
+- A future run should use real detector outputs after the ONNX detector adapter is wired.
 
 ## M6 - AWS Public Demo
 
-Status: planned.
+Status: active.
 
 Detailed goal:
 
