@@ -30,7 +30,9 @@ Graph project: yes.
 - Separation of concerns: package layout under `src/melodious_v2/`.
 - Reproducible run path: README and scripts.
 - UI/demo: frontend upload/results flow.
-- Running artifact: ECS/Fargate deployment templates and smoke tests.
+- Running artifact path: ECS/Fargate deployment template, ECR build/push commands, S3/CloudFront frontend publish commands, and shutdown controls in `infra/aws/README.md`.
+- Public-demo smoke contract: `scripts/smoke_public_demo.py`, `src/melodious_v2/deployment/smoke.py`, `infra/aws/smoke_test.ps1`, and `tests/test_deployment_smoke.py`.
+- Deployment caveat: public AWS smoke is pending because AWS CLI and account-local AWS values are not available in this workspace. Local smoke evidence is generated under ignored `runs/deploy/m6_local_smoke/smoke.json`.
 
 ## GitHub and Documentation
 
@@ -51,6 +53,6 @@ Graph project: yes.
   - full YOLOv8m 136-class detector checkpoint and ONNX artifact,
   - real legacy GNN assembly runtime with natural-distribution graph metrics,
   - fixed holdout MusicXML/MIDI export evaluation with generated artifacts,
-  - public AWS deployment path,
+  - public AWS deployment path with smoke tooling and cost-control runbook,
   - upload-to-artifact product flow,
   - graph-positive F1 metric policy.

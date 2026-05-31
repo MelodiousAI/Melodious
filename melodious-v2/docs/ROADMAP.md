@@ -23,7 +23,7 @@ This document is the project execution plan after the V2 foundation. It turns th
 | M3 - Full 136-Class Detector | Done | Train and evaluate full-taxonomy detector | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, model metadata |
 | M4 - Real Assembly Runtime | Done | Wire trained GNN adapter and natural-distribution graph evaluation | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported artifacts |
-| M6 - AWS Public Demo | Active | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront evidence, smoke logs |
+| M6 - AWS Public Demo | Active / blocked on AWS values | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront runbook, local smoke logs, public smoke pending |
 | M7 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
 
 ## Completed M3 - Full 136-Class Detector
@@ -186,22 +186,49 @@ M5 caveat:
 
 Goal: satisfy deployment evidence with a stable, low-cost public system.
 
+Current M6 state:
+
+- Deployment path is prepared in `infra/aws/README.md`.
+- API CORS can be configured for a public frontend through `MELODIOUS_CORS_ORIGINS`.
+- ECS task-template placeholders exist for the public frontend origin and `MELODIOUS_GNN_CHECKPOINT`.
+- Python smoke tooling exists at `scripts/smoke_public_demo.py`.
+- PowerShell smoke tooling exists at `infra/aws/smoke_test.ps1`.
+- Local smoke can verify `/health`, `/version`, sample transcription, MusicXML download, and MIDI download.
+- Actual AWS deployment remains blocked until AWS CLI access and account-local ECS/ECR/S3/CloudFront values are available.
+
 Implementation tasks:
 
-- Create ECR repository and ECS service.
-- Deploy FastAPI container with CPU ONNX inference.
-- Deploy frontend to S3 and CloudFront.
-- Configure private artifact storage with short-lived download links.
-- Add CloudWatch logging and smoke-test script outputs.
-- Document cost controls and shutdown steps.
+- Done: document the ECR/ECS/Fargate backend path.
+- Done: document the S3/CloudFront frontend path.
+- Done: document CloudWatch log group usage.
+- Done: document cost controls and shutdown steps.
+- Done: add local/public API smoke tooling.
+- Pending: create account-local ECR repository and ECS service.
+- Pending: deploy the FastAPI container.
+- Pending: build frontend with the public API URL and publish to S3/CloudFront.
+- Pending: run public smoke and save output under ignored `runs/deploy/m6_public_smoke/`.
+- Deferred: private S3 artifact storage with short-lived links. The current demo artifact routes use in-memory job state and are acceptable only for a short public demo.
 
 Acceptance criteria:
 
-- Public frontend URL loads.
-- Public API `/health` and `/version` pass.
-- Sample transcription completes through the public service.
-- Uploaded-image transcription completes through the public service.
-- Smoke-test output is saved as deployment evidence.
+- Prepared: exact public API smoke command is documented.
+- Prepared: exact frontend build/publish command is documented.
+- Prepared: shutdown and scale-to-zero commands are documented.
+- Pending: public frontend URL loads.
+- Pending: public API `/health` and `/version` pass.
+- Pending: sample transcription completes through the public service.
+- Pending: uploaded-image transcription completes through the public service with `heuristic_bootstrap` provenance unless a detector adapter is added.
+- Pending: public smoke-test output is saved as deployment evidence.
+
+Exact next action:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json
+```
+
+Then install/configure AWS CLI or move to an environment with AWS access, fill `infra/aws/generated/task-definition.json` from the template, and follow `infra/aws/README.md`.
 
 ### M7 - Final Grading Package
 

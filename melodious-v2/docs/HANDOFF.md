@@ -4,7 +4,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M6 - AWS Public Demo is active. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M4 loaded the legacy MUSCIMA GNN checkpoint through a V2 adapter, added truth-preserving runtime metadata, evaluated graph assembly on the fixed M1 MUSCIMA validation split, and regenerated `docs/EXPERIMENTS.md`. M5 measured the MUSCIMA holdout export path from XML-derived payload fixtures and regenerated `docs/EXPERIMENTS.md`.
+Active milestone: M6 - AWS Public Demo is active and deployment-prepared, but actual public deployment is blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M4 loaded the legacy MUSCIMA GNN checkpoint through a V2 adapter, added truth-preserving runtime metadata, evaluated graph assembly on the fixed M1 MUSCIMA validation split, and regenerated `docs/EXPERIMENTS.md`. M5 measured the MUSCIMA holdout export path from XML-derived payload fixtures and regenerated `docs/EXPERIMENTS.md`. M6 added public-demo smoke tooling, deployment CORS configuration, and a detailed AWS runbook, but public AWS smoke has not run.
 
 Current state:
 
@@ -42,6 +42,15 @@ Current state:
 - M5 page success rate: `1.0`.
 - M5 generated artifacts: per-page MusicXML, MIDI, detector payload JSON, and relationship JSON for 14 MUSCIMA holdout pages.
 - M5 caveat: this is export-validity evidence from MUSCIMA XML-derived payload fixtures, not trained uploaded-image detector quality.
+- M6 deployment runbook: `infra/aws/README.md`.
+- M6 local/public smoke CLI: `scripts/smoke_public_demo.py`.
+- M6 smoke module: `src/melodious_v2/deployment/smoke.py`.
+- M6 smoke test: `tests/test_deployment_smoke.py`.
+- M6 PowerShell smoke script: `infra/aws/smoke_test.ps1`.
+- M6 API CORS env var: `MELODIOUS_CORS_ORIGINS`.
+- M6 GNN deployment env var: `MELODIOUS_GNN_CHECKPOINT`.
+- M6 local smoke evidence path: `runs/deploy/m6_local_smoke/smoke.json` (ignored).
+- M6 public deployment blocker: AWS CLI was not found locally, and account-specific ECR/ECS/S3/CloudFront values are unavailable and must not be committed.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -88,12 +97,89 @@ Next exact prompt:
 
 Next exact implementation target:
 
-1. Start M6 from the active prompt in `docs/AGENT_PROMPTS.md`.
-2. Confirm M3, M4, and M5 metrics exist locally.
-3. Read `infra/`, `frontend/`, and API deployment docs.
-4. Prepare or verify the low-cost AWS deployment path for Dockerized FastAPI plus static frontend.
-5. Document smoke commands for `/health`, `/version`, sample transcription, and artifact download.
+1. Install/configure AWS CLI or move to an AWS-enabled environment.
+2. Run `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json`.
+3. Fill ignored `infra/aws/generated/task-definition.json` from `infra/aws/task-definition.template.json`.
+4. Follow the ECR/ECS/Fargate and S3/CloudFront sections in `infra/aws/README.md`.
+5. Run `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --api-base-url https://REPLACE_WITH_PUBLIC_API_HOST --output runs\deploy\m6_public_smoke\smoke.json`.
 6. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-05-31 - Agent Handoff - M6 Deployment Path Prepared
+
+Milestone worked:
+
+- M6 - AWS Public Demo
+
+Files changed:
+
+- `.env.example`
+- `.gitignore`
+- `README.md`
+- `MODEL_CARD.md`
+- `docs/HANDOFF.md`
+- `docs/MILESTONE_HISTORY.md`
+- `docs/ROADMAP.md`
+- `docs/RUBRIC_MAP.md`
+- `docs/STATUS.md`
+- `infra/aws/README.md`
+- `infra/aws/smoke_test.ps1`
+- `infra/aws/task-definition.template.json`
+- `scripts/smoke_public_demo.py`
+- `src/melodious_v2/api/app.py`
+- `src/melodious_v2/deployment/__init__.py`
+- `src/melodious_v2/deployment/smoke.py`
+- `tests/test_deployment_smoke.py`
+
+Commits created:
+
+- `c697a4d` - `Document M5 export evaluation completion`.
+- `2c6f2bd` - `Add public demo smoke tooling`.
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 32 tests before M6 edits.
+- `Test-Path runs\detection\detection_136class_yolov8m_v1\metrics.json` - passed.
+- `Test-Path runs\graph\graph_legacy_gnn_muscima_val_v1\metrics.json` - passed.
+- `Test-Path runs\e2e\e2e_muscima_holdout_xml_fixture_v1\metrics.json` - passed.
+- API local smoke through FastAPI `TestClient` - passed; `/health` returned `ok`, `/version` returned schema `2.0`, sample transcription completed, detector mode was `sample_payload`, and artifact download returned 721 bytes.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\deployment\smoke.py scripts\smoke_public_demo.py src\melodious_v2\api\app.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_deployment_smoke.py` - passed, 1 test.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json` - passed; wrote ignored local smoke evidence.
+- `Get-Command aws -ErrorAction SilentlyContinue` - returned no AWS CLI path.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 33 tests after M6 changes.
+- `cd frontend; npm run build` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 12 documentation files.
+
+What is complete:
+
+- The API can be configured for a deployed frontend with `MELODIOUS_CORS_ORIGINS`.
+- A Python smoke tester verifies `/health`, `/version`, `/samples`, sample transcription, MusicXML download, and MIDI download.
+- The PowerShell AWS smoke script verifies the same public-demo path and can write JSON evidence.
+- The AWS runbook documents backend image build/push, ECS task/service deployment, frontend S3/CloudFront publishing, smoke testing, and cost-control shutdown.
+- Ignored generated deployment state is reserved under `infra/aws/generated/`.
+
+What failed or is blocked:
+
+- Actual public AWS deployment was not run because AWS CLI is not installed or not available in this workspace.
+- Account-local values are not available and must not be committed: AWS profile/role, region, ECR repository state, ECS role ARNs, subnet IDs, security group IDs, ALB target group/listener, S3 frontend bucket, CloudFront distribution ID/domain, and public API host.
+- Uploaded-image detector inference still uses `heuristic_bootstrap`.
+- Durable private artifact storage is not implemented; current API artifact links are in-memory and suitable only for a short single-task demo.
+
+Next exact step:
+
+- From an AWS-enabled shell, run the M6 local smoke command, then follow `infra/aws/README.md` through public smoke. The first command is:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json
+```
+
+Then run the backend ECR/ECS and frontend S3/CloudFront sections in `infra/aws/README.md`, ending with:
+
+```powershell
+..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --api-base-url https://REPLACE_WITH_PUBLIC_API_HOST --output runs\deploy\m6_public_smoke\smoke.json
+```
 
 ## 2026-05-30 - Agent Handoff - M5 End-to-End Export Complete
 

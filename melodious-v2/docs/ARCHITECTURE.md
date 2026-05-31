@@ -21,6 +21,7 @@
 - `export`: MusicXML/MIDI generation and validation.
 - `evaluation.e2e_export`: fixed holdout export evaluation using detector payload fixtures.
 - `api`: product service endpoints.
+- `deployment`: local/public smoke-test helpers for the API deployment contract.
 - `reports`: generated metric and experiment report helpers.
 
 ## Fallback Policy
@@ -50,3 +51,14 @@ Fallbacks are allowed for demo resilience but must be explicit:
 - Payload source: MUSCIMA XML-derived detector payload fixtures.
 - Current run: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
 - Limitation: this measures export validity and artifact generation, not trained uploaded-image detector quality.
+
+## Deployment Architecture
+
+- Backend image: `infra/docker/Dockerfile.api`.
+- Backend target: ECS Express Mode or ECS Fargate with an ECR image and one CPU task for the public demo.
+- Frontend target: static Vite build on S3 behind CloudFront.
+- CORS: API origins are controlled by `MELODIOUS_CORS_ORIGINS`; local defaults remain `http://localhost:5173` and `http://127.0.0.1:5173`.
+- Graph checkpoint: `MELODIOUS_GNN_CHECKPOINT` must point to a private checkpoint path inside the container or mounted storage; otherwise the API reports fallback metadata.
+- Smoke contract: `scripts/smoke_public_demo.py` verifies `/health`, `/version`, sample transcription, MusicXML download, and MIDI download.
+- Deployment runbook: `infra/aws/README.md`.
+- Current deployment blocker: public AWS smoke has not run because AWS CLI and account-local resource values are unavailable in this workspace.
