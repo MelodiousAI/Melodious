@@ -73,8 +73,9 @@ Current handoff:
 - Twenty-one taxonomy classes have zero local labels across train/validation/test, so another fine-tune on the same data cannot teach them.
 - No validation-supported or test-supported class is absent from training.
 - `ledgerLine` and `stem` remain important high-support zero-mAP limitations.
-- Fine-tune run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` was launched on 2026-06-01 at local time `02:46:32`; monitor it before launching any duplicate run.
-- Fine-tune launch artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`, including `finetune.pid`, `finetune_child.pid`, `finetune_stdout.log`, `finetune_stderr.log`, and `finetune_launch_metadata.json`.
+- Fine-tune run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` was launched on 2026-06-01 at local time `02:46:32`, stopped after seven completed epochs, and was resumed on 2026-06-02 at local time `01:05:09`.
+- Fine-tune resume artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`, including `resume_epoch7.pid`, `resume_epoch7_child.pid`, `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, and `resume_epoch7_launch_metadata.json`.
+- Fine-tune resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
 - Test-set detector performance is still intentionally unreported.
 
 Do all of the following:
