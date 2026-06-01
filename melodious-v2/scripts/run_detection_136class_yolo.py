@@ -93,6 +93,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--split", default="val", choices=["val", "test"])
     parser.add_argument("--materialize-only", action="store_true")
     parser.add_argument(
+        "--resume-training",
+        action="store_true",
+        help="Resume an interrupted Ultralytics training run from last.pt instead of starting a new run.",
+    )
+    parser.add_argument(
+        "--resume-checkpoint",
+        default=None,
+        help=(
+            "Checkpoint for --resume-training. Defaults to the run's "
+            "ultralytics/train/weights/last.pt."
+        ),
+    )
+    parser.add_argument(
         "--finalize-existing-run",
         action="store_true",
         help="Evaluate/export an existing Ultralytics train directory without launching more training.",
@@ -266,6 +279,23 @@ def main() -> None:
         train_args_path = save_dir / "args.yaml"
         train_args = load_yaml(train_args_path) if train_args_path.exists() else {}
         trained_model = YOLO(str(selected_checkpoint))
+    elif args.resume_training:
+        resume_checkpoint = (
+            Path(args.resume_checkpoint).resolve()
+            if args.resume_checkpoint
+            else (train_project / "train" / "weights" / "last.pt").resolve()
+        )
+        if not resume_checkpoint.exists():
+            raise FileNotFoundError(f"Cannot resume missing checkpoint: {resume_checkpoint}")
+        model = YOLO(str(resume_checkpoint))
+        train_result = model.train(resume=True, device=args.device, workers=args.workers)
+        save_dir = Path(getattr(train_result, "save_dir", train_project / "train"))
+        best_checkpoint = save_dir / "weights" / "best.pt"
+        last_checkpoint = save_dir / "weights" / "last.pt"
+        selected_checkpoint = best_checkpoint if best_checkpoint.exists() else last_checkpoint
+        train_args_path = save_dir / "args.yaml"
+        train_args = load_yaml(train_args_path) if train_args_path.exists() else {}
+        trained_model = YOLO(str(selected_checkpoint))
     else:
         model = YOLO(model_path)
         train_kwargs = {
@@ -388,6 +418,12 @@ def main() -> None:
             "val_augment": bool(args.val_augment),
             "smoke": bool(args.smoke),
             "smoke_overrides": smoke_overrides,
+            "resume_training": bool(args.resume_training),
+            "resume_checkpoint": (
+                Path(args.resume_checkpoint).resolve().as_posix()
+                if args.resume_checkpoint
+                else None
+            ),
             "finalize_existing_run": bool(args.finalize_existing_run),
             "existing_train_args": train_args,
             "training_results_summary": training_results_summary,
