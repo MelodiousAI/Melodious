@@ -181,6 +181,23 @@ Launch status:
 - Launch metadata: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`.
 - Startup evidence: Ultralytics loaded `artifacts/models/detection_136class_yolov8m_v1/best.pt`, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and started epoch `1/50`.
 
+Interruption and resume status:
+
+- The first launch stopped after seven completed epochs and while epoch 8 was in progress.
+- No final V2 `metrics.json` exists yet for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- The clean epoch-7 checkpoint files exist at `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt` and `best.pt`.
+- Completed rows in `results.csv`: 7.
+- Best completed primary training-row metric so far: epoch 7, `metrics/mAP50-95(B) = 0.6116`.
+- Best completed training-row `metrics/mAP50(B)` so far: epoch 6, `0.79679`.
+- These training-row values do not replace the generated V2 validation metric. The run is not complete until the project runner writes `metrics.json`.
+- Resume support was added to `scripts/run_detection_136class_yolo.py` in commit `6636622`.
+- Resume launch local time: 2026-06-02 `01:05:09`.
+- Resume parent PID: `35952`, saved in `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7.pid`.
+- Resume active child PID: `43740`, saved in `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_child.pid`.
+- Resume stdout log: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_stdout.log`.
+- Resume stderr log: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_stderr.log`.
+- Resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
+
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $env:PYTHONPATH='src'
@@ -201,9 +218,9 @@ Monitor command:
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $run='runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1'
-Get-Process -Id ([int](Get-Content "$run\finetune.pid")) -ErrorAction SilentlyContinue
-Get-Process -Id ([int](Get-Content "$run\finetune_child.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\finetune_stdout.log"
+Get-Process -Id ([int](Get-Content "$run\resume_epoch7.pid")) -ErrorAction SilentlyContinue
+Get-Process -Id ([int](Get-Content "$run\resume_epoch7_child.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\resume_epoch7_stdout.log"
 if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
 ```
 

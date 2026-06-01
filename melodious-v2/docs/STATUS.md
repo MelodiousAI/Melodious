@@ -4,7 +4,7 @@
 
 M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has now improved the best validation detector configuration by correcting dense-page inference settings for the selected YOLOv8m checkpoint. The best primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, with primary `mAP@0.5:0.95 = 0.6204968163150985`. The best secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`, with `mAP@0.5 = 0.7920129156176505`. These are inference-configuration improvements on validation, not a newly trained model and not a test-set result. M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The next real-training experiment, `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, was launched on 2026-06-01 at local time `02:46:32` and is running from the selected `best.pt` checkpoint.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. M7 has now improved the best validation detector configuration by correcting dense-page inference settings for the selected YOLOv8m checkpoint. The best primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, with primary `mAP@0.5:0.95 = 0.6204968163150985`. The best secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`, with `mAP@0.5 = 0.7920129156176505`. These are inference-configuration improvements on validation, not a newly trained model and not a test-set result. M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The next real-training experiment, `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, was launched on 2026-06-01 at local time `02:46:32`, stopped after seven completed epochs while epoch 8 was in progress, and was resumed on 2026-06-02 at local time `01:05:09` from the saved epoch-7 `last.pt` checkpoint.
 
 ## Completed
 
@@ -51,6 +51,8 @@ The current detector artifact is ready for integration work, but the API still u
 - M7 generated a class-coverage audit under `runs/detection/detection_136class_class_coverage_audit_v1/`.
 - M7 verified that validation/test do not contain supported classes that are absent from training, but the current validation split cannot measure 33 taxonomy classes.
 - M7 launched fine-tuning run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `artifacts/models/detection_136class_yolov8m_v1/best.pt` at image size 1472, batch 1, and `max_det=2000`.
+- M7 added `--resume-training` and `--resume-checkpoint` to `scripts/run_detection_136class_yolo.py` after the fine-tune was interrupted mid-epoch.
+- M7 resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `ultralytics/train/weights/last.pt`; Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 
 ## Latest Detector Result
@@ -111,13 +113,18 @@ Fine-tune currently running:
 
 - Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
 - Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
-- Launch command saved at `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_command.txt`.
-- Launch metadata saved at `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`.
-- Parent PID at launch: `34780`, saved in `finetune.pid`.
-- Active Python child PID observed after launch: `23612`, saved in `finetune_child.pid`.
-- Stdout log: `finetune_stdout.log`.
-- Stderr log: `finetune_stderr.log`.
-- Startup evidence: epoch `1/50` started after loading the selected YOLOv8m checkpoint and transferring 475/475 pretrained items.
+- First launch command saved at `finetune_launch_command.txt`.
+- First launch stopped after seven completed rows in `ultralytics/train/results.csv`; the best completed primary training-row metric so far was epoch 7 with `metrics/mAP50-95(B) = 0.6116`.
+- Best completed training-row `metrics/mAP50(B)` so far was epoch 6 with `0.79679`.
+- Clean checkpoint files exist at `ultralytics/train/weights/last.pt` and `best.pt`.
+- Resume command saved at `resume_epoch7_launch_command.txt`.
+- Resume metadata saved at `resume_epoch7_launch_metadata.json`.
+- Resume parent PID: `35952`, saved in `resume_epoch7.pid`.
+- Resume active Python child PID: `43740`, saved in `resume_epoch7_child.pid`.
+- Resume stdout log: `resume_epoch7_stdout.log`.
+- Resume stderr log: `resume_epoch7_stderr.log`.
+- Resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
+- Final V2 `metrics.json` does not exist yet for this fine-tune.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -272,6 +279,11 @@ Important end-to-end caveat:
 - Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests`, 34 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 13 documentation files.
 - Passed: fine-tune launch command for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; startup logs show CUDA training reached epoch `1/50`.
+- Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py tests\test_full_detector_m3.py` after adding resume support.
+- Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py`, 5 tests.
+- Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests`, 36 tests.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 13 documentation files.
+- Passed: resume launch for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; startup logs show training resumed from epoch 8 to 50.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\evaluation\class_coverage.py scripts\audit_detector_class_coverage.py tests\test_detector_class_coverage.py`.
 - Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_detector_class_coverage.py`, 2 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\audit_detector_class_coverage.py --metrics runs\detection\detection_136class_yolov8m_eval_img1472_maxdet2000_v1\metrics.json --output-dir runs\detection\detection_136class_class_coverage_audit_v1`.
@@ -309,8 +321,8 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Monitor `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` until it completes, fails, or the user requests a clean save/stop.
-2. Use the monitor command in `docs/METRIC_IMPROVEMENT.md` to check the parent PID, child PID, stdout tail, and latest `results.csv` row.
+1. Monitor the resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` until it completes, fails, or the user requests a clean save/stop.
+2. Use the updated monitor command in `docs/METRIC_IMPROVEMENT.md` to check `resume_epoch7.pid`, `resume_epoch7_child.pid`, `resume_epoch7_stdout.log`, and the latest `results.csv` row.
 3. Treat the fine-tune as an attempt to improve the 115 locally supported classes, not as a solution for the 21 zero-label taxonomy classes.
 4. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
 5. After the fine-tune completes, regenerate `docs/EXPERIMENTS.md`, compare validation metrics against `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, update docs, and run the full test suite plus `scripts/validate_metric_claims.py`.

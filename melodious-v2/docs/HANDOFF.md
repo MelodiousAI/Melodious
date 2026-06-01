@@ -63,9 +63,15 @@ Current state:
 - M7 class coverage finding: the detector head preserves 136 classes, but the local train/validation/test labels support 115 classes, validation supports 103 classes, and 21 taxonomy classes have zero local labels.
 - M7 class coverage finding: no validation-supported or test-supported class is absent from training, but 12 train-supported classes are absent from validation.
 - M7 class coverage finding: high-support zero-map validation classes remain `ledgerLine` and `stem`.
-- M7 fine-tune currently running: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
-- M7 fine-tune launch: 2026-06-01 local time `02:46:32`, parent PID `34780`, active child PID observed after launch `23612`.
-- M7 fine-tune logs: `finetune_stdout.log`, `finetune_stderr.log`, `finetune.pid`, `finetune_child.pid`, and `finetune_launch_metadata.json` under the run directory.
+- M7 fine-tune currently resumed/running: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
+- M7 first fine-tune launch: 2026-06-01 local time `02:46:32`, parent PID `34780`, active child PID observed after launch `23612`.
+- M7 first fine-tune attempt stopped after seven completed epochs and while epoch 8 was in progress; no final fine-tune `metrics.json` exists yet.
+- M7 first fine-tune clean checkpoint files: `ultralytics/train/weights/last.pt` and `best.pt`.
+- M7 first fine-tune best completed primary training-row metric so far: epoch 7, `metrics/mAP50-95(B) = 0.6116`.
+- M7 first fine-tune best completed `metrics/mAP50(B)` so far: epoch 6, `0.79679`.
+- M7 resume support commit: `6636622`.
+- M7 fine-tune resume launch: 2026-06-02 local time `01:05:09`, parent PID `35952`, active child PID `43740`.
+- M7 fine-tune resume logs: `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, `resume_epoch7.pid`, `resume_epoch7_child.pid`, and `resume_epoch7_launch_metadata.json` under the run directory.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -113,10 +119,82 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. Monitor the running `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` process using the exact monitor command in `docs/METRIC_IMPROVEMENT.md`.
+2. Monitor the resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` process using the exact monitor command in `docs/METRIC_IMPROVEMENT.md`.
 3. If training is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, and the PID/log metadata before stopping.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+
+## 2026-06-02 - Agent Handoff - M7 Fine-Tune Interrupted And Resumed
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement
+
+Files changed:
+
+- `scripts/run_detection_136class_yolo.py`
+- `tests/test_full_detector_m3.py`
+- `docs/HANDOFF.md`
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/STATUS.md`
+
+Generated ignored evidence:
+
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_launch_command.txt`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_launch_metadata.json`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7.pid`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_child.pid`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_stdout.log`
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_stderr.log`
+
+What happened:
+
+- The fine-tune launched on 2026-06-01 did not complete.
+- It stopped after seven completed epochs and while epoch 8 was in progress.
+- `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json` does not exist yet.
+- `results.csv` has seven completed rows.
+- Best completed primary training-row metric so far: epoch 7, `metrics/mAP50-95(B) = 0.6116`.
+- Best completed training-row `metrics/mAP50(B)` so far: epoch 6, `0.79679`.
+- Clean checkpoint files exist at `ultralytics/train/weights/last.pt` and `best.pt`, last updated after epoch 7.
+
+Code change:
+
+- Added `--resume-training` and `--resume-checkpoint` to `scripts/run_detection_136class_yolo.py`.
+- The resume path uses `YOLO(last.pt).train(resume=True, device=..., workers=...)`, then continues through the normal V2 final validation/export/report flow when training completes.
+- Focused detector tests now cover the resume arguments.
+
+Commands run:
+
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m py_compile scripts\run_detection_136class_yolo.py tests\test_full_detector_m3.py` - passed.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_full_detector_m3.py` - passed, 5 tests.
+- `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 36 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 13 documentation files.
+- `git commit -m "Add detector training resume support"` - passed with commit `6636622`.
+- Resume launch through `Start-Process -WindowStyle Hidden` - passed.
+- `Get-CimInstance Win32_Process -Filter "name = 'python.exe'" | Where-Object { $_.CommandLine -like '*detection_136class_yolov8m_finetune_img1472_maxdet2000_v1*' } | Format-List ProcessId,ParentProcessId,CommandLine` - passed; documented resume parent PID `35952` and child PID `43740`.
+
+Resume status:
+
+- Resume local launch time: `2026-06-02T01:05:09`.
+- Resume command: `..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 --resume-training --resume-checkpoint runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\ultralytics\train\weights\last.pt --epochs 50 --imgsz 1472 --batch 1 --workers 0 --device 0 --patience 15 --max-det 2000`.
+- Ultralytics resume evidence: `Resuming training ... from epoch 8 to 50 total epochs`.
+- Resume parent PID: `35952`.
+- Resume active child PID: `43740`.
+
+Monitor command:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$run='runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1'
+Get-Process -Id ([int](Get-Content "$run\resume_epoch7.pid")) -ErrorAction SilentlyContinue
+Get-Process -Id ([int](Get-Content "$run\resume_epoch7_child.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\resume_epoch7_stdout.log"
+if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
+```
+
+Next exact step:
+
+- Keep the resumed fine-tune running unless the user explicitly asks to stop. When it completes, confirm `metrics.json` exists, regenerate `docs/EXPERIMENTS.md`, compare validation metrics against `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, update docs, run tests and `scripts/validate_metric_claims.py`, then commit the completed-result documentation.
 
 ## 2026-06-01 - Agent Handoff - M7 Fine-Tune Launched
 
