@@ -64,23 +64,27 @@ Fallbacks are allowed for demo resilience but must be explicit:
   FastAPI upload path is rewired away from `heuristic_bootstrap`.
 - Output artifacts: note JSON, overlay PNG, compact MusicXML, and playable MIDI
   with actual note events.
+- Pitch modifiers: detected `keyFlat`, `keySharp`, and `keyNatural` symbols
+  are mapped to per-staff key signatures; detected explicit `accidental*`
+  symbols override the key signature for the attached note.
 - Current Sad Romance verification output:
   `runs/demo/sad_romance_note_extraction_v3/`.
 - Current uploaded Arabic page verification output:
-  `runs/demo/image_note_extraction_v3/`.
+  `runs/demo/image_note_extraction_v5/`.
 - Sad Romance verification summary: 9 detected staff systems, 197 note events,
   17 dotted notes, 0 stem-confirmed notes, and MusicXML with 17 `<dot/>` tags.
 - Uploaded Arabic page verification summary: 9 detected staff systems, 319
-  note events, 37 dotted notes, 0 stem-confirmed notes, and MusicXML with 37
-  `<dot/>` tags.
+  note events, 38 dotted notes, 0 stem-confirmed notes, detected `B: -1` key
+  signatures on all 9 systems, and MusicXML with `<fifths>-1</fifths>` plus 53
+  `<alter>-1</alter>` tags.
 - Staff detection now combines dark-line, light-line, and adaptive horizontal
   masks so clean printed pages with faint/antialiased staff lines do not lose
   complete systems before pitch mapping.
-- Limitation: pitch assumes treble clef; rhythm is heuristic; accidentals,
-  ties, slurs, measures, and full graph assembly are not reconstructed. Beam
-  detections are used for duration, not complete notational grouping. Stem
-  detections are used when present, but the current Sad Romance checkpoint
-  inference returned no usable `stem` boxes.
+- Limitation: pitch assumes treble clef; rhythm is heuristic; ties, slurs,
+  measures, measure-scoped accidental persistence/cancellation, and full graph
+  assembly are not reconstructed. Beam detections are used for duration, not
+  complete notational grouping. Stem detections are used when present, but the
+  current Sad Romance checkpoint inference returned no usable `stem` boxes.
 
 ## Deployment Architecture
 

@@ -72,15 +72,15 @@ Current state:
 - M7 resume support commit: `6636622`.
 - M7 fine-tune resume launch: 2026-06-02 local time `01:05:09`, parent PID `35952`, active child PID `43740`.
 - M7 fine-tune resume logs: `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, `resume_epoch7.pid`, `resume_epoch7_child.pid`, and `resume_epoch7_launch_metadata.json` under the run directory.
-- M7 fine-tune latest checked after uploaded-image note extraction work: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `33`, training-validation `metrics/mAP50(B) = 0.81344`, training-validation `metrics/mAP50-95(B) = 0.63103`, and no final fine-tune `metrics.json` exists yet.
+- M7 fine-tune latest checked after key-signature extraction work: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `36`, training-validation `metrics/mAP50(B) = 0.81375`, training-validation `metrics/mAP50-95(B) = 0.63024`, and no final fine-tune `metrics.json` exists yet.
 - Local note extraction demo module: `src/melodious_v2/omr/note_extraction.py`.
 - Local note extraction demo CLI: `scripts/extract_notes_from_image.py`.
 - Local note extraction demo docs: `docs/NOTE_EXTRACTION_DEMO.md`.
 - Local note extraction demo test: `tests/test_note_extraction_demo.py`.
 - Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v3/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, 0 stem-confirmed notes, 17 dotted notes, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, and an overlay image. This is an ignored demo artifact, not an official metric run.
 - Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry. Rhythm uses nearby stems, beams, flags, and augmentation dots when the detector returns them. On this page, the checkpoint returned no usable stem detections, so quarter notes are marked as `black_notehead_quarter_rule_no_stem`.
-- Uploaded Arabic page note extraction evidence: `runs/demo/image_note_extraction_v3/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 319 extracted note events, 0 stem-confirmed notes, 37 dotted notes, duration distribution `0.25:29`, `0.375:7`, `0.5:178`, `0.75:9`, `1.0:65`, `1.5:20`, `2.0:10`, `3.0:1`, MIDI size `2878` bytes, and MusicXML parse check `319` notes with `37` `<dot/>` tags. This is an ignored demo artifact, not an official metric run.
-- Uploaded Arabic page staff-detection finding: the initial run detected only 4 staff systems and should be ignored. The fixed `v3` run detects all 9 visible systems by preserving lighter/antialiased staff lines before note-to-pitch mapping.
+- Uploaded Arabic page note extraction evidence: `runs/demo/image_note_extraction_v5/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 319 extracted note events, 0 stem-confirmed notes, 38 dotted notes, detected `B: -1` key signatures on all 9 systems, MusicXML `key_fifths = -1`, 53 B-flat notes from detected key signatures, 2 explicit sharp notes from detected inline accidentals, duration distribution `0.25:28`, `0.375:8`, `0.5:175`, `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`, MIDI size `2879` bytes, and MusicXML parse check `319` notes with `38` `<dot/>` tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags. This is an ignored demo artifact, not an official metric run.
+- Uploaded Arabic page staff/key finding: the initial run detected only 4 staff systems and should be ignored. The fixed `v3` run detects all 9 visible systems by preserving lighter/antialiased staff lines before note-to-pitch mapping. The `v5` run adds detected key-signature application. This was not hard-coded to the page: YOLO emits `keyFlat`, the extractor maps each key-flat glyph to `B` by staff geometry, and then applies `B: -1` to matching notes.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -134,6 +134,91 @@ Next exact implementation target:
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
 6. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. For the next product-facing step, wire this path into the API behind an explicit mode such as `yolo_note_demo`, preserving warnings that rhythm and pitch are heuristic.
 7. For the next rhythm-quality step, target stem detection specifically: evaluate/lower a separate `stem` threshold, add a CV stem-line attachment fallback, or continue fine-tuning with stronger thin-line/stem coverage.
+
+## 2026-06-02 - Agent Handoff - Key Signature Application Added
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local demo rescue path
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/ARCHITECTURE.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `runs/demo/image_note_extraction_v5/best_snapshot.pt`
+- `runs/demo/image_note_extraction_v5/image_notes.json`
+- `runs/demo/image_note_extraction_v5/image_notes.mid`
+- `runs/demo/image_note_extraction_v5/image_notes.musicxml`
+- `runs/demo/image_note_extraction_v5/image_notes_overlay.png`
+
+What changed:
+
+- Added generic pitch-modifier support to the local note extraction demo.
+- YOLO `keyFlat`, `keySharp`, and `keyNatural` detections are now mapped to per-staff key signatures by staff geometry.
+- YOLO explicit `accidental*` detections now override the key signature for the attached note.
+- Flat glyphs use a lower-bulb pitch anchor instead of the bbox center; this avoids mapping detected `keyFlat` glyphs to the wrong staff step.
+- Extracted notes now record `alter` and `pitch_source`.
+- Extraction results now record `key_signatures` and `key_fifths`.
+- MusicXML now writes detected key fifths and per-note `<alter>` values.
+- Overlay note labels show altered pitches with `b`/`#`.
+- Added a regression test proving a detected `keyFlat` on B maps B4 to B-flat/MIDI 70 and writes `<fifths>-1</fifths>` plus `<alter>-1</alter>`.
+
+Important diagnosis:
+
+- The user's uploaded Arabic page already had high-confidence YOLO detections for `keyFlat`; the extractor was ignoring them because it only retained noteheads and rhythm symbols.
+- This is not an immediate training failure for this page. The detector taxonomy separates key-signature symbols from inline accidentals: use `keyFlat` for the start-of-staff flat, not `accidentalFlat`.
+- Existing validation evidence for key signatures is strong: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1` reports `keyFlat` `mAP@0.5:0.95 = 0.8426791417729934`.
+
+Uploaded Arabic page verification after key-signature support:
+
+- Command:
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png --output-dir runs\demo\image_note_extraction_v5 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Tislam Alaina Alhawa"`
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Extracted note events: `319`.
+- Stem-confirmed notes: `0`.
+- Dotted notes: `38`.
+- Key signatures: every staff system has `{"B": -1}`.
+- MusicXML key fifths: `-1`.
+- B-flat notes from detected key signature: `53`.
+- Explicit sharp notes from detected inline accidentals: `2`.
+- Duration distribution: `0.25:28`, `0.375:8`, `0.5:175`, `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`.
+- Rhythm source distribution: `beam_x1:173`, `black_notehead_quarter_rule_no_stem:68`, `beam_x2:28`, `black_notehead_quarter_rule_no_stem+augmentation_dot:21`, `notehead_class:10`, `beam_x2+augmentation_dot:8`, `beam_x1+augmentation_dot:7`, `flag:2`, `notehead_class+augmentation_dot:1`, `flag+augmentation_dot:1`.
+- Pitch source distribution: `staff_geometry:264`, `key_signature:flat:53`, `explicit_accidental:accidentalSharp:2`.
+- MusicXML parse check: `319` notes, `38` dot tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags.
+- MIDI path: `runs/demo/image_note_extraction_v5/image_notes.mid`.
+- MIDI size: `2879` bytes.
+- Overlay path: `runs/demo/image_note_extraction_v5/image_notes_overlay.png`.
+
+Commands run:
+
+- Probe current checkpoints on `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png` for key/accidental predictions - passed; available checkpoints returned 9 high-confidence `keyFlat` boxes and 1 inline `accidentalSharp` box at `conf=0.12`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py -q` - passed, 6 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py scripts\extract_notes_from_image.py tests\test_note_extraction_demo.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png --output-dir runs\demo\image_note_extraction_v5 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Tislam Alaina Alhawa"` - passed.
+- MusicXML parse check for `runs/demo/image_note_extraction_v5/image_notes.musicxml` - passed, 319 notes, 38 dot tags, one key fifths value `-1`, and 53 flat alters.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` - passed, 42 tests with 1 third-party deprecation warning from `torch_geometric`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 14 documentation files.
+- Fine-tune process check - parent PID `35952` alive, child PID `43740` alive.
+- Latest fine-tune `results.csv` check - latest completed row epoch `36`, `metrics/mAP50(B) = 0.81375`, `metrics/mAP50-95(B) = 0.63024`. Treat these as training-run validation CSV values, not final V2 metric provenance.
+
+Limitations:
+
+- This adds detected key-signature application, not full music-theory reconstruction.
+- Measure-scoped accidental persistence/cancellation is still not implemented; explicit accidentals currently affect only the attached note.
+- Rhythm remains the main demo weakness because this page still has `0` stem-confirmed notes.
+
+Next exact step:
+
+- Keep monitoring the fine-tune. For local demo quality, target stem detection next; for pitch quality, add measure-aware accidental persistence/cancellation after measure/barline reconstruction exists.
 
 ## 2026-06-02 - Agent Handoff - Uploaded Image Staff Detection Fixed
 
@@ -196,7 +281,7 @@ Limitations:
 
 - The generated output is much more complete than the first uploaded-image run, but it is still a local demo artifact rather than a measured detector metric.
 - The extractor still reports `0` stem-confirmed notes on this page. Quarter values without beams/flags still come from `black_notehead_quarter_rule_no_stem`, so rhythm is not yet trustworthy enough for final product claims.
-- Pitch still assumes treble clef and does not reconstruct key signature accidentals, measures, ties, slurs, voices, or full graph assembly.
+- At this stage, pitch still assumed treble clef and did not reconstruct key signature accidentals, measures, ties, slurs, voices, or full graph assembly. This was later superseded by the key-signature support section above; measure-scoped accidental persistence/cancellation is still not implemented.
 
 Next exact step:
 
@@ -266,7 +351,7 @@ Limitations:
 - This is not an evaluation metric and must not be reported as detector `mAP`.
 - The current pitch mapping assumes treble clef.
 - The current rhythm model defaults unbeamed black noteheads to quarter notes and uses nearby beam/flag/dot detections, but it remains heuristic.
-- Accidentals, key signature, ties, slurs, beams, measures, and full graph assembly are not reconstructed in this demo path.
+- At this stage, accidentals, key signature, ties, slurs, beams, measures, and full graph assembly were not reconstructed in this demo path. This was later superseded for detected key signatures and attached explicit accidentals only.
 
 Next exact step:
 
@@ -330,7 +415,7 @@ Commands run:
 
 Limitations:
 
-- Rhythm remains heuristic. It is better for quarters, beamed notes, flags, and visible augmentation dots, but it still does not reconstruct measures, ties, accidentals, voices, or complete beaming semantics.
+- Rhythm remains heuristic. It is better for quarters, beamed notes, flags, and visible augmentation dots, but it still does not reconstruct measures, ties, measure-scoped accidental persistence/cancellation, voices, or complete beaming semantics.
 
 ## 2026-06-02 - Agent Handoff - Stem-Aware Rhythm Labels Added
 
