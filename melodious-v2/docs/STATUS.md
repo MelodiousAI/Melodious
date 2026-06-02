@@ -8,7 +8,9 @@ The current detector artifact is ready for integration work, but the API still u
 
 M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing a real fine-tune. The completed fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 Its threshold metrics are precision `0.8457099520968777`, recall `0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
-M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The completed fine-tune still leaves `stem = 0.0` AP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction remains limited by thin-symbol detection. A follow-up background run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, is active from the completed fine-tune `best.pt`; parent PID `34896` and Python child PID `28432` are saved under its run directory.
+M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The completed fine-tune still leaves `stem = 0.0` AP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction remains limited by thin-symbol detection. A follow-up background run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, is active from the completed fine-tune `best.pt`; parent PID `34896` and Python child PID `28432` are saved under its run directory. Latest live check on 2026-06-03 showed both processes still running, no final `metrics.json`, and 17 completed `results.csv` rows. The latest row was epoch `17` with `metrics/mAP50(B) = 0.8338` and `metrics/mAP50-95(B) = 0.64865`; those are interim training CSV values, not final V2 metric provenance.
+
+M7 has now moved the `stem` fix from a vague "train more" idea to a concrete tiled-dataset path. The local labels contain abundant `stem` supervision, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages. The new tiled materializer creates focus tiles around stems, ledger lines, dots, beams, and flags. A smoke materialization under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/` raises projected `stem` width to a median of `2.666645333333387` pixels at tiled `target_imgsz=1024`. The detector runner now supports `--dataset-yaml` and `--dataset-id`, so tiled datasets can be trained without being overwritten by the original full-page materializer. No tiled metric claim exists yet; the next metric claim needs a completed tiled run with `metrics.json`.
 
 ## Completed
 
@@ -59,6 +61,9 @@ M7 also added a detector class-coverage audit: the model head preserves the 136-
 - M7 resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `ultralytics/train/weights/last.pt`; Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
 - M7 completed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; generated `metrics.json`, `analysis.json`, `manifest.json`, `artifacts.json`, `report.md`, `config.yaml`, and `onnx_parity.json`.
 - M7 launched active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the completed fine-tune `best.pt` at image size 1536, batch 1, and `max_det=2000`.
+- M7 added stem-focused tiled YOLO dataset generation in `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
+- M7 added existing-dataset runner support through `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...`, so a tiled dataset can be used without rematerializing the original full-page DeepScores dataset.
+- M7 generated a smoke tiled dataset under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/` with 222 train tiles, 229 validation tiles, 264 test tiles, 4361 retained stem labels, and median projected stem width `2.666645333333387` pixels at `target_imgsz=1024`.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 - Added local note extraction demo tooling at `src/melodious_v2/omr/note_extraction.py` and `scripts/extract_notes_from_image.py`.
 - Added focused note extraction tests in `tests/test_note_extraction_demo.py`.
@@ -164,6 +169,19 @@ Active follow-up fine-tune:
 - Settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
 - Startup evidence: reached epoch `1/50` on CUDA with the RTX 3080 Laptop GPU.
 - Ignore the first `finetune_v2_stdout.log` / `finetune_v2_stderr.log` attempt; it failed before training because `$env:PYTHONPATH` was expanded incorrectly in the child command. The active run uses the `retry` PID/log files.
+- Latest live check on 2026-06-03: parent PID `34896` and child PID `28432` are running.
+- Final `metrics.json` exists: no.
+- Completed `results.csv` rows at latest check: 17.
+- Latest completed row: epoch `17`, `metrics/precision(B) = 0.87334`, `metrics/recall(B) = 0.77575`, `metrics/mAP50(B) = 0.8338`, and `metrics/mAP50-95(B) = 0.64865`.
+
+Stem-focused tiled dataset path:
+
+- Smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`.
+- Materializer: `scripts/materialize_tiled_yolo_dataset.py`.
+- Runner support: `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...`.
+- Smoke focus counts: `stem = 4361`, `ledgerLine = 749`, `augmentationDot = 211`, `beam = 1248`, `flag8thUp = 401`, `flag8thDown = 137`, `flag16thUp = 8`, `flag16thDown = 10`.
+- Smoke projected `stem` width at tiled target size 1024: median `2.666645333333387` pixels.
+- Metric status: no tiled detector metric exists yet. Generate `runs/data/deepscores_136_yolo_tiled_stem_v1/` and train `detection_136class_yolov8m_tiled_stem_img1024_v1` only after the active v2 fine-tune completes or is cleanly stopped.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -333,6 +351,13 @@ Important end-to-end caveat:
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py -q`, 8 tests after disabling YOLO-mode CV dot fallback by default.
 - Passed: local extraction command for `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png` to `runs\demo\image_note_extraction_v6`; generated JSON, overlay, MusicXML, and MIDI with 319 notes and 7 MusicXML `<dot/>` tags.
 - Passed: active background launch for `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`; startup logs show CUDA training reached epoch `1/50`, parent PID `34896`, and child PID `28432`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_yolo_tiling.py -q`, 3 tests.
+- Passed: smoke tiled materialization command for `runs\data\deepscores_136_yolo_tiled_stem_smoke_v1`; generated 222 train tiles, 229 validation tiles, and 264 test tiles.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_full_detector_m3.py tests\test_yolo_tiling.py -q`, 10 tests after adding existing-dataset runner support.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_smoke_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_smoke_v1 --materialize-only`; runner recorded `materialization_mode = existing_dataset_yaml`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q`, 50 tests, with one upstream `torch_geometric` deprecation warning.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 14 documentation files.
+- Passed: active fine-tune status check for `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`; parent PID `34896` and child PID `28432` were running, final `metrics.json` was absent, and latest completed row was epoch 17.
 
 ## Milestone Tracker
 
@@ -368,10 +393,13 @@ Important end-to-end caveat:
 1. Monitor active run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` using the monitor command in `docs/METRIC_IMPROVEMENT.md`; use `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, and `finetune_v2_retry_stdout.log`.
 2. If the active run is interrupted, preserve `last.pt`, `best.pt`, `results.csv`, `args.yaml`, retry logs, retry PID files, and retry launch metadata before stopping or resuming.
 3. When the active run completes, compare `stem`, `ledgerLine`, `augmentationDot`, `beam`, `flag8thUp`, `flag8thDown`, headline AP metrics, recall, and F1 against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
-4. If `stem` remains near zero, do not keep blindly training whole pages. Build a tiled/cropped staff-system or measure-level dataset for thin symbols, or add a demo-only CV stem-line attachment fallback with explicit provenance.
-5. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
-6. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-7. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
+4. If `stem` remains near zero, do not keep blindly training whole pages. Generate the full tiled dataset with `scripts/materialize_tiled_yolo_dataset.py --output-dir runs\data\deepscores_136_yolo_tiled_stem_v1 --tile-size 384 --stride 256 --target-imgsz 1024`.
+5. After the full tiled dataset exists, run the materialize-only check with `scripts/run_detection_136class_yolo.py --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --materialize-only`.
+6. Launch tiled training as `detection_136class_yolov8m_tiled_stem_img1024_v1` from the active v2 `best.pt` if v2 completes, or from the completed 1472 fine-tune `best.pt` if v2 has no usable completed checkpoint. Use the exact command in `docs/METRIC_IMPROVEMENT.md`.
+7. If tiled detect-mode training still cannot localize stems, then evaluate an OBB/segmentation side branch or a clearly labeled demo-only CV stem-line attachment fallback with explicit `rhythm_source` provenance.
+8. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
+9. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
+10. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 
 ## Roadmap
 

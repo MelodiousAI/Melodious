@@ -65,6 +65,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=str(PROJECT_ROOT / "runs" / "data" / "deepscores_136_yolo_materialized"),
     )
     parser.add_argument(
+        "--dataset-yaml",
+        default=None,
+        help=(
+            "Use an existing YOLO dataset.yaml directly instead of materializing "
+            "from the M1 DeepScores manifest. Required for tiled/cropped datasets."
+        ),
+    )
+    parser.add_argument(
+        "--dataset-id",
+        default=None,
+        help="Dataset id to record in metric provenance. Defaults to the selected dataset directory name.",
+    )
+    parser.add_argument(
         "--model",
         default=None,
         help="Model seed. Defaults to yolov8m.pt for full runs and ../yolov8s.pt for --smoke.",
@@ -128,6 +141,74 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--commit", default=None)
     return parser.parse_args(argv)
+
+
+def _normalize_yolo_names(names: Any) -> dict[int, str]:
+    """Return YOLO class names as an integer-keyed mapping."""
+    if isinstance(names, dict):
+        return {int(key): str(value) for key, value in names.items()}
+    if isinstance(names, list):
+        return {index: str(value) for index, value in enumerate(names)}
+    raise ValueError("Expected YOLO dataset names as a mapping or list.")
+
+
+def existing_yolo_dataset_manifest(dataset_yaml: str | Path, dataset_id: str | None = None) -> dict[str, Any]:
+    """Summarize an existing YOLO dataset without rematerializing it."""
+    dataset_yaml_path = Path(dataset_yaml).resolve()
+    payload = load_yaml(dataset_yaml_path)
+    names = _normalize_yolo_names(payload.get("names"))
+    if len(names) != 136:
+        raise ValueError("Expected an existing 136-class YOLO dataset YAML.")
+    dataset_root = Path(payload.get("path", dataset_yaml_path.parent))
+    if not dataset_root.is_absolute():
+        dataset_root = (dataset_yaml_path.parent / dataset_root).resolve()
+    else:
+        dataset_root = dataset_root.resolve()
+
+    split_summaries: dict[str, dict[str, Any]] = {}
+    for split in ("train", "val", "test"):
+        image_rel = str(payload.get(split, f"images/{split}"))
+        image_dir = dataset_root / image_rel
+        label_dir = dataset_root / "labels" / split
+        image_count = len(
+            [
+                path
+                for path in image_dir.glob("*")
+                if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".tif", ".tiff"}
+            ]
+        )
+        label_count = 0
+        class_counts = {name: 0 for _, name in sorted(names.items())}
+        if label_dir.exists():
+            for label_path in label_dir.glob("*.txt"):
+                label_count += 1
+                for line in label_path.read_text(encoding="utf-8").splitlines():
+                    parts = line.split()
+                    if not parts:
+                        continue
+                    class_id = int(float(parts[0]))
+                    class_name = names[class_id]
+                    class_counts[class_name] += 1
+        split_summaries[split] = {
+            "target_images": image_rel,
+            "target_labels": f"labels/{split}",
+            "image_count": image_count,
+            "materialized_image_count": image_count,
+            "materialized_label_count": label_count,
+            "class_counts": class_counts,
+        }
+
+    return {
+        "dataset_id": dataset_id or dataset_root.name,
+        "source_manifest_dir": None,
+        "output_dir": dataset_root.as_posix(),
+        "dataset_yaml": dataset_yaml_path.as_posix(),
+        "generated_at": utc_timestamp(),
+        "materialization_mode": "existing_dataset_yaml",
+        "operation_counts": {},
+        "splits": split_summaries,
+        "class_count": 136,
+    }
 
 
 def _config_training_value(config: dict, name: str, fallback: int) -> int:
@@ -233,10 +314,18 @@ def main() -> None:
     run_root.mkdir(parents=True, exist_ok=True)
     configure_ultralytics_dirs(run_root)
 
-    materialized_manifest = materialize_yolo_dataset(
-        manifest_dir=args.manifest_dir,
-        output_dir=args.materialized_dir,
-    )
+    if args.dataset_yaml:
+        materialized_manifest = existing_yolo_dataset_manifest(
+            args.dataset_yaml,
+            dataset_id=args.dataset_id,
+        )
+    else:
+        materialized_manifest = materialize_yolo_dataset(
+            manifest_dir=args.manifest_dir,
+            output_dir=args.materialized_dir,
+        )
+        if args.dataset_id:
+            materialized_manifest["dataset_id"] = args.dataset_id
     if args.materialize_only:
         print(json.dumps({"materialized": materialized_manifest}, indent=2, sort_keys=True))
         return
@@ -264,6 +353,7 @@ def main() -> None:
     batch = args.batch if args.batch is not None else (2 if args.smoke else _config_training_value(config, "batch_size", 4))
     patience = args.patience if args.patience is not None else _config_training_value(config, "patience", 30)
     dataset_yaml = Path(materialized_manifest["dataset_yaml"])
+    dataset_id = str(materialized_manifest.get("dataset_id", args.dataset_id or "deepscores_136_yolo_materialized"))
     train_project = run_root / "ultralytics"
     train_args = {}
     if args.finalize_existing_run:
@@ -369,7 +459,7 @@ def main() -> None:
         run_id=run_id,
         commit=args.commit or git_commit(),
         config_path=config_path.as_posix(),
-        dataset_id="deepscores_136_yolo_materialized",
+        dataset_id=dataset_id,
         split=args.split,
         taxonomy_id="deepscores_136",
         metric_version=metrics["metric_version"],
@@ -398,7 +488,7 @@ def main() -> None:
     )
     manifest = {
         "run_id": run_id,
-        "dataset_id": "deepscores_136_yolo_materialized",
+        "dataset_id": dataset_id,
         "taxonomy_id": "deepscores_136",
         "generated_at": utc_timestamp(),
         "config_path": config_path.as_posix(),
@@ -416,6 +506,8 @@ def main() -> None:
             "nms_iou": args.nms_iou,
             "split": args.split,
             "val_augment": bool(args.val_augment),
+            "dataset_yaml": Path(args.dataset_yaml).resolve().as_posix() if args.dataset_yaml else None,
+            "dataset_id": dataset_id,
             "smoke": bool(args.smoke),
             "smoke_overrides": smoke_overrides,
             "resume_training": bool(args.resume_training),
@@ -448,9 +540,23 @@ def main() -> None:
         "model_artifacts": model_artifacts,
     }
     write_json(run_root / "manifest.json", manifest)
+    if args.dataset_yaml:
+        analysis_split_manifest = run_root / f"{args.split}_dataset_class_counts.json"
+        write_json(
+            analysis_split_manifest,
+            {
+                "class_counts": materialized_manifest["splits"][args.split]["class_counts"],
+                "dataset_id": dataset_id,
+                "split": args.split,
+            },
+        )
+    else:
+        analysis_split_manifest = (
+            PROJECT_ROOT / "runs" / "data" / "deepscores_136_manifest" / f"{args.split}.json"
+        )
     analysis = write_detector_run_analysis(
         run_dir=run_root,
-        split_manifest=PROJECT_ROOT / "runs" / "data" / "deepscores_136_manifest" / f"{args.split}.json",
+        split_manifest=analysis_split_manifest,
     )
 
     artifacts = {

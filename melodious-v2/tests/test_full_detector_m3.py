@@ -8,7 +8,7 @@ from melodious_v2.evaluation.full_detector import (
     summarize_ultralytics_results_csv,
     write_detector_run_analysis,
 )
-from scripts.run_detection_136class_yolo import parse_args
+from scripts.run_detection_136class_yolo import existing_yolo_dataset_manifest, parse_args
 
 
 class FullDetectorM3Tests(unittest.TestCase):
@@ -115,6 +115,68 @@ class FullDetectorM3Tests(unittest.TestCase):
         self.assertAlmostEqual(args.nms_iou, 0.8)
         self.assertTrue(args.resume_training)
         self.assertEqual(args.resume_checkpoint, "last.pt")
+
+    def test_parse_args_accepts_existing_dataset_yaml(self):
+        args = parse_args(
+            [
+                "--dataset-yaml",
+                "runs/data/tiled/dataset.yaml",
+                "--dataset-id",
+                "tiled_stem",
+            ]
+        )
+
+        self.assertEqual(args.dataset_yaml, "runs/data/tiled/dataset.yaml")
+        self.assertEqual(args.dataset_id, "tiled_stem")
+
+    def test_existing_yolo_dataset_manifest_counts_labels(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dataset = root / "dataset"
+            names = "\n".join(f"  {index}: class{index}" for index in range(136))
+            (dataset / "dataset.yaml").parent.mkdir(parents=True)
+            (dataset / "dataset.yaml").write_text(
+                f"path: {dataset.as_posix()}\ntrain: images/train\nval: images/val\ntest: images/test\nnc: 136\nnames:\n"
+                + names
+                + "\n",
+                encoding="utf-8",
+            )
+            for split in ("train", "val", "test"):
+                (dataset / "images" / split).mkdir(parents=True)
+                (dataset / "labels" / split).mkdir(parents=True)
+                (dataset / "images" / split / "tile.png").write_bytes(b"image")
+                (dataset / "labels" / split / "tile.txt").write_text(
+                    "41 0.5 0.5 0.02 0.7\n0 0.2 0.2 0.1 0.1\n",
+                    encoding="utf-8",
+                )
+
+            manifest = existing_yolo_dataset_manifest(dataset / "dataset.yaml", dataset_id="unit_tiled")
+
+            self.assertEqual(manifest["dataset_id"], "unit_tiled")
+            self.assertEqual(manifest["splits"]["train"]["image_count"], 1)
+            self.assertEqual(manifest["splits"]["train"]["materialized_label_count"], 1)
+            self.assertEqual(manifest["splits"]["train"]["class_counts"]["class41"], 1)
+
+    def test_existing_yolo_dataset_manifest_accepts_list_names(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dataset = root / "dataset"
+            names = "\n".join(f"  - class{index}" for index in range(136))
+            (dataset / "dataset.yaml").parent.mkdir(parents=True)
+            (dataset / "dataset.yaml").write_text(
+                f"path: {dataset.as_posix()}\ntrain: images/train\nval: images/val\ntest: images/test\nnc: 136\nnames:\n"
+                + names
+                + "\n",
+                encoding="utf-8",
+            )
+            for split in ("train", "val", "test"):
+                (dataset / "images" / split).mkdir(parents=True)
+                (dataset / "labels" / split).mkdir(parents=True)
+
+            manifest = existing_yolo_dataset_manifest(dataset / "dataset.yaml")
+
+            self.assertEqual(manifest["class_count"], 136)
+            self.assertIn("class41", manifest["splits"]["train"]["class_counts"])
 
     def test_write_detector_run_analysis_uses_metrics_and_split_support(self):
         with tempfile.TemporaryDirectory() as tmp:

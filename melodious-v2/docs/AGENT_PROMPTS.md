@@ -47,6 +47,8 @@ Before coding, read:
 - README.md
 - configs/detection_136class_eval_resolution_sweep.yaml
 - scripts/run_detection_136class_yolo.py
+- scripts/materialize_tiled_yolo_dataset.py
+- src/melodious_v2/datasets/yolo_tiling.py
 - runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json if it exists locally
@@ -79,6 +81,11 @@ Current handoff:
 - Active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was launched from the completed fine-tune `best.pt` on 2026-06-02 at local time `23:11:35`.
 - Active follow-up artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, including `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, and `finetune_v2_retry_launch_metadata.json`.
 - Active follow-up startup evidence: CUDA training reached epoch `1/50`.
+- Stem failure diagnosis: the local labels have abundant `stem` support, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages.
+- Tiled dataset tooling now exists at `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
+- Tiled smoke dataset exists under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`; it generated 222 train tiles, 229 validation tiles, 264 test tiles, retained 4361 stem labels, and raised projected median stem width to `2.666645333333387` pixels at tiled `target_imgsz=1024`.
+- The detector runner now supports `--dataset-yaml` and `--dataset-id`, so an existing tiled YOLO dataset can be evaluated or trained without being rematerialized as the original full-page dataset.
+- No tiled detector metric exists yet. Do not claim tiled improvement until a completed tiled run writes `runs/**/metrics.json`.
 - Test-set detector performance is still intentionally unreported.
 
 Do all of the following:
@@ -93,7 +100,16 @@ Do all of the following:
    - If `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` is still running, monitor it instead of launching a duplicate run.
    - If it is not running and no completed `metrics.json` exists, resume from `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/last.pt` according to `docs/HANDOFF.md`.
    - If it completes, compare headline metrics and especially `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
-   - If `stem` remains near zero, do not keep blindly training whole pages; plan a tiled/cropped thin-symbol dataset or a clearly labeled CV stem-line attachment fallback.
+   - If `stem` remains near zero, do not keep blindly training whole pages. Generate the full tiled dataset and train from it through the existing-dataset runner path.
+   - Full tiled dataset command:
+     `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\materialize_tiled_yolo_dataset.py --output-dir runs\data\deepscores_136_yolo_tiled_stem_v1 --tile-size 384 --stride 256 --target-imgsz 1024`
+   - Tiled dataset materialize-only check:
+     `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --materialize-only`
+   - Preferred tiled training command after the active v2 run completes:
+     `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_tiled_stem_img1024_v1 --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --model runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\ultralytics\train\weights\best.pt --epochs 40 --imgsz 1024 --batch 4 --workers 0 --device 0 --patience 10 --max-det 2000`
+   - Fallback tiled training command if v2 has no usable completed checkpoint:
+     `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_tiled_stem_img1024_v1 --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --model runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\ultralytics\train\weights\best.pt --epochs 40 --imgsz 1024 --batch 4 --workers 0 --device 0 --patience 10 --max-det 2000`
+   - If tiled detect-mode training still cannot localize stems, evaluate an OBB/segmentation side branch or add a clearly labeled demo-only CV stem-line attachment fallback with explicit provenance.
    - If not launching/resuming training, document the exact blocker and next command.
    - Keep generated training outputs under ignored `runs/` and `artifacts/`.
 

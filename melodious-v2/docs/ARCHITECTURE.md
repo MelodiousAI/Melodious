@@ -92,6 +92,11 @@ Fallbacks are allowed for demo resilience but must be explicit:
   The completed fine-tune still reports validation `stem` mAP `0.0`, so rhythm
   reconstruction needs targeted stem detection/attachment work rather than
   generic notehead extraction alone.
+- Detector-side stem fix: the current path is a tiled thin-symbol dataset, not
+  a graph-model change. The graph can attach detected stems to noteheads, but it
+  cannot recover stems that the detector never emits. The tiled materializer
+  makes stem boxes larger in model pixels and the runner can consume that
+  dataset through `--dataset-yaml` without rematerializing full pages.
 
 ## Deployment Architecture
 
