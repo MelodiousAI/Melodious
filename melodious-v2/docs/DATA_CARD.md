@@ -111,14 +111,17 @@
   - validation secondary AP metric: `mAP@0.5` 0.8226206920791271,
   - validation threshold metrics: precision 0.8457099520968777, recall 0.7738772781467206, and `F1@0.5` 0.8082006373091581,
   - limitation: `stem` remains 0.0 mAP and `ledgerLine` remains 0.0035627224962602928 mAP, so the dataset/training path still needs thin-symbol work.
-- M7 active follow-up fine-tune:
+- M7 paused follow-up fine-tune:
   - run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`,
   - source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`,
   - image size: 1536,
   - max detections per image: 2000,
   - launch status: retry launch started on 2026-06-02 local time `23:11:35`,
-  - active PID files: `finetune_v2_retry.pid` and `finetune_v2_retry_child.pid`,
-  - metric status: pending until `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` exists.
+  - saved/stop status: manually saved after clean completed epoch 22 on 2026-06-03 and then stopped,
+  - manual checkpoint: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`,
+  - active PID files at launch: `finetune_v2_retry.pid` and `finetune_v2_retry_child.pid`; both PIDs were confirmed stopped,
+  - load verification: saved `last.pt` loaded with 136 classes,
+  - metric status: pending until the run is resumed and `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` exists.
 - M7 stem-focused tiled dataset pipeline:
   - materializer: `scripts/materialize_tiled_yolo_dataset.py`,
   - reusable code: `src/melodious_v2/datasets/yolo_tiling.py`,

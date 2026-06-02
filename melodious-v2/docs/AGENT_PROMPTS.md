@@ -78,9 +78,13 @@ Current handoff:
 - Completed fine-tune run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` has final AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 - Completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
 - `stem` remains `0.0` mAP after the completed fine-tune, and `ledgerLine` remains very weak at `0.0035627224962602928`; this is the main rhythm-quality blocker.
-- Active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was launched from the completed fine-tune `best.pt` on 2026-06-02 at local time `23:11:35`.
-- Active follow-up artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, including `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, and `finetune_v2_retry_launch_metadata.json`.
-- Active follow-up startup evidence: CUDA training reached epoch `1/50`.
+- Follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was launched from the completed fine-tune `best.pt` on 2026-06-02 at local time `23:11:35`.
+- Follow-up artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, including `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, and `finetune_v2_retry_launch_metadata.json`.
+- Follow-up startup evidence: CUDA training reached epoch `1/50`.
+- Follow-up saved/stop status: the run was manually saved after clean completed epoch `22` on 2026-06-03 and then stopped. Parent PID `34896` and child PID `28432` were confirmed stopped.
+- Manual checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`.
+- Saved checkpoint load verification: `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, last class `ottavaBracket`.
+- Latest saved interim CSV row: epoch `22`, `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`. These are not final V2 metric provenance.
 - Stem failure diagnosis: the local labels have abundant `stem` support, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages.
 - Tiled dataset tooling now exists at `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
 - Tiled smoke dataset exists under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`; it generated 222 train tiles, 229 validation tiles, 264 test tiles, retained 4361 stem labels, and raised projected median stem width to `2.666645333333387` pixels at tiled `target_imgsz=1024`.
@@ -98,7 +102,9 @@ Do all of the following:
 
 2. Decide the next honest improvement path.
    - If `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` is still running, monitor it instead of launching a duplicate run.
-   - If it is not running and no completed `metrics.json` exists, resume from `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/last.pt` according to `docs/HANDOFF.md`.
+   - If it is not running and no completed `metrics.json` exists, resume from `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/last.pt` according to `docs/HANDOFF.md`.
+   - Resume command:
+     `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 --resume-training --resume-checkpoint artifacts\manual_checkpoints\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\epoch22_stop_2026-06-03_021238\last.pt --device 0 --workers 0`
    - If it completes, compare headline metrics and especially `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
    - If `stem` remains near zero, do not keep blindly training whole pages. Generate the full tiled dataset and train from it through the existing-dataset runner path.
    - Full tiled dataset command:
