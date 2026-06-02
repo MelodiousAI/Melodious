@@ -4,7 +4,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M7 improved the best validation detector configuration by correcting dense-page inference settings for the selected checkpoint. The best current primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the best current secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M7 improved the best validation detector configuration by correcting dense-page inference settings for the selected checkpoint. The best current primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the best current secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
 
 Current state:
 
@@ -72,6 +72,13 @@ Current state:
 - M7 resume support commit: `6636622`.
 - M7 fine-tune resume launch: 2026-06-02 local time `01:05:09`, parent PID `35952`, active child PID `43740`.
 - M7 fine-tune resume logs: `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, `resume_epoch7.pid`, `resume_epoch7_child.pid`, and `resume_epoch7_launch_metadata.json` under the run directory.
+- M7 fine-tune latest checked after note extraction work: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `28`, training-validation `metrics/mAP50(B) = 0.81045`, training-validation `metrics/mAP50-95(B) = 0.6272`, and no final fine-tune `metrics.json` exists yet.
+- Local note extraction demo module: `src/melodious_v2/omr/note_extraction.py`.
+- Local note extraction demo CLI: `scripts/extract_notes_from_image.py`.
+- Local note extraction demo docs: `docs/NOTE_EXTRACTION_DEMO.md`.
+- Local note extraction demo test: `tests/test_note_extraction_demo.py`.
+- Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v1/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, a 1,809-byte MIDI file, and an overlay image. This is an ignored demo artifact, not an official metric run.
+- Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry and rhythm defaults to heuristic eighth-note timing for black noteheads. It is useful for testing extracted notes, not for claiming complete score transcription quality.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -123,6 +130,74 @@ Next exact implementation target:
 3. If training is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, and the PID/log metadata before stopping.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+6. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. For the next product-facing step, wire this path into the API behind an explicit mode such as `yolo_note_demo`, preserving warnings that rhythm and pitch are heuristic.
+
+## 2026-06-02 - Agent Handoff - Local Note Extraction Demo Added
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local demo rescue path
+
+Files changed:
+
+- `src/melodious_v2/omr/__init__.py`
+- `src/melodious_v2/omr/note_extraction.py`
+- `scripts/extract_notes_from_image.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/ARCHITECTURE.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `runs/demo/sad_romance_note_extraction_v1/best_snapshot.pt`
+- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.json`
+- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.mid`
+- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.musicxml`
+- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes_overlay.png`
+- `runs/demo/sad_romance_note_extraction_v1_stdout.json`
+
+What happened:
+
+- The earlier API upload-to-MIDI test produced a bad toy output because the FastAPI upload route still uses `heuristic_bootstrap` and `minimal_midi_base64()`.
+- A separate local note extraction demo path was added so the user can test actual note extraction from a clean sheet image without waiting for the full API rewrite.
+- The new CLI snapshots the YOLO checkpoint before CPU inference, detects notehead boxes, detects staff geometry, maps noteheads to treble-clef pitch, and writes note JSON, overlay PNG, compact MusicXML, and real MIDI note events.
+- The current API upload route remains unchanged and must still be labeled `heuristic_bootstrap`.
+
+Sad Romance verification:
+
+- Command:
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v1 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 0.5 --title "Sad Romance"`
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Extracted note events: `197`.
+- MIDI path: `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.mid`.
+- MIDI size: `1809` bytes.
+- MIDI header: `MThd`.
+- Overlay path: `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes_overlay.png`.
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v1 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 0.5 --title "Sad Romance"` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py scripts\extract_notes_from_image.py tests\test_note_extraction_demo.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_note_extraction_demo.py` - passed, 3 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed after the final status/handoff wording update, checked 14 documentation files.
+- `Get-Process -Id 35952,43740 -ErrorAction SilentlyContinue` - passed; the fine-tune parent and child processes were still alive after CPU note extraction.
+- Latest fine-tune `results.csv` check after CPU note extraction - passed; latest completed row epoch `28`, `metrics/mAP50(B) = 0.81045`, `metrics/mAP50-95(B) = 0.6272`. Treat these as training-run validation CSV values, not final V2 metric provenance.
+
+Limitations:
+
+- This is not the API upload path yet.
+- This is not an evaluation metric and must not be reported as detector `mAP`.
+- The current pitch mapping assumes treble clef.
+- The current rhythm model is simple and defaults black noteheads to eighth notes.
+- Accidentals, key signature, ties, slurs, beams, measures, and full graph assembly are not reconstructed in this demo path.
+
+Next exact step:
+
+- Keep monitoring the fine-tune. If the user wants product-demo upload behavior, wire `scripts/extract_notes_from_image.py` / `melodious_v2.omr.note_extraction` into the FastAPI upload route behind an explicit non-default mode, return `detector_mode = "yolo_note_demo"` or similar, and keep response warnings clear that rhythm/pitch reconstruction is heuristic.
 
 ## 2026-06-02 - Agent Handoff - M7 Fine-Tune Interrupted And Resumed
 
