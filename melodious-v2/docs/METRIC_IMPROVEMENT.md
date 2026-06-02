@@ -241,16 +241,20 @@ Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run w
 - Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
 - Source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
 - Launch local time: 2026-06-02 `23:11:35`.
-- Active parent PID: `34896`, saved in `finetune_v2_retry.pid`.
-- Active Python child PID: `28432`, saved in `finetune_v2_retry_child.pid`.
+- Stopped parent PID: `34896`, saved in `finetune_v2_retry.pid`.
+- Stopped Python child PID: `28432`, saved in `finetune_v2_retry_child.pid`.
 - Stdout log: `finetune_v2_retry_stdout.log`.
 - Stderr log: `finetune_v2_retry_stderr.log`.
 - Launch metadata: `finetune_v2_retry_launch_metadata.json`.
 - Launch settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
 - Startup evidence: Ultralytics loaded the completed fine-tune checkpoint, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and reached epoch `1/50`.
 - First launch attempt files `finetune_v2_stdout.log` and `finetune_v2_stderr.log` show a pre-training failure caused by incorrect PowerShell expansion of `$env:PYTHONPATH`; ignore that failed attempt and use the `retry` PID/log files.
-- Latest live check on 2026-06-03: parent PID `34896` and child PID `28432` are still running, no final `metrics.json` exists yet, and `results.csv` contains 17 completed rows.
-- Latest completed row at that check: epoch `17`, `metrics/precision(B) = 0.87334`, `metrics/recall(B) = 0.77575`, `metrics/mAP50(B) = 0.8338`, and `metrics/mAP50-95(B) = 0.64865`. These are training-run CSV values, not final V2 metric provenance.
+- Saved/stop status on 2026-06-03: the run was manually checkpointed after clean completed epoch `22`, then parent PID `34896` and child PID `28432` were stopped and confirmed not running.
+- Manual checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`.
+- Saved files: `last.pt`, `best.pt`, `results.csv`, `args.yaml`, retry stdout/stderr logs, retry PID files, retry launch metadata, retry launch command, `metadata.json`, and `README.md`.
+- Checkpoint load verification: saved `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, and last class `ottavaBracket`.
+- Saved checkpoint SHA256 values: `last.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51` and `best.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
+- Latest completed row before stop: epoch `22`, `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`. These are training-run CSV values, not final V2 metric provenance.
 
 Monitor command:
 
@@ -263,7 +267,20 @@ Get-Content -Tail 80 "$run\finetune_v2_retry_stdout.log"
 if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
 ```
 
-If interrupted, preserve `ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, `args.yaml`, the retry stdout/stderr logs, the retry PID files, and retry launch metadata before stopping. Resume with `--resume-training --resume-checkpoint runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\ultralytics\train\weights\last.pt`.
+Resume command from the manual epoch-22 checkpoint:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 `
+  --resume-training `
+  --resume-checkpoint artifacts\manual_checkpoints\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\epoch22_stop_2026-06-03_021238\last.pt `
+  --device 0 `
+  --workers 0
+```
+
+After resume completes, run the project finalization path through the same runner and compare the final generated `metrics.json` against the completed 1472 fine-tune.
 
 ## Stem/Rhythm Training Plan
 

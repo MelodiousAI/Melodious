@@ -7,7 +7,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`.
 
 M7 improved detector AP metrics by correcting dense-page inference settings and then completing `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation.
-The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, is actively training in the background from the completed fine-tune `best.pt`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
+The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was manually saved and stopped at clean completed epoch 22. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
 
 Current state:
 
@@ -78,15 +78,19 @@ Current state:
 - M7 completed fine-tune AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 - M7 completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
 - M7 completed fine-tune caveat: `stem = 0.0` mAP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction still needs targeted thin-symbol work.
-- M7 active follow-up fine-tune: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
+- M7 paused follow-up fine-tune: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
 - M7 active follow-up source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
 - M7 active follow-up launch: 2026-06-02 local time `23:11:35`, parent PID `34896`, Python child PID `28432`.
 - M7 active follow-up files: `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, `finetune_v2_retry_launch_command.txt`, and `finetune_v2_retry_launch_metadata.json`.
 - M7 active follow-up settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
 - M7 active follow-up startup evidence: CUDA training reached epoch `1/50` on the RTX 3080 Laptop GPU.
 - Ignore `finetune_v2_stdout.log` / `finetune_v2_stderr.log`; the first v2 launch failed before training because `$env:PYTHONPATH` was expanded incorrectly. The active run uses the `retry` files.
-- M7 latest active follow-up check on 2026-06-03: parent PID `34896` and child PID `28432` are still running, final `metrics.json` does not exist, `results.csv` has 17 completed rows, and the latest completed row is epoch `17`.
-- M7 latest active follow-up interim CSV values at epoch 17: `metrics/precision(B) = 0.87334`, `metrics/recall(B) = 0.77575`, `metrics/mAP50(B) = 0.8338`, and `metrics/mAP50-95(B) = 0.64865`. These are not final V2 metric provenance.
+- M7 saved/stop status for follow-up: saved after clean completed epoch `22` on 2026-06-03, then parent PID `34896` and child PID `28432` were stopped and confirmed not running.
+- M7 manual recovery checkpoint: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`.
+- M7 manual recovery checkpoint files: `last.pt`, `best.pt`, `results.csv`, `args.yaml`, retry stdout/stderr logs, retry PID files, retry launch metadata, retry launch command, `metadata.json`, and `README.md`.
+- M7 manual recovery checkpoint load verification: saved `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, last class `ottavaBracket`.
+- M7 manual recovery checkpoint SHA256 values: `last.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`; `best.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
+- M7 latest follow-up interim CSV values at epoch 22: `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`. These are not final V2 metric provenance.
 - M7 stem diagnosis: local labels have abundant `stem` support, but whole-page training makes the median stem about `0.78` model pixels wide at `imgsz=1536`, and a sampled low-threshold validation probe returned zero stem predictions.
 - M7 tiled stem dataset tooling: `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
 - M7 tiled stem smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`, with 222 train tiles, 229 validation tiles, 264 test tiles, 4361 retained stem labels, and projected median stem width `2.666645333333387` pixels at `target_imgsz=1024`.
@@ -147,13 +151,103 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. Monitor the active `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` process using the exact monitor command in `docs/METRIC_IMPROVEMENT.md`.
-3. If training is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, retry PID files, and retry launch metadata before stopping or resuming.
-4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
-5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
-6. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. YOLO-backed runs now disable CV augmentation-dot fallback by default; add `--use-cv-dot-fallback` only for deliberate experiments.
-7. For the next rhythm-quality step, target stem detection specifically: compare `stem` after v2 completes; if it remains near zero, generate the full tiled dataset and train from it through `--dataset-yaml` instead of blindly training more whole-page epochs.
-8. If tiled detect-mode training still cannot localize stems, evaluate an OBB/segmentation side branch or add a clearly labeled demo-only CV stem-line attachment fallback with explicit provenance.
+2. Resume the paused `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` run from `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/last.pt` when training should continue.
+3. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
+4. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
+5. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. YOLO-backed runs now disable CV augmentation-dot fallback by default; add `--use-cv-dot-fallback` only for deliberate experiments.
+6. For the next rhythm-quality step, target stem detection specifically: compare `stem` after v2 completes; if it remains near zero, generate the full tiled dataset and train from it through `--dataset-yaml` instead of blindly training more whole-page epochs.
+7. If tiled detect-mode training still cannot localize stems, evaluate an OBB/segmentation side branch or add a clearly labeled demo-only CV stem-line attachment fallback with explicit provenance.
+
+Resume command for the paused v2 fine-tune:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 `
+  --resume-training `
+  --resume-checkpoint artifacts\manual_checkpoints\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\epoch22_stop_2026-06-03_021238\last.pt `
+  --device 0 `
+  --workers 0
+```
+
+## 2026-06-03 - Agent Handoff - V2 Fine-Tune Saved And Stopped At Epoch 22
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / checkpoint management
+
+Files changed:
+
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/STATUS.md`
+- `docs/HANDOFF.md`
+- `docs/AGENT_PROMPTS.md`
+- `docs/DATA_CARD.md`
+- `MODEL_CARD.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`
+
+What happened:
+
+- The user asked to save the active v2 fine-tune and stop it for now.
+- Before stopping, the latest clean completed row in `results.csv` was epoch `22`.
+- The run had no final `metrics.json`; the saved values are interim training CSV values only.
+- Copied `last.pt`, `best.pt`, `results.csv`, `args.yaml`, retry logs, retry PID files, retry launch metadata, and retry launch command into a manual checkpoint folder.
+- Wrote `metadata.json` and `README.md` into the manual checkpoint folder.
+- Rewrote `metadata.json` without UTF-8 BOM and validated it with `python -m json.tool`.
+- Stopped child PID `28432` and parent PID `34896`.
+- Confirmed both PIDs were no longer running.
+- Loaded saved `last.pt` with Ultralytics; it reported `task = detect`, `class_count = 136`, first class `brace`, and last class `ottavaBracket`.
+
+Saved checkpoint:
+
+- Folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`.
+- Latest completed epoch: `22`.
+- Completed rows: `22`.
+- `last.pt` SHA256: `8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
+- `best.pt` SHA256: `8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
+- Latest interim CSV row: `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`.
+
+Commands run:
+
+- Check latest row and checkpoint files - passed; latest clean completed epoch was 22.
+- Copy checkpoint, logs, and metadata to `artifacts/manual_checkpoints/.../epoch22_stop_2026-06-03_021238/` - passed.
+- Stop child PID `28432` and parent PID `34896` - passed.
+- Confirm both PIDs stopped - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -c "from ultralytics import YOLO; ..."` - passed; saved `last.pt` is loadable and has 136 classes.
+- `..\.venv\Scripts\python.exe -m json.tool artifacts\manual_checkpoints\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\epoch22_stop_2026-06-03_021238\metadata.json` - passed after removing UTF-8 BOM.
+
+What is complete:
+
+- The active v2 fine-tune is stopped.
+- The latest clean epoch-22 checkpoint is copied to a manual recovery folder.
+- The saved checkpoint is loadable.
+- The exact resume command is documented.
+
+What is not complete:
+
+- `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` has not completed all configured epochs.
+- It has no final project `metrics.json` yet.
+- Do not claim final v2 metrics from the interim `results.csv`.
+
+Next exact step:
+
+Resume when requested:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 `
+  --resume-training `
+  --resume-checkpoint artifacts\manual_checkpoints\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\epoch22_stop_2026-06-03_021238\last.pt `
+  --device 0 `
+  --workers 0
+```
 
 ## 2026-06-03 - Agent Handoff - Tiled Stem Dataset Path Added
 
