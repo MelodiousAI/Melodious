@@ -45,6 +45,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-det", type=int, default=2000, help="YOLO max detections.")
     parser.add_argument("--device", default="cpu", help="YOLO device. Use cpu while training owns the GPU.")
     parser.add_argument(
+        "--use-cv-dot-fallback",
+        action="store_true",
+        help=(
+            "Also infer augmentation dots from tiny CV contours. YOLO-backed extraction leaves this off by "
+            "default to avoid false dotted notes."
+        ),
+    )
+    parser.add_argument(
         "--default-quarter-length",
         type=float,
         default=1.0,
@@ -70,6 +78,7 @@ def main() -> int:
         device=args.device,
         default_quarter_length=args.default_quarter_length,
         use_cv_fallback=True,
+        use_cv_dot_fallback=True if args.use_cv_dot_fallback else None,
         title=args.title,
     )
     print(json.dumps(result_to_dict(result), indent=2))

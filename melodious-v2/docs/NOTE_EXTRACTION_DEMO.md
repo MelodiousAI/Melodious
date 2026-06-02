@@ -27,7 +27,7 @@ It does the following:
    - black noteheads default to quarter notes;
    - nearby stems confirm unbeamed black noteheads as quarter notes;
    - nearby beams or flags shorten black noteheads to eighth/smaller values;
-   - nearby augmentation dots multiply the duration by 1.5;
+   - nearby detector-confirmed augmentation dots multiply the duration by 1.5;
    - half/whole notehead classes set longer base durations.
 7. Writes:
    - `*_notes.json` with note order, staff index, bounding box, pitch, MIDI
@@ -45,6 +45,11 @@ It does the following:
   stem, beam, or flag, the extractor marks it as
   `black_notehead_quarter_rule_no_stem` instead of pretending the detector found
   a complete duration label.
+- YOLO-backed extraction now leaves the old CV augmentation-dot fallback off by
+  default. This prevents tiny specks, staff artifacts, or non-dot marks from
+  being silently converted into dotted rhythms. Detector-confirmed
+  `augmentationDot` boxes still count. Use `--use-cv-dot-fallback` only for
+  deliberate experiments where false dotted notes are acceptable.
 - Pitch assumes treble clef. Basic detected key signatures and explicit
   accidentals are applied when YOLO returns `keyFlat`, `keySharp`,
   `keyNatural`, or `accidental*` boxes.
@@ -73,7 +78,8 @@ $env:PYTHONPATH='src'
 ```
 
 Use `--device cpu` while fine-tuning is running so the GPU remains dedicated to
-training.
+training. Add `--use-cv-dot-fallback` only if you explicitly want contour-based
+augmentation-dot guesses in addition to YOLO detections.
 
 ## Interpreting Output
 
@@ -137,7 +143,7 @@ Command:
 $env:PYTHONPATH='src'
 ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py `
   --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png `
-  --output-dir runs\demo\image_note_extraction_v5 `
+  --output-dir runs\demo\image_note_extraction_v6 `
   --device cpu `
   --conf 0.12 `
   --imgsz 1472 `
@@ -147,30 +153,25 @@ $env:PYTHONPATH='src'
 
 Latest verified output:
 
-- Output directory: `runs/demo/image_note_extraction_v5/`.
+- Output directory: `runs/demo/image_note_extraction_v6/`.
 - Extractor mode: `yolo_notehead_staff_pitch`.
 - Staff systems: `9`.
 - Note events: `319`.
 - Stem-confirmed notes: `0`.
-- Dotted notes: `38`.
+- Dotted notes: `7`.
 - Key signatures: each of the 9 staff systems has detected `{"B": -1}`.
 - MusicXML key fifths: `-1`.
 - B-flat notes from detected key signature: `53`.
-- Explicit sharp notes from detected inline accidentals: `2`.
-- Duration distribution: `0.25:28`, `0.375:8`, `0.5:175`,
-  `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`.
-- Rhythm sources: `beam_x1:173`, `black_notehead_quarter_rule_no_stem:68`,
-  `beam_x2:28`, `black_notehead_quarter_rule_no_stem+augmentation_dot:21`,
-  `notehead_class:10`, `beam_x2+augmentation_dot:8`,
-  `beam_x1+augmentation_dot:7`, `flag:2`,
-  `notehead_class+augmentation_dot:1`, `flag+augmentation_dot:1`.
+- Duration distribution: `0.25:36`, `0.5:192`, `1.0:74`, `1.5:6`,
+  `2.0:10`, `3.0:1`.
 - Pitch sources: `staff_geometry:264`, `key_signature:flat:53`,
   `explicit_accidental:accidentalSharp:2`.
-- MIDI path: `runs/demo/image_note_extraction_v5/image_notes.mid`.
-- MIDI size: `2879` bytes.
-- MusicXML path: `runs/demo/image_note_extraction_v5/image_notes.musicxml`.
-- Overlay path: `runs/demo/image_note_extraction_v5/image_notes_overlay.png`.
-- MusicXML parse check passed with `319` notes, `38` `<dot/>` tags,
+- Warning: `CV augmentation-dot fallback disabled; only detector-confirmed augmentationDot symbols were used.`
+- MIDI path: `runs/demo/image_note_extraction_v6/image_notes.mid`.
+- MIDI size: `2871` bytes.
+- MusicXML path: `runs/demo/image_note_extraction_v6/image_notes.musicxml`.
+- Overlay path: `runs/demo/image_note_extraction_v6/image_notes_overlay.png`.
+- MusicXML parse check passed with `319` notes, `7` `<dot/>` tags,
   one `<fifths>-1</fifths>` key signature, and `53` `<alter>-1</alter>` tags.
 
 Important history: the first run on this image only detected `4` staff systems
@@ -179,12 +180,17 @@ and should not be used as demo evidence. The corrected `v3` run detected all
 mapping. The later `v5` run adds detected key-signature application. This is not
 hard-coded to the song: the detector emits `keyFlat` boxes, the extractor maps
 their staff position to `B`, and then applies `B: -1` to matching notes.
+The `v6` run keeps the same note count and key-signature behavior but disables
+CV dot guessing, reducing dotted notes from `38` to `7`. Any remaining false
+dots must now be handled by detector calibration/training or stricter
+`augmentationDot` post-processing.
 
 ## Next Engineering Step
 
-The next step is to wire this path into the upload API behind an explicit mode,
-for example `MELODIOUS_UPLOAD_DETECTOR=yolo_note_demo`, and keep the response
-warnings honest until measures, ties, and graph assembly are more complete. For
-rhythm quality, the next targeted improvement is stem detection: either
-evaluate/lower the detector threshold for `stem` separately, add a CV stem-line
-attachment fallback, or fine-tune with stronger thin-line/stem coverage.
+The next product step is to wire this path into the upload API behind an
+explicit mode, for example `MELODIOUS_UPLOAD_DETECTOR=yolo_note_demo`, and keep
+the response warnings honest until measures, ties, and graph assembly are more
+complete. The next rhythm-quality step is stem detection and attachment:
+evaluate a separate `stem` threshold, add a CV stem-line attachment fallback for
+clean printed pages, or build a tiled/thin-symbol training set so stems occupy
+more pixels during training.
