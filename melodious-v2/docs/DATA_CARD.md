@@ -119,6 +119,18 @@
   - launch status: retry launch started on 2026-06-02 local time `23:11:35`,
   - active PID files: `finetune_v2_retry.pid` and `finetune_v2_retry_child.pid`,
   - metric status: pending until `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` exists.
+- M7 stem-focused tiled dataset pipeline:
+  - materializer: `scripts/materialize_tiled_yolo_dataset.py`,
+  - reusable code: `src/melodious_v2/datasets/yolo_tiling.py`,
+  - source dataset: `runs/data/deepscores_136_yolo_materialized/`,
+  - smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`,
+  - smoke settings: tile size 384 pixels, stride 256 pixels, target image size 1024 pixels, maximum 3 source pages per split,
+  - focus classes: `stem`, `ledgerLine`, `augmentationDot`, `beam`, and flag classes,
+  - smoke tile counts: 222 train tiles, 229 validation tiles, and 264 test tiles,
+  - smoke retained labels: `stem = 4361`, `ledgerLine = 749`, `augmentationDot = 211`, `beam = 1248`, `flag8thUp = 401`, `flag8thDown = 137`, `flag16thUp = 8`, and `flag16thDown = 10`,
+  - smoke projected `stem` width at tiled target size 1024: median `2.666645333333387` pixels,
+  - runner support: `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...` consumes an existing tiled YOLO dataset without rematerializing the full-page dataset,
+  - metric status: no tiled detector metric has been claimed yet. The full dataset target is `runs/data/deepscores_136_yolo_tiled_stem_v1/`, followed by a training run such as `detection_136class_yolov8m_tiled_stem_img1024_v1`.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.

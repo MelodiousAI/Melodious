@@ -249,6 +249,8 @@ Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run w
 - Launch settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
 - Startup evidence: Ultralytics loaded the completed fine-tune checkpoint, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and reached epoch `1/50`.
 - First launch attempt files `finetune_v2_stdout.log` and `finetune_v2_stderr.log` show a pre-training failure caused by incorrect PowerShell expansion of `$env:PYTHONPATH`; ignore that failed attempt and use the `retry` PID/log files.
+- Latest live check on 2026-06-03: parent PID `34896` and child PID `28432` are still running, no final `metrics.json` exists yet, and `results.csv` contains 17 completed rows.
+- Latest completed row at that check: epoch `17`, `metrics/precision(B) = 0.87334`, `metrics/recall(B) = 0.77575`, `metrics/mAP50(B) = 0.8338`, and `metrics/mAP50-95(B) = 0.64865`. These are training-run CSV values, not final V2 metric provenance.
 
 Monitor command:
 
@@ -279,6 +281,117 @@ Next concrete experiment after the active v2 run:
 3. Add a detector-threshold calibration for rhythm symbols separate from notehead thresholding. The note extractor can use a lower confidence for `stem`/`augmentationDot` only if validation/hard-negative checks keep false positives controlled.
 4. Add a clean-page CV stem-line attachment fallback as a demo-only bridge while training catches up. It should record `rhythm_source = cv_stem_quarter` so it is never confused with detector evidence.
 5. Consider an OBB or segmentation side branch for `stem`/`ledgerLine` if the tiled detect-mode run still cannot localize thin symbols.
+
+## Tiled Stem Dataset Pipeline
+
+M7 now has a concrete tiled/cropped dataset path for the `stem` failure instead of only a proposal. The diagnosis is:
+
+- The local labels have a large amount of `stem` supervision: 210140 train labels, 25247 validation labels, and 65010 test labels.
+- The whole-page boxes are too thin at the current training scale. The median normalized `stem` width is approximately `0.0005102`, which is about `0.78` model pixels at whole-page `imgsz=1536`.
+- A direct probe of the completed fine-tune checkpoint on three validation pages at `conf=0.01` returned zero `stem` predictions. This means simple threshold lowering is unlikely to recover stem detections.
+- The existing detector runner originally rematerialized the full-page dataset whenever it ran. That would have overwritten or ignored a tiled dataset. The runner now supports `--dataset-yaml` so an already materialized tiled dataset can be used directly and recorded with a distinct dataset id.
+
+Code added for this path:
+
+- `src/melodious_v2/datasets/yolo_tiling.py` implements YOLO label parsing, tile-window generation, box clipping, coordinate remapping, and tiled dataset materialization.
+- `scripts/materialize_tiled_yolo_dataset.py` creates a stem-focused tiled YOLO dataset from `runs/data/deepscores_136_yolo_materialized/`.
+- `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...` evaluates or trains from an existing YOLO dataset YAML without rematerializing the original full-page dataset.
+- Tests cover tile edge coverage, clipped-box visibility, focus-tile retention, `--dataset-yaml` parsing, and runner manifest counting for existing datasets.
+
+Smoke materialization command already run:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\materialize_tiled_yolo_dataset.py `
+  --output-dir runs\data\deepscores_136_yolo_tiled_stem_smoke_v1 `
+  --tile-size 384 `
+  --stride 256 `
+  --target-imgsz 1024 `
+  --max-images-per-split 3
+```
+
+Smoke output:
+
+- Output directory: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`.
+- Train tiles: 222.
+- Validation tiles: 229.
+- Test tiles: 264.
+- Overall smoke `stem` labels retained: 4361.
+- Overall smoke `ledgerLine` labels retained: 749.
+- Overall smoke `augmentationDot` labels retained: 211.
+- Overall smoke `beam` labels retained: 1248.
+- Overall smoke flag labels retained: `flag8thUp = 401`, `flag8thDown = 137`, `flag16thUp = 8`, and `flag16thDown = 10`.
+- Projected `stem` width at tiled `target_imgsz=1024`: median `2.666645333333387` pixels, min `2.666630400000031`, max `5.333342933333673`.
+
+Interpretation:
+
+- The smoke run proves the tiling pipeline works and changes `stem` from subpixel whole-page geometry to a visible small object.
+- It does not yet prove metric improvement. The next metric claim must come from a completed tiled detector run with `runs/**/metrics.json`.
+- The full tiled dataset may be large, so the smoke was run first. Do not start full tiled training while `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` is actively using the GPU.
+
+Full tiled dataset command to run after the active v2 fine-tune either completes or is cleanly stopped:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\materialize_tiled_yolo_dataset.py `
+  --output-dir runs\data\deepscores_136_yolo_tiled_stem_v1 `
+  --tile-size 384 `
+  --stride 256 `
+  --target-imgsz 1024
+```
+
+Runner materialize-only check for the tiled dataset:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml `
+  --dataset-id deepscores_136_yolo_tiled_stem_v1 `
+  --materialize-only
+```
+
+Tiled training command to run after the full tiled dataset exists. Prefer the active v2 `best.pt` once it completes; if it does not complete, use the completed 1472 fine-tune `best.pt` shown in the fallback command.
+
+Preferred command after active v2 completes:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_tiled_stem_img1024_v1 `
+  --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml `
+  --dataset-id deepscores_136_yolo_tiled_stem_v1 `
+  --model runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\ultralytics\train\weights\best.pt `
+  --epochs 40 `
+  --imgsz 1024 `
+  --batch 4 `
+  --workers 0 `
+  --device 0 `
+  --patience 10 `
+  --max-det 2000
+```
+
+Fallback command if v2 has no usable completed checkpoint:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_tiled_stem_img1024_v1 `
+  --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml `
+  --dataset-id deepscores_136_yolo_tiled_stem_v1 `
+  --model runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\ultralytics\train\weights\best.pt `
+  --epochs 40 `
+  --imgsz 1024 `
+  --batch 4 `
+  --workers 0 `
+  --device 0 `
+  --patience 10 `
+  --max-det 2000
+```
 
 ## Presentation Guidance
 
