@@ -13,13 +13,14 @@ actual extracted note events plus a playable MIDI artifact right now?"
 It does the following:
 
 1. Detects five-line staff systems from long horizontal staff strokes.
-2. Uses a YOLO checkpoint, when available, to detect notehead, beam, flag, and
-   augmentation-dot boxes.
+2. Uses a YOLO checkpoint, when available, to detect notehead, stem, beam,
+   flag, and augmentation-dot boxes.
 3. Snapshots the checkpoint into the output directory before inference so a
    live training process can continue writing `best.pt` or `last.pt`.
 4. Maps notehead vertical position to treble-clef pitch.
 5. Infers simple rhythm:
    - black noteheads default to quarter notes;
+   - nearby stems confirm unbeamed black noteheads as quarter notes;
    - nearby beams or flags shorten black noteheads to eighth/smaller values;
    - nearby augmentation dots multiply the duration by 1.5;
    - half/whole notehead classes set longer base durations.
@@ -34,8 +35,11 @@ It does the following:
 
 - This is not the FastAPI upload route.
 - This is not an official detector metric or test-set result.
-- Rhythm is heuristic. Black noteheads default to quarter notes; beams, flags,
-  and augmentation dots adjust duration when detected near the notehead.
+- Rhythm is heuristic. Stems, beams, flags, and augmentation dots adjust
+  duration when detected near the notehead. If a black notehead has no detected
+  stem, beam, or flag, the extractor marks it as
+  `black_notehead_quarter_rule_no_stem` instead of pretending the detector found
+  a complete duration label.
 - Pitch assumes treble clef and no key signature or accidental reconstruction.
 - It does not yet reconstruct ties, slurs, voices, measures, accidentals, or
   expression markings. Beam detections are currently used only for duration,
@@ -51,7 +55,7 @@ Run from `melodious-v2`:
 $env:PYTHONPATH='src'
 ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py `
   --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png `
-  --output-dir runs\demo\sad_romance_note_extraction_v2 `
+  --output-dir runs\demo\sad_romance_note_extraction_v3 `
   --device cpu `
   --conf 0.12 `
   --imgsz 1472 `
@@ -74,7 +78,10 @@ training.
   `1.0` is quarter, `0.5` is eighth, `1.5` is dotted quarter, and
   `0.75` is dotted eighth.
 - `rhythm_source` explains why that duration was chosen, for example
-  `default_quarter`, `beam_x1`, `flag`, or `default_quarter+augmentation_dot`.
+  `stem_quarter`, `black_notehead_quarter_rule_no_stem`, `beam_x1`, `flag`, or
+  `black_notehead_quarter_rule_no_stem+augmentation_dot`.
+- `stem_detected` records whether a nearby detected `stem` box was attached to
+  the notehead.
 - The MIDI file is playable and contains real note-on/note-off events, unlike
   the older API placeholder MIDI which was only a 26-byte empty MIDI container.
 
@@ -82,18 +89,26 @@ training.
 
 Latest verified output:
 
-- Output directory: `runs/demo/sad_romance_note_extraction_v2/`.
+- Output directory: `runs/demo/sad_romance_note_extraction_v3/`.
 - Extractor mode: `yolo_notehead_staff_pitch`.
 - Staff systems: `9`.
 - Note events: `197`.
+- Stem-confirmed notes: `0`.
 - Dotted notes: `17`.
 - Duration distribution: `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`,
   `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`.
-- Rhythm sources: `default_quarter:71`, `beam_x1:68`,
-  `notehead_class:28`, `flag:13`, `default_quarter+augmentation_dot:8`,
+- Rhythm sources: `black_notehead_quarter_rule_no_stem:71`, `beam_x1:68`,
+  `notehead_class:28`, `flag:13`,
+  `black_notehead_quarter_rule_no_stem+augmentation_dot:8`,
   `beam_x1+augmentation_dot:4`, `flag+augmentation_dot:3`,
   `notehead_class+augmentation_dot:2`.
 - MusicXML parse check passed with `197` notes and `17` `<dot/>` tags.
+
+The `0` stem-confirmed note count is important. The DeepScores detector head
+has a `stem` class, but the current Sad Romance checkpoint inference did not
+return usable stem boxes at the selected threshold. Quarter notes are therefore
+inferred from black noteheads that have no nearby beam/flag, which is a notation
+rule fallback rather than direct stem evidence.
 
 ## Next Engineering Step
 

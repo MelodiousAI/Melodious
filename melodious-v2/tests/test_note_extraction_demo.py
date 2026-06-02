@@ -119,6 +119,13 @@ class NoteExtractionDemoTest(unittest.TestCase):
                 bbox_xyxy=(207.0, 30.0, 216.0, 52.0),
                 source="unit",
             ),
+            DetectionCandidate(
+                class_id=5,
+                class_name="stem",
+                confidence=0.8,
+                bbox_xyxy=(261.0, 30.0, 264.0, 69.0),
+                source="unit",
+            ),
         ]
 
         extracted = notes_from_candidates(
@@ -131,9 +138,16 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertEqual([note.quarter_length for note in extracted], [1.5, 0.5, 0.25, 1.0])
         self.assertEqual(
             [note.rhythm_source for note in extracted],
-            ["default_quarter+augmentation_dot", "beam_x1", "flag", "default_quarter"],
+            [
+                "black_notehead_quarter_rule_no_stem+augmentation_dot",
+                "beam_x1",
+                "flag",
+                "stem_quarter",
+            ],
         )
         self.assertTrue(extracted[0].dotted)
+        self.assertFalse(extracted[0].stem_detected)
+        self.assertTrue(extracted[3].stem_detected)
 
     def test_midi_writer_handles_empty_note_list(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
