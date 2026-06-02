@@ -20,6 +20,8 @@ import numpy as np
 STEP_NAMES = ["C", "D", "E", "F", "G", "A", "B"]
 STEP_TO_SEMITONE = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 TREBLE_BOTTOM_LINE_DIATONIC = 7 * 4 + STEP_NAMES.index("E")
+FLAT_KEY_ORDER = ["B", "E", "A", "D", "G", "C", "F"]
+SHARP_KEY_ORDER = ["F", "C", "G", "D", "A", "E", "B"]
 
 
 @dataclass(frozen=True)
@@ -81,6 +83,8 @@ class ExtractedNote:
     midi_pitch: int
     quarter_length: float
     onset_quarter: float
+    alter: int = 0
+    pitch_source: str = "staff_geometry"
     dotted: bool = False
     rhythm_source: str = "default"
     stem_detected: bool = False
@@ -109,6 +113,8 @@ class ExtractionResult:
     detector_checkpoint: str | None
     staff_systems: list[StaffSystem]
     notes: list[ExtractedNote]
+    key_signatures: dict[int, dict[str, int]]
+    key_fifths: int = 0
     artifacts: ExtractionArtifacts | None = None
     warnings: list[str] | None = None
 
@@ -517,6 +523,42 @@ def is_augmentation_dot(class_name: str) -> bool:
     return class_name.lower() == "augmentationdot"
 
 
+def is_key_signature_symbol(class_name: str) -> bool:
+    return class_name.lower() in {"keyflat", "keysharp", "keynatural"}
+
+
+def is_explicit_accidental(class_name: str) -> bool:
+    lowered = class_name.lower()
+    return lowered.startswith("accidental") and not lowered.endswith("small")
+
+
+def is_pitch_modifier(class_name: str) -> bool:
+    return is_key_signature_symbol(class_name) or is_explicit_accidental(class_name)
+
+
+def alter_for_pitch_modifier(class_name: str) -> int | None:
+    lowered = class_name.lower()
+    if "doubleflat" in lowered:
+        return -2
+    if "doublesharp" in lowered:
+        return 2
+    if "flat" in lowered:
+        return -1
+    if "sharp" in lowered:
+        return 1
+    if "natural" in lowered:
+        return 0
+    return None
+
+
+def pitch_modifier_anchor_y(symbol: DetectionCandidate) -> float:
+    """Return the staff-position anchor for an accidental/key-signature glyph."""
+    _, y1, _, y2 = symbol.bbox_xyxy
+    if "flat" in symbol.class_name.lower():
+        return symbol.y_center + (y2 - y1) * 0.25
+    return symbol.y_center
+
+
 def quarter_length_for_class(class_name: str, default_quarter_length: float = 1.0) -> float:
     """Estimate base duration from notehead class before beams/flags/dots."""
     lowered = class_name.lower()
@@ -665,11 +707,115 @@ def rhythm_for_note(
     return duration, dotted, source, stem_detected
 
 
+def key_signatures_from_symbols(
+    pitch_symbols: list[DetectionCandidate],
+    staff_systems: list[StaffSystem],
+    note_candidates: list[DetectionCandidate],
+) -> dict[int, dict[str, int]]:
+    """Infer per-staff key signatures from detected keyFlat/keySharp/keyNatural symbols."""
+    first_note_x_by_staff: dict[int, float] = {}
+    for candidate in note_candidates:
+        staff = closest_staff(candidate.y_center, staff_systems)
+        if staff is None:
+            continue
+        current = first_note_x_by_staff.get(staff.index)
+        if current is None or candidate.x_center < current:
+            first_note_x_by_staff[staff.index] = candidate.x_center
+
+    key_signatures: dict[int, dict[str, int]] = {}
+    best_by_staff_step: dict[tuple[int, str], tuple[float, int]] = {}
+    for symbol in pitch_symbols:
+        if not is_key_signature_symbol(symbol.class_name):
+            continue
+        alter = alter_for_pitch_modifier(symbol.class_name)
+        if alter is None:
+            continue
+        symbol_pitch_y = pitch_modifier_anchor_y(symbol)
+        staff = closest_staff(symbol_pitch_y, staff_systems)
+        if staff is None or not _symbol_staff_compatible(symbol, staff):
+            continue
+
+        first_note_x = first_note_x_by_staff.get(staff.index)
+        left_region_end = staff.start_x + staff.spacing * 24.0
+        if first_note_x is not None:
+            left_region_end = max(left_region_end, first_note_x - staff.spacing * 1.2)
+        if symbol.x_center < staff.start_x - staff.spacing or symbol.x_center > left_region_end:
+            continue
+
+        step, _, _ = pitch_from_y(symbol_pitch_y, staff)
+        key = (staff.index, step)
+        existing = best_by_staff_step.get(key)
+        if existing is None or symbol.confidence > existing[0]:
+            best_by_staff_step[key] = (symbol.confidence, alter)
+
+    for (staff_index, step), (_, alter) in best_by_staff_step.items():
+        key_signatures.setdefault(staff_index, {})[step] = alter
+    return key_signatures
+
+
+def explicit_accidental_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    pitch_symbols: list[DetectionCandidate],
+) -> tuple[int, str] | None:
+    """Return the nearest explicit accidental attached to a notehead, if any."""
+    note_x1, _, _, _ = note.bbox_xyxy
+    best: tuple[float, int, str] | None = None
+    for symbol in pitch_symbols:
+        if not is_explicit_accidental(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+            continue
+        alter = alter_for_pitch_modifier(symbol.class_name)
+        if alter is None:
+            continue
+        _, _, symbol_x2, _ = symbol.bbox_xyxy
+        x_distance = note_x1 - symbol_x2
+        y_distance = abs(note.y_center - pitch_modifier_anchor_y(symbol))
+        if not (0.0 <= x_distance <= staff.spacing * 4.0 and y_distance <= staff.spacing * 2.5):
+            continue
+        score = x_distance + y_distance * 0.5 - symbol.confidence
+        if best is None or score < best[0]:
+            best = (score, alter, symbol.class_name)
+    if best is None:
+        return None
+    return best[1], f"explicit_accidental:{best[2]}"
+
+
+def key_fifths_from_signature(signature: dict[str, int]) -> int:
+    """Convert a simple standard key-signature map to MusicXML fifths."""
+    altered = {step: alter for step, alter in signature.items() if alter != 0}
+    if not altered:
+        return 0
+    if all(alter == -1 for alter in altered.values()):
+        steps = set(altered)
+        for count in range(1, len(FLAT_KEY_ORDER) + 1):
+            if steps == set(FLAT_KEY_ORDER[:count]):
+                return -count
+    if all(alter == 1 for alter in altered.values()):
+        steps = set(altered)
+        for count in range(1, len(SHARP_KEY_ORDER) + 1):
+            if steps == set(SHARP_KEY_ORDER[:count]):
+                return count
+    return 0
+
+
+def document_key_fifths(key_signatures: dict[int, dict[str, int]]) -> int:
+    """Return the most common MusicXML fifths value across detected staff signatures."""
+    counts: dict[int, int] = {}
+    for signature in key_signatures.values():
+        fifths = key_fifths_from_signature(signature)
+        counts[fifths] = counts.get(fifths, 0) + 1
+    if not counts:
+        return 0
+    return max(counts.items(), key=lambda item: (item[1], -abs(item[0])))[0]
+
+
 def notes_from_candidates(
     candidates: list[DetectionCandidate],
     staff_systems: list[StaffSystem],
     *,
     rhythm_symbols: list[DetectionCandidate] | None = None,
+    pitch_symbols: list[DetectionCandidate] | None = None,
+    key_signatures: dict[int, dict[str, int]] | None = None,
     default_quarter_length: float = 1.0,
 ) -> list[ExtractedNote]:
     """Convert notehead boxes into ordered treble-clef note events."""
@@ -678,12 +824,25 @@ def notes_from_candidates(
     spacing = float(np.median([staff.spacing for staff in staff_systems]))
     candidates = _deduplicate_candidates(candidates, spacing=spacing)
     rhythm_symbols = list(rhythm_symbols or [])
+    pitch_symbols = list(pitch_symbols or [])
+    key_signatures = dict(key_signatures or {})
     notes: list[ExtractedNote] = []
     for candidate in candidates:
         staff = closest_staff(candidate.y_center, staff_systems)
         if staff is None:
             continue
         step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff)
+        alter = 0
+        pitch_source = "staff_geometry"
+        explicit_accidental = explicit_accidental_for_note(candidate, staff, pitch_symbols)
+        if explicit_accidental is not None:
+            alter, pitch_source = explicit_accidental
+        else:
+            staff_signature = key_signatures.get(staff.index, {})
+            if step in staff_signature:
+                alter = int(staff_signature[step])
+                pitch_source = f"key_signature:{'flat' if alter < 0 else 'sharp' if alter > 0 else 'natural'}"
+        midi_pitch += alter
         quarter_length, dotted, rhythm_source, stem_detected = rhythm_for_note(
             candidate,
             staff,
@@ -703,8 +862,10 @@ def notes_from_candidates(
                 step=step,
                 octave=int(octave),
                 midi_pitch=int(midi_pitch),
+                alter=int(alter),
                 quarter_length=quarter_length,
                 onset_quarter=0.0,
+                pitch_source=pitch_source,
                 dotted=dotted,
                 rhythm_source=rhythm_source,
                 stem_detected=stem_detected,
@@ -744,8 +905,10 @@ def notes_from_candidates(
                 step=note.step,
                 octave=note.octave,
                 midi_pitch=note.midi_pitch,
+                alter=note.alter,
                 quarter_length=note.quarter_length,
                 onset_quarter=onset,
+                pitch_source=note.pitch_source,
                 dotted=note.dotted,
                 rhythm_source=note.rhythm_source,
                 stem_detected=note.stem_detected,
@@ -809,7 +972,7 @@ def write_midi(
     Path(output_path).write_bytes(header + body)
 
 
-def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title: str) -> None:
+def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title: str, key_fifths: int = 0) -> None:
     """Write compact MusicXML from extracted notes."""
     divisions = 480
     parts = [
@@ -825,7 +988,7 @@ def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title
     ]
     elapsed = 0.0
     measure_number = 1
-    parts.extend(_measure_start(measure_number, divisions, include_attributes=True))
+    parts.extend(_measure_start(measure_number, divisions, include_attributes=True, key_fifths=key_fifths))
     for note in notes:
         if elapsed >= 4.0:
             parts.append("    </measure>")
@@ -839,6 +1002,12 @@ def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title
                 "      <note>",
                 "        <pitch>",
                 f"          <step>{note.step}</step>",
+            ]
+        )
+        if note.alter:
+            parts.append(f"          <alter>{note.alter}</alter>")
+        parts.extend(
+            [
                 f"          <octave>{note.octave}</octave>",
                 "        </pitch>",
                 f"        <duration>{duration}</duration>",
@@ -863,14 +1032,14 @@ def _xml_escape(value: str) -> str:
     )
 
 
-def _measure_start(number: int, divisions: int, *, include_attributes: bool) -> list[str]:
+def _measure_start(number: int, divisions: int, *, include_attributes: bool, key_fifths: int = 0) -> list[str]:
     lines = [f'    <measure number="{number}">']
     if include_attributes:
         lines.extend(
             [
                 "      <attributes>",
                 f"        <divisions>{divisions}</divisions>",
-                "        <key><fifths>0</fifths></key>",
+                f"        <key><fifths>{key_fifths}</fifths></key>",
                 "        <time><beats>4</beats><beat-type>4</beat-type></time>",
                 "        <clef><sign>G</sign><line>2</line></clef>",
                 "      </attributes>",
@@ -918,7 +1087,8 @@ def write_overlay(
         color = (0, 0, 255) if note.source == "yolo" else (255, 0, 0)
         cv2.rectangle(canvas, (x1, y1), (x2, y2), color, 2)
         dot_suffix = "." if note.dotted else ""
-        label = f"{note.order}:{note.step}{note.octave}/{note.quarter_length:g}{dot_suffix}"
+        alter_suffix = "b" * abs(note.alter) if note.alter < 0 else "#" * note.alter
+        label = f"{note.order}:{note.step}{alter_suffix}{note.octave}/{note.quarter_length:g}{dot_suffix}"
         cv2.putText(
             canvas,
             label,
@@ -957,6 +1127,7 @@ def extract_notes_from_image(
 
     candidates: list[DetectionCandidate] = []
     rhythm_symbols: list[DetectionCandidate] = []
+    pitch_symbols: list[DetectionCandidate] = []
     checkpoint_snapshot: Path | None = None
     extractor_mode = "cv_fallback"
     checkpoint_for_result: str | None = None
@@ -984,6 +1155,7 @@ def extract_notes_from_image(
                 or is_flag(candidate.class_name)
                 or is_augmentation_dot(candidate.class_name)
             ]
+            pitch_symbols = [candidate for candidate in all_candidates if is_pitch_modifier(candidate.class_name)]
             extractor_mode = "yolo_notehead_staff_pitch"
             checkpoint_for_result = str(checkpoint_source)
         except Exception as exc:  # pragma: no cover - runtime dependency path
@@ -997,11 +1169,15 @@ def extract_notes_from_image(
         warnings.append("No note candidates were found.")
 
     rhythm_symbols.extend(cv_augmentation_dot_candidates(image, staff_systems))
+    key_signatures = key_signatures_from_symbols(pitch_symbols, staff_systems, candidates)
+    key_fifths = document_key_fifths(key_signatures)
 
     notes = notes_from_candidates(
         candidates,
         staff_systems,
         rhythm_symbols=rhythm_symbols,
+        pitch_symbols=pitch_symbols,
+        key_signatures=key_signatures,
         default_quarter_length=default_quarter_length,
     )
     if not notes:
@@ -1015,7 +1191,7 @@ def extract_notes_from_image(
     run_title = title or stem
 
     write_midi(notes, midi_path)
-    write_musicxml(notes, musicxml_path, title=run_title)
+    write_musicxml(notes, musicxml_path, title=run_title, key_fifths=key_fifths)
     write_overlay(image, staff_systems, notes, overlay_path)
 
     artifacts = ExtractionArtifacts(
@@ -1034,6 +1210,8 @@ def extract_notes_from_image(
         detector_checkpoint=checkpoint_for_result,
         staff_systems=staff_systems,
         notes=notes,
+        key_signatures=key_signatures,
+        key_fifths=key_fifths,
         artifacts=artifacts,
         warnings=warnings,
     )

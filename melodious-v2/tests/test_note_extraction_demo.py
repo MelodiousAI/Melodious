@@ -10,10 +10,13 @@ from melodious_v2.omr.note_extraction import (
     DetectionCandidate,
     StaffSystem,
     detect_staff_systems,
+    document_key_fifths,
     extract_notes_from_image,
+    key_signatures_from_symbols,
     notes_from_candidates,
     pitch_from_y,
     write_midi,
+    write_musicxml,
 )
 
 
@@ -54,6 +57,52 @@ class NoteExtractionDemoTest(unittest.TestCase):
         staff_systems = detect_staff_systems(np.asarray(image))
         self.assertEqual(len(staff_systems), 2)
         self.assertEqual([round(staff.spacing) for staff in staff_systems], [10, 10])
+
+    def test_detected_key_flat_applies_b_flat_pitch(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        key_flat = DetectionCandidate(
+            class_id=67,
+            class_name="keyFlat",
+            confidence=0.9,
+            bbox_xyxy=(56.0, 68.0, 64.0, 84.0),
+            source="unit",
+        )
+        b_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackOnLine",
+            confidence=0.9,
+            bbox_xyxy=(120.0, 76.0, 132.0, 84.0),
+            source="unit",
+        )
+
+        key_signatures = key_signatures_from_symbols([key_flat], [staff], [b_note])
+        extracted = notes_from_candidates(
+            [b_note],
+            [staff],
+            pitch_symbols=[key_flat],
+            key_signatures=key_signatures,
+            default_quarter_length=1.0,
+        )
+
+        self.assertEqual(key_signatures, {0: {"B": -1}})
+        self.assertEqual(document_key_fifths(key_signatures), -1)
+        self.assertEqual(extracted[0].step, "B")
+        self.assertEqual(extracted[0].alter, -1)
+        self.assertEqual(extracted[0].midi_pitch, 70)
+        self.assertEqual(extracted[0].pitch_source, "key_signature:flat")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            musicxml_path = Path(tmp) / "key_flat.musicxml"
+            write_musicxml(extracted, musicxml_path, title="Key Flat", key_fifths=-1)
+            text = musicxml_path.read_text(encoding="utf-8")
+        self.assertIn("<fifths>-1</fifths>", text)
+        self.assertIn("<alter>-1</alter>", text)
 
     def test_cv_extraction_writes_real_midi(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

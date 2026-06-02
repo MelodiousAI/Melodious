@@ -16,17 +16,20 @@ It does the following:
    dark-line, light-line, and adaptive masks so faded/antialiased staff lines
    are not silently dropped.
 2. Uses a YOLO checkpoint, when available, to detect notehead, stem, beam,
-   flag, and augmentation-dot boxes.
+   flag, augmentation-dot, key-signature, and explicit-accidental boxes.
 3. Snapshots the checkpoint into the output directory before inference so a
    live training process can continue writing `best.pt` or `last.pt`.
 4. Maps notehead vertical position to treble-clef pitch.
-5. Infers simple rhythm:
+5. Applies detected `keyFlat`, `keySharp`, and `keyNatural` symbols to matching
+   note steps on the same staff; detected explicit accidentals override the key
+   signature for the attached note.
+6. Infers simple rhythm:
    - black noteheads default to quarter notes;
    - nearby stems confirm unbeamed black noteheads as quarter notes;
    - nearby beams or flags shorten black noteheads to eighth/smaller values;
    - nearby augmentation dots multiply the duration by 1.5;
    - half/whole notehead classes set longer base durations.
-6. Writes:
+7. Writes:
    - `*_notes.json` with note order, staff index, bounding box, pitch, MIDI
      pitch, confidence, duration, dotted flag, and rhythm source.
    - `*_notes_overlay.png` with staff lines and note labels.
@@ -42,10 +45,12 @@ It does the following:
   stem, beam, or flag, the extractor marks it as
   `black_notehead_quarter_rule_no_stem` instead of pretending the detector found
   a complete duration label.
-- Pitch assumes treble clef and no key signature or accidental reconstruction.
-- It does not yet reconstruct ties, slurs, voices, measures, accidentals, or
-  expression markings. Beam detections are currently used only for duration,
-  not for full notational grouping.
+- Pitch assumes treble clef. Basic detected key signatures and explicit
+  accidentals are applied when YOLO returns `keyFlat`, `keySharp`,
+  `keyNatural`, or `accidental*` boxes.
+- It does not yet reconstruct ties, slurs, voices, measures, measure-scoped
+  accidental persistence/cancellation, or expression markings. Beam detections
+  are currently used only for duration, not for full notational grouping.
 - The current script is best suited for clean treble-clef pages. It can now
   handle dense multi-system pages when staff lines are visible, but rhythm
   remains the weakest part of the demo.
@@ -85,6 +90,14 @@ training.
   `black_notehead_quarter_rule_no_stem+augmentation_dot`.
 - `stem_detected` records whether a nearby detected `stem` box was attached to
   the notehead.
+- `key_signatures` records detected per-staff key signature maps, for example
+  `{"B": -1}` for one detected B-flat key signature.
+- `key_fifths` is the MusicXML fifths value inferred from the detected key
+  signatures, for example `-1` for one flat.
+- `alter` records the semitone pitch alteration applied to one note. `-1` is a
+  flat and `1` is a sharp.
+- `pitch_source` explains whether a pitch came from raw staff geometry,
+  detected key signature, or detected explicit accidental.
 - The MIDI file is playable and contains real note-on/note-off events, unlike
   the older API placeholder MIDI which was only a 26-byte empty MIDI container.
 
@@ -124,7 +137,7 @@ Command:
 $env:PYTHONPATH='src'
 ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py `
   --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png `
-  --output-dir runs\demo\image_note_extraction_v3 `
+  --output-dir runs\demo\image_note_extraction_v5 `
   --device cpu `
   --conf 0.12 `
   --imgsz 1472 `
@@ -134,36 +147,44 @@ $env:PYTHONPATH='src'
 
 Latest verified output:
 
-- Output directory: `runs/demo/image_note_extraction_v3/`.
+- Output directory: `runs/demo/image_note_extraction_v5/`.
 - Extractor mode: `yolo_notehead_staff_pitch`.
 - Staff systems: `9`.
 - Note events: `319`.
 - Stem-confirmed notes: `0`.
-- Dotted notes: `37`.
-- Duration distribution: `0.25:29`, `0.375:7`, `0.5:178`,
-  `0.75:9`, `1.0:65`, `1.5:20`, `2.0:10`, `3.0:1`.
-- Rhythm sources: `beam_x1:176`, `black_notehead_quarter_rule_no_stem:65`,
-  `beam_x2:29`, `black_notehead_quarter_rule_no_stem+augmentation_dot:20`,
-  `notehead_class:10`, `beam_x1+augmentation_dot:8`,
-  `beam_x2+augmentation_dot:7`, `flag:2`,
+- Dotted notes: `38`.
+- Key signatures: each of the 9 staff systems has detected `{"B": -1}`.
+- MusicXML key fifths: `-1`.
+- B-flat notes from detected key signature: `53`.
+- Explicit sharp notes from detected inline accidentals: `2`.
+- Duration distribution: `0.25:28`, `0.375:8`, `0.5:175`,
+  `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`.
+- Rhythm sources: `beam_x1:173`, `black_notehead_quarter_rule_no_stem:68`,
+  `beam_x2:28`, `black_notehead_quarter_rule_no_stem+augmentation_dot:21`,
+  `notehead_class:10`, `beam_x2+augmentation_dot:8`,
+  `beam_x1+augmentation_dot:7`, `flag:2`,
   `notehead_class+augmentation_dot:1`, `flag+augmentation_dot:1`.
-- MIDI path: `runs/demo/image_note_extraction_v3/image_notes.mid`.
-- MIDI size: `2878` bytes.
-- MusicXML path: `runs/demo/image_note_extraction_v3/image_notes.musicxml`.
-- Overlay path: `runs/demo/image_note_extraction_v3/image_notes_overlay.png`.
-- MusicXML parse check passed with `319` notes and `37` `<dot/>` tags.
+- Pitch sources: `staff_geometry:264`, `key_signature:flat:53`,
+  `explicit_accidental:accidentalSharp:2`.
+- MIDI path: `runs/demo/image_note_extraction_v5/image_notes.mid`.
+- MIDI size: `2879` bytes.
+- MusicXML path: `runs/demo/image_note_extraction_v5/image_notes.musicxml`.
+- Overlay path: `runs/demo/image_note_extraction_v5/image_notes_overlay.png`.
+- MusicXML parse check passed with `319` notes, `38` `<dot/>` tags,
+  one `<fifths>-1</fifths>` key signature, and `53` `<alter>-1</alter>` tags.
 
 Important history: the first run on this image only detected `4` staff systems
-and should not be used as demo evidence. The corrected `v3` run detects all
+and should not be used as demo evidence. The corrected `v3` run detected all
 `9` visible staff systems by preserving lighter staff lines before note-to-pitch
-mapping.
+mapping. The later `v5` run adds detected key-signature application. This is not
+hard-coded to the song: the detector emits `keyFlat` boxes, the extractor maps
+their staff position to `B`, and then applies `B: -1` to matching notes.
 
 ## Next Engineering Step
 
 The next step is to wire this path into the upload API behind an explicit mode,
 for example `MELODIOUS_UPLOAD_DETECTOR=yolo_note_demo`, and keep the response
-warnings honest until accidentals, measures, ties, and graph assembly are more
-complete. For rhythm quality, the next targeted improvement is stem detection:
-either evaluate/lower the detector threshold for `stem` separately, add a CV
-stem-line attachment fallback, or fine-tune with stronger thin-line/stem
-coverage.
+warnings honest until measures, ties, and graph assembly are more complete. For
+rhythm quality, the next targeted improvement is stem detection: either
+evaluate/lower the detector threshold for `stem` separately, add a CV stem-line
+attachment fallback, or fine-tune with stronger thin-line/stem coverage.
