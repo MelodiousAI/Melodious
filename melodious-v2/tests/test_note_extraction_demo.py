@@ -41,6 +41,20 @@ class NoteExtractionDemoTest(unittest.TestCase):
             step, octave, midi_pitch = pitch_from_y(staff_systems[0].bottom_y, staff_systems[0])
             self.assertEqual((step, octave, midi_pitch), ("E", 4, 64))
 
+    def test_staff_detection_keeps_light_staff_lines(self) -> None:
+        image = Image.new("L", (520, 360), color=255)
+        draw = ImageDraw.Draw(image)
+        for base_y, fill in [(70, 0), (210, 205)]:
+            for offset in range(0, 50, 10):
+                draw.line((45, base_y + offset, 470, base_y + offset), fill=fill, width=1)
+        draw.text((180, 25), "Light staff regression", fill=0)
+
+        import numpy as np
+
+        staff_systems = detect_staff_systems(np.asarray(image))
+        self.assertEqual(len(staff_systems), 2)
+        self.assertEqual([round(staff.spacing) for staff in staff_systems], [10, 10])
+
     def test_cv_extraction_writes_real_midi(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
