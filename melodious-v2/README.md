@@ -116,20 +116,20 @@ Example:
 $env:PYTHONPATH="src"
 python scripts/extract_notes_from_image.py `
   --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png `
-  --output-dir runs\demo\sad_romance_note_extraction_v1 `
+  --output-dir runs\demo\sad_romance_note_extraction_v2 `
   --device cpu `
   --conf 0.12 `
   --imgsz 1472 `
   --max-det 2000 `
-  --default-quarter-length 0.5 `
+  --default-quarter-length 1.0 `
   --title "Sad Romance"
 ```
 
 This writes `*_notes.json`, `*_notes_overlay.png`, `*_notes.musicxml`, and
 `*_notes.mid`. The Sad Romance verification run used
 `extractor_mode = yolo_notehead_staff_pitch`, detected 9 staff systems, wrote
-197 note events, and produced a 1,809-byte MIDI file with a valid `MThd`
-header. This is a demo extraction artifact, not an evaluation metric.
+197 note events, inferred 17 dotted notes, and produced MusicXML with 17
+`<dot/>` tags. This is a demo extraction artifact, not an evaluation metric.
 
 ## Deployment Path
 
@@ -153,6 +153,6 @@ Current M6 status: deployment path and local smoke tooling are ready, but actual
 
 ## Current Status
 
-This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, deployment templates, and a separate local note-extraction demo CLI. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best primary validation inference configuration is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the current best secondary `mAP@0.5` configuration is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. The current class-coverage audit is `detection_136class_class_coverage_audit_v1` and should be read before making all-136-class claims. The current fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; check `docs/METRIC_IMPROVEMENT.md` and `docs/HANDOFF.md` before launching any duplicate training process. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`. The Sad Romance local note-extraction demo artifact is under `runs/demo/sad_romance_note_extraction_v1/` and is documented in `docs/NOTE_EXTRACTION_DEMO.md`.
+This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, deployment templates, and a separate local note-extraction demo CLI. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best primary validation inference configuration is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the current best secondary `mAP@0.5` configuration is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. The current class-coverage audit is `detection_136class_class_coverage_audit_v1` and should be read before making all-136-class claims. The current fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; check `docs/METRIC_IMPROVEMENT.md` and `docs/HANDOFF.md` before launching any duplicate training process. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`. The Sad Romance local note-extraction demo artifact is under `runs/demo/sad_romance_note_extraction_v2/` and is documented in `docs/NOTE_EXTRACTION_DEMO.md`.
 
 Current active milestone: M7 - Detector Metric Improvement. See `docs/METRIC_IMPROVEMENT.md`, `docs/ROADMAP.md`, and `docs/MILESTONE_HISTORY.md` before starting new implementation work.

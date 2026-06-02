@@ -77,8 +77,8 @@ Current state:
 - Local note extraction demo CLI: `scripts/extract_notes_from_image.py`.
 - Local note extraction demo docs: `docs/NOTE_EXTRACTION_DEMO.md`.
 - Local note extraction demo test: `tests/test_note_extraction_demo.py`.
-- Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v1/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, a 1,809-byte MIDI file, and an overlay image. This is an ignored demo artifact, not an official metric run.
-- Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry and rhythm defaults to heuristic eighth-note timing for black noteheads. It is useful for testing extracted notes, not for claiming complete score transcription quality.
+- Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v2/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, 17 dotted notes, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, and an overlay image. This is an ignored demo artifact, not an official metric run.
+- Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry. Rhythm now defaults black noteheads to quarter notes and uses nearby beams, flags, and augmentation dots, but it is still heuristic and not complete score transcription.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -152,35 +152,38 @@ Files changed:
 
 Generated ignored evidence:
 
-- `runs/demo/sad_romance_note_extraction_v1/best_snapshot.pt`
-- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.json`
-- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.mid`
-- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.musicxml`
-- `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes_overlay.png`
-- `runs/demo/sad_romance_note_extraction_v1_stdout.json`
+- `runs/demo/sad_romance_note_extraction_v2/best_snapshot.pt`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.json`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.mid`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.musicxml`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes_overlay.png`
+- `runs/demo/sad_romance_note_extraction_v2_stdout.json`
 
 What happened:
 
 - The earlier API upload-to-MIDI test produced a bad toy output because the FastAPI upload route still uses `heuristic_bootstrap` and `minimal_midi_base64()`.
 - A separate local note extraction demo path was added so the user can test actual note extraction from a clean sheet image without waiting for the full API rewrite.
-- The new CLI snapshots the YOLO checkpoint before CPU inference, detects notehead boxes, detects staff geometry, maps noteheads to treble-clef pitch, and writes note JSON, overlay PNG, compact MusicXML, and real MIDI note events.
+- The new CLI snapshots the YOLO checkpoint before CPU inference, detects notehead boxes, detects staff geometry, maps noteheads to treble-clef pitch, infers simple rhythm from beams/flags/augmentation dots, and writes note JSON, overlay PNG, compact MusicXML, and real MIDI note events.
 - The current API upload route remains unchanged and must still be labeled `heuristic_bootstrap`.
 
 Sad Romance verification:
 
 - Command:
-  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v1 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 0.5 --title "Sad Romance"`
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v2 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 1.0 --title "Sad Romance"`
 - Extractor mode: `yolo_notehead_staff_pitch`.
 - Staff systems: `9`.
 - Extracted note events: `197`.
-- MIDI path: `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes.mid`.
-- MIDI size: `1809` bytes.
+- Dotted notes: `17`.
+- Duration distribution: `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`.
+- MusicXML parse check: `197` notes and `17` `<dot/>` tags.
+- MIDI path: `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.mid`.
+- MIDI size: `1808` bytes.
 - MIDI header: `MThd`.
-- Overlay path: `runs/demo/sad_romance_note_extraction_v1/sad_romance_clearer_smooth_notes_overlay.png`.
+- Overlay path: `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes_overlay.png`.
 
 Commands run:
 
-- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v1 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 0.5 --title "Sad Romance"` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v2 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 1.0 --title "Sad Romance"` - passed.
 - `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py scripts\extract_notes_from_image.py tests\test_note_extraction_demo.py` - passed.
 - `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_note_extraction_demo.py` - passed, 3 tests.
 - `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed after the final status/handoff wording update, checked 14 documentation files.
@@ -192,12 +195,72 @@ Limitations:
 - This is not the API upload path yet.
 - This is not an evaluation metric and must not be reported as detector `mAP`.
 - The current pitch mapping assumes treble clef.
-- The current rhythm model is simple and defaults black noteheads to eighth notes.
+- The current rhythm model defaults unbeamed black noteheads to quarter notes and uses nearby beam/flag/dot detections, but it remains heuristic.
 - Accidentals, key signature, ties, slurs, beams, measures, and full graph assembly are not reconstructed in this demo path.
 
 Next exact step:
 
 - Keep monitoring the fine-tune. If the user wants product-demo upload behavior, wire `scripts/extract_notes_from_image.py` / `melodious_v2.omr.note_extraction` into the FastAPI upload route behind an explicit non-default mode, return `detector_mode = "yolo_note_demo"` or similar, and keep response warnings clear that rhythm/pitch reconstruction is heuristic.
+
+## 2026-06-02 - Agent Handoff - Local Note Extraction Rhythm Improved
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local demo rescue path
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `scripts/extract_notes_from_image.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/ARCHITECTURE.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `runs/demo/sad_romance_note_extraction_v2/best_snapshot.pt`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.json`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.mid`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.musicxml`
+- `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes_overlay.png`
+- `runs/demo/sad_romance_note_extraction_v2_stdout.json`
+
+What changed:
+
+- Black noteheads now default to quarter notes instead of eighth notes.
+- YOLO rhythm symbols are retained alongside noteheads so nearby `beam`, `flag*`, and `augmentationDot` detections can adjust note duration.
+- A CV augmentation-dot fallback was added because dots are tiny and the YOLO detector can miss them.
+- MusicXML now writes `<dot/>` for dotted durations.
+- MIDI event sorting now writes note-off events before note-on events at the same tick.
+
+Sad Romance verification after rhythm update:
+
+- Command:
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v2 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Sad Romance"`
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Extracted note events: `197`.
+- Dotted notes: `17`.
+- Duration distribution: `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`.
+- Rhythm sources: `default_quarter:71`, `beam_x1:68`, `notehead_class:28`, `flag:13`, `default_quarter+augmentation_dot:8`, `beam_x1+augmentation_dot:4`, `flag+augmentation_dot:3`, `notehead_class+augmentation_dot:2`.
+- MusicXML parse check: `197` notes and `17` `<dot/>` tags.
+- MIDI path: `runs/demo/sad_romance_note_extraction_v2/sad_romance_clearer_smooth_notes.mid`.
+- MIDI size: `1808` bytes.
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py scripts\extract_notes_from_image.py tests\test_note_extraction_demo.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests -p test_note_extraction_demo.py` - passed, 4 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v2 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Sad Romance"` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m unittest discover tests` - passed, 40 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 14 documentation files.
+
+Limitations:
+
+- Rhythm remains heuristic. It is better for quarters, beamed notes, flags, and visible augmentation dots, but it still does not reconstruct measures, ties, accidentals, voices, or complete beaming semantics.
 
 ## 2026-06-02 - Agent Handoff - M7 Fine-Tune Interrupted And Resumed
 

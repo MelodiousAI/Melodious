@@ -47,8 +47,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--default-quarter-length",
         type=float,
-        default=0.5,
-        help="Fallback rhythm length for black noteheads. 0.5 means eighth notes.",
+        default=1.0,
+        help="Fallback rhythm length for un-beamed black noteheads. 1.0 means quarter notes.",
     )
     parser.add_argument("--title", default=None, help="MusicXML title.")
     return parser.parse_args()
@@ -78,4 +78,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
