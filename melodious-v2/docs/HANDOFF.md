@@ -72,13 +72,15 @@ Current state:
 - M7 resume support commit: `6636622`.
 - M7 fine-tune resume launch: 2026-06-02 local time `01:05:09`, parent PID `35952`, active child PID `43740`.
 - M7 fine-tune resume logs: `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, `resume_epoch7.pid`, `resume_epoch7_child.pid`, and `resume_epoch7_launch_metadata.json` under the run directory.
-- M7 fine-tune latest checked after note extraction work: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `28`, training-validation `metrics/mAP50(B) = 0.81045`, training-validation `metrics/mAP50-95(B) = 0.6272`, and no final fine-tune `metrics.json` exists yet.
+- M7 fine-tune latest checked after uploaded-image note extraction work: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `33`, training-validation `metrics/mAP50(B) = 0.81344`, training-validation `metrics/mAP50-95(B) = 0.63103`, and no final fine-tune `metrics.json` exists yet.
 - Local note extraction demo module: `src/melodious_v2/omr/note_extraction.py`.
 - Local note extraction demo CLI: `scripts/extract_notes_from_image.py`.
 - Local note extraction demo docs: `docs/NOTE_EXTRACTION_DEMO.md`.
 - Local note extraction demo test: `tests/test_note_extraction_demo.py`.
 - Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v3/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, 0 stem-confirmed notes, 17 dotted notes, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, and an overlay image. This is an ignored demo artifact, not an official metric run.
 - Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry. Rhythm uses nearby stems, beams, flags, and augmentation dots when the detector returns them. On this page, the checkpoint returned no usable stem detections, so quarter notes are marked as `black_notehead_quarter_rule_no_stem`.
+- Uploaded Arabic page note extraction evidence: `runs/demo/image_note_extraction_v3/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 319 extracted note events, 0 stem-confirmed notes, 37 dotted notes, duration distribution `0.25:29`, `0.375:7`, `0.5:178`, `0.75:9`, `1.0:65`, `1.5:20`, `2.0:10`, `3.0:1`, MIDI size `2878` bytes, and MusicXML parse check `319` notes with `37` `<dot/>` tags. This is an ignored demo artifact, not an official metric run.
+- Uploaded Arabic page staff-detection finding: the initial run detected only 4 staff systems and should be ignored. The fixed `v3` run detects all 9 visible systems by preserving lighter/antialiased staff lines before note-to-pitch mapping.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -131,6 +133,74 @@ Next exact implementation target:
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
 6. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. For the next product-facing step, wire this path into the API behind an explicit mode such as `yolo_note_demo`, preserving warnings that rhythm and pitch are heuristic.
+7. For the next rhythm-quality step, target stem detection specifically: evaluate/lower a separate `stem` threshold, add a CV stem-line attachment fallback, or continue fine-tuning with stronger thin-line/stem coverage.
+
+## 2026-06-02 - Agent Handoff - Uploaded Image Staff Detection Fixed
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local demo rescue path
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/ARCHITECTURE.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `runs/demo/image_note_extraction_v3/best_snapshot.pt`
+- `runs/demo/image_note_extraction_v3/image_notes.json`
+- `runs/demo/image_note_extraction_v3/image_notes.mid`
+- `runs/demo/image_note_extraction_v3/image_notes.musicxml`
+- `runs/demo/image_note_extraction_v3/image_notes_overlay.png`
+
+What changed:
+
+- Staff detection now builds and merges candidate staff systems from dark-line, light-line, and adaptive horizontal masks.
+- This fixes a concrete uploaded-image failure where `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png` initially detected only 4 staff systems even though the page has 9 visible systems.
+- A regression test now covers light staff lines so faded/antialiased staff strokes are not silently dropped.
+
+Uploaded Arabic page verification:
+
+- Command:
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png --output-dir runs\demo\image_note_extraction_v3 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Tislam Alaina Alhawa"`
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Extracted note events: `319`.
+- Stem-confirmed notes: `0`.
+- Dotted notes: `37`.
+- Duration distribution: `0.25:29`, `0.375:7`, `0.5:178`, `0.75:9`, `1.0:65`, `1.5:20`, `2.0:10`, `3.0:1`.
+- Rhythm source distribution: `beam_x1:176`, `black_notehead_quarter_rule_no_stem:65`, `beam_x2:29`, `black_notehead_quarter_rule_no_stem+augmentation_dot:20`, `notehead_class:10`, `beam_x1+augmentation_dot:8`, `beam_x2+augmentation_dot:7`, `flag:2`, `notehead_class+augmentation_dot:1`, `flag+augmentation_dot:1`.
+- MusicXML parse check: `319` notes and `37` `<dot/>` tags.
+- MIDI path: `runs/demo/image_note_extraction_v3/image_notes.mid`.
+- MIDI size: `2878` bytes.
+- Overlay path: `runs/demo/image_note_extraction_v3/image_notes_overlay.png`.
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py -q` - passed, 5 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py scripts\extract_notes_from_image.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png --output-dir runs\demo\image_note_extraction_v3 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Tislam Alaina Alhawa"` - passed.
+- MusicXML parse check for `runs/demo/image_note_extraction_v3/image_notes.musicxml` - passed, 319 notes and 37 dot tags.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` - passed, 41 tests with 1 third-party deprecation warning from `torch_geometric`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 14 documentation files.
+- Fine-tune process check - parent PID `35952` alive, child PID `43740` alive.
+- Latest fine-tune `results.csv` check - latest completed row epoch `33`, `metrics/mAP50(B) = 0.81344`, `metrics/mAP50-95(B) = 0.63103`. Treat these as training-run validation CSV values, not final V2 metric provenance.
+
+Limitations:
+
+- The generated output is much more complete than the first uploaded-image run, but it is still a local demo artifact rather than a measured detector metric.
+- The extractor still reports `0` stem-confirmed notes on this page. Quarter values without beams/flags still come from `black_notehead_quarter_rule_no_stem`, so rhythm is not yet trustworthy enough for final product claims.
+- Pitch still assumes treble clef and does not reconstruct key signature accidentals, measures, ties, slurs, voices, or full graph assembly.
+
+Next exact step:
+
+- Keep monitoring the fine-tune. For local demo quality, target stem detection next with a separate stem threshold probe, a CV stem-line attachment fallback, or fine-tuning that improves thin-line/stem coverage.
 
 ## 2026-06-02 - Agent Handoff - Local Note Extraction Demo Added
 

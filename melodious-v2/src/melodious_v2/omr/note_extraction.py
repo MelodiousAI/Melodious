@@ -146,40 +146,101 @@ def _largest_column_run(mask: np.ndarray) -> tuple[float, float]:
     return float(start), float(end)
 
 
+def _horizontal_staff_masks(image: np.ndarray, width: int) -> list[np.ndarray]:
+    """Return horizontal masks that preserve both dark and light staff strokes."""
+    _, otsu_binary = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    _, light_line_binary = cv2.threshold(image, 245, 255, cv2.THRESH_BINARY_INV)
+    adaptive_binary = cv2.adaptiveThreshold(
+        image,
+        255,
+        cv2.ADAPTIVE_THRESH_MEAN_C,
+        cv2.THRESH_BINARY_INV,
+        31,
+        12,
+    )
+    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (max(30, width // 60), 1))
+    masks = []
+    for binary in (otsu_binary, light_line_binary, adaptive_binary):
+        masks.append(cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=1))
+    return masks
+
+
+def _staff_candidates_from_horizontal(horizontal: np.ndarray, height: int, width: int) -> list[StaffSystem]:
+    """Detect candidate five-line systems from one horizontal-line mask."""
+    row_counts = (horizontal > 0).sum(axis=1)
+    thresholds = (max(120, int(width * 0.15)),)
+    candidates: list[StaffSystem] = []
+    for threshold in thresholds:
+        rows = np.where(row_counts > threshold)[0]
+        line_centers = [(start + end) / 2.0 for start, end in _group_runs(rows, max_gap=3)]
+
+        i = 0
+        while i <= len(line_centers) - 5:
+            group = line_centers[i : i + 5]
+            diffs = np.diff(group)
+            if len(diffs) == 4 and float(np.std(diffs)) < 3.0 and 6.0 <= float(np.mean(diffs)) <= 30.0:
+                spacing = float(np.mean(diffs))
+                y0 = max(0, int(min(group)) - 3)
+                y1 = min(height, int(max(group)) + 4)
+                start_x, end_x = _largest_column_run(horizontal[y0:y1, :])
+                candidates.append(
+                    StaffSystem(
+                        index=0,
+                        line_y=tuple(float(value) for value in group),  # type: ignore[arg-type]
+                        spacing=spacing,
+                        start_x=start_x,
+                        end_x=end_x,
+                    )
+                )
+                i += 5
+                continue
+            i += 1
+    return candidates
+
+
+def _merge_staff_system_candidates(candidates: list[StaffSystem]) -> list[StaffSystem]:
+    """Merge duplicate staff detections from several horizontal-line masks."""
+    merged: list[StaffSystem] = []
+    for candidate in sorted(candidates, key=lambda staff: (staff.top_y + staff.bottom_y) / 2.0):
+        replacement_index: int | None = None
+        candidate_center = (candidate.top_y + candidate.bottom_y) / 2.0
+        for index, existing in enumerate(merged):
+            existing_center = (existing.top_y + existing.bottom_y) / 2.0
+            center_close = abs(candidate_center - existing_center) <= max(candidate.spacing, existing.spacing) * 1.5
+            vertical_overlap = candidate.top_y <= existing.bottom_y and existing.top_y <= candidate.bottom_y
+            if center_close or vertical_overlap:
+                replacement_index = index
+                break
+
+        if replacement_index is None:
+            merged.append(candidate)
+            continue
+
+        existing = merged[replacement_index]
+        candidate_span = candidate.end_x - candidate.start_x
+        existing_span = existing.end_x - existing.start_x
+        if candidate_span > existing_span * 1.05:
+            merged[replacement_index] = candidate
+
+    return [
+        StaffSystem(
+            index=index,
+            line_y=staff.line_y,
+            spacing=staff.spacing,
+            start_x=staff.start_x,
+            end_x=staff.end_x,
+        )
+        for index, staff in enumerate(sorted(merged, key=lambda item: item.top_y))
+    ]
+
+
 def detect_staff_systems(image: np.ndarray) -> list[StaffSystem]:
     """Detect five-line staff systems from long horizontal strokes."""
     height, width = image.shape[:2]
-    _, binary = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (max(40, width // 45), 1))
-    horizontal = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
-    row_counts = (horizontal > 0).sum(axis=1)
-    rows = np.where(row_counts > max(120, int(width * 0.15)))[0]
-    line_centers = [(start + end) / 2.0 for start, end in _group_runs(rows, max_gap=3)]
-
-    systems: list[StaffSystem] = []
-    i = 0
-    while i <= len(line_centers) - 5:
-        group = line_centers[i : i + 5]
-        diffs = np.diff(group)
-        if len(diffs) == 4 and float(np.std(diffs)) < 3.0 and 6.0 <= float(np.mean(diffs)) <= 30.0:
-            spacing = float(np.mean(diffs))
-            y0 = max(0, int(min(group)) - 3)
-            y1 = min(height, int(max(group)) + 4)
-            start_x, end_x = _largest_column_run(horizontal[y0:y1, :])
-            systems.append(
-                StaffSystem(
-                    index=len(systems),
-                    line_y=tuple(float(value) for value in group),  # type: ignore[arg-type]
-                    spacing=spacing,
-                    start_x=start_x,
-                    end_x=end_x,
-                )
-            )
-            i += 5
-            continue
-        i += 1
-
-    return systems
+    candidates: list[StaffSystem] = []
+    for horizontal in _horizontal_staff_masks(image, width):
+        candidates.extend(_staff_candidates_from_horizontal(horizontal, height, width))
+    return _merge_staff_system_candidates(candidates)
 
 
 def _bbox_iou(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> float:

@@ -66,8 +66,16 @@ Fallbacks are allowed for demo resilience but must be explicit:
   with actual note events.
 - Current Sad Romance verification output:
   `runs/demo/sad_romance_note_extraction_v3/`.
-- Verification summary: 9 detected staff systems, 197 note events, 17 dotted
-  notes, 0 stem-confirmed notes, and MusicXML with 17 `<dot/>` tags.
+- Current uploaded Arabic page verification output:
+  `runs/demo/image_note_extraction_v3/`.
+- Sad Romance verification summary: 9 detected staff systems, 197 note events,
+  17 dotted notes, 0 stem-confirmed notes, and MusicXML with 17 `<dot/>` tags.
+- Uploaded Arabic page verification summary: 9 detected staff systems, 319
+  note events, 37 dotted notes, 0 stem-confirmed notes, and MusicXML with 37
+  `<dot/>` tags.
+- Staff detection now combines dark-line, light-line, and adaptive horizontal
+  masks so clean printed pages with faint/antialiased staff lines do not lose
+  complete systems before pitch mapping.
 - Limitation: pitch assumes treble clef; rhythm is heuristic; accidentals,
   ties, slurs, measures, and full graph assembly are not reconstructed. Beam
   detections are used for duration, not complete notational grouping. Stem
