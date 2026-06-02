@@ -83,6 +83,7 @@ class ExtractedNote:
     onset_quarter: float
     dotted: bool = False
     rhythm_source: str = "default"
+    stem_detected: bool = False
 
 
 @dataclass(frozen=True)
@@ -443,6 +444,10 @@ def is_beam(class_name: str) -> bool:
     return class_name.lower() == "beam"
 
 
+def is_stem(class_name: str) -> bool:
+    return class_name.lower() == "stem"
+
+
 def is_flag(class_name: str) -> bool:
     return class_name.lower().startswith("flag")
 
@@ -500,6 +505,30 @@ def _beam_count_for_note(
     return count
 
 
+def _has_stem_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+) -> bool:
+    """Return whether a detected stem is geometrically attached to a notehead."""
+    nx1, ny1, nx2, ny2 = note.bbox_xyxy
+    note_side_x = (nx1, nx2)
+    for symbol in rhythm_symbols:
+        if not is_stem(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+            continue
+        sx1, sy1, sx2, sy2 = symbol.bbox_xyxy
+        stem_height = sy2 - sy1
+        stem_width = sx2 - sx1
+        if stem_height < staff.spacing * 2.0 or stem_width > staff.spacing * 1.5:
+            continue
+        x_distance = min(abs(symbol.x_center - side_x) for side_x in note_side_x)
+        y_overlaps_note = sy1 <= ny2 + staff.spacing * 0.75 and sy2 >= ny1 - staff.spacing * 0.75
+        near_note_vertical = min(abs(sy1 - note.y_center), abs(sy2 - note.y_center)) <= staff.spacing * 7.0
+        if x_distance <= staff.spacing * 1.2 and (y_overlaps_note or near_note_vertical):
+            return True
+    return False
+
+
 def _flag_duration_for_note(
     note: DetectionCandidate,
     staff: StaffSystem,
@@ -546,10 +575,11 @@ def rhythm_for_note(
     rhythm_symbols: list[DetectionCandidate],
     *,
     default_quarter_length: float = 1.0,
-) -> tuple[float, bool, str]:
+) -> tuple[float, bool, str, bool]:
     """Infer note duration from class plus nearby beams, flags, and dots."""
     duration = quarter_length_for_class(note.class_name, default_quarter_length)
-    source = "notehead_class" if duration != default_quarter_length else "default_quarter"
+    source = "notehead_class" if duration != default_quarter_length else "black_notehead_quarter_rule"
+    stem_detected = _has_stem_for_note(note, staff, rhythm_symbols)
 
     if "black" in note.class_name.lower() or note.source == "cv_fallback":
         flag_duration = _flag_duration_for_note(note, staff, rhythm_symbols)
@@ -560,15 +590,18 @@ def rhythm_for_note(
         elif beam_count > 0:
             duration = max(1.0 / 32.0, 1.0 / (2**beam_count))
             source = f"beam_x{beam_count}"
+        elif stem_detected:
+            duration = default_quarter_length
+            source = "stem_quarter"
         else:
             duration = default_quarter_length
-            source = "default_quarter"
+            source = "black_notehead_quarter_rule_no_stem"
 
     dotted = _has_augmentation_dot(note, staff, rhythm_symbols)
     if dotted:
         duration *= 1.5
         source = f"{source}+augmentation_dot"
-    return duration, dotted, source
+    return duration, dotted, source, stem_detected
 
 
 def notes_from_candidates(
@@ -590,7 +623,7 @@ def notes_from_candidates(
         if staff is None:
             continue
         step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff)
-        quarter_length, dotted, rhythm_source = rhythm_for_note(
+        quarter_length, dotted, rhythm_source, stem_detected = rhythm_for_note(
             candidate,
             staff,
             rhythm_symbols,
@@ -613,6 +646,7 @@ def notes_from_candidates(
                 onset_quarter=0.0,
                 dotted=dotted,
                 rhythm_source=rhythm_source,
+                stem_detected=stem_detected,
             )
         )
 
@@ -653,6 +687,7 @@ def notes_from_candidates(
                 onset_quarter=onset,
                 dotted=note.dotted,
                 rhythm_source=note.rhythm_source,
+                stem_detected=note.stem_detected,
             )
         )
         previous_staff = note.staff_index
@@ -884,6 +919,7 @@ def extract_notes_from_image(
                 candidate
                 for candidate in all_candidates
                 if is_beam(candidate.class_name)
+                or is_stem(candidate.class_name)
                 or is_flag(candidate.class_name)
                 or is_augmentation_dot(candidate.class_name)
             ]

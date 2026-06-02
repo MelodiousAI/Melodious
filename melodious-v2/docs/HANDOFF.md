@@ -77,8 +77,8 @@ Current state:
 - Local note extraction demo CLI: `scripts/extract_notes_from_image.py`.
 - Local note extraction demo docs: `docs/NOTE_EXTRACTION_DEMO.md`.
 - Local note extraction demo test: `tests/test_note_extraction_demo.py`.
-- Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v2/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, 17 dotted notes, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, and an overlay image. This is an ignored demo artifact, not an official metric run.
-- Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry. Rhythm now defaults black noteheads to quarter notes and uses nearby beams, flags, and augmentation dots, but it is still heuristic and not complete score transcription.
+- Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v3/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, 0 stem-confirmed notes, 17 dotted notes, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, and an overlay image. This is an ignored demo artifact, not an official metric run.
+- Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry. Rhythm uses nearby stems, beams, flags, and augmentation dots when the detector returns them. On this page, the checkpoint returned no usable stem detections, so quarter notes are marked as `black_notehead_quarter_rule_no_stem`.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
 - First manual recovery checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_v1/epoch20_stop_2026-05-21/`.
@@ -261,6 +261,59 @@ Commands run:
 Limitations:
 
 - Rhythm remains heuristic. It is better for quarters, beamed notes, flags, and visible augmentation dots, but it still does not reconstruct measures, ties, accidentals, voices, or complete beaming semantics.
+
+## 2026-06-02 - Agent Handoff - Stem-Aware Rhythm Labels Added
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local demo rescue path
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/ARCHITECTURE.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `runs/demo/sad_romance_note_extraction_v3/best_snapshot.pt`
+- `runs/demo/sad_romance_note_extraction_v3/sad_romance_clearer_smooth_notes.json`
+- `runs/demo/sad_romance_note_extraction_v3/sad_romance_clearer_smooth_notes.mid`
+- `runs/demo/sad_romance_note_extraction_v3/sad_romance_clearer_smooth_notes.musicxml`
+- `runs/demo/sad_romance_note_extraction_v3/sad_romance_clearer_smooth_notes_overlay.png`
+- `runs/demo/sad_romance_note_extraction_v3_stdout.json`
+
+What changed:
+
+- Stem detections are now carried into the local rhythm inference layer.
+- `ExtractedNote` now records `stem_detected`.
+- Black noteheads with nearby detected stems and no beam/flag are labeled `stem_quarter`.
+- Black noteheads without nearby stem/beam/flag are labeled `black_notehead_quarter_rule_no_stem`, making it explicit that the quarter value came from notation fallback rather than a detected stem.
+
+Sad Romance verification:
+
+- Command:
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_note_extraction_v3 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --title "Sad Romance"`
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Extracted note events: `197`.
+- Stem-confirmed notes: `0`.
+- Dotted notes: `17`.
+- Duration distribution: `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`.
+- Rhythm source distribution: `black_notehead_quarter_rule_no_stem:71`, `beam_x1:68`, `notehead_class:28`, `flag:13`, `black_notehead_quarter_rule_no_stem+augmentation_dot:8`, `beam_x1+augmentation_dot:4`, `flag+augmentation_dot:3`, `notehead_class+augmentation_dot:2`.
+- MusicXML parse check: `197` notes and `17` `<dot/>` tags.
+
+Key finding:
+
+- The detector taxonomy includes `stem`, but the current Sad Romance checkpoint inference returned no usable stem boxes at the selected threshold. This is why the local extractor cannot truthfully claim stem-confirmed quarter notes on that page.
+
+Next exact step:
+
+- Improve stem detection or post-processing before expecting stem-confirmed rhythm. Practical options: evaluate the current/final fine-tuned checkpoint specifically for `stem`, lower the stem confidence threshold separately, add a CV stem-line fallback attached to noteheads, or train/fine-tune with stronger thin-line/stem coverage.
 
 ## 2026-06-02 - Agent Handoff - M7 Fine-Tune Interrupted And Resumed
 
