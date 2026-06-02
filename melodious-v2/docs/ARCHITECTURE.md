@@ -67,14 +67,18 @@ Fallbacks are allowed for demo resilience but must be explicit:
 - Pitch modifiers: detected `keyFlat`, `keySharp`, and `keyNatural` symbols
   are mapped to per-staff key signatures; detected explicit `accidental*`
   symbols override the key signature for the attached note.
+- Augmentation-dot policy: YOLO-backed extraction uses detector-confirmed
+  `augmentationDot` boxes only by default. The older contour-based CV dot
+  fallback is disabled for YOLO runs to avoid false dotted rhythms from specks
+  or staff artifacts.
 - Current Sad Romance verification output:
   `runs/demo/sad_romance_note_extraction_v3/`.
 - Current uploaded Arabic page verification output:
-  `runs/demo/image_note_extraction_v5/`.
+  `runs/demo/image_note_extraction_v6/`.
 - Sad Romance verification summary: 9 detected staff systems, 197 note events,
   17 dotted notes, 0 stem-confirmed notes, and MusicXML with 17 `<dot/>` tags.
 - Uploaded Arabic page verification summary: 9 detected staff systems, 319
-  note events, 38 dotted notes, 0 stem-confirmed notes, detected `B: -1` key
+  note events, 7 detector-confirmed dotted notes, 0 stem-confirmed notes, detected `B: -1` key
   signatures on all 9 systems, and MusicXML with `<fifths>-1</fifths>` plus 53
   `<alter>-1</alter>` tags.
 - Staff detection now combines dark-line, light-line, and adaptive horizontal
@@ -85,6 +89,9 @@ Fallbacks are allowed for demo resilience but must be explicit:
   assembly are not reconstructed. Beam detections are used for duration, not
   complete notational grouping. Stem detections are used when present, but the
   current Sad Romance checkpoint inference returned no usable `stem` boxes.
+  The completed fine-tune still reports validation `stem` mAP `0.0`, so rhythm
+  reconstruction needs targeted stem detection/attachment work rather than
+  generic notehead extraction alone.
 
 ## Deployment Architecture
 

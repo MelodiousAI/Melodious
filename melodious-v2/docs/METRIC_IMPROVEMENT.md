@@ -166,9 +166,9 @@ Engineering decision:
 - Twenty-one taxonomy classes have no local labels, so another fine-tune on the same data cannot teach those classes.
 - Current validation metrics only measure 103 of 136 classes because 33 taxonomy classes are absent from validation.
 
-## Next High-Impact Experiment
+## First High-Impact Fine-Tune
 
-The next experiment should be a real fine-tune from the selected YOLOv8m checkpoint using the best measured primary-metric scale and the corrected dense-page detection cap:
+The next experiment was a real fine-tune from the selected YOLOv8m checkpoint using the best measured primary-metric scale and the corrected dense-page detection cap:
 
 Launch status:
 
@@ -181,10 +181,11 @@ Launch status:
 - Launch metadata: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/finetune_launch_metadata.json`.
 - Startup evidence: Ultralytics loaded `artifacts/models/detection_136class_yolov8m_v1/best.pt`, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and started epoch `1/50`.
 
-Interruption and resume status:
+Interruption, resume, and completion status:
 
 - The first launch stopped after seven completed epochs and while epoch 8 was in progress.
-- No final V2 `metrics.json` exists yet for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- The run was resumed from the clean epoch-7 `last.pt` checkpoint and later completed all 50 epochs.
+- Final V2 `metrics.json`, `analysis.json`, `manifest.json`, `artifacts.json`, `report.md`, `config.yaml`, and `onnx_parity.json` now exist for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
 - The clean epoch-7 checkpoint files exist at `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt` and `best.pt`.
 - Completed rows in `results.csv`: 7.
 - Best completed primary training-row metric so far: epoch 7, `metrics/mAP50-95(B) = 0.6116`.
@@ -197,6 +198,10 @@ Interruption and resume status:
 - Resume stdout log: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_stdout.log`.
 - Resume stderr log: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/resume_epoch7_stderr.log`.
 - Resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
+- Final generated AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+- Final generated threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
+- Final class analysis: 103 validation-supported classes, 5 supported zero-mAP classes, and small-symbol mean `mAP@0.5:0.95 = 0.5646180558011504`.
+- Important per-class result for rhythm: `beam = 0.7824341036579809`, `flag8thUp = 0.7196678490605957`, `flag8thDown = 0.8042434669433673`, and `augmentationDot = 0.25050444606568056`, but `stem = 0.0`. This explains why local demos can often find noteheads/beams/flags/key signatures but still cannot reliably distinguish all stemmed quarters from beamed notes from detector output alone.
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
@@ -226,14 +231,62 @@ if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralyti
 
 If the run is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, `args.yaml`, `finetune_stdout.log`, `finetune_stderr.log`, `finetune.pid`, `finetune_child.pid`, and `finetune_launch_metadata.json` before stopping.
 
-After training completes, finalize normally through the same script, regenerate `docs/EXPERIMENTS.md`, and compare only validation metrics until the model family is frozen.
+The completed fine-tune is now the best generated validation detector metric, but it does not solve `stem`.
+
+## Active Follow-Up Fine-Tune
+
+Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run was launched from the completed fine-tune `best.pt` at the stronger 1536 scale:
+
+- Run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
+- Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
+- Source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
+- Launch local time: 2026-06-02 `23:11:35`.
+- Active parent PID: `34896`, saved in `finetune_v2_retry.pid`.
+- Active Python child PID: `28432`, saved in `finetune_v2_retry_child.pid`.
+- Stdout log: `finetune_v2_retry_stdout.log`.
+- Stderr log: `finetune_v2_retry_stderr.log`.
+- Launch metadata: `finetune_v2_retry_launch_metadata.json`.
+- Launch settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
+- Startup evidence: Ultralytics loaded the completed fine-tune checkpoint, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and reached epoch `1/50`.
+- First launch attempt files `finetune_v2_stdout.log` and `finetune_v2_stderr.log` show a pre-training failure caused by incorrect PowerShell expansion of `$env:PYTHONPATH`; ignore that failed attempt and use the `retry` PID/log files.
+
+Monitor command:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$run='runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2'
+Get-Process -Id ([int](Get-Content "$run\finetune_v2_retry.pid")) -ErrorAction SilentlyContinue
+Get-Process -Id ([int](Get-Content "$run\finetune_v2_retry_child.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\finetune_v2_retry_stdout.log"
+if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
+```
+
+If interrupted, preserve `ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, `args.yaml`, the retry stdout/stderr logs, the retry PID files, and retry launch metadata before stopping. Resume with `--resume-training --resume-checkpoint runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\ultralytics\train\weights\last.pt`.
+
+## Stem/Rhythm Training Plan
+
+Internet/source-backed guidance points to a targeted thin-symbol plan rather than generic epoch increases:
+
+- DeepScores exists specifically as a tiny-object music-recognition benchmark; DeepScoresV2 stores dense music-object labels and benchmark artifacts. This supports higher-resolution, crop/tile, or small-object-focused experiments instead of relying on whole-page low-scale training.
+- MUSCIMA++ defines notation as primitives plus relationships: noteheads, stems, beams, key signatures, and attachment edges. This matches the engineering need for `stem_notehead` and `beam_notegroup` relationships after detection, not just isolated symbol labels.
+- Ultralytics documents data augmentation controls such as mosaic and scale, and notes copy-paste is useful for rare objects in segmentation tasks. For this project, copy-paste is not directly available for detect-mode boxes, but the same idea applies to a future synthetic/verified stem-dot dataset or a segmentation/OBB branch.
+- Ultralytics OBB docs describe rotated boxes that more tightly enclose objects with orientation. Stems and ledger lines are thin line-like objects where axis-aligned boxes can be weak supervision, so an OBB or segmentation branch is a plausible next experiment if the active detect-mode fine-tune does not move `stem`.
+
+Next concrete experiment after the active v2 run:
+
+1. Evaluate `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` per-class AP from `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` when it completes.
+2. If `stem` remains near zero, generate a tiled/cropped DeepScores training set where each staff-system or measure crop is resized to 1024-1536, remapping existing YOLO labels into tile coordinates. This makes stems and dots larger in model pixels and reduces dense-page object caps.
+3. Add a detector-threshold calibration for rhythm symbols separate from notehead thresholding. The note extractor can use a lower confidence for `stem`/`augmentationDot` only if validation/hard-negative checks keep false positives controlled.
+4. Add a clean-page CV stem-line attachment fallback as a demo-only bridge while training catches up. It should record `rhythm_source = cv_stem_quarter` so it is never confused with detector evidence.
+5. Consider an OBB or segmentation side branch for `stem`/`ledgerLine` if the tiled detect-mode run still cannot localize thin symbols.
 
 ## Presentation Guidance
 
 Use this language:
 
-- "Our best primary validation detector configuration uses the full 136-class YOLOv8m checkpoint at image size 1472 with a dense-page detection cap of 2000 and reaches `mAP@0.5:0.95 = 0.6204968163150985`."
-- "For the more optimistic validation metric, the best current configuration reaches `mAP@0.5 = 0.7920129156176505` at image size 1536 with the same 2000 detection cap."
+- "Our best completed validation detector is the M7 fine-tuned YOLOv8m run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation."
+- "The earlier dense-page inference sweep on the original full YOLOv8m checkpoint found that `imgsz=1472` and `max_det=2000` were necessary for fair validation on dense music pages."
+- "The remaining detector weakness is specific: `stem` remains at `0.0` AP after fine-tuning, so rhythm extraction needs targeted thin-symbol/stem work."
 
 Avoid this language:
 

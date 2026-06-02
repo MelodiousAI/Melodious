@@ -1114,6 +1114,7 @@ def extract_notes_from_image(
     device: str = "cpu",
     default_quarter_length: float = 1.0,
     use_cv_fallback: bool = True,
+    use_cv_dot_fallback: bool | None = None,
     title: str | None = None,
 ) -> ExtractionResult:
     """Extract approximate notes and write JSON, overlay, MusicXML, and MIDI."""
@@ -1168,7 +1169,14 @@ def extract_notes_from_image(
     elif not candidates:
         warnings.append("No note candidates were found.")
 
-    rhythm_symbols.extend(cv_augmentation_dot_candidates(image, staff_systems))
+    if use_cv_dot_fallback is None:
+        use_cv_dot_fallback = checkpoint_path is None or extractor_mode == "cv_staff_notehead_pitch"
+    if use_cv_dot_fallback:
+        rhythm_symbols.extend(cv_augmentation_dot_candidates(image, staff_systems))
+    elif checkpoint_path is not None:
+        warnings.append(
+            "CV augmentation-dot fallback disabled; only detector-confirmed augmentationDot symbols were used."
+        )
     key_signatures = key_signatures_from_symbols(pitch_symbols, staff_systems, candidates)
     key_fifths = document_key_fifths(key_signatures)
 

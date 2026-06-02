@@ -4,7 +4,11 @@
 
 M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deployment-prepared, but actual public deployment is blocked on account-local AWS values and AWS CLI availability in this workspace. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured M3 detector run `detection_136class_yolov8m_v1` completed all 150 YOLOv8m epochs, was finalized from the selected `best.pt` checkpoint, wrote project-standard metric provenance, exported ONNX, copied model artifacts, and generated class/error analysis. M4 wired the legacy MUSCIMA GNN checkpoint into a V2 runtime adapter, added explicit checkpoint/fallback API metadata, and wrote a natural-candidate-edge graph evaluation run. M5 measured the fixed MUSCIMA holdout export path using XML-derived detector payload fixtures and wrote end-to-end artifact evidence.
 
-The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. A separate local clean-sheet note extraction demo now exists at `scripts/extract_notes_from_image.py`; it snapshots a YOLO checkpoint, detects noteheads on CPU, estimates treble-clef pitch from staff geometry, applies detected key-signature and explicit-accidental symbols, and writes actual note JSON, overlay, MusicXML, and MIDI artifacts. This demo path is not a metric run and is not yet wired into the FastAPI upload route. M7 has now improved the best validation detector configuration by correcting dense-page inference settings for the selected YOLOv8m checkpoint. The best primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, with primary `mAP@0.5:0.95 = 0.6204968163150985`. The best secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`, with `mAP@0.5 = 0.7920129156176505`. These are inference-configuration improvements on validation, not a newly trained model and not a test-set result. M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The next real-training experiment, `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, was launched on 2026-06-01 at local time `02:46:32`, stopped after seven completed epochs while epoch 8 was in progress, and was resumed on 2026-06-02 at local time `01:05:09` from the saved epoch-7 `last.pt` checkpoint. Latest process check after the key-signature extraction work: resume parent PID `35952` and child PID `43740` are alive; `results.csv` latest completed row is epoch `36` with training-validation `metrics/mAP50(B) = 0.81375` and `metrics/mAP50-95(B) = 0.63024`. No final fine-tune `metrics.json` claim exists yet.
+The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. A separate local clean-sheet note extraction demo now exists at `scripts/extract_notes_from_image.py`; it snapshots a YOLO checkpoint, detects noteheads on CPU, estimates treble-clef pitch from staff geometry, applies detected key-signature and explicit-accidental symbols, and writes actual note JSON, overlay, MusicXML, and MIDI artifacts. This demo path is not a metric run and is not yet wired into the FastAPI upload route.
+
+M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing a real fine-tune. The completed fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+Its threshold metrics are precision `0.8457099520968777`, recall `0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
+M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The completed fine-tune still leaves `stem = 0.0` AP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction remains limited by thin-symbol detection. A follow-up background run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, is active from the completed fine-tune `best.pt`; parent PID `34896` and Python child PID `28432` are saved under its run directory.
 
 ## Completed
 
@@ -53,6 +57,8 @@ The current detector artifact is ready for integration work, but the API still u
 - M7 launched fine-tuning run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `artifacts/models/detection_136class_yolov8m_v1/best.pt` at image size 1472, batch 1, and `max_det=2000`.
 - M7 added `--resume-training` and `--resume-checkpoint` to `scripts/run_detection_136class_yolo.py` after the fine-tune was interrupted mid-epoch.
 - M7 resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `ultralytics/train/weights/last.pt`; Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
+- M7 completed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; generated `metrics.json`, `analysis.json`, `manifest.json`, `artifacts.json`, `report.md`, `config.yaml`, and `onnx_parity.json`.
+- M7 launched active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the completed fine-tune `best.pt` at image size 1536, batch 1, and `max_det=2000`.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 - Added local note extraction demo tooling at `src/melodious_v2/omr/note_extraction.py` and `scripts/extract_notes_from_image.py`.
 - Added focused note extraction tests in `tests/test_note_extraction_demo.py`.
@@ -60,6 +66,8 @@ The current detector artifact is ready for integration work, but the API still u
 - Verified the Sad Romance local demo image through the YOLO-backed extraction CLI on CPU after adding stem-aware rhythm inference: `extractor_mode = yolo_notehead_staff_pitch`, staff systems `9`, note events `197`, stem-confirmed notes `0`, dotted notes `17`, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, MusicXML `<dot/>` count `17`, output under `runs/demo/sad_romance_note_extraction_v3/`.
 - Improved the local staff detector so uploaded clean pages with lighter/antialiased staff lines do not silently lose systems; the regression test now covers light staff lines.
 - Verified `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png` through the YOLO-backed extraction CLI on CPU after the staff-detector and key-signature fixes: output under `runs/demo/image_note_extraction_v5/`, `extractor_mode = yolo_notehead_staff_pitch`, staff systems `9`, note events `319`, stem-confirmed notes `0`, dotted notes `38`, detected `B: -1` key signatures on all 9 systems, MusicXML `key_fifths = -1`, `53` B-flat notes from detected key signature, `2` explicit sharp notes from detected inline accidentals, duration distribution `0.25:28`, `0.375:8`, `0.5:175`, `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`, MIDI size `2879` bytes, and MusicXML parse check `319` notes with `38` `<dot/>` tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags.
+- Disabled CV augmentation-dot fallback by default for YOLO-backed note extraction; detector-confirmed `augmentationDot` boxes still count, but tiny CV contour specks are no longer silently converted into dotted rhythms.
+- Re-verified `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png` after the safer dot policy: output under `runs/demo/image_note_extraction_v6/`, `extractor_mode = yolo_notehead_staff_pitch`, staff systems `9`, note events `319`, stem-confirmed notes `0`, dotted notes `7`, detected `B: -1` key signatures on all 9 systems, MusicXML `key_fifths = -1`, `53` B-flat notes from detected key signature, duration distribution `0.25:36`, `0.5:192`, `1.0:74`, `1.5:6`, `2.0:10`, `3.0:1`, MIDI size `2871` bytes, and MusicXML parse check `319` notes with `7` `<dot/>` tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags.
 
 ## Latest Detector Result
 
@@ -115,7 +123,7 @@ Important detector-result caveat:
 - Precision cannot improve by an absolute 0.2 from the original 0.8274236461250144 because metric values are capped at 1.0.
 - The class-coverage audit shows the local labels support 115 of 136 taxonomy classes across all splits, 21 taxonomy classes have zero local labels, and validation measures 103 classes. Fine-tuning on the same labels can improve supported classes but cannot teach zero-label classes.
 
-Fine-tune currently running:
+Completed fine-tune:
 
 - Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
 - Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
@@ -130,8 +138,32 @@ Fine-tune currently running:
 - Resume stdout log: `resume_epoch7_stdout.log`.
 - Resume stderr log: `resume_epoch7_stderr.log`.
 - Resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
-- Latest process check after key-signature extraction: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `36`, training-validation `metrics/mAP50(B) = 0.81375`, and training-validation `metrics/mAP50-95(B) = 0.63024`.
-- Final V2 `metrics.json` does not exist yet for this fine-tune.
+- Final process check: parent PID `35952`, child PID `43740`, original parent PID `34780`, and original child PID `23612` are not running.
+- Final V2 metric source: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json`.
+- Final primary `mAP@0.5:0.95`: 0.6777474953487629.
+- Final secondary `mAP@0.5`: 0.8226206920791271.
+- Final `precision@0.5`: 0.8457099520968777.
+- Final `recall@0.5`: 0.7738772781467206.
+- Final `F1@0.5`: 0.8082006373091581.
+- Final supported validation classes: 103.
+- Final supported zero-mAP classes: 5.
+- Final small-symbol mean `mAP@0.5:0.95`: 0.5646180558011504.
+- Important per-class caveat: `stem = 0.0`, `ledgerLine = 0.0035627224962602928`, `augmentationDot = 0.25050444606568056`, `beam = 0.7824341036579809`, `flag8thUp = 0.7196678490605957`, and `flag8thDown = 0.8042434669433673`.
+
+Active follow-up fine-tune:
+
+- Run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
+- Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
+- Source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
+- Launch local time: 2026-06-02 `23:11:35`.
+- Parent PID: `34896`, saved in `finetune_v2_retry.pid`.
+- Python child PID: `28432`, saved in `finetune_v2_retry_child.pid`.
+- Stdout log: `finetune_v2_retry_stdout.log`.
+- Stderr log: `finetune_v2_retry_stderr.log`.
+- Launch metadata: `finetune_v2_retry_launch_metadata.json`.
+- Settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
+- Startup evidence: reached epoch `1/50` on CUDA with the RTX 3080 Laptop GPU.
+- Ignore the first `finetune_v2_stdout.log` / `finetune_v2_stderr.log` attempt; it failed before training because `$env:PYTHONPATH` was expanded incorrectly in the child command. The active run uses the `retry` PID/log files.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -296,6 +328,11 @@ Important end-to-end caveat:
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\audit_detector_class_coverage.py --metrics runs\detection\detection_136class_yolov8m_eval_img1472_maxdet2000_v1\metrics.json --output-dir runs\detection\detection_136class_class_coverage_audit_v1`.
 - Passed: `$env:PYTHONPATH='src;.'; ..\.venv\Scripts\python.exe -m unittest discover tests`, 36 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 13 documentation files.
+- Passed: completed fine-tune finalization for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; generated `metrics.json` with AP metrics `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+- Passed: same fine-tune threshold `F1@0.5 = 0.8082006373091581`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py -q`, 8 tests after disabling YOLO-mode CV dot fallback by default.
+- Passed: local extraction command for `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png` to `runs\demo\image_note_extraction_v6`; generated JSON, overlay, MusicXML, and MIDI with 319 notes and 7 MusicXML `<dot/>` tags.
+- Passed: active background launch for `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`; startup logs show CUDA training reached epoch `1/50`, parent PID `34896`, and child PID `28432`.
 
 ## Milestone Tracker
 
@@ -308,7 +345,7 @@ Important end-to-end caveat:
 | M4 - Real Assembly Runtime | Done | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported MusicXML/MIDI artifacts |
 | M6 - AWS Public Demo | Prepared / blocked on AWS values | `infra/aws/README.md`, `scripts/smoke_public_demo.py`, local smoke evidence; public smoke pending |
-| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`, `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
+| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json`, active `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, `docs/METRIC_IMPROVEMENT.md` |
 | M8 - Final Grading Package | Planned | Frozen docs and presentation evidence |
 
 ## Active Blockers
@@ -328,11 +365,11 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Monitor the resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` until it completes, fails, or the user requests a clean save/stop.
-2. Use the updated monitor command in `docs/METRIC_IMPROVEMENT.md` to check `resume_epoch7.pid`, `resume_epoch7_child.pid`, `resume_epoch7_stdout.log`, and the latest `results.csv` row.
-3. Treat the fine-tune as an attempt to improve the 115 locally supported classes, not as a solution for the 21 zero-label taxonomy classes.
-4. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
-5. After the fine-tune completes, regenerate `docs/EXPERIMENTS.md`, compare validation metrics against `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`, update docs, and run the full test suite plus `scripts/validate_metric_claims.py`.
+1. Monitor active run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` using the monitor command in `docs/METRIC_IMPROVEMENT.md`; use `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, and `finetune_v2_retry_stdout.log`.
+2. If the active run is interrupted, preserve `last.pt`, `best.pt`, `results.csv`, `args.yaml`, retry logs, retry PID files, and retry launch metadata before stopping or resuming.
+3. When the active run completes, compare `stem`, `ledgerLine`, `augmentationDot`, `beam`, `flag8thUp`, `flag8thDown`, headline AP metrics, recall, and F1 against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+4. If `stem` remains near zero, do not keep blindly training whole pages. Build a tiled/cropped staff-system or measure-level dataset for thin symbols, or add a demo-only CV stem-line attachment fallback with explicit provenance.
+5. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
 6. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
 7. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 

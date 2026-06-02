@@ -99,13 +99,26 @@
   - training-supported but validation-absent classes: 12,
   - high-support zero-map validation classes: `ledgerLine` and `stem`,
   - caveat: fine-tuning on the same local labels can improve supported-class metrics but cannot teach zero-label classes without additional labeled data.
-- M7 fine-tune in progress:
+- M7 completed fine-tune:
   - run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`,
   - source checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`,
   - image size: 1472,
   - max detections per image: 2000,
   - launch status: started on 2026-06-01 local time `02:46:32`,
-  - metric status: pending until `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json` exists.
+  - resume status: resumed on 2026-06-02 local time `01:05:09` from the saved epoch-7 `last.pt`,
+  - final V2 metric source: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json`,
+  - validation primary metric: `mAP@0.5:0.95` 0.6777474953487629,
+  - validation secondary AP metric: `mAP@0.5` 0.8226206920791271,
+  - validation threshold metrics: precision 0.8457099520968777, recall 0.7738772781467206, and `F1@0.5` 0.8082006373091581,
+  - limitation: `stem` remains 0.0 mAP and `ledgerLine` remains 0.0035627224962602928 mAP, so the dataset/training path still needs thin-symbol work.
+- M7 active follow-up fine-tune:
+  - run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`,
+  - source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`,
+  - image size: 1536,
+  - max detections per image: 2000,
+  - launch status: retry launch started on 2026-06-02 local time `23:11:35`,
+  - active PID files: `finetune_v2_retry.pid` and `finetune_v2_retry_child.pid`,
+  - metric status: pending until `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` exists.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.

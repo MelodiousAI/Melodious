@@ -49,6 +49,7 @@ Before coding, read:
 - scripts/run_detection_136class_yolo.py
 - runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json if it exists locally
+- runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_eval_img1248_v1/metrics.json if it exists locally
 - runs/detection/detection_136class_yolov8m_v1/metrics.json if it exists locally
 
@@ -72,10 +73,12 @@ Current handoff:
 - Validation supports 103 classes and has 33 taxonomy-class blind spots.
 - Twenty-one taxonomy classes have zero local labels across train/validation/test, so another fine-tune on the same data cannot teach them.
 - No validation-supported or test-supported class is absent from training.
-- `ledgerLine` and `stem` remain important high-support zero-mAP limitations.
-- Fine-tune run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` was launched on 2026-06-01 at local time `02:46:32`, stopped after seven completed epochs, and was resumed on 2026-06-02 at local time `01:05:09`.
-- Fine-tune resume artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`, including `resume_epoch7.pid`, `resume_epoch7_child.pid`, `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, and `resume_epoch7_launch_metadata.json`.
-- Fine-tune resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
+- Completed fine-tune run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` has final AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+- Completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
+- `stem` remains `0.0` mAP after the completed fine-tune, and `ledgerLine` remains very weak at `0.0035627224962602928`; this is the main rhythm-quality blocker.
+- Active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was launched from the completed fine-tune `best.pt` on 2026-06-02 at local time `23:11:35`.
+- Active follow-up artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, including `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, and `finetune_v2_retry_launch_metadata.json`.
+- Active follow-up startup evidence: CUDA training reached epoch `1/50`.
 - Test-set detector performance is still intentionally unreported.
 
 Do all of the following:
@@ -87,14 +90,15 @@ Do all of the following:
    - Run tests before significant detector code changes.
 
 2. Decide the next honest improvement path.
-   - If `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` is still running, monitor it instead of launching a duplicate run.
-   - If it is not running and no completed `metrics.json` exists, resume or relaunch from the most recent clean checkpoint according to `docs/HANDOFF.md`.
-   - If GPU time is available and no fine-tune is active, launch the 1472/max-det fine-tune command from `docs/METRIC_IMPROVEMENT.md`.
-   - If not launching training, document the exact blocker and next command.
+   - If `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` is still running, monitor it instead of launching a duplicate run.
+   - If it is not running and no completed `metrics.json` exists, resume from `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/last.pt` according to `docs/HANDOFF.md`.
+   - If it completes, compare headline metrics and especially `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+   - If `stem` remains near zero, do not keep blindly training whole pages; plan a tiled/cropped thin-symbol dataset or a clearly labeled CV stem-line attachment fallback.
+   - If not launching/resuming training, document the exact blocker and next command.
    - Keep generated training outputs under ignored `runs/` and `artifacts/`.
 
 3. If training is launched.
-   - Use a new run id, preferably `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+   - Use a new run id, not one of the completed or active run ids.
    - Save/stop only at clean checkpoints.
    - Preserve `last.pt`, `best.pt`, `results.csv`, logs, and metadata before stopping.
    - Do not overwrite `detection_136class_yolov8m_v1`.

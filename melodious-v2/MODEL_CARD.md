@@ -28,7 +28,10 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - Best current validation detector `F1@0.5 = 0.7746130448554269`.
 - The best current secondary `mAP@0.5` validation configuration is `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, with `mAP@0.5 = 0.7920129156176505`.
 - The M7 class coverage audit is recorded under `runs/detection/detection_136class_class_coverage_audit_v1/`; it shows that the model head preserves the 136-class taxonomy, but local labels contain support for 115 classes across train/validation/test and validation measures 103 classes.
-- The next M7 fine-tune, `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, is running from the selected YOLOv8m checkpoint at image size 1472 with `max_det=2000`; final metrics are not available until its generated `metrics.json` exists.
+- The completed M7 fine-tune `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` is recorded in `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json`.
+- Completed fine-tune AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+- Completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
+- A follow-up background fine-tune, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was launched from the completed fine-tune `best.pt` at image size 1536 with `max_det=2000`; it has no final `metrics.json` until the runner completes.
 - Graph assembly now has a real legacy GNN runtime path. With `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt`, the API sample path can report `applied_mode = "gnn"` only after checkpoint inference runs.
 - The current graph evaluation run is `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
 - Primary graph metric: `positive_macro_f1 = 0.7590456327823909`.
@@ -59,7 +62,8 @@ Melodious V2 is an optical music recognition system for scanned or photographed 
 - The full YOLOv8m detector is a validation-split artifact. Test-set detector performance has not been reported yet and should be produced only once the team freezes the model family.
 - The `detection_136class_yolov8m_eval_img1472_maxdet2000_v1` and `detection_136class_yolov8m_eval_img1536_maxdet2000_v1` results are validation-time inference tuning on the existing checkpoint. They are not newly trained models and must not be reported as test performance.
 - The full YOLOv8m analysis shows 103 supported validation classes, 16 supported classes with zero mAP, and small-symbol mean `mAP@0.5:0.95 = 0.3194606161321027`. Problem classes include `ledgerLine`, `stem`, `ottavaBracket`, several articulation classes, and fingering classes. See `runs/detection/detection_136class_yolov8m_v1/analysis.json`.
-- The improved dense-page inference runs still leave high-support classes such as `ledgerLine` and `stem` unresolved; see `docs/METRIC_IMPROVEMENT.md`.
+- The completed fine-tune improved the headline validation metrics and reduced supported zero-mAP classes to 5, but `stem` remains `0.0` mAP and `ledgerLine` is only `0.0035627224962602928`. Rhythm extraction on uploaded sheet demos therefore remains limited by missing stem detections.
+- The local note-extraction demo disables CV augmentation-dot guessing for YOLO-backed runs by default. This reduces false dotted notes but does not solve detector-confirmed false `augmentationDot` predictions or missing stem detections.
 - The local DeepScores labels do not cover all 136 taxonomy classes: 21 classes have zero labels across train/validation/test. Another fine-tune on the same labels cannot teach those classes; future full-taxonomy improvement needs added labels, external data, synthetic-but-verified examples, or a narrower supported-class claim.
 - Current validation metrics are blind to 33 taxonomy classes because those classes have zero validation support. Validation-selected settings must not be presented as proof that every class works.
 - API inference still uses the bootstrap detector path until a selected ONNX artifact is intentionally wired into a non-bootstrap detector adapter.

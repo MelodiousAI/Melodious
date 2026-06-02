@@ -3,6 +3,7 @@ from __future__ import annotations
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from PIL import Image, ImageDraw
 
@@ -211,6 +212,79 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertTrue(extracted[0].dotted)
         self.assertFalse(extracted[0].stem_detected)
         self.assertTrue(extracted[3].stem_detected)
+
+    def test_yolo_extraction_does_not_invent_cv_dots_by_default(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            image_path = tmp_path / "staff_with_speck.png"
+            self._synthetic_staff_image(image_path)
+            image = Image.open(image_path).convert("L")
+            draw = ImageDraw.Draw(image)
+            draw.ellipse((140, 91, 144, 95), fill=0)
+            image.save(image_path)
+
+            note = DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(120.0, 91.0, 132.0, 99.0),
+                source="yolo",
+            )
+
+            with patch(
+                "melodious_v2.omr.note_extraction.yolo_detection_candidates",
+                return_value=[note],
+            ):
+                result = extract_notes_from_image(
+                    image_path=image_path,
+                    output_dir=tmp_path / "out",
+                    checkpoint_path=tmp_path / "fake.pt",
+                    snapshot_live_checkpoint=False,
+                    use_cv_fallback=True,
+                    default_quarter_length=1.0,
+                )
+
+            self.assertEqual(len(result.notes), 1)
+            self.assertFalse(result.notes[0].dotted)
+            self.assertEqual(result.notes[0].quarter_length, 1.0)
+            self.assertIn("only detector-confirmed augmentationDot", " ".join(result.warnings))
+
+    def test_yolo_extraction_keeps_detector_confirmed_dots(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            image_path = tmp_path / "staff.png"
+            self._synthetic_staff_image(image_path)
+            note = DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(120.0, 91.0, 132.0, 99.0),
+                source="yolo",
+            )
+            dot = DetectionCandidate(
+                class_id=2,
+                class_name="augmentationDot",
+                confidence=0.9,
+                bbox_xyxy=(138.0, 92.0, 142.0, 96.0),
+                source="yolo",
+            )
+
+            with patch(
+                "melodious_v2.omr.note_extraction.yolo_detection_candidates",
+                return_value=[note, dot],
+            ):
+                result = extract_notes_from_image(
+                    image_path=image_path,
+                    output_dir=tmp_path / "out",
+                    checkpoint_path=tmp_path / "fake.pt",
+                    snapshot_live_checkpoint=False,
+                    use_cv_fallback=True,
+                    default_quarter_length=1.0,
+                )
+
+            self.assertEqual(len(result.notes), 1)
+            self.assertTrue(result.notes[0].dotted)
+            self.assertEqual(result.notes[0].quarter_length, 1.5)
 
     def test_midi_writer_handles_empty_note_list(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

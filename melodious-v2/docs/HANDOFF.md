@@ -4,7 +4,10 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 ## Current Handoff
 
-Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`. M7 improved the best validation detector configuration by correcting dense-page inference settings for the selected checkpoint. The best current primary validation detector run is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the best current secondary `mAP@0.5` validation run is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
+Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`.
+
+M7 improved detector AP metrics by correcting dense-page inference settings and then completing `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation.
+The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, is actively training in the background from the completed fine-tune `best.pt`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
 
 Current state:
 
@@ -63,23 +66,33 @@ Current state:
 - M7 class coverage finding: the detector head preserves 136 classes, but the local train/validation/test labels support 115 classes, validation supports 103 classes, and 21 taxonomy classes have zero local labels.
 - M7 class coverage finding: no validation-supported or test-supported class is absent from training, but 12 train-supported classes are absent from validation.
 - M7 class coverage finding: high-support zero-map validation classes remain `ledgerLine` and `stem`.
-- M7 fine-tune currently resumed/running: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
+- M7 completed fine-tune: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
 - M7 first fine-tune launch: 2026-06-01 local time `02:46:32`, parent PID `34780`, active child PID observed after launch `23612`.
-- M7 first fine-tune attempt stopped after seven completed epochs and while epoch 8 was in progress; no final fine-tune `metrics.json` exists yet.
+- M7 first fine-tune attempt stopped after seven completed epochs and while epoch 8 was in progress; it was later resumed and completed all 50 epochs.
 - M7 first fine-tune clean checkpoint files: `ultralytics/train/weights/last.pt` and `best.pt`.
 - M7 first fine-tune best completed primary training-row metric so far: epoch 7, `metrics/mAP50-95(B) = 0.6116`.
 - M7 first fine-tune best completed `metrics/mAP50(B)` so far: epoch 6, `0.79679`.
 - M7 resume support commit: `6636622`.
 - M7 fine-tune resume launch: 2026-06-02 local time `01:05:09`, parent PID `35952`, active child PID `43740`.
 - M7 fine-tune resume logs: `resume_epoch7_stdout.log`, `resume_epoch7_stderr.log`, `resume_epoch7.pid`, `resume_epoch7_child.pid`, and `resume_epoch7_launch_metadata.json` under the run directory.
-- M7 fine-tune latest checked after key-signature extraction work: parent PID `35952` alive, child PID `43740` alive, latest completed `results.csv` row epoch `36`, training-validation `metrics/mAP50(B) = 0.81375`, training-validation `metrics/mAP50-95(B) = 0.63024`, and no final fine-tune `metrics.json` exists yet.
+- M7 completed fine-tune AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+- M7 completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
+- M7 completed fine-tune caveat: `stem = 0.0` mAP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction still needs targeted thin-symbol work.
+- M7 active follow-up fine-tune: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
+- M7 active follow-up source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
+- M7 active follow-up launch: 2026-06-02 local time `23:11:35`, parent PID `34896`, Python child PID `28432`.
+- M7 active follow-up files: `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, `finetune_v2_retry_launch_command.txt`, and `finetune_v2_retry_launch_metadata.json`.
+- M7 active follow-up settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
+- M7 active follow-up startup evidence: CUDA training reached epoch `1/50` on the RTX 3080 Laptop GPU.
+- Ignore `finetune_v2_stdout.log` / `finetune_v2_stderr.log`; the first v2 launch failed before training because `$env:PYTHONPATH` was expanded incorrectly. The active run uses the `retry` files.
 - Local note extraction demo module: `src/melodious_v2/omr/note_extraction.py`.
 - Local note extraction demo CLI: `scripts/extract_notes_from_image.py`.
 - Local note extraction demo docs: `docs/NOTE_EXTRACTION_DEMO.md`.
 - Local note extraction demo test: `tests/test_note_extraction_demo.py`.
 - Sad Romance note extraction evidence: `runs/demo/sad_romance_note_extraction_v3/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 197 extracted note events, 0 stem-confirmed notes, 17 dotted notes, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, and an overlay image. This is an ignored demo artifact, not an official metric run.
 - Sad Romance note extraction caveat: pitch is estimated from treble-clef staff geometry. Rhythm uses nearby stems, beams, flags, and augmentation dots when the detector returns them. On this page, the checkpoint returned no usable stem detections, so quarter notes are marked as `black_notehead_quarter_rule_no_stem`.
-- Uploaded Arabic page note extraction evidence: `runs/demo/image_note_extraction_v5/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 319 extracted note events, 0 stem-confirmed notes, 38 dotted notes, detected `B: -1` key signatures on all 9 systems, MusicXML `key_fifths = -1`, 53 B-flat notes from detected key signatures, 2 explicit sharp notes from detected inline accidentals, duration distribution `0.25:28`, `0.375:8`, `0.5:175`, `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`, MIDI size `2879` bytes, and MusicXML parse check `319` notes with `38` `<dot/>` tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags. This is an ignored demo artifact, not an official metric run.
+- Uploaded Arabic page note extraction evidence after key-signature support: `runs/demo/image_note_extraction_v5/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 319 extracted note events, 0 stem-confirmed notes, 38 dotted notes, detected `B: -1` key signatures on all 9 systems, MusicXML `key_fifths = -1`, 53 B-flat notes from detected key signatures, 2 explicit sharp notes from detected inline accidentals, duration distribution `0.25:28`, `0.375:8`, `0.5:175`, `0.75:8`, `1.0:68`, `1.5:21`, `2.0:10`, `3.0:1`, MIDI size `2879` bytes, and MusicXML parse check `319` notes with `38` `<dot/>` tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags. This is an ignored demo artifact, not an official metric run.
+- Uploaded Arabic page note extraction evidence after safer dot policy: `runs/demo/image_note_extraction_v6/` with `extractor_mode = yolo_notehead_staff_pitch`, 9 staff systems, 319 extracted note events, 0 stem-confirmed notes, 7 detector-confirmed dotted notes, detected `B: -1` key signatures on all 9 systems, MusicXML `key_fifths = -1`, 53 B-flat notes from detected key signatures, duration distribution `0.25:36`, `0.5:192`, `1.0:74`, `1.5:6`, `2.0:10`, `3.0:1`, MIDI size `2871` bytes, and MusicXML parse check `319` notes with `7` `<dot/>` tags, one `<fifths>-1</fifths>`, and `53` `<alter>-1</alter>` tags. This is an ignored demo artifact, not an official metric run.
 - Uploaded Arabic page staff/key finding: the initial run detected only 4 staff systems and should be ignored. The fixed `v3` run detects all 9 visible systems by preserving lighter/antialiased staff lines before note-to-pitch mapping. The `v5` run adds detected key-signature application. This was not hard-coded to the page: YOLO emits `keyFlat`, the extractor maps each key-flat glyph to `B` by staff geometry, and then applies `B: -1` to matching notes.
 - `yolov8m.pt` exists in the V2 workspace and is ignored by `.gitignore`.
 - Full YOLOv8m training was first saved after epoch 20 completed and stopped during epoch 21.
@@ -128,12 +141,112 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. Monitor the resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` process using the exact monitor command in `docs/METRIC_IMPROVEMENT.md`.
-3. If training is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, and the PID/log metadata before stopping.
+2. Monitor the active `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` process using the exact monitor command in `docs/METRIC_IMPROVEMENT.md`.
+3. If training is interrupted, first wait for a completed epoch row in `results.csv`, then preserve `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/last.pt`, `best.pt`, `results.csv`, logs, retry PID files, and retry launch metadata before stopping or resuming.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
-6. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. For the next product-facing step, wire this path into the API behind an explicit mode such as `yolo_note_demo`, preserving warnings that rhythm and pitch are heuristic.
-7. For the next rhythm-quality step, target stem detection specifically: evaluate/lower a separate `stem` threshold, add a CV stem-line attachment fallback, or continue fine-tuning with stronger thin-line/stem coverage.
+6. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. YOLO-backed runs now disable CV augmentation-dot fallback by default; add `--use-cv-dot-fallback` only for deliberate experiments.
+7. For the next rhythm-quality step, target stem detection specifically: compare `stem` after v2 completes; if it remains near zero, build a tiled/cropped thin-symbol dataset or add a clearly labeled CV stem-line attachment fallback instead of blindly training more whole-page epochs.
+
+## 2026-06-02 - Agent Handoff - Dot Fallback Tightened And V2 Fine-Tune Launched
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local note-extraction demo quality
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `scripts/extract_notes_from_image.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/ARCHITECTURE.md`
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `MODEL_CARD.md`
+- `README.md`
+
+Generated ignored evidence:
+
+- `runs/demo/image_note_extraction_v6/best_snapshot.pt`
+- `runs/demo/image_note_extraction_v6/image_notes.json`
+- `runs/demo/image_note_extraction_v6/image_notes.mid`
+- `runs/demo/image_note_extraction_v6/image_notes.musicxml`
+- `runs/demo/image_note_extraction_v6/image_notes_overlay.png`
+- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/finetune_v2_retry.pid`
+- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/finetune_v2_retry_child.pid`
+- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/finetune_v2_retry_stdout.log`
+- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/finetune_v2_retry_stderr.log`
+- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/finetune_v2_retry_launch_command.txt`
+- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/finetune_v2_retry_launch_metadata.json`
+
+What changed:
+
+- Confirmed the previous fine-tune `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` had completed and generated final V2 artifacts.
+- Recorded completed fine-tune AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+- Recorded completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
+- Recorded the critical rhythm limitation: completed fine-tune `stem = 0.0` mAP, while `beam = 0.7824341036579809`, `flag8thUp = 0.7196678490605957`, `flag8thDown = 0.8042434669433673`, and `augmentationDot = 0.25050444606568056`.
+- Added `use_cv_dot_fallback` to `extract_notes_from_image()`. Default behavior now enables CV dot fallback only for CV-only extraction, not for YOLO-backed extraction.
+- Added CLI flag `--use-cv-dot-fallback` so YOLO-backed runs can opt into the old contour-dot behavior deliberately.
+- Added tests proving YOLO-backed extraction does not turn a nearby visual speck into a dotted note by default, while detector-confirmed `augmentationDot` boxes still produce dotted notes.
+- Re-ran the uploaded Arabic page extraction as `runs/demo/image_note_extraction_v6/`.
+- Launched active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the completed v1 fine-tune `best.pt`.
+
+Uploaded Arabic page verification after safer dot policy:
+
+- Command:
+  `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png --output-dir runs\demo\image_note_extraction_v6 --device cpu --title "Extracted Notes"`
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Extracted note events: `319`.
+- Stem-confirmed notes: `0`.
+- Dotted notes: `7`, down from `38` in `v5`.
+- Key signatures: every staff system has `{"B": -1}`.
+- MusicXML key fifths: `-1`.
+- B-flat notes from detected key signature: `53`.
+- Duration distribution: `0.25:36`, `0.5:192`, `1.0:74`, `1.5:6`, `2.0:10`, `3.0:1`.
+- MusicXML parse check: `319` notes, `7` dot tags, one key fifths value `-1`, and `53` flat alters.
+- MIDI path: `runs/demo/image_note_extraction_v6/image_notes.mid`.
+- MIDI size: `2871` bytes.
+- Warning in output: `CV augmentation-dot fallback disabled; only detector-confirmed augmentationDot symbols were used.`
+
+Active follow-up fine-tune:
+
+- Run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
+- Source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
+- First launch attempt failed before training because the PowerShell command expanded `$env:PYTHONPATH` incorrectly; this failed attempt is recorded in `finetune_v2_stdout.log` and `finetune_v2_stderr.log`.
+- Corrected retry launch local time: 2026-06-02 `23:11:35`.
+- Parent PID: `34896`, saved in `finetune_v2_retry.pid`.
+- Python child PID: `28432`, saved in `finetune_v2_retry_child.pid`.
+- Retry stdout log: `finetune_v2_retry_stdout.log`.
+- Retry stderr log: `finetune_v2_retry_stderr.log`.
+- Startup evidence: Ultralytics loaded the completed v1 fine-tune checkpoint, transferred 475/475 pretrained items, used CUDA on the RTX 3080 Laptop GPU, and reached epoch `1/50`.
+
+Internet/source-backed training conclusion:
+
+- DeepScores is a tiny-object music detection benchmark, so whole-page training can leave stems/ledger lines too small in model pixels.
+- MUSCIMA++ models notation as primitives plus relationships, including notehead-stem and key-signature attachment edges; rhythm is therefore not solved by notehead labels alone.
+- Ultralytics data augmentation and OBB docs support the next engineering direction: higher-resolution/tiled data, augmentation targeted at rare/thin symbols, and possibly OBB/segmentation for line-like objects.
+- If `stem` remains near zero after the active v2 run, the next correct experiment is a tiled/cropped staff-system or measure-level dataset that remaps existing labels, plus separate threshold calibration for rhythm symbols. Blindly adding more whole-page epochs is not the best engineering bet.
+
+Commands run:
+
+- Fine-tune completion check for `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` - passed; final `metrics.json` exists.
+- Process check for old v1 PID files - passed; old parent/child PIDs are not running.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py -q` - passed, 8 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image.png --output-dir runs\demo\image_note_extraction_v6 --device cpu --title "Extracted Notes"` - passed.
+- MusicXML/MIDI artifact check for `runs/demo/image_note_extraction_v6/` - passed; MIDI size `2871` bytes and MusicXML has `7` dot tags.
+- GPU check with `nvidia-smi` - passed before launch; RTX 3080 Laptop GPU was available.
+- Active v2 fine-tune launch - passed on retry; parent PID `34896`, child PID `28432`, epoch `1/50` in stdout.
+
+Failures:
+
+- First v2 launch attempt failed before training with `ModuleNotFoundError: No module named 'melodious_v2'` because the child PowerShell command expanded `$env:PYTHONPATH` while constructing the command string. This produced no training rows and is superseded by the retry launch.
+
+Next exact step:
+
+- Monitor `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` with the command in `docs/METRIC_IMPROVEMENT.md`. When it finishes, compare headline metrics and especially `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` against the completed v1 fine-tune. If `stem` is still near zero, build a tiled/cropped thin-symbol dataset or add a clearly labeled CV stem attachment fallback before doing more whole-page training.
 
 ## 2026-06-02 - Agent Handoff - Key Signature Application Added
 

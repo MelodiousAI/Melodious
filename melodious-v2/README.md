@@ -85,7 +85,10 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 5. Evaluate with `mAP@0.5:0.95` as the primary detector metric.
 6. Improve inference configuration only through validation-provenance runs. Current best primary validation inference run: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`, with `mAP@0.5:0.95 = 0.6204968163150985`. Current best secondary `mAP@0.5` validation run: `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, with `mAP@0.5 = 0.7920129156176505`.
 7. Audit class coverage before claiming full-taxonomy quality. Current audit: `runs/detection/detection_136class_class_coverage_audit_v1/`; the model head has 136 classes, local labels support 115 classes across train/validation/test, and validation measures 103 classes.
-8. Store every run under `runs/detection/{run_id}/` with config, metrics JSON, plots, and artifact hashes.
+8. Fine-tune with generated metric provenance. Completed run `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json` reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+9. The completed fine-tune has separate validation `F1@0.5 = 0.8082006373091581`.
+10. The `stem` class remains `0.0` AP after fine-tuning.
+11. Store every run under `runs/detection/{run_id}/` with config, metrics JSON, plots, and artifact hashes.
 
 ## Graph Assembly Path
 
@@ -141,6 +144,10 @@ key-signature fixes, it detected 9 staff systems, wrote 319 note events, inferre
 MusicXML with `<fifths>-1</fifths>` and 53 `<alter>-1</alter>` tags, and wrote a
 2879-byte MIDI file. It still had 0 stem-confirmed notes, so rhythm quality is
 limited by missing `stem` detections and the demo's fallback rhythm rules.
+The newer `runs/demo/image_note_extraction_v6/` artifact disables CV
+augmentation-dot guessing for YOLO-backed extraction; it keeps the same 319 note
+events and key-signature behavior, but reduces dotted notes from 38 to 7 and
+writes a 2871-byte MIDI file.
 
 ## Deployment Path
 
@@ -164,6 +171,6 @@ Current M6 status: deployment path and local smoke tooling are ready, but actual
 
 ## Current Status
 
-This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, deployment templates, and a separate local note-extraction demo CLI. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best primary validation inference configuration is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the current best secondary `mAP@0.5` configuration is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. The current class-coverage audit is `detection_136class_class_coverage_audit_v1` and should be read before making all-136-class claims. The current fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; check `docs/METRIC_IMPROVEMENT.md` and `docs/HANDOFF.md` before launching any duplicate training process. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`. The Sad Romance local note-extraction demo artifact is under `runs/demo/sad_romance_note_extraction_v3/`; the uploaded Arabic page local note-extraction demo artifact is under `runs/demo/image_note_extraction_v5/`; both are documented in `docs/NOTE_EXTRACTION_DEMO.md`.
+This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, deployment templates, and a separate local note-extraction demo CLI. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best primary validation inference configuration is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the current best secondary `mAP@0.5` configuration is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. The current completed fine-tune is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; the active follow-up background run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. The current class-coverage audit is `detection_136class_class_coverage_audit_v1` and should be read before making all-136-class claims. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`. The Sad Romance local note-extraction demo artifact is under `runs/demo/sad_romance_note_extraction_v3/`; the uploaded Arabic page local note-extraction demo artifact is under `runs/demo/image_note_extraction_v6/`; both are documented in `docs/NOTE_EXTRACTION_DEMO.md`.
 
 Current active milestone: M7 - Detector Metric Improvement. See `docs/METRIC_IMPROVEMENT.md`, `docs/ROADMAP.md`, and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
