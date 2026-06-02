@@ -20,6 +20,8 @@
 - `assembly`: relationship inference, checkpoint-gated legacy GNN runtime, and fallback mode resolution.
 - `export`: MusicXML/MIDI generation and validation.
 - `evaluation.e2e_export`: fixed holdout export evaluation using detector payload fixtures.
+- `omr`: local clean-sheet note extraction helpers that combine detector
+  notehead boxes with staff geometry and write demo MIDI/MusicXML artifacts.
 - `api`: product service endpoints.
 - `deployment`: local/public smoke-test helpers for the API deployment contract.
 - `reports`: generated metric and experiment report helpers.
@@ -51,6 +53,23 @@ Fallbacks are allowed for demo resilience but must be explicit:
 - Payload source: MUSCIMA XML-derived detector payload fixtures.
 - Current run: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
 - Limitation: this measures export validity and artifact generation, not trained uploaded-image detector quality.
+
+## Local Note Extraction Demo
+
+- CLI: `scripts/extract_notes_from_image.py`.
+- Reusable code: `src/melodious_v2/omr/note_extraction.py`.
+- Primary mode: `yolo_notehead_staff_pitch`.
+- Fallback mode: `cv_staff_notehead_pitch`.
+- Purpose: local testing of clean sheet image note extraction before the
+  FastAPI upload path is rewired away from `heuristic_bootstrap`.
+- Output artifacts: note JSON, overlay PNG, compact MusicXML, and playable MIDI
+  with actual note events.
+- Current Sad Romance verification output:
+  `runs/demo/sad_romance_note_extraction_v1/`.
+- Verification summary: 9 detected staff systems, 197 note events, and a
+  1,809-byte MIDI file with `MThd` header.
+- Limitation: pitch assumes treble clef; rhythm is heuristic; accidentals,
+  ties, slurs, beams, measures, and full graph assembly are not reconstructed.
 
 ## Deployment Architecture
 

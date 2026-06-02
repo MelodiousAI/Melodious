@@ -9,6 +9,8 @@ Melodious V2 is a clean rebuild of the original OMR project. It targets a full-g
 - Versioned detector payload contract with taxonomy, run id, model id, and artifact hash provenance.
 - FastAPI product service with sample and upload transcription routes.
 - Checkpoint-gated legacy GNN assembly runtime with explicit fallback metadata.
+- Local YOLO-backed clean-sheet note extraction demo script for testing actual
+  note events and playable MIDI before the upload API is fully rewired.
 - AWS ECS/Fargate deployment templates instead of local-only demo claims.
 - Governance docs from day one: metrics, data card, experiments, rubric map, status, model card, and agent rules.
 
@@ -102,6 +104,33 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 5. Current end-to-end run: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
 6. Scope caveat: this measures export validity from XML-derived payload fixtures, not trained uploaded-image detector quality.
 
+## Local Note Extraction Demo
+
+The FastAPI uploaded-image route still reports `detector_mode = "heuristic_bootstrap"`.
+For testing a clean sheet image with the trained detector checkpoint right now,
+use the separate CLI demo path documented in `docs/NOTE_EXTRACTION_DEMO.md`.
+
+Example:
+
+```powershell
+$env:PYTHONPATH="src"
+python scripts/extract_notes_from_image.py `
+  --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png `
+  --output-dir runs\demo\sad_romance_note_extraction_v1 `
+  --device cpu `
+  --conf 0.12 `
+  --imgsz 1472 `
+  --max-det 2000 `
+  --default-quarter-length 0.5 `
+  --title "Sad Romance"
+```
+
+This writes `*_notes.json`, `*_notes_overlay.png`, `*_notes.musicxml`, and
+`*_notes.mid`. The Sad Romance verification run used
+`extractor_mode = yolo_notehead_staff_pitch`, detected 9 staff systems, wrote
+197 note events, and produced a 1,809-byte MIDI file with a valid `MThd`
+header. This is a demo extraction artifact, not an evaluation metric.
+
 ## Deployment Path
 
 Backend deployment targets Dockerized FastAPI + CPU inference on ECS Express Mode or ECS Fargate with images in ECR. The frontend deploys to S3 + CloudFront. See `infra/aws/README.md` for the M6 runbook, public smoke commands, CORS configuration, `MELODIOUS_GNN_CHECKPOINT` guidance, and scale-to-zero shutdown steps.
@@ -124,6 +153,6 @@ Current M6 status: deployment path and local smoke tooling are ready, but actual
 
 ## Current Status
 
-This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, and deployment templates. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best primary validation inference configuration is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the current best secondary `mAP@0.5` configuration is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. The current class-coverage audit is `detection_136class_class_coverage_audit_v1` and should be read before making all-136-class claims. The current fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; check `docs/METRIC_IMPROVEMENT.md` and `docs/HANDOFF.md` before launching any duplicate training process. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`.
+This implementation provides the clean project foundation, strict contracts, metric code, M1 data manifests, M2 reduced-class metric reproduction, M3 full-taxonomy detector artifacts, M4 real graph assembly runtime, M5 end-to-end export evaluation, M6 deployment runbook/smoke tooling, M7 detector metric-improvement evidence, upload/sample API, frontend, tests, deployment templates, and a separate local note-extraction demo CLI. The full configured 136-class YOLOv8m run has generated metric provenance under `runs/detection/detection_136class_yolov8m_v1/` and model artifacts under `artifacts/models/detection_136class_yolov8m_v1/`. The current best primary validation inference configuration is `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`; the current best secondary `mAP@0.5` configuration is `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`. The current class-coverage audit is `detection_136class_class_coverage_audit_v1` and should be read before making all-136-class claims. The current fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; check `docs/METRIC_IMPROVEMENT.md` and `docs/HANDOFF.md` before launching any duplicate training process. The legacy GNN assembly run has generated metric provenance under `runs/graph/graph_legacy_gnn_muscima_val_v1/`. The end-to-end export run has generated metric provenance under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/`. The Sad Romance local note-extraction demo artifact is under `runs/demo/sad_romance_note_extraction_v1/` and is documented in `docs/NOTE_EXTRACTION_DEMO.md`.
 
 Current active milestone: M7 - Detector Metric Improvement. See `docs/METRIC_IMPROVEMENT.md`, `docs/ROADMAP.md`, and `docs/MILESTONE_HISTORY.md` before starting new implementation work.
