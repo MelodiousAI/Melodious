@@ -57,7 +57,7 @@ The current detector artifact is ready for integration work, but the API still u
 - Added local note extraction demo tooling at `src/melodious_v2/omr/note_extraction.py` and `scripts/extract_notes_from_image.py`.
 - Added focused note extraction tests in `tests/test_note_extraction_demo.py`.
 - Added `docs/NOTE_EXTRACTION_DEMO.md` with the exact clean-sheet extraction command and caveats.
-- Verified the Sad Romance local demo image through the YOLO-backed extraction CLI on CPU: `extractor_mode = yolo_notehead_staff_pitch`, staff systems `9`, note events `197`, MIDI bytes `1809`, MIDI header `MThd`, output under `runs/demo/sad_romance_note_extraction_v1/`.
+- Verified the Sad Romance local demo image through the YOLO-backed extraction CLI on CPU after adding rhythm inference: `extractor_mode = yolo_notehead_staff_pitch`, staff systems `9`, note events `197`, dotted notes `17`, duration distribution `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`, `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`, MusicXML `<dot/>` count `17`, output under `runs/demo/sad_romance_note_extraction_v2/`.
 
 ## Latest Detector Result
 

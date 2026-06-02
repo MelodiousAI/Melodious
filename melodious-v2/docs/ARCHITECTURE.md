@@ -65,11 +65,12 @@ Fallbacks are allowed for demo resilience but must be explicit:
 - Output artifacts: note JSON, overlay PNG, compact MusicXML, and playable MIDI
   with actual note events.
 - Current Sad Romance verification output:
-  `runs/demo/sad_romance_note_extraction_v1/`.
-- Verification summary: 9 detected staff systems, 197 note events, and a
-  1,809-byte MIDI file with `MThd` header.
+  `runs/demo/sad_romance_note_extraction_v2/`.
+- Verification summary: 9 detected staff systems, 197 note events, 17 dotted
+  notes, and MusicXML with 17 `<dot/>` tags.
 - Limitation: pitch assumes treble clef; rhythm is heuristic; accidentals,
-  ties, slurs, beams, measures, and full graph assembly are not reconstructed.
+  ties, slurs, measures, and full graph assembly are not reconstructed. Beam
+  detections are used for duration, not complete notational grouping.
 
 ## Deployment Architecture
 

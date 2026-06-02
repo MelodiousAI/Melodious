@@ -7,8 +7,11 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from melodious_v2.omr.note_extraction import (
+    DetectionCandidate,
+    StaffSystem,
     detect_staff_systems,
     extract_notes_from_image,
+    notes_from_candidates,
     pitch_from_y,
     write_midi,
 )
@@ -48,13 +51,89 @@ class NoteExtractionDemoTest(unittest.TestCase):
                 output_dir=tmp_path / "out",
                 checkpoint_path=None,
                 use_cv_fallback=True,
-                default_quarter_length=0.5,
+                default_quarter_length=1.0,
             )
             self.assertGreaterEqual(len(result.notes), 3)
             midi_path = Path(result.artifacts.midi_path)  # type: ignore[union-attr]
             self.assertTrue(midi_path.exists())
             self.assertGreater(midi_path.stat().st_size, 26)
             self.assertEqual(midi_path.read_bytes()[:4], b"MThd")
+
+    def test_rhythm_inference_uses_beams_flags_and_dots(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        notes = [
+            DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(100.0, 91.0, 112.0, 99.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(150.0, 81.0, 162.0, 89.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(200.0, 71.0, 212.0, 79.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(250.0, 61.0, 262.0, 69.0),
+                source="unit",
+            ),
+        ]
+        symbols = [
+            DetectionCandidate(
+                class_id=2,
+                class_name="augmentationDot",
+                confidence=0.8,
+                bbox_xyxy=(116.0, 92.0, 119.0, 95.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=3,
+                class_name="beam",
+                confidence=0.8,
+                bbox_xyxy=(145.0, 45.0, 166.0, 49.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=4,
+                class_name="flag16thUp",
+                confidence=0.8,
+                bbox_xyxy=(207.0, 30.0, 216.0, 52.0),
+                source="unit",
+            ),
+        ]
+
+        extracted = notes_from_candidates(
+            notes,
+            [staff],
+            rhythm_symbols=symbols,
+            default_quarter_length=1.0,
+        )
+
+        self.assertEqual([note.quarter_length for note in extracted], [1.5, 0.5, 0.25, 1.0])
+        self.assertEqual(
+            [note.rhythm_source for note in extracted],
+            ["default_quarter+augmentation_dot", "beam_x1", "flag", "default_quarter"],
+        )
+        self.assertTrue(extracted[0].dotted)
 
     def test_midi_writer_handles_empty_note_list(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

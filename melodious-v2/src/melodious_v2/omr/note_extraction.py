@@ -1,8 +1,8 @@
 """Clean-sheet note extraction helpers for local demos.
 
 This module is intentionally separate from the official detector metric path.
-It can use a YOLO checkpoint to detect notehead boxes and then estimates pitch
-from staff geometry. Rhythm reconstruction is deliberately simple.
+It can use a YOLO checkpoint to detect notehead boxes, estimate pitch from staff
+geometry, and infer simple rhythm from notehead/beam/flag/dot geometry.
 """
 
 from __future__ import annotations
@@ -81,6 +81,8 @@ class ExtractedNote:
     midi_pitch: int
     quarter_length: float
     onset_quarter: float
+    dotted: bool = False
+    rhythm_source: str = "default"
 
 
 @dataclass(frozen=True)
@@ -223,7 +225,7 @@ def snapshot_checkpoint(checkpoint_path: str | Path, output_dir: str | Path) -> 
     return destination
 
 
-def yolo_note_candidates(
+def yolo_detection_candidates(
     image_path: str | Path,
     checkpoint_path: str | Path,
     *,
@@ -232,7 +234,7 @@ def yolo_note_candidates(
     max_det: int = 2000,
     device: str = "cpu",
 ) -> list[DetectionCandidate]:
-    """Run YOLO and return notehead candidates only."""
+    """Run YOLO and return all detector candidates."""
     try:
         from ultralytics import YOLO
     except Exception as exc:  # pragma: no cover - optional runtime dependency
@@ -256,8 +258,6 @@ def yolo_note_candidates(
             class_name = str(names.get(class_id, class_id))
         else:
             class_name = str(names[class_id])
-        if "notehead" not in class_name.lower():
-            continue
         candidates.append(
             DetectionCandidate(
                 class_id=class_id,
@@ -268,6 +268,30 @@ def yolo_note_candidates(
             )
         )
     return candidates
+
+
+def yolo_note_candidates(
+    image_path: str | Path,
+    checkpoint_path: str | Path,
+    *,
+    confidence: float = 0.12,
+    imgsz: int = 1472,
+    max_det: int = 2000,
+    device: str = "cpu",
+) -> list[DetectionCandidate]:
+    """Run YOLO and return notehead candidates only."""
+    return [
+        candidate
+        for candidate in yolo_detection_candidates(
+            image_path,
+            checkpoint_path,
+            confidence=confidence,
+            imgsz=imgsz,
+            max_det=max_det,
+            device=device,
+        )
+        if is_notehead(candidate.class_name)
+    ]
 
 
 def cv_note_candidates(image: np.ndarray, staff_systems: list[StaffSystem]) -> list[DetectionCandidate]:
@@ -338,6 +362,60 @@ def cv_note_candidates(image: np.ndarray, staff_systems: list[StaffSystem]) -> l
     return candidates
 
 
+def cv_augmentation_dot_candidates(
+    image: np.ndarray,
+    staff_systems: list[StaffSystem],
+) -> list[DetectionCandidate]:
+    """Return tiny contour candidates that can act as augmentation dots."""
+    height, _ = image.shape[:2]
+    if not staff_systems:
+        return []
+    median_spacing = float(np.median([staff.spacing for staff in staff_systems]))
+    _, binary = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    without_lines = binary.copy()
+    line_half_thickness = max(1, int(round(median_spacing * 0.06)))
+    for staff in staff_systems:
+        for y_value in staff.line_y:
+            y = int(round(y_value))
+            without_lines[
+                max(0, y - line_half_thickness) : min(height, y + line_half_thickness + 1),
+                :,
+            ] = 0
+
+    contours, _ = cv2.findContours(without_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    candidates: list[DetectionCandidate] = []
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        if not (0.12 * median_spacing <= w <= 0.75 * median_spacing):
+            continue
+        if not (0.12 * median_spacing <= h <= 0.75 * median_spacing):
+            continue
+        aspect = w / max(h, 1)
+        if not (0.45 <= aspect <= 2.2):
+            continue
+        crop = without_lines[y : y + h, x : x + w]
+        density = float((crop > 0).mean()) if crop.size else 0.0
+        if density < 0.35:
+            continue
+        x_center = x + w / 2.0
+        y_center = y + h / 2.0
+        staff = closest_staff(y_center, staff_systems)
+        if staff is None or not staff.contains_y(y_center, ledger_margin_steps=5.5):
+            continue
+        if x_center < staff.start_x + staff.spacing * 4.0:
+            continue
+        candidates.append(
+            DetectionCandidate(
+                class_id=-2,
+                class_name="augmentationDot",
+                confidence=min(0.95, max(0.20, density)),
+                bbox_xyxy=(float(x), float(y), float(x + w), float(y + h)),
+                source="cv_dot",
+            )
+        )
+    return candidates
+
+
 def closest_staff(y: float, staff_systems: list[StaffSystem]) -> StaffSystem | None:
     """Return the nearest staff system whose vertical range can contain y."""
     compatible = [staff for staff in staff_systems if staff.contains_y(y)]
@@ -357,9 +435,27 @@ def pitch_from_y(y: float, staff: StaffSystem) -> tuple[str, int, int]:
     return step, octave, midi_pitch
 
 
-def quarter_length_for_class(class_name: str, default_quarter_length: float) -> float:
-    """Estimate duration from notehead class, falling back to a fixed demo value."""
+def is_notehead(class_name: str) -> bool:
+    return "notehead" in class_name.lower()
+
+
+def is_beam(class_name: str) -> bool:
+    return class_name.lower() == "beam"
+
+
+def is_flag(class_name: str) -> bool:
+    return class_name.lower().startswith("flag")
+
+
+def is_augmentation_dot(class_name: str) -> bool:
+    return class_name.lower() == "augmentationdot"
+
+
+def quarter_length_for_class(class_name: str, default_quarter_length: float = 1.0) -> float:
+    """Estimate base duration from notehead class before beams/flags/dots."""
     lowered = class_name.lower()
+    if "doublewhole" in lowered:
+        return 8.0
     if "whole" in lowered:
         return 4.0
     if "half" in lowered:
@@ -367,23 +463,139 @@ def quarter_length_for_class(class_name: str, default_quarter_length: float) -> 
     return default_quarter_length
 
 
+def _flag_quarter_length(class_name: str) -> float | None:
+    lowered = class_name.lower()
+    if "128th" in lowered:
+        return 1.0 / 32.0
+    if "64th" in lowered:
+        return 1.0 / 16.0
+    if "32nd" in lowered:
+        return 1.0 / 8.0
+    if "16th" in lowered:
+        return 0.25
+    if "8th" in lowered:
+        return 0.5
+    return None
+
+
+def _symbol_staff_compatible(symbol: DetectionCandidate, staff: StaffSystem) -> bool:
+    return staff.contains_y(symbol.y_center, ledger_margin_steps=9.0)
+
+
+def _beam_count_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+) -> int:
+    count = 0
+    note_x = note.x_center
+    for symbol in rhythm_symbols:
+        if not is_beam(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+            continue
+        x1, y1, x2, y2 = symbol.bbox_xyxy
+        y_distance = min(abs(note.y_center - y1), abs(note.y_center - y2), abs(note.y_center - symbol.y_center))
+        x_margin = staff.spacing * 0.75
+        if x1 - x_margin <= note_x <= x2 + x_margin and y_distance <= staff.spacing * 7.0:
+            count += 1
+    return count
+
+
+def _flag_duration_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+) -> float | None:
+    durations: list[float] = []
+    for symbol in rhythm_symbols:
+        if not is_flag(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+            continue
+        duration = _flag_quarter_length(symbol.class_name)
+        if duration is None:
+            continue
+        x_distance = abs(symbol.x_center - note.x_center)
+        y_distance = abs(symbol.y_center - note.y_center)
+        if x_distance <= staff.spacing * 3.5 and y_distance <= staff.spacing * 8.0:
+            durations.append(duration)
+    return min(durations) if durations else None
+
+
+def _has_augmentation_dot(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+) -> bool:
+    x1, _, x2, _ = note.bbox_xyxy
+    best_distance: float | None = None
+    for symbol in rhythm_symbols:
+        if not is_augmentation_dot(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+            continue
+        if symbol.x_center <= note.x_center:
+            continue
+        x_distance = symbol.x_center - x2
+        y_distance = abs(symbol.y_center - note.y_center)
+        if 0.0 <= x_distance <= staff.spacing * 2.8 and y_distance <= staff.spacing * 0.9:
+            distance = x_distance + y_distance
+            if best_distance is None or distance < best_distance:
+                best_distance = distance
+    return best_distance is not None
+
+
+def rhythm_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+    *,
+    default_quarter_length: float = 1.0,
+) -> tuple[float, bool, str]:
+    """Infer note duration from class plus nearby beams, flags, and dots."""
+    duration = quarter_length_for_class(note.class_name, default_quarter_length)
+    source = "notehead_class" if duration != default_quarter_length else "default_quarter"
+
+    if "black" in note.class_name.lower() or note.source == "cv_fallback":
+        flag_duration = _flag_duration_for_note(note, staff, rhythm_symbols)
+        beam_count = _beam_count_for_note(note, staff, rhythm_symbols)
+        if flag_duration is not None:
+            duration = flag_duration
+            source = "flag"
+        elif beam_count > 0:
+            duration = max(1.0 / 32.0, 1.0 / (2**beam_count))
+            source = f"beam_x{beam_count}"
+        else:
+            duration = default_quarter_length
+            source = "default_quarter"
+
+    dotted = _has_augmentation_dot(note, staff, rhythm_symbols)
+    if dotted:
+        duration *= 1.5
+        source = f"{source}+augmentation_dot"
+    return duration, dotted, source
+
+
 def notes_from_candidates(
     candidates: list[DetectionCandidate],
     staff_systems: list[StaffSystem],
     *,
-    default_quarter_length: float = 0.5,
+    rhythm_symbols: list[DetectionCandidate] | None = None,
+    default_quarter_length: float = 1.0,
 ) -> list[ExtractedNote]:
     """Convert notehead boxes into ordered treble-clef note events."""
     if not staff_systems:
         return []
     spacing = float(np.median([staff.spacing for staff in staff_systems]))
     candidates = _deduplicate_candidates(candidates, spacing=spacing)
+    rhythm_symbols = list(rhythm_symbols or [])
     notes: list[ExtractedNote] = []
     for candidate in candidates:
         staff = closest_staff(candidate.y_center, staff_systems)
         if staff is None:
             continue
         step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff)
+        quarter_length, dotted, rhythm_source = rhythm_for_note(
+            candidate,
+            staff,
+            rhythm_symbols,
+            default_quarter_length=default_quarter_length,
+        )
         notes.append(
             ExtractedNote(
                 order=0,
@@ -397,8 +609,10 @@ def notes_from_candidates(
                 step=step,
                 octave=int(octave),
                 midi_pitch=int(midi_pitch),
-                quarter_length=quarter_length_for_class(candidate.class_name, default_quarter_length),
+                quarter_length=quarter_length,
                 onset_quarter=0.0,
+                dotted=dotted,
+                rhythm_source=rhythm_source,
             )
         )
 
@@ -406,14 +620,22 @@ def notes_from_candidates(
     ordered: list[ExtractedNote] = []
     onset = 0.0
     previous_staff = None
-    previous_x: float | None = None
+    group_x: float | None = None
+    group_duration = 0.0
     group_threshold_by_staff = {staff.index: staff.spacing * 1.15 for staff in staff_systems}
     for note in notes:
         if previous_staff is None or note.staff_index != previous_staff:
-            onset = 0.0 if previous_staff is None else onset + default_quarter_length
-            previous_x = None
-        elif previous_x is None or abs(note.x_center - previous_x) > group_threshold_by_staff[note.staff_index]:
-            onset += default_quarter_length
+            if previous_staff is not None:
+                onset += group_duration
+            group_x = None
+            group_duration = 0.0
+        elif group_x is None or abs(note.x_center - group_x) > group_threshold_by_staff[note.staff_index]:
+            onset += group_duration
+            group_x = None
+            group_duration = 0.0
+
+        if group_x is None:
+            group_x = note.x_center
         ordered.append(
             ExtractedNote(
                 order=len(ordered) + 1,
@@ -429,10 +651,12 @@ def notes_from_candidates(
                 midi_pitch=note.midi_pitch,
                 quarter_length=note.quarter_length,
                 onset_quarter=onset,
+                dotted=note.dotted,
+                rhythm_source=note.rhythm_source,
             )
         )
         previous_staff = note.staff_index
-        previous_x = note.x_center
+        group_duration = max(group_duration, note.quarter_length)
     return ordered
 
 
@@ -469,7 +693,7 @@ def write_midi(
         duration = max(1, int(round(note.quarter_length * ticks_per_quarter)))
         events.append((start, 0, note.midi_pitch, velocity))
         events.append((start + duration, 1, note.midi_pitch, 0))
-    events.sort(key=lambda item: (item[0], item[1]))
+    events.sort(key=lambda item: (item[0], 0 if item[1] == 1 else 1))
 
     mpqn = int(round(60_000_000 / max(1, tempo_bpm)))
     track = bytearray()
@@ -523,9 +747,11 @@ def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title
                 "        </pitch>",
                 f"        <duration>{duration}</duration>",
                 f"        <type>{note_type}</type>",
-                "      </note>",
             ]
         )
+        if note.dotted:
+            parts.append("        <dot/>")
+        parts.append("      </note>")
         elapsed += note.quarter_length
     parts.extend(["    </measure>", "  </part>", "</score-partwise>"])
     Path(output_path).write_text("\n".join(parts) + "\n", encoding="utf-8")
@@ -558,15 +784,25 @@ def _measure_start(number: int, divisions: int, *, include_attributes: bool) -> 
 
 
 def _musicxml_type(quarter_length: float) -> str:
-    if quarter_length >= 4.0:
+    base_length = quarter_length / 1.5 if _is_dotted_length(quarter_length) else quarter_length
+    if base_length >= 8.0:
+        return "breve"
+    if base_length >= 4.0:
         return "whole"
-    if quarter_length >= 2.0:
+    if base_length >= 2.0:
         return "half"
-    if quarter_length >= 1.0:
+    if base_length >= 1.0:
         return "quarter"
-    if quarter_length >= 0.5:
+    if base_length >= 0.5:
         return "eighth"
     return "16th"
+
+
+def _is_dotted_length(quarter_length: float) -> bool:
+    for base in (4.0, 2.0, 1.0, 0.5, 0.25, 0.125):
+        if abs(quarter_length - base * 1.5) < 1e-6:
+            return True
+    return False
 
 
 def write_overlay(
@@ -585,7 +821,8 @@ def write_overlay(
         x1, y1, x2, y2 = [int(round(value)) for value in note.bbox_xyxy]
         color = (0, 0, 255) if note.source == "yolo" else (255, 0, 0)
         cv2.rectangle(canvas, (x1, y1), (x2, y2), color, 2)
-        label = f"{note.order}:{note.step}{note.octave}"
+        dot_suffix = "." if note.dotted else ""
+        label = f"{note.order}:{note.step}{note.octave}/{note.quarter_length:g}{dot_suffix}"
         cv2.putText(
             canvas,
             label,
@@ -609,7 +846,7 @@ def extract_notes_from_image(
     imgsz: int = 1472,
     max_det: int = 2000,
     device: str = "cpu",
-    default_quarter_length: float = 0.5,
+    default_quarter_length: float = 1.0,
     use_cv_fallback: bool = True,
     title: str | None = None,
 ) -> ExtractionResult:
@@ -623,6 +860,7 @@ def extract_notes_from_image(
     warnings: list[str] = []
 
     candidates: list[DetectionCandidate] = []
+    rhythm_symbols: list[DetectionCandidate] = []
     checkpoint_snapshot: Path | None = None
     extractor_mode = "cv_fallback"
     checkpoint_for_result: str | None = None
@@ -633,7 +871,7 @@ def extract_notes_from_image(
             if snapshot_live_checkpoint:
                 checkpoint_snapshot = snapshot_checkpoint(checkpoint_source, output_dir)
                 checkpoint_for_inference = checkpoint_snapshot
-            candidates = yolo_note_candidates(
+            all_candidates = yolo_detection_candidates(
                 image_path,
                 checkpoint_for_inference,
                 confidence=confidence,
@@ -641,6 +879,14 @@ def extract_notes_from_image(
                 max_det=max_det,
                 device=device,
             )
+            candidates = [candidate for candidate in all_candidates if is_notehead(candidate.class_name)]
+            rhythm_symbols = [
+                candidate
+                for candidate in all_candidates
+                if is_beam(candidate.class_name)
+                or is_flag(candidate.class_name)
+                or is_augmentation_dot(candidate.class_name)
+            ]
             extractor_mode = "yolo_notehead_staff_pitch"
             checkpoint_for_result = str(checkpoint_source)
         except Exception as exc:  # pragma: no cover - runtime dependency path
@@ -653,9 +899,12 @@ def extract_notes_from_image(
     elif not candidates:
         warnings.append("No note candidates were found.")
 
+    rhythm_symbols.extend(cv_augmentation_dot_candidates(image, staff_systems))
+
     notes = notes_from_candidates(
         candidates,
         staff_systems,
+        rhythm_symbols=rhythm_symbols,
         default_quarter_length=default_quarter_length,
     )
     if not notes:
