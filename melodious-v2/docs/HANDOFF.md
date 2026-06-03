@@ -7,7 +7,7 @@ Use this file at the end of every coding-agent session. The next agent must read
 Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`.
 
 M7 improved detector AP metrics by correcting dense-page inference settings and then completing `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation.
-The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was manually saved and stopped at clean completed epoch 22, then resumed from the load-verified manual checkpoint. The active resume PID is `7052`, saved in `resume_epoch22.pid`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
+The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was manually saved and stopped at clean completed epoch 22, then resumed from the load-verified manual checkpoint. The active resume PID is `7052`, saved in `resume_epoch22.pid`; latest live check on 2026-06-04 showed it still running with 39 completed rows and no final `metrics.json`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
 
 Current state:
 
@@ -94,6 +94,8 @@ Current state:
 - M7 active resume launch: 2026-06-03, PID `7052`, saved in `resume_epoch22.pid`.
 - M7 active resume logs: `resume_epoch22_stdout.log` and `resume_epoch22_stderr.log`.
 - M7 active resume evidence: Ultralytics reported resume from `epoch22_stop_2026-06-03_021238\last.pt` from epoch 23 to 50 total epochs and started epoch `23/50`.
+- M7 latest active resume check on 2026-06-04: PID `7052` was running, final `metrics.json` did not exist, `results.csv` had 39 completed rows, and the latest completed row was epoch `39`.
+- M7 latest active resume interim CSV values at epoch 39: `metrics/precision(B) = 0.87573`, `metrics/recall(B) = 0.78508`, `metrics/mAP50(B) = 0.83539`, and `metrics/mAP50-95(B) = 0.65404`. These are not final V2 metric provenance.
 - M7 stem diagnosis: local labels have abundant `stem` support, but whole-page training makes the median stem about `0.78` model pixels wide at `imgsz=1536`, and a sampled low-threshold validation probe returned zero stem predictions.
 - M7 tiled stem dataset tooling: `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
 - M7 tiled stem smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`, with 222 train tiles, 229 validation tiles, 264 test tiles, 4361 retained stem labels, and projected median stem width `2.666645333333387` pixels at `target_imgsz=1024`.
@@ -237,6 +239,64 @@ if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralyti
 ```
 
 If interrupted again, preserve the latest `last.pt`, `best.pt`, `results.csv`, `args.yaml`, resume logs, PID file, launch command, and launch metadata before stopping or resuming.
+
+## 2026-06-04 - Agent Handoff - V2 Fine-Tune Still Running At Epoch 39
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / active training monitoring
+
+Files changed:
+
+- `docs/METRIC_IMPROVEMENT.md`
+- `docs/STATUS.md`
+- `docs/HANDOFF.md`
+
+Generated ignored evidence:
+
+- None. Existing active run logs and `results.csv` were read only.
+
+What happened:
+
+- User asked to carry on with what is needed.
+- Checked the resumed v2 fine-tune before taking action.
+- PID `7052` is still running.
+- No final `metrics.json` exists yet.
+- `results.csv` has 39 completed rows.
+- Latest completed row is epoch `39`.
+- Since training is already active and healthy, no duplicate launch or resume was started.
+
+Latest interim row:
+
+- `metrics/precision(B) = 0.87573`.
+- `metrics/recall(B) = 0.78508`.
+- `metrics/mAP50(B) = 0.83539`.
+- `metrics/mAP50-95(B) = 0.65404`.
+
+What is complete:
+
+- Confirmed the resumed v2 run is alive.
+- Confirmed the correct action is to keep monitoring until epoch 50/final metrics.
+- Updated status docs with the latest active state.
+
+What is not complete:
+
+- The run has not produced final project `metrics.json`.
+- Per-class `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` results are not available until final analysis is written.
+
+Next exact step:
+
+Monitor:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$run='runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2'
+Get-Process -Id ([int](Get-Content "$run\resume_epoch22.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\resume_epoch22_stdout.log"
+if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
+```
+
+When final `metrics.json` appears, compare headline and per-class results against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, then decide whether to launch the tiled stem run.
 
 ## 2026-06-03 - Agent Handoff - V2 Fine-Tune Saved And Stopped At Epoch 22
 
