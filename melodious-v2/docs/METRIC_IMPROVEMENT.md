@@ -255,19 +255,23 @@ Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run w
 - Checkpoint load verification: saved `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, and last class `ottavaBracket`.
 - Saved checkpoint SHA256 values: `last.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51` and `best.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
 - Latest completed row before stop: epoch `22`, `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`. These are training-run CSV values, not final V2 metric provenance.
+- Resume launch from the epoch-22 manual checkpoint started on 2026-06-03 with PID `7052`, saved in `resume_epoch22.pid`.
+- Resume stdout log: `resume_epoch22_stdout.log`.
+- Resume stderr log: `resume_epoch22_stderr.log`.
+- Resume launch metadata: `resume_epoch22_launch_metadata.json`.
+- Resume evidence: Ultralytics reported `Resuming training ... epoch22_stop_2026-06-03_021238\last.pt from epoch 23 to 50 total epochs`, then started epoch `23/50`.
 
 Monitor command:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $run='runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2'
-Get-Process -Id ([int](Get-Content "$run\finetune_v2_retry.pid")) -ErrorAction SilentlyContinue
-Get-Process -Id ([int](Get-Content "$run\finetune_v2_retry_child.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\finetune_v2_retry_stdout.log"
+Get-Process -Id ([int](Get-Content "$run\resume_epoch22.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\resume_epoch22_stdout.log"
 if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
 ```
 
-Resume command from the manual epoch-22 checkpoint:
+Resume command used from the manual epoch-22 checkpoint:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2

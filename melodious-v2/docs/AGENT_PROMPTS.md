@@ -82,6 +82,7 @@ Current handoff:
 - Follow-up artifacts are under `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, including `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, and `finetune_v2_retry_launch_metadata.json`.
 - Follow-up startup evidence: CUDA training reached epoch `1/50`.
 - Follow-up saved/stop status: the run was manually saved after clean completed epoch `22` on 2026-06-03 and then stopped. Parent PID `34896` and child PID `28432` were confirmed stopped.
+- Follow-up resume status: resumed from the epoch-22 manual checkpoint on 2026-06-03. New PID `7052` is saved in `resume_epoch22.pid`, and stdout showed resume from epoch 23 to 50 with epoch `23/50` active.
 - Manual checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`.
 - Saved checkpoint load verification: `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, last class `ottavaBracket`.
 - Latest saved interim CSV row: epoch `22`, `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`. These are not final V2 metric provenance.
