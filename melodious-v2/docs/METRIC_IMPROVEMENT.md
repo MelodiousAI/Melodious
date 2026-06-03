@@ -260,6 +260,8 @@ Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run w
 - Resume stderr log: `resume_epoch22_stderr.log`.
 - Resume launch metadata: `resume_epoch22_launch_metadata.json`.
 - Resume evidence: Ultralytics reported `Resuming training ... epoch22_stop_2026-06-03_021238\last.pt from epoch 23 to 50 total epochs`, then started epoch `23/50`.
+- Latest live check on 2026-06-04: PID `7052` is still running, no final `metrics.json` exists, and `results.csv` contains 39 completed rows.
+- Latest completed row at that check: epoch `39`, `metrics/precision(B) = 0.87573`, `metrics/recall(B) = 0.78508`, `metrics/mAP50(B) = 0.83539`, and `metrics/mAP50-95(B) = 0.65404`. These are training-run CSV values, not final V2 metric provenance.
 
 Monitor command:
 

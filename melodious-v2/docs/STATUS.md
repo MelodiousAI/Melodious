@@ -8,7 +8,7 @@ The current detector artifact is ready for integration work, but the API still u
 
 M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing a real fine-tune. The completed fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 Its threshold metrics are precision `0.8457099520968777`, recall `0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
-M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The completed fine-tune still leaves `stem = 0.0` AP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction remains limited by thin-symbol detection. The follow-up run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was manually saved and stopped on 2026-06-03 after clean completed epoch `22`, then resumed from the load-verified manual checkpoint. Resume PID `7052` is saved in `resume_epoch22.pid`; Ultralytics reported resume from epoch 23 to 50 and epoch `23/50` is active. The latest completed row before resume was epoch `22` with `metrics/mAP50(B) = 0.83573` and `metrics/mAP50-95(B) = 0.65517`; those are interim training CSV values, not final V2 metric provenance.
+M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The completed fine-tune still leaves `stem = 0.0` AP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction remains limited by thin-symbol detection. The follow-up run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was manually saved and stopped on 2026-06-03 after clean completed epoch `22`, then resumed from the load-verified manual checkpoint. Resume PID `7052` is saved in `resume_epoch22.pid`; latest live check on 2026-06-04 showed the process still running with no final `metrics.json` and 39 completed `results.csv` rows. The latest completed row is epoch `39` with `metrics/mAP50(B) = 0.83539` and `metrics/mAP50-95(B) = 0.65404`; those are interim training CSV values, not final V2 metric provenance.
 
 M7 has now moved the `stem` fix from a vague "train more" idea to a concrete tiled-dataset path. The local labels contain abundant `stem` supervision, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages. The new tiled materializer creates focus tiles around stems, ledger lines, dots, beams, and flags. A smoke materialization under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/` raises projected `stem` width to a median of `2.666645333333387` pixels at tiled `target_imgsz=1024`. The detector runner now supports `--dataset-yaml` and `--dataset-id`, so tiled datasets can be trained without being overwritten by the original full-page materializer. No tiled metric claim exists yet; the next metric claim needs a completed tiled run with `metrics.json`.
 
@@ -182,6 +182,8 @@ Active resumed follow-up fine-tune:
 - Resume stderr log: `resume_epoch22_stderr.log`.
 - Resume launch metadata: `resume_epoch22_launch_metadata.json`.
 - Resume evidence: Ultralytics reported `Resuming training ... epoch22_stop_2026-06-03_021238\last.pt from epoch 23 to 50 total epochs`, then started epoch `23/50`.
+- Latest live check on 2026-06-04: PID `7052` is running, no final `metrics.json` exists, and `results.csv` has 39 completed rows.
+- Latest completed row at that check: epoch `39`, `metrics/precision(B) = 0.87573`, `metrics/recall(B) = 0.78508`, `metrics/mAP50(B) = 0.83539`, and `metrics/mAP50-95(B) = 0.65404`.
 - Resume command used:
 
 ```powershell
@@ -384,6 +386,7 @@ Important end-to-end caveat:
 - Passed: load verification for saved `last.pt`; Ultralytics reported `task=detect`, `class_count=136`, first class `brace`, last class `ottavaBracket`.
 - Passed: saved checkpoint `metadata.json` validation with `python -m json.tool` after rewriting without UTF-8 BOM.
 - Passed: resumed `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the epoch-22 manual checkpoint; new PID `7052` was running and stdout showed resume from epoch 23 to 50.
+- Passed: live status check on 2026-06-04 for resumed run; PID `7052` was running, final `metrics.json` was absent, and latest completed row was epoch 39.
 
 ## Milestone Tracker
 
