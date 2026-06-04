@@ -233,7 +233,7 @@ If the run is interrupted, first wait for a completed epoch row in `results.csv`
 
 The completed fine-tune is now the best generated validation detector metric, but it does not solve `stem`.
 
-## Active Follow-Up Fine-Tune
+## Completed Follow-Up Fine-Tune
 
 Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run was launched from the completed fine-tune `best.pt` at the stronger 1536 scale:
 
@@ -260,18 +260,17 @@ Because `stem` remained at `0.0` after the completed 1472 run, a follow-up run w
 - Resume stderr log: `resume_epoch22_stderr.log`.
 - Resume launch metadata: `resume_epoch22_launch_metadata.json`.
 - Resume evidence: Ultralytics reported `Resuming training ... epoch22_stop_2026-06-03_021238\last.pt from epoch 23 to 50 total epochs`, then started epoch `23/50`.
-- Latest live check on 2026-06-04: PID `7052` is still running, no final `metrics.json` exists, and `results.csv` contains 39 completed rows.
-- Latest completed row at that check: epoch `39`, `metrics/precision(B) = 0.87573`, `metrics/recall(B) = 0.78508`, `metrics/mAP50(B) = 0.83539`, and `metrics/mAP50-95(B) = 0.65404`. These are training-run CSV values, not final V2 metric provenance.
-
-Monitor command:
-
-```powershell
-cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
-$run='runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2'
-Get-Process -Id ([int](Get-Content "$run\resume_epoch22.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\resume_epoch22_stdout.log"
-if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
-```
+- Completion status on 2026-06-04: the resume PID `7052` was no longer running, final artifacts existed, and the run had completed.
+- Corrected finalization command used `imgsz=1536` and `max_det=2000`. An earlier finalization at `imgsz=1024` with the default cap was identified as inconsistent with the run settings and was replaced.
+- Corrected final V2 metric source: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`.
+- Corrected primary `mAP@0.5:0.95`: 0.707986237382828.
+- Corrected secondary `mAP@0.5`: 0.8390674529615662.
+- Corrected threshold metrics: `precision@0.5 = 0.8806427974719793`, `recall@0.5 = 0.7881733414248919`, and `F1@0.5 = 0.8318461933668392`.
+- Corrected class analysis: 103 validation-supported classes, 6 supported zero-mAP classes, and small-symbol mean `mAP@0.5:0.95 = 0.5870386050344123`.
+- Rhythm-adjacent per-class results: `stem = 0.0`, `ledgerLine = 0.01106603897644983`, `augmentationDot = 0.26796388729163445`, `beam = 0.8011588011549605`, `flag8thUp = 0.7470091255390053`, `flag8thDown = 0.8207040444816455`, `flag16thUp = 0.7792069978265269`, and `flag16thDown = 0.8260426843009119`.
+- Gain over the completed 1472 fine-tune for `F1@0.5`: +0.0236455560576811.
+- AP/threshold gains over the completed 1472 fine-tune: primary +0.0302387420340651, `mAP@0.5` +0.0164467608824391, precision +0.0349328453751016, recall +0.0142960632781713, and small-symbol mean +0.0224205492332619.
+- Remaining problem: `stem` is still exactly `0.0`; whole-page fine-tuning has not solved the rhythm blocker.
 
 Resume command used from the manual epoch-22 checkpoint:
 
@@ -286,7 +285,7 @@ $env:PYTHONPATH='src'
   --workers 0
 ```
 
-After resume completes, run the project finalization path through the same runner and compare the final generated `metrics.json` against the completed 1472 fine-tune.
+The completed v2 run is now the best completed validation detector result, but it still does not solve `stem`, so M7 moved to tiled thin-symbol training.
 
 ## Stem/Rhythm Training Plan
 
@@ -297,13 +296,12 @@ Internet/source-backed guidance points to a targeted thin-symbol plan rather tha
 - Ultralytics documents data augmentation controls such as mosaic and scale, and notes copy-paste is useful for rare objects in segmentation tasks. For this project, copy-paste is not directly available for detect-mode boxes, but the same idea applies to a future synthetic/verified stem-dot dataset or a segmentation/OBB branch.
 - Ultralytics OBB docs describe rotated boxes that more tightly enclose objects with orientation. Stems and ledger lines are thin line-like objects where axis-aligned boxes can be weak supervision, so an OBB or segmentation branch is a plausible next experiment if the active detect-mode fine-tune does not move `stem`.
 
-Next concrete experiment after the active v2 run:
+Current concrete experiment:
 
-1. Evaluate `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` per-class AP from `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` when it completes.
-2. If `stem` remains near zero, generate a tiled/cropped DeepScores training set where each staff-system or measure crop is resized to 1024-1536, remapping existing YOLO labels into tile coordinates. This makes stems and dots larger in model pixels and reduces dense-page object caps.
-3. Add a detector-threshold calibration for rhythm symbols separate from notehead thresholding. The note extractor can use a lower confidence for `stem`/`augmentationDot` only if validation/hard-negative checks keep false positives controlled.
-4. Add a clean-page CV stem-line attachment fallback as a demo-only bridge while training catches up. It should record `rhythm_source = cv_stem_quarter` so it is never confused with detector evidence.
-5. Consider an OBB or segmentation side branch for `stem`/`ledgerLine` if the tiled detect-mode run still cannot localize thin symbols.
+1. Train a 136-class tiled pilot from the corrected v2 `best.pt` using sampled tile-list manifests. This keeps the same detector taxonomy but gives `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` objects more model pixels than whole-page training.
+2. Use the pilot as a decision gate before spending days on the full 88137-train-tile dataset. The pilot is not a final metric claim until it writes `metrics.json`, and its metrics should be labeled as tiled-validation pilot evidence unless the checkpoint is also evaluated back on full-page validation.
+3. If the pilot moves `stem`, either evaluate that checkpoint on full-page validation to check regressions or launch a longer/full tiled run from the pilot `best.pt`.
+4. If the pilot still leaves `stem = 0.0`, stop treating generic YOLO detect-mode training as enough. Evaluate OBB/segmentation for thin symbols, a verified synthetic stem/dot supplement, or a clean-page CV stem-line attachment fallback that records explicit `rhythm_source` provenance.
 
 ## Tiled Stem Dataset Pipeline
 
@@ -347,13 +345,31 @@ Smoke output:
 - Overall smoke flag labels retained: `flag8thUp = 401`, `flag8thDown = 137`, `flag16thUp = 8`, and `flag16thDown = 10`.
 - Projected `stem` width at tiled `target_imgsz=1024`: median `2.666645333333387` pixels, min `2.666630400000031`, max `5.333342933333673`.
 
+Full tiled output now exists:
+
+- Output directory: `runs/data/deepscores_136_yolo_tiled_stem_v1/`.
+- Settings: tile size 384 pixels, stride 256 pixels, target image size 1024 pixels, minimum retained visibility 0.5, and all labels retained in selected focus tiles.
+- Source pages: 1226 train, 136 validation, and 352 test.
+- Tile counts: 88137 train, 10709 validation, 26019 test, total 124865.
+- Focus label counts across all splits: `stem = 747473`, `ledgerLine = 274618`, `augmentationDot = 61150`, `beam = 216886`, `flag8thUp = 22581`, `flag8thDown = 25567`, `flag16thUp = 2712`, `flag16thDown = 2636`, `flag32ndUp = 491`, `flag32ndDown = 723`, `flag64thUp = 408`, `flag64thDown = 360`, `flag128thUp = 688`, and `flag128thDown = 582`.
+- Projected `stem` width at tiled `target_imgsz=1024`: median `2.666645333333387` pixels, min `2.666626373333353`, max `253.33334506666628`.
+- Runner materialize-only preflight passed for `runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml`.
+
+Sampled pilot output now exists:
+
+- Output directory: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`.
+- The pilot does not duplicate images or labels. Its `train.txt`, `val.txt`, and `test.txt` lists point into the full tiled dataset.
+- Sampled tiles: 12000 train, 2500 validation, and 2500 test.
+- Label-pair check: zero missing labels in all three sampled lists.
+- Runner materialize-only preflight passed for `runs\data\deepscores_136_yolo_tiled_stem_pilot_v1\dataset.yaml`.
+
 Interpretation:
 
-- The smoke run proves the tiling pipeline works and changes `stem` from subpixel whole-page geometry to a visible small object.
-- It does not yet prove metric improvement. The next metric claim must come from a completed tiled detector run with `runs/**/metrics.json`.
-- The full tiled dataset may be large, so the smoke was run first. Do not start full tiled training while `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` is actively using the GPU.
+- The smoke run proved the tiling pipeline works and changes `stem` from subpixel whole-page geometry to a visible small object.
+- The completed full tiled materialization proves the full training corpus can be generated locally, but it is large enough that a pilot run is the responsible next step.
+- No tiled metric improvement has been claimed yet. The next metric claim must come from a completed tiled detector run with `runs/**/metrics.json`.
 
-Full tiled dataset command to run after the active v2 fine-tune either completes or is cleanly stopped:
+Full tiled dataset command already run:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
@@ -376,53 +392,44 @@ $env:PYTHONPATH='src'
   --materialize-only
 ```
 
-Tiled training command to run after the full tiled dataset exists. Prefer the active v2 `best.pt` once it completes; if it does not complete, use the completed 1472 fine-tune `best.pt` shown in the fallback command.
-
-Preferred command after active v2 completes:
+Active tiled pilot command:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $env:PYTHONPATH='src'
 ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
-  --run-id detection_136class_yolov8m_tiled_stem_img1024_v1 `
-  --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml `
-  --dataset-id deepscores_136_yolo_tiled_stem_v1 `
+  --run-id detection_136class_yolov8m_tiled_stem_pilot_img1024_v1 `
+  --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_pilot_v1\dataset.yaml `
+  --dataset-id deepscores_136_yolo_tiled_stem_pilot_v1 `
   --model runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\ultralytics\train\weights\best.pt `
-  --epochs 40 `
+  --epochs 12 `
   --imgsz 1024 `
   --batch 4 `
   --workers 0 `
   --device 0 `
-  --patience 10 `
+  --patience 5 `
   --max-det 2000
 ```
 
-Fallback command if v2 has no usable completed checkpoint:
+Monitor command for the active tiled pilot:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
-$env:PYTHONPATH='src'
-..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
-  --run-id detection_136class_yolov8m_tiled_stem_img1024_v1 `
-  --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml `
-  --dataset-id deepscores_136_yolo_tiled_stem_v1 `
-  --model runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\ultralytics\train\weights\best.pt `
-  --epochs 40 `
-  --imgsz 1024 `
-  --batch 4 `
-  --workers 0 `
-  --device 0 `
-  --patience 10 `
-  --max-det 2000
+$run='runs\detection\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1'
+Get-Process -Id ([int](Get-Content "$run\tiled_pilot_train.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\tiled_pilot_train_stdout.log"
+if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
 ```
+
+If the pilot improves `stem`, a longer or full tiled run can reuse the full tiled YAML and start from the pilot `best.pt`. If the pilot does not move `stem`, the next better experiment is OBB/segmentation or verified synthetic thin-symbol data rather than blindly running 40 epochs over 88137 full tiles.
 
 ## Presentation Guidance
 
 Use this language:
 
-- "Our best completed validation detector is the M7 fine-tuned YOLOv8m run `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation."
+- "Our best completed validation detector is the M7 follow-up fine-tuned YOLOv8m run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, finalized at `imgsz=1536` and `max_det=2000`, which reaches `mAP@0.5:0.95 = 0.707986237382828` and `mAP@0.5 = 0.8390674529615662` on validation."
 - "The earlier dense-page inference sweep on the original full YOLOv8m checkpoint found that `imgsz=1472` and `max_det=2000` were necessary for fair validation on dense music pages."
-- "The remaining detector weakness is specific: `stem` remains at `0.0` AP after fine-tuning, so rhythm extraction needs targeted thin-symbol/stem work."
+- "The remaining detector weakness is specific: `stem` remains at `0.0` AP after whole-page fine-tuning, so rhythm extraction needs the active tiled thin-symbol/stem experiment or a different thin-symbol formulation."
 
 Avoid this language:
 
