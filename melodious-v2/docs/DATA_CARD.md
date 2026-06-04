@@ -111,18 +111,23 @@
   - validation secondary AP metric: `mAP@0.5` 0.8226206920791271,
   - validation threshold metrics: precision 0.8457099520968777, recall 0.7738772781467206, and `F1@0.5` 0.8082006373091581,
   - limitation: `stem` remains 0.0 mAP and `ledgerLine` remains 0.0035627224962602928 mAP, so the dataset/training path still needs thin-symbol work.
-- M7 active resumed follow-up fine-tune:
+- M7 completed follow-up fine-tune:
   - run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`,
   - source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`,
   - image size: 1536,
   - max detections per image: 2000,
   - launch status: retry launch started on 2026-06-02 local time `23:11:35`,
   - saved/stop status: manually saved after clean completed epoch 22 on 2026-06-03 and then stopped,
-  - resume status: resumed from the epoch-22 manual checkpoint on 2026-06-03; PID `7052` is saved in `resume_epoch22.pid`,
+  - resume status: resumed from the epoch-22 manual checkpoint on 2026-06-03 and later completed,
   - manual checkpoint: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`,
   - active PID files at launch: `finetune_v2_retry.pid` and `finetune_v2_retry_child.pid`; both PIDs were confirmed stopped,
   - load verification: saved `last.pt` loaded with 136 classes,
-  - metric status: pending until the resumed run completes and `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json` exists.
+  - final V2 metric source: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`,
+  - corrected finalization settings: image size 1536 and max detections per image 2000,
+  - validation primary metric: `mAP@0.5:0.95` 0.707986237382828,
+  - validation secondary AP metric: `mAP@0.5` 0.8390674529615662,
+  - validation threshold metrics: precision 0.8806427974719793, recall 0.7881733414248919, and `F1@0.5` 0.8318461933668392,
+  - limitation: `stem` remains 0.0 mAP, so whole-page fine-tuning still did not solve rhythm-critical stem detection.
 - M7 stem-focused tiled dataset pipeline:
   - materializer: `scripts/materialize_tiled_yolo_dataset.py`,
   - reusable code: `src/melodious_v2/datasets/yolo_tiling.py`,
@@ -134,7 +139,13 @@
   - smoke retained labels: `stem = 4361`, `ledgerLine = 749`, `augmentationDot = 211`, `beam = 1248`, `flag8thUp = 401`, `flag8thDown = 137`, `flag16thUp = 8`, and `flag16thDown = 10`,
   - smoke projected `stem` width at tiled target size 1024: median `2.666645333333387` pixels,
   - runner support: `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...` consumes an existing tiled YOLO dataset without rematerializing the full-page dataset,
-  - metric status: no tiled detector metric has been claimed yet. The full dataset target is `runs/data/deepscores_136_yolo_tiled_stem_v1/`, followed by a training run such as `detection_136class_yolov8m_tiled_stem_img1024_v1`.
+  - full tiled output: `runs/data/deepscores_136_yolo_tiled_stem_v1/`,
+  - full tiled counts: 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 124865 total tiles,
+  - full tiled focus counts: `stem = 747473`, `ledgerLine = 274618`, `augmentationDot = 61150`, `beam = 216886`, `flag8thUp = 22581`, `flag8thDown = 25567`, `flag16thUp = 2712`, and `flag16thDown = 2636`,
+  - pilot tiled output: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`,
+  - pilot tile-list counts: 12000 train, 2500 validation, and 2500 test paths pointing into the full tiled dataset with zero missing labels,
+  - active pilot training run: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`,
+  - metric status: no tiled detector metric has been claimed yet. The active pilot must complete and write `metrics.json` before it can be used as model-performance evidence.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.

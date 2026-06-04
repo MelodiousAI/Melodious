@@ -6,11 +6,11 @@ M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deploym
 
 The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. A separate local clean-sheet note extraction demo now exists at `scripts/extract_notes_from_image.py`; it snapshots a YOLO checkpoint, detects noteheads on CPU, estimates treble-clef pitch from staff geometry, applies detected key-signature and explicit-accidental symbols, and writes actual note JSON, overlay, MusicXML, and MIDI artifacts. This demo path is not a metric run and is not yet wired into the FastAPI upload route.
 
-M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing a real fine-tune. The completed fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
-Its threshold metrics are precision `0.8457099520968777`, recall `0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
-M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The completed fine-tune still leaves `stem = 0.0` AP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction remains limited by thin-symbol detection. The follow-up run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` was manually saved and stopped on 2026-06-03 after clean completed epoch `22`, then resumed from the load-verified manual checkpoint. Resume PID `7052` is saved in `resume_epoch22.pid`; latest live check on 2026-06-04 showed the process still running with no final `metrics.json` and 39 completed `results.csv` rows. The latest completed row is epoch `39` with `metrics/mAP50(B) = 0.83539` and `metrics/mAP50-95(B) = 0.65404`; those are interim training CSV values, not final V2 metric provenance.
+M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing two real fine-tunes. The completed 1472 fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its separate `F1@0.5` is `0.8082006373091581`, and its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
+The completed follow-up run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. It was resumed from the load-verified epoch-22 manual checkpoint, completed, then was re-finalized with the intended `imgsz=1536` and `max_det=2000` settings after an initial incorrect 1024/default-cap finalization was found. Corrected v2 `F1@0.5` is `0.8318461933668392`. Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
+M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The best completed v2 fine-tune still leaves `stem = 0.0` AP and only modest `ledgerLine = 0.01106603897644983`, so rhythm extraction remains limited by thin-symbol detection.
 
-M7 has now moved the `stem` fix from a vague "train more" idea to a concrete tiled-dataset path. The local labels contain abundant `stem` supervision, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages. The new tiled materializer creates focus tiles around stems, ledger lines, dots, beams, and flags. A smoke materialization under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/` raises projected `stem` width to a median of `2.666645333333387` pixels at tiled `target_imgsz=1024`. The detector runner now supports `--dataset-yaml` and `--dataset-id`, so tiled datasets can be trained without being overwritten by the original full-page materializer. No tiled metric claim exists yet; the next metric claim needs a completed tiled run with `metrics.json`.
+M7 has now moved the `stem` fix from a vague "train more" idea to a concrete tiled-dataset path. The local labels contain abundant `stem` supervision, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages. The new tiled materializer creates focus tiles around stems, ledger lines, dots, beams, and flags. The full tiled dataset under `runs/data/deepscores_136_yolo_tiled_stem_v1/` now contains 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels. A sampled no-copy pilot dataset under `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/` points to 12000 train tiles, 2500 validation tiles, and 2500 test tiles from the full tiled set. Active tiled pilot training is `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`, launched from the corrected v2 `best.pt`; PID `6100` is saved in `tiled_pilot_train.pid`. No tiled detector metric has been claimed yet; the next metric claim needs the pilot or full tiled run to complete and write `metrics.json`.
 
 ## Completed
 
@@ -60,10 +60,14 @@ M7 has now moved the `stem` fix from a vague "train more" idea to a concrete til
 - M7 added `--resume-training` and `--resume-checkpoint` to `scripts/run_detection_136class_yolo.py` after the fine-tune was interrupted mid-epoch.
 - M7 resumed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1` from `ultralytics/train/weights/last.pt`; Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
 - M7 completed `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; generated `metrics.json`, `analysis.json`, `manifest.json`, `artifacts.json`, `report.md`, `config.yaml`, and `onnx_parity.json`.
-- M7 launched active follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the completed fine-tune `best.pt` at image size 1536, batch 1, and `max_det=2000`.
+- M7 launched follow-up fine-tune `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the completed fine-tune `best.pt` at image size 1536, batch 1, and `max_det=2000`.
 - M7 added stem-focused tiled YOLO dataset generation in `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
 - M7 added existing-dataset runner support through `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...`, so a tiled dataset can be used without rematerializing the original full-page DeepScores dataset.
 - M7 generated a smoke tiled dataset under `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/` with 222 train tiles, 229 validation tiles, 264 test tiles, 4361 retained stem labels, and median projected stem width `2.666645333333387` pixels at `target_imgsz=1024`.
+- M7 completed and corrected finalization of `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`; this is now the best completed validation detector metric.
+- M7 generated the full tiled stem dataset under `runs/data/deepscores_136_yolo_tiled_stem_v1/` with 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 retained stem labels across all splits.
+- M7 generated a no-copy sampled tiled pilot dataset under `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/` with 12000 train tile paths, 2500 validation tile paths, and 2500 test tile paths pointing into the full tiled dataset.
+- M7 launched active tiled pilot fine-tune `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` from the corrected v2 `best.pt`.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 - Added local note extraction demo tooling at `src/melodious_v2/omr/note_extraction.py` and `scripts/extract_notes_from_image.py`.
 - Added focused note extraction tests in `tests/test_note_extraction_demo.py`.
@@ -76,15 +80,15 @@ M7 has now moved the `stem` fix from a vague "train more" idea to a concrete til
 
 ## Latest Detector Result
 
-Best primary validation inference run id: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
+Best completed validation detector run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
 
-Metric source: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+Metric source: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`.
 
 Evaluation split: `val` from `deepscores_136_yolo_materialized`.
 
-Checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+Checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt`.
 
-Inference image size: 1472.
+Inference image size: 1536.
 
 Maximum detections per image: 2000.
 
@@ -92,119 +96,62 @@ Validation augmentation: disabled.
 
 Primary detector metric:
 
-- `mAP@0.5:0.95`: 0.6204968163150985.
+- `mAP@0.5:0.95`: 0.707986237382828.
 
 Secondary detector metrics:
 
-- `mAP@0.5`: 0.7833788545364062.
-- `precision@0.5`: 0.8166240104606699.
-- `recall@0.5`: 0.7367130723503518.
-- `F1@0.5`: 0.7746130448554269.
+- `mAP@0.5`: 0.8390674529615662.
+- `precision@0.5`: 0.8806427974719793.
+- `recall@0.5`: 0.7881733414248919.
+- `F1@0.5`: 0.8318461933668392.
 
-Best secondary `mAP@0.5` validation run:
+Class-analysis summary:
 
-- Run id: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
-- Metric source: `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`.
-- Image size: 1536.
-- Maximum detections per image: 2000.
-- Primary `mAP@0.5:0.95`: 0.6203204846063568.
-- Secondary `mAP@0.5`: 0.7920129156176505.
-- `precision@0.5`: 0.8107734656247262.
-- `recall@0.5`: 0.7331813762215841.
-- `F1@0.5`: 0.7700277096444413.
+- Supported validation classes: 103.
+- Supported zero-mAP classes: 6.
+- Small-symbol mean `mAP@0.5:0.95`: 0.5870386050344123.
+- Rhythm-adjacent per-class results: `stem = 0.0`, `ledgerLine = 0.01106603897644983`, `augmentationDot = 0.26796388729163445`, `beam = 0.8011588011549605`, `flag8thUp = 0.7470091255390053`, `flag8thDown = 0.8207040444816455`, `flag16thUp = 0.7792069978265269`, and `flag16thDown = 0.8260426843009119`.
 
-Measured gain over original M3 validation at image size 1024:
+Measured gain over the previous completed 1472 fine-tune:
 
-- Best primary `mAP@0.5:0.95`: +0.1457597412034697.
-- Best secondary `mAP@0.5`: +0.2066917787863014.
-- Best recall: +0.2625252988473996.
-- Best detector F1: +0.1583405062573777.
-- Best small-symbol mean `mAP@0.5:0.95`: +0.1792769692209457.
-- Supported validation classes with zero mAP decreased from 16 to 6.
+- Primary `mAP@0.5:0.95`: +0.0302387420340651.
+- Secondary `mAP@0.5`: +0.0164467608824391.
+- Precision: +0.0349328453751016.
+- Recall: +0.0142960632781713.
+- `F1@0.5`: +0.0236455560576811.
+- Small-symbol mean `mAP@0.5:0.95`: +0.0224205492332619.
+- Supported zero-mAP classes changed from 5 to 6, so the headline gain did not solve every class.
 
 Important detector-result caveat:
 
-- This is a validation-set inference sweep on the existing checkpoint, not a new trained model and not a test-set result.
-- Precision cannot improve by an absolute 0.2 from the original 0.8274236461250144 because metric values are capped at 1.0.
+- This is still validation-set performance, not test-set performance.
+- The run initially had an incorrect finalization with `imgsz=1024` and the default detection cap. That incorrect finalization was replaced by the corrected `imgsz=1536`, `max_det=2000` finalization listed above.
 - The class-coverage audit shows the local labels support 115 of 136 taxonomy classes across all splits, 21 taxonomy classes have zero local labels, and validation measures 103 classes. Fine-tuning on the same labels can improve supported classes but cannot teach zero-label classes.
+- `stem` remains `0.0`, so rhythm extraction cannot honestly be called solved.
 
-Completed fine-tune:
+Previous completed fine-tune:
 
 - Run id: `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
-- Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/`.
-- First launch command saved at `finetune_launch_command.txt`.
-- First launch stopped after seven completed rows in `ultralytics/train/results.csv`; the best completed primary training-row metric so far was epoch 7 with `metrics/mAP50-95(B) = 0.6116`.
-- Best completed training-row `metrics/mAP50(B)` so far was epoch 6 with `0.79679`.
-- Clean checkpoint files exist at `ultralytics/train/weights/last.pt` and `best.pt`.
-- Resume command saved at `resume_epoch7_launch_command.txt`.
-- Resume metadata saved at `resume_epoch7_launch_metadata.json`.
-- Resume parent PID: `35952`, saved in `resume_epoch7.pid`.
-- Resume active Python child PID: `43740`, saved in `resume_epoch7_child.pid`.
-- Resume stdout log: `resume_epoch7_stdout.log`.
-- Resume stderr log: `resume_epoch7_stderr.log`.
-- Resume evidence: Ultralytics reported `Resuming training ... from epoch 8 to 50 total epochs`.
-- Final process check: parent PID `35952`, child PID `43740`, original parent PID `34780`, and original child PID `23612` are not running.
-- Final V2 metric source: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json`.
 - Final primary `mAP@0.5:0.95`: 0.6777474953487629.
 - Final secondary `mAP@0.5`: 0.8226206920791271.
 - Final `precision@0.5`: 0.8457099520968777.
 - Final `recall@0.5`: 0.7738772781467206.
 - Final `F1@0.5`: 0.8082006373091581.
-- Final supported validation classes: 103.
-- Final supported zero-mAP classes: 5.
-- Final small-symbol mean `mAP@0.5:0.95`: 0.5646180558011504.
 - Important per-class caveat: `stem = 0.0`, `ledgerLine = 0.0035627224962602928`, `augmentationDot = 0.25050444606568056`, `beam = 0.7824341036579809`, `flag8thUp = 0.7196678490605957`, and `flag8thDown = 0.8042434669433673`.
-
-Active resumed follow-up fine-tune:
-
-- Run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
-- Run directory: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
-- Source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
-- Launch local time: 2026-06-02 `23:11:35`.
-- Parent PID: `34896`, saved in `finetune_v2_retry.pid`, stopped on 2026-06-03.
-- Python child PID: `28432`, saved in `finetune_v2_retry_child.pid`, stopped on 2026-06-03.
-- Stdout log: `finetune_v2_retry_stdout.log`.
-- Stderr log: `finetune_v2_retry_stderr.log`.
-- Launch metadata: `finetune_v2_retry_launch_metadata.json`.
-- Settings: `epochs=50`, `imgsz=1536`, `batch=1`, `workers=0`, `device=0`, `patience=15`, `max_det=2000`.
-- Startup evidence: reached epoch `1/50` on CUDA with the RTX 3080 Laptop GPU.
-- Ignore the first `finetune_v2_stdout.log` / `finetune_v2_stderr.log` attempt; it failed before training because `$env:PYTHONPATH` was expanded incorrectly in the child command. The active run uses the `retry` PID/log files.
-- Manual checkpoint folder: `artifacts/manual_checkpoints/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/epoch22_stop_2026-06-03_021238/`.
-- Saved files: `last.pt`, `best.pt`, `results.csv`, `args.yaml`, retry stdout/stderr logs, retry PID files, retry launch metadata, retry launch command, `metadata.json`, and `README.md`.
-- Load verification: saved `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, and last class `ottavaBracket`.
-- Checkpoint SHA256: `last.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`; `best.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
-- Latest process check on 2026-06-03: parent PID `34896` and child PID `28432` are stopped.
-- Final `metrics.json` exists: no.
-- Completed `results.csv` rows at stop: 22.
-- Latest completed row before stop: epoch `22`, `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`.
-- Resume PID: `7052`, saved in `resume_epoch22.pid`.
-- Resume stdout log: `resume_epoch22_stdout.log`.
-- Resume stderr log: `resume_epoch22_stderr.log`.
-- Resume launch metadata: `resume_epoch22_launch_metadata.json`.
-- Resume evidence: Ultralytics reported `Resuming training ... epoch22_stop_2026-06-03_021238\last.pt from epoch 23 to 50 total epochs`, then started epoch `23/50`.
-- Latest live check on 2026-06-04: PID `7052` is running, no final `metrics.json` exists, and `results.csv` has 39 completed rows.
-- Latest completed row at that check: epoch `39`, `metrics/precision(B) = 0.87573`, `metrics/recall(B) = 0.78508`, `metrics/mAP50(B) = 0.83539`, and `metrics/mAP50-95(B) = 0.65404`.
-- Resume command used:
-
-```powershell
-cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
-$env:PYTHONPATH='src'
-..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
-  --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 `
-  --resume-training `
-  --resume-checkpoint artifacts\manual_checkpoints\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\epoch22_stop_2026-06-03_021238\last.pt `
-  --device 0 `
-  --workers 0
-```
 
 Stem-focused tiled dataset path:
 
-- Smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`.
-- Materializer: `scripts/materialize_tiled_yolo_dataset.py`.
-- Runner support: `scripts/run_detection_136class_yolo.py --dataset-yaml ... --dataset-id ...`.
-- Smoke focus counts: `stem = 4361`, `ledgerLine = 749`, `augmentationDot = 211`, `beam = 1248`, `flag8thUp = 401`, `flag8thDown = 137`, `flag16thUp = 8`, `flag16thDown = 10`.
-- Smoke projected `stem` width at tiled target size 1024: median `2.666645333333387` pixels.
-- Metric status: no tiled detector metric exists yet. Generate `runs/data/deepscores_136_yolo_tiled_stem_v1/` and train `detection_136class_yolov8m_tiled_stem_img1024_v1` only after the active v2 fine-tune completes or is cleanly stopped.
+- Smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`, with 222 train tiles, 229 validation tiles, 264 test tiles, 4361 retained stem labels, and median projected `stem` width `2.666645333333387` pixels at `target_imgsz=1024`.
+- Full tiled output: `runs/data/deepscores_136_yolo_tiled_stem_v1/`.
+- Full tiled counts: 88137 train tiles, 10709 validation tiles, 26019 test tiles, 523424 train stem labels, 62411 validation stem labels, 161638 test stem labels, and 747473 total retained stem labels.
+- Full tiled preflight passed through `scripts/run_detection_136class_yolo.py --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --materialize-only`.
+- Sampled pilot output: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`.
+- Sampled pilot lists point into the full tiled dataset without copying images or labels: 12000 train tiles, 2500 validation tiles, and 2500 test tiles; all sampled images had matching labels.
+- Active tiled pilot training: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`.
+- Active tiled pilot PID file: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train.pid`, containing PID `6100`.
+- Active tiled pilot source checkpoint: corrected v2 `best.pt`.
+- Active tiled pilot settings: `epochs=12`, `imgsz=1024`, `batch=4`, `workers=0`, `device=0`, `patience=5`, `max_det=2000`.
+- Metric status: no tiled detector metric exists yet. The pilot must complete and write `metrics.json` before any tiled improvement claim is made.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -387,6 +334,12 @@ Important end-to-end caveat:
 - Passed: saved checkpoint `metadata.json` validation with `python -m json.tool` after rewriting without UTF-8 BOM.
 - Passed: resumed `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` from the epoch-22 manual checkpoint; new PID `7052` was running and stdout showed resume from epoch 23 to 50.
 - Passed: live status check on 2026-06-04 for resumed run; PID `7052` was running, final `metrics.json` was absent, and latest completed row was epoch 39.
+- Passed: corrected finalization for `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` at `imgsz=1536` and `max_det=2000`; final `F1@0.5` is `0.8318461933668392`, and AP metrics are `mAP@0.5:0.95 = 0.707986237382828` and `mAP@0.5 = 0.8390674529615662`.
+- Passed: full tiled stem dataset materialization at `runs/data/deepscores_136_yolo_tiled_stem_v1/`; generated 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels.
+- Passed: materialize-only runner preflight for `runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml`.
+- Passed: sampled no-copy tiled pilot manifest at `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`; generated text lists for 12000 train, 2500 validation, and 2500 test tiles with zero missing labels.
+- Passed: materialize-only runner preflight for `runs\data\deepscores_136_yolo_tiled_stem_pilot_v1\dataset.yaml`.
+- Passed: active tiled pilot launch for `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`; PID `6100` is saved in `tiled_pilot_train.pid`, latest live check showed stdout in epoch `3/12`, and `results.csv` had completed through epoch `2`.
 
 ## Milestone Tracker
 
@@ -419,16 +372,14 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Monitor active resumed run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` using `resume_epoch22.pid` and `resume_epoch22_stdout.log`.
-2. If the resumed run is interrupted, preserve the latest `last.pt`, `best.pt`, `results.csv`, logs, PID files, and launch metadata before stopping or resuming.
-3. After the resumed run completes, compare `stem`, `ledgerLine`, `augmentationDot`, `beam`, `flag8thUp`, `flag8thDown`, headline AP metrics, recall, and F1 against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
-4. If `stem` remains near zero, do not keep blindly training whole pages. Generate the full tiled dataset with `scripts/materialize_tiled_yolo_dataset.py --output-dir runs\data\deepscores_136_yolo_tiled_stem_v1 --tile-size 384 --stride 256 --target-imgsz 1024`.
-5. After the full tiled dataset exists, run the materialize-only check with `scripts/run_detection_136class_yolo.py --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --materialize-only`.
-6. Launch tiled training as `detection_136class_yolov8m_tiled_stem_img1024_v1` from the active v2 `best.pt` if v2 completes, or from the completed 1472 fine-tune `best.pt` if v2 has no usable completed checkpoint. Use the exact command in `docs/METRIC_IMPROVEMENT.md`.
-7. If tiled detect-mode training still cannot localize stems, then evaluate an OBB/segmentation side branch or a clearly labeled demo-only CV stem-line attachment fallback with explicit `rhythm_source` provenance.
-8. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
-9. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-10. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
+1. Monitor active tiled pilot run `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` using `tiled_pilot_train.pid` and `tiled_pilot_train_stdout.log`.
+2. If the pilot is interrupted, preserve the latest `last.pt`, `best.pt`, `results.csv`, logs, PID file, command, and launch metadata before stopping or resuming.
+3. When the pilot completes, inspect `metrics.json`, `analysis.json`, and per-class AP for `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*`; compare against corrected v2, but label it as a tiled-validation pilot unless evaluated back on the original full-page validation set.
+4. If the pilot moves `stem` meaningfully, decide whether to launch a longer/full tiled run from the pilot `best.pt` or evaluate the pilot checkpoint on the full-page validation split to check regression.
+5. If the pilot still has `stem = 0.0`, do not spend days on the full tiled run without a new idea. Evaluate OBB/segmentation for thin symbols, a verified synthetic stem/dot supplement, or a clearly labeled demo-only CV stem-line attachment fallback with explicit `rhythm_source` provenance.
+6. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
+7. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
+8. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 
 ## Roadmap
 

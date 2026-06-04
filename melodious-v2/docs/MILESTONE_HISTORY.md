@@ -765,6 +765,28 @@ $env:PYTHONPATH='src'
   --max-det 2000
 ```
 
+### 2026-06-04 M7 update - Corrected v2 finalization and tiled stem pilot
+
+Corrected follow-up fine-tune:
+
+- Run id: `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
+- Corrected metric source: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`.
+- Finalization correction: the run was re-finalized with `imgsz=1536` and `max_det=2000` after an earlier finalization used an inconsistent 1024/default-cap configuration.
+- Primary validation metric: `mAP@0.5:0.95 = 0.707986237382828`.
+- Secondary validation metric: `mAP@0.5 = 0.8390674529615662`.
+- Threshold metrics: `precision@0.5 = 0.8806427974719793`, `recall@0.5 = 0.7881733414248919`, and `F1@0.5 = 0.8318461933668392`.
+- Remaining rhythm blocker: `stem = 0.0` despite the headline gains.
+
+Tiled stem training path:
+
+- Full tiled dataset: `runs/data/deepscores_136_yolo_tiled_stem_v1/`.
+- Full tiled counts: 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels.
+- Pilot tiled dataset: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`.
+- Pilot list counts: 12000 train, 2500 validation, and 2500 test tile paths pointing into the full tiled dataset.
+- Active pilot training run: `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`.
+- Pilot launch settings: corrected v2 `best.pt`, `epochs=12`, `imgsz=1024`, `batch=4`, `workers=0`, `device=0`, `patience=5`, and `max_det=2000`.
+- Pilot status: running at handoff with PID `6100`; no tiled metric claim exists until `metrics.json` is written.
+
 ## M8 - Final Grading Package
 
 Status: planned.
