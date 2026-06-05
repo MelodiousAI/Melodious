@@ -443,7 +443,7 @@ Latest fixed output:
 - MusicXML SHA256:
   `0FEF8DA42F1B27B5EBF567AADEB1FD156EADFFD14CA62C7606E003FC23894430`.
 
-### Espresso Rest, Beam, Slur, and Annotation Fix
+### Espresso Rest, Beam, Slur, Annotation, Layout, and Dot Fix
 
 The uploaded Espresso screenshot exposed two product-path failures:
 
@@ -456,6 +456,11 @@ The uploaded Espresso screenshot exposed two product-path failures:
   close enough to the first staff's vertical ledger margin;
 - small cue/grace-sized noteheads were exported as normal rhythmic notes;
 - detected `slur` and `tie` boxes were ignored before MusicXML export.
+- the MusicXML renderer was allowed to reflow the score into fewer systems than
+  the original page because the writer did not preserve detected staff-system
+  boundaries;
+- at least one clean dotted half note had no detector-confirmed
+  `augmentationDot`, so it exported as an undotted half note.
 
 The extractor now writes an ordered musical event stream containing both notes
 and rests. The old `notes` list remains in the JSON for compatibility, but the
@@ -468,7 +473,11 @@ the staff before the first real staff note are filtered, and very small
 cue/grace-sized noteheads are excluded from the normal rhythmic timeline.
 Detected `slur` and `tie` boxes are retained as notation symbols; their
 endpoints are attached to nearby notes and emitted as MusicXML `<slur>`,
-`<tie>`, and `<tied>` tags.
+`<tie>`, and `<tied>` tags. The MusicXML writer now emits
+`<print new-system="yes"/>` when the ordered event stream moves to a new
+detected staff row, so renderers keep closer to the original system layout. A
+narrow CV dot fallback recovers dots for open noteheads only; it does not apply
+CV dots to black noteheads.
 
 Measured comparison on the same uploaded Espresso screenshot:
 
@@ -478,6 +487,8 @@ Measured comparison on the same uploaded Espresso screenshot:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/`.
 - Latest output directory:
   `runs/demo/espresso_screenshot_slur_gracefix_20260606/`.
+- Latest layout/dot-fix output directory:
+  `runs/demo/espresso_screenshot_system_dotfix_20260606/`.
 - Staff systems: unchanged at `8`.
 - Notes: changed from `197` before annotation filtering to `192`.
 - Ordered events: `209`.
@@ -487,7 +498,9 @@ Measured comparison on the same uploaded Espresso screenshot:
 - Tie starts: `15`; MusicXML `<tie ...>` tags: `30` and `<tied ...>` tags:
   `30`.
 - Stem-confirmed notes after annotation/small-note filtering: `186`.
-- Dotted notes: unchanged at `12`.
+- Dotted notes: improved from `12` to `13`; the opening `E5` is now a dotted
+  half note with quarter length `3.0`.
+- MusicXML system breaks: `7`, matching the `8` detected staff rows.
 - Relationship count: unchanged at `1257`.
 - Very short durations changed from `0.0625:4` and `0.125:34` to
   `0.0625:2` and `0.125:5`.
@@ -497,6 +510,10 @@ Measured comparison on the same uploaded Espresso screenshot:
 - Latest duration distribution over all events:
   `0.0625:2`, `0.125:5`, `0.25:81`, `0.375:2`, `0.5:99`, `0.75:8`,
   `1.0:8`, `2.0:2`, `3.0:2`.
+- Latest layout/dot-fix duration distribution over all events keeps the same
+  event count but changes the first open note to dotted-half duration:
+  `0.0625:2`, `0.125:5`, `0.25:81`, `0.375:2`, `0.5:99`, `0.75:8`,
+  `1.0:8`, `2.0:1`, `3.0:3`.
 - Rest/beam-fix MusicXML path:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
 - Latest MusicXML path:
@@ -505,6 +522,12 @@ Measured comparison on the same uploaded Espresso screenshot:
   `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.mid`.
 - Latest overlay path:
   `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`.
+- Latest layout/dot-fix MusicXML path:
+  `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
+- Latest layout/dot-fix MIDI path:
+  `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.mid`.
+- Latest layout/dot-fix overlay path:
+  `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`.
 - Rest/beam-fix MIDI path:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.mid`.
 - Rest/beam-fix overlay path:
@@ -513,6 +536,8 @@ Measured comparison on the same uploaded Espresso screenshot:
   `df722438ab04d184e4f4ff3f03cb11cfacc89219c6c8e6ccbbc942fa45dbd55a`.
 - Latest MusicXML SHA256:
   `503d7300f2e1fd72b14c54a2c5d9071b4339a54778c6648c0a193df6ba2836ac`.
+- Latest layout/dot-fix MusicXML SHA256:
+  `9768026e134233b5b5d5c037ee0a52fb9508d55013c47be6b1e71a1f4816de20`.
 
 This is still a local demo transcription artifact, not an official detector
 metric run. It improves the observed failure classes, but measure-level repair,

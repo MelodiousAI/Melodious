@@ -21,10 +21,66 @@ Local note-extraction default checkpoint:
 - Sad Romance default-checkpoint retry artifact: `runs/demo/sad_romance_default_fullpage_20260605/`, with MusicXML at `runs/demo/sad_romance_default_fullpage_20260605/sad_romance_clearer_smooth_notes.musicxml`.
 - Latest default-checkpoint Sad Romance extraction: `9` staff systems, `197` note events, `0` stem-confirmed notes, and `3` detector-confirmed dotted notes.
 - The tiled stem pilot checkpoint is now used as a second tiled thin-symbol pass by default when the generated artifact exists. It does not replace the full-page notehead checkpoint.
-- Latest Espresso rest/beam/slur/grace artifact: `runs/demo/espresso_screenshot_slur_gracefix_20260606/`, with MusicXML at `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
-- Latest Espresso extraction now reports `209` ordered events, `192` notes, `17` rest events, `17` MusicXML `<rest/>` tags, `186` stem-confirmed notes, `12` dotted notes, `19` slur starts, and `15` tie starts.
+- Latest Espresso rest/beam/slur/grace/system/dot artifact: `runs/demo/espresso_screenshot_system_dotfix_20260606/`, with MusicXML at `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
+- Latest Espresso extraction now reports `209` ordered events, `192` notes, `17` rest events, `17` MusicXML `<rest/>` tags, `186` stem-confirmed notes, `13` dotted notes, `19` slur starts, `15` tie starts, and `7` MusicXML system breaks.
 - Compared with `runs/demo/espresso_screenshot_tiled_gnn_20260606/`, very short durations improved from `0.0625:4` and `0.125:34` to `0.0625:2` and `0.125:5` after beam-lane deduplication and geometry-capped GNN beam relationships.
 - Compared with `runs/demo/espresso_screenshot_rest_beamfix_20260606/`, notes changed from `197` to `192` because the tempo-like annotation notehead and very small cue/grace-sized noteheads are now filtered from the normal rhythmic timeline. The latest XML contains `38` `<slur ...>` tags, `30` `<tie ...>` tags, and `30` `<tied ...>` tags.
+- Compared with `runs/demo/espresso_screenshot_slur_gracefix_20260606/`, dotted notes improved from `12` to `13`; the first event is now dotted `E5` with quarter length `3.0`, and XML contains `7` `<print new-system="yes"/>` breaks for the `8` detected staff rows.
+
+## 2026-06-06 - Agent Handoff - Espresso System/Dot Fix
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local note-extraction system layout and open-note dot recovery.
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+
+Commands run:
+
+- Staff/event duration probe on `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.json` - passed; confirmed `8` staff systems and per-staff event groups while the MusicXML renderer had been free to reflow systems.
+- Raw detector dot probe on the opening dotted half note - passed; detector returned no `augmentationDot` near the first note even at `conf=0.01`, proving a threshold change would not recover that dot.
+- CV dot probe on the same image - passed; `cv_augmentation_dot_candidates` found a tight dot candidate at approximately `(271, 319)` next to the opening `E5`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 23 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` - passed, 65 tests, with one upstream `torch_geometric` deprecation warning.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\Screenshot 2026-06-06 001627.png" --output-dir runs\demo\espresso_screenshot_system_dotfix_20260606 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --thin-conf 0.05 --thin-imgsz 1024 --thin-max-det 1000 --thin-tile-size 384 --thin-tile-stride 256 --default-quarter-length 1.0 --title "Espresso"` - passed.
+- Espresso MusicXML count check - passed, `17` `<rest/>` tags, `13` `<dot/>` tags, `38` `<slur ...>` tags, `30` `<tie ...>` tags, and `7` `new-system="yes"` breaks.
+
+Generated artifacts:
+
+- `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`
+- `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.mid`
+- `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`
+- `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.json`
+- `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_detector_payload.json`
+- `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_relationships.json`
+
+What is complete:
+
+- MusicXML now emits `<print new-system="yes"/>` when the ordered event stream moves to a new detected staff row.
+- The latest Espresso XML contains `7` system breaks for `8` detected staff rows, so renderers should keep closer to the original page layout.
+- A narrow CV dot fallback recovers augmentation dots for open noteheads only. It does not apply CV dots to black noteheads.
+- The opening Espresso `E5` now exports as a dotted half with quarter length `3.0`.
+- Regression coverage verifies staff-system break emission and open-note-only CV dot recovery.
+
+What failed:
+
+- No command failed in this pass. The detector itself still missed the opening augmentation dot; the CV open-note fallback is the compensating path.
+
+What is blocked:
+
+- Exact measure totals can still drift because measure/barline-aware rhythm repair is not implemented.
+- System breaks now follow detected staff rows, but horizontal spacing inside each rendered system is still up to the MusicXML renderer.
+- Grace notes remain ignored for demo stability rather than exported as true MusicXML grace notes.
+
+Next exact step:
+
+- Re-render or open `runs/demo/espresso_screenshot_system_dotfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`; if remaining issues are mostly measure totals, implement barline-aware duration repair using detected barline positions and per-staff event groups.
 
 ## 2026-06-06 - Agent Handoff - Espresso Slur/Annotation Fix
 
