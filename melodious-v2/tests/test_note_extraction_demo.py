@@ -585,6 +585,90 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertIn('<tie type="start"/>', xml)
         self.assertIn('<tie type="stop"/>', xml)
 
+    def test_musicxml_preserves_detected_staff_system_breaks(self) -> None:
+        upper_staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        lower_staff = StaffSystem(
+            index=1,
+            line_y=(160.0, 170.0, 180.0, 190.0, 200.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        upper_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 91.0, 112.0, 99.0),
+            source="unit",
+        )
+        lower_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 191.0, 112.0, 199.0),
+            source="unit",
+        )
+        events = events_from_candidates([upper_note, lower_note], [upper_staff, lower_staff])
+
+        with tempfile.TemporaryDirectory() as tmp:
+            musicxml_path = Path(tmp) / "systems.musicxml"
+            write_musicxml(events, musicxml_path, title="Systems")
+            xml = musicxml_path.read_text(encoding="utf-8")
+
+        self.assertIn('<print new-system="yes"/>', xml)
+
+    def test_cv_open_note_dot_only_applies_to_open_noteheads(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        half_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadHalfInSpace",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 91.0, 116.0, 107.0),
+            source="unit",
+        )
+        black_note = DetectionCandidate(
+            class_id=2,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(180.0, 91.0, 196.0, 107.0),
+            source="unit",
+        )
+        dot_for_half = DetectionCandidate(
+            class_id=-2,
+            class_name="augmentationDot",
+            confidence=0.8,
+            bbox_xyxy=(122.0, 96.0, 126.0, 100.0),
+            source="cv_open_note_dot",
+        )
+        dot_for_black = DetectionCandidate(
+            class_id=-2,
+            class_name="augmentationDot",
+            confidence=0.8,
+            bbox_xyxy=(202.0, 96.0, 206.0, 100.0),
+            source="cv_open_note_dot",
+        )
+
+        extracted = notes_from_candidates(
+            [half_note, black_note],
+            [staff],
+            rhythm_symbols=[dot_for_half, dot_for_black],
+        )
+
+        self.assertEqual([note.quarter_length for note in extracted], [3.0, 1.0])
+        self.assertEqual([note.dotted for note in extracted], [True, False])
+
     def test_yolo_extraction_does_not_invent_cv_dots_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
@@ -619,7 +703,7 @@ class NoteExtractionDemoTest(unittest.TestCase):
             self.assertEqual(len(result.notes), 1)
             self.assertFalse(result.notes[0].dotted)
             self.assertEqual(result.notes[0].quarter_length, 1.0)
-            self.assertIn("only detector-confirmed augmentationDot", " ".join(result.warnings))
+            self.assertIn("tight open-note dot recovery", " ".join(result.warnings))
 
     def test_yolo_extraction_keeps_detector_confirmed_dots(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -621,6 +621,50 @@ def cv_augmentation_dot_candidates(
     return candidates
 
 
+def _dot_candidate_attaches_to_note(
+    note: DetectionCandidate,
+    dot: DetectionCandidate,
+    staff: StaffSystem,
+) -> bool:
+    if dot.source == "cv_open_note_dot" and not is_open_notehead(note.class_name):
+        return False
+    _, _, x2, _ = note.bbox_xyxy
+    if dot.x_center <= note.x_center:
+        return False
+    x_distance = dot.x_center - x2
+    y_distance = abs(dot.y_center - note.y_center)
+    return 0.0 <= x_distance <= staff.spacing * 2.8 and y_distance <= staff.spacing * 0.9
+
+
+def cv_open_note_dot_candidates(
+    image: np.ndarray,
+    staff_systems: list[StaffSystem],
+    note_candidates: list[DetectionCandidate],
+) -> list[DetectionCandidate]:
+    """Return CV dot candidates that tightly attach to open noteheads only."""
+    open_notes = [candidate for candidate in note_candidates if is_open_notehead(candidate.class_name)]
+    if not open_notes:
+        return []
+    dots: list[DetectionCandidate] = []
+    for dot in cv_augmentation_dot_candidates(image, staff_systems):
+        for note in open_notes:
+            staff = closest_staff(note.y_center, staff_systems)
+            if staff is None:
+                continue
+            if _dot_candidate_attaches_to_note(note, dot, staff):
+                dots.append(
+                    DetectionCandidate(
+                        class_id=dot.class_id,
+                        class_name=dot.class_name,
+                        confidence=dot.confidence,
+                        bbox_xyxy=dot.bbox_xyxy,
+                        source="cv_open_note_dot",
+                    )
+                )
+                break
+    return dots
+
+
 def closest_staff(y: float, staff_systems: list[StaffSystem]) -> StaffSystem | None:
     """Return the nearest staff system whose vertical range can contain y."""
     compatible = [staff for staff in staff_systems if staff.contains_y(y)]
@@ -661,6 +705,13 @@ def pitch_from_y(y: float, staff: StaffSystem, class_name: str | None = None) ->
 
 def is_notehead(class_name: str) -> bool:
     return "notehead" in class_name.lower()
+
+
+def is_open_notehead(class_name: str) -> bool:
+    lowered = class_name.lower()
+    return "notehead" in lowered and (
+        "half" in lowered or "whole" in lowered or "doublewhole" in lowered
+    )
 
 
 def is_rest(class_name: str) -> bool:
@@ -1072,19 +1123,16 @@ def _has_augmentation_dot(
     staff: StaffSystem,
     rhythm_symbols: list[DetectionCandidate],
 ) -> bool:
-    x1, _, x2, _ = note.bbox_xyxy
     best_distance: float | None = None
     for symbol in rhythm_symbols:
         if not is_augmentation_dot(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
             continue
-        if symbol.x_center <= note.x_center:
+        if not _dot_candidate_attaches_to_note(note, symbol, staff):
             continue
-        x_distance = symbol.x_center - x2
-        y_distance = abs(symbol.y_center - note.y_center)
-        if 0.0 <= x_distance <= staff.spacing * 2.8 and y_distance <= staff.spacing * 0.9:
-            distance = x_distance + y_distance
-            if best_distance is None or distance < best_distance:
-                best_distance = distance
+        _, _, x2, _ = note.bbox_xyxy
+        distance = (symbol.x_center - x2) + abs(symbol.y_center - note.y_center)
+        if best_distance is None or distance < best_distance:
+            best_distance = distance
     return best_distance is not None
 
 
@@ -1677,12 +1725,21 @@ def write_musicxml(
     elapsed = 0.0
     measure_number = 1
     parts.extend(_measure_start(measure_number, divisions, include_attributes=True, key_fifths=key_fifths))
+    previous_staff_index: int | None = None
     for event in events:
-        if elapsed >= 4.0:
+        staff_changed = previous_staff_index is not None and event.staff_index != previous_staff_index
+        if staff_changed or elapsed >= 4.0:
             parts.append("    </measure>")
             measure_number += 1
             elapsed = 0.0
-            parts.extend(_measure_start(measure_number, divisions, include_attributes=False))
+            parts.extend(
+                _measure_start(
+                    measure_number,
+                    divisions,
+                    include_attributes=False,
+                    new_system=staff_changed,
+                )
+            )
         duration = max(1, int(round(event.quarter_length * divisions)))
         note_type = _musicxml_type(event.quarter_length)
         parts.append("      <note>")
@@ -1731,6 +1788,7 @@ def write_musicxml(
                 parts.append("        </notations>")
         parts.append("      </note>")
         elapsed += event.quarter_length
+        previous_staff_index = event.staff_index
     parts.extend(["    </measure>", "  </part>", "</score-partwise>"])
     Path(output_path).write_text("\n".join(parts) + "\n", encoding="utf-8")
 
@@ -1745,8 +1803,17 @@ def _xml_escape(value: str) -> str:
     )
 
 
-def _measure_start(number: int, divisions: int, *, include_attributes: bool, key_fifths: int = 0) -> list[str]:
+def _measure_start(
+    number: int,
+    divisions: int,
+    *,
+    include_attributes: bool,
+    key_fifths: int = 0,
+    new_system: bool = False,
+) -> list[str]:
     lines = [f'    <measure number="{number}">']
+    if new_system:
+        lines.append('      <print new-system="yes"/>')
     if include_attributes:
         lines.extend(
             [
@@ -2087,8 +2154,10 @@ def extract_notes_from_image(
     if use_cv_dot_fallback:
         rhythm_symbols.extend(cv_augmentation_dot_candidates(image, staff_systems))
     elif checkpoint_path is not None:
+        rhythm_symbols.extend(cv_open_note_dot_candidates(image, staff_systems, candidates))
         warnings.append(
-            "CV augmentation-dot fallback disabled; only detector-confirmed augmentationDot symbols were used."
+            "CV augmentation-dot fallback disabled except tight open-note dot recovery; "
+            "black-note dots require detector-confirmed augmentationDot symbols."
         )
     if staff_systems:
         spacing = float(np.median([staff.spacing for staff in staff_systems]))
