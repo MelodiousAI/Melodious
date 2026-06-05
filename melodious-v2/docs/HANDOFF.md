@@ -220,6 +220,56 @@ Next exact step:
 
 - Run the new default tiled+GNN local extractor on Sad Romance and `image.png` with tiled dots disabled, then compare stem-confirmed notes, dotted notes, MusicXML hashes, and subjective MIDI quality. After that, implement a beam-count normalization rule if over-shortened notes are still obvious.
 
+## 2026-06-05 - Agent Handoff
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / Fur Elise pitch and accidental correction.
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+
+Commands run:
+
+- Internet research check - done. Relevant engineering direction: use staff-position-aware note primitives and relationships; Audiveris is a mature open-source OMR system for comparison, OpenCV line primitives remain appropriate for thin-line/stem fallback work, and MUSCIMA++ relationship modeling supports notehead-stem / beam-note grouping.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py tests\test_note_extraction_demo.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 16 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" --output-dir runs\demo\fur_elise_pitchfix_tiled_gnn_20260605 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --thin-conf 0.05 --thin-imgsz 1024 --thin-max-det 1000 --thin-tile-size 384 --thin-tile-stride 256 --default-quarter-length 1.0 --title "Fur Elise"` - passed; fixed the first note to E but exposed a false E-sharp on note 5 from loose accidental attachment.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" --output-dir runs\demo\fur_elise_pitch_accidental_fix_tiled_gnn_20260605 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --thin-conf 0.05 --thin-imgsz 1024 --thin-max-det 1000 --thin-tile-size 384 --thin-tile-stride 256 --default-quarter-length 1.0 --title "Fur Elise"` - passed after accidental attachment was constrained to matching staff steps.
+
+Generated artifacts:
+
+- `runs/demo/fur_elise_pitchfix_tiled_gnn_20260605/` - intermediate comparison output; first note fixed but note 5 was falsely E-sharp.
+- `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes.musicxml`
+- `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes.mid`
+- `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes_overlay.png`
+- `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes.json`
+- `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_detector_payload.json`
+- `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_relationships.json`
+
+What is complete:
+
+- `notehead*InSpace` detections now quantize to staff spaces and `notehead*OnLine` detections now quantize to staff lines before pitch is computed.
+- Explicit accidental attachment now requires the accidental's staff-position step to match the note's step.
+- Regression tests cover both fixes.
+- Latest Fur Elise opening phrase now extracts as `E5`, `D#5`, `E5`, `D#5`, `E5`, `B4`, `D5`, `C5`, `A4`.
+- Latest Fur Elise output still has `9` staff systems, `256` note events, `171` stem-confirmed notes, `3` dotted notes, `1259` GNN relationships, and `applied_mode = gnn`.
+- Latest Fur Elise MusicXML SHA256 is `0FEF8DA42F1B27B5EBF567AADEB1FD156EADFFD14CA62C7606E003FC23894430`.
+
+What is blocked:
+
+- Stem boxes are present in the new tiled+GNN output. The user's open file, `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes.musicxml`, is an older artifact from before tiled stem inference and will still show no stem-confirmed evidence in its JSON.
+- Beam-count over-shortening is still unresolved; the latest Fur Elise output still contains very short `0.0625` durations from `beam_x4` style sources.
+
+Next exact step:
+
+- Fix beam-count over-shortening by collapsing duplicate/stacked beam boxes per note group before duration assignment, then rerun Fur Elise and compare the duration distribution against `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/`.
+
 Current state:
 
 - V2 foundation is implemented.
