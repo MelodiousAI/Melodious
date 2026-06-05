@@ -21,6 +21,62 @@ Local note-extraction default checkpoint:
 - Sad Romance default-checkpoint retry artifact: `runs/demo/sad_romance_default_fullpage_20260605/`, with MusicXML at `runs/demo/sad_romance_default_fullpage_20260605/sad_romance_clearer_smooth_notes.musicxml`.
 - Latest default-checkpoint Sad Romance extraction: `9` staff systems, `197` note events, `0` stem-confirmed notes, and `3` detector-confirmed dotted notes.
 - The tiled stem pilot checkpoint is now used as a second tiled thin-symbol pass by default when the generated artifact exists. It does not replace the full-page notehead checkpoint.
+- Latest Espresso rest/beam-fix artifact: `runs/demo/espresso_screenshot_rest_beamfix_20260606/`, with MusicXML at `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
+- Latest Espresso extraction now reports `214` ordered events, `197` notes, `17` rest events, `17` MusicXML `<rest/>` tags, `191` stem-confirmed notes, and `12` dotted notes.
+- Compared with `runs/demo/espresso_screenshot_tiled_gnn_20260606/`, very short durations improved from `0.0625:4` and `0.125:34` to `0.0625:2` and `0.125:5` after beam-lane deduplication and geometry-capped GNN beam relationships.
+
+## 2026-06-06 - Agent Handoff
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local note-extraction rest and beam rhythm fix.
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 18 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` - passed, 60 tests, with one upstream `torch_geometric` deprecation warning.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\Screenshot 2026-06-06 001627.png" --output-dir runs\demo\espresso_screenshot_rest_beamfix_20260606 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --thin-conf 0.05 --thin-imgsz 1024 --thin-max-det 1000 --thin-tile-size 384 --thin-tile-stride 256 --default-quarter-length 1.0 --title "Espresso"` - passed.
+- Espresso MusicXML/XML-count check - passed, `214` `<note>` elements, `17` `<rest/>` tags, and `12` `<dot/>` tags.
+
+Generated artifacts:
+
+- `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`
+- `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.mid`
+- `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`
+- `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.json`
+- `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_detector_payload.json`
+- `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_relationships.json`
+
+What is complete:
+
+- The local extraction contract now has an ordered `events` stream containing notes and rests while preserving the old `notes` list for compatibility.
+- Full-page and tiled YOLO rest detections can now become real rest events.
+- MusicXML writes `<rest/>` events and MIDI note onsets preserve silence from detected rests.
+- Beam duration inference now counts deduplicated visual beam lanes at the attached stem x-position.
+- When usable geometry exists, geometry caps GNN `beam_notegroup` over-attachment so mixed eighth/sixteenth groups are less likely to force every note to the shortest neighboring duration.
+- Regression coverage verifies rest export/onset advancement and a mixed beam group where an eighth stays eighth while an adjacent sixteenth remains sixteenth.
+- Espresso before/after evidence improved from `0` rests to `17` rests and sharply reduced very short duration artifacts.
+
+What failed:
+
+- A first summary/comparison PowerShell command hit a Windows access error while expanding paths. The run artifacts existed, and smaller `-LiteralPath` summary commands passed.
+
+What is blocked:
+
+- Ties, slurs, measure-level rhythm repair, voice separation, and barline-constrained duration normalization are still incomplete in the local demo path.
+- The FastAPI upload route still uses `heuristic_bootstrap` unless the local YOLO/tiled/GNN extractor is intentionally wired behind an explicit mode.
+
+Next exact step:
+
+- Re-run Sad Romance, Fur Elise, and the Arabic page through the rest-aware beam-fixed extractor, compare MusicXML/MIDI quality against their previous artifacts, then implement barline-aware duration repair if measure totals still drift or if ties/slurs must be preserved for the demo.
 
 ## 2026-06-05 - Agent Handoff
 

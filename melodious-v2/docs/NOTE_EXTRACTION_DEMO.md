@@ -59,9 +59,11 @@ It does the following:
    dark-line, light-line, and adaptive masks so faded/antialiased staff lines
    are not silently dropped.
 2. Uses a full-page YOLO checkpoint, when available, to detect notehead,
-   beam, flag, augmentation-dot, key-signature, and explicit-accidental boxes.
+   rest, beam, flag, augmentation-dot, key-signature, and
+   explicit-accidental boxes.
 3. Uses the tiled thin-symbol YOLO checkpoint, when available, to recover
-   stems, beams, flags, and explicit accidentals from cropped source windows.
+   stems, beams, flags, rests, and explicit accidentals from cropped source
+   windows.
 4. Snapshots each checkpoint into the output directory before inference so a
    live training process can continue writing `best.pt` or `last.pt`.
 5. Maps notehead vertical position to treble-clef pitch.
@@ -74,9 +76,15 @@ It does the following:
    - black noteheads default to quarter notes;
    - nearby stems confirm unbeamed black noteheads as quarter notes;
    - nearby beams or flags shorten black noteheads to eighth/smaller values;
+   - detected rest classes create real rest events that advance MusicXML/MIDI
+     time instead of disappearing from the export;
+   - beam lanes are counted at the attached stem position and deduplicated, so
+     a mixed eighth/sixteenth group is less likely to force the eighth note to
+     inherit the shortest neighboring duration;
    - nearby detector-confirmed augmentation dots multiply the duration by 1.5;
    - GNN `stem_notehead` and `beam_notegroup` relationships can produce
-     `gnn_stem_quarter` and `gnn_beam_x*` rhythm sources.
+     `gnn_stem_quarter` and `gnn_beam_x*` rhythm sources, but geometry caps
+     GNN beam over-attachment when usable beam geometry exists.
    - half/whole notehead classes set longer base durations.
 9. Writes:
    - `*_notes.json` with note order, staff index, bounding box, pitch, MIDI
@@ -435,11 +443,62 @@ Latest fixed output:
 - MusicXML SHA256:
   `0FEF8DA42F1B27B5EBF567AADEB1FD156EADFFD14CA62C7606E003FC23894430`.
 
+### Espresso Rest and Beam-Count Fix
+
+The uploaded Espresso screenshot exposed two product-path failures:
+
+- detected rests were not exported because the local MusicXML/MIDI path only
+  wrote notehead events;
+- mixed beamed groups could over-shorten notes because GNN `beam_notegroup`
+  relationships and overlapping tiled beam boxes could make an eighth note
+  inherit the shortest neighboring duration.
+
+The extractor now writes an ordered musical event stream containing both notes
+and rests. The old `notes` list remains in the JSON for compatibility, but the
+new `events` list is the timeline used by MusicXML/MIDI. Rests are written as
+MusicXML `<rest/>` events and advance onset time for later MIDI notes. Beam
+duration inference now probes beam lanes at the attached stem x-position,
+deduplicates tiled beam boxes into visual lanes, and uses geometry to cap GNN
+beam over-attachment when geometry is available.
+
+Measured comparison on the same uploaded Espresso screenshot:
+
+- Previous output directory:
+  `runs/demo/espresso_screenshot_tiled_gnn_20260606/`.
+- New output directory:
+  `runs/demo/espresso_screenshot_rest_beamfix_20260606/`.
+- Staff systems: unchanged at `8`.
+- Notes: unchanged at `197`.
+- Rest events: improved from `0` to `17`.
+- MusicXML `<rest/>` tags: improved from `0` to `17`.
+- Stem-confirmed notes: unchanged at `191`.
+- Dotted notes: unchanged at `12`.
+- Relationship count: unchanged at `1257`.
+- Very short durations changed from `0.0625:4` and `0.125:34` to
+  `0.0625:2` and `0.125:5`.
+- New duration distribution over all events:
+  `0.0625:2`, `0.125:5`, `0.25:81`, `0.375:2`, `0.5:103`, `0.75:8`,
+  `1.0:9`, `2.0:2`, `3.0:2`.
+- New MusicXML path:
+  `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
+- New MIDI path:
+  `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.mid`.
+- New overlay path:
+  `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`.
+- New MusicXML SHA256:
+  `df722438ab04d184e4f4ff3f03cb11cfacc89219c6c8e6ccbbc942fa45dbd55a`.
+
+This is still a local demo transcription artifact, not an official detector
+metric run. It improves the two observed failure classes, but ties, slurs,
+measure-level repair, voice separation, and exact barline-constrained rhythm
+normalization remain incomplete.
+
 ## Next Engineering Step
 
 The next product step is to wire this path into the upload API behind an
 explicit mode, for example `MELODIOUS_UPLOAD_DETECTOR=yolo_note_demo`, and keep
 the response warnings honest until measures, ties, and graph assembly are more
-complete. The next rhythm-quality step is to reduce beam-count over-shortening,
-add measure/barline-aware rhythm normalization, and test the tiled+GNN path on
-Sad Romance and the Arabic page without enabling tiled dots.
+complete. The next rhythm-quality step is to add measure/barline-aware rhythm
+normalization, preserve ties/slurs where possible, and test the rest-aware
+tiled+GNN path on Sad Romance, Fur Elise, and the Arabic page without enabling
+tiled dots.

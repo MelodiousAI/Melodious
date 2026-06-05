@@ -16,6 +16,8 @@ The follow-up Fur Elise tiled+GNN run is `runs/demo/fur_elise_tiled_gnn_rhythm_n
 
 The latest Fur Elise local demo output is `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/`. It fixes a pitch-quantization bug where `notehead*InSpace` boxes could be rounded onto staff lines, causing the opening E notes to appear as D. The opening phrase now extracts as `E5`, `D#5`, `E5`, `D#5`, `E5`, `B4`, `D5`, `C5`, `A4`. Stem-confirmed notes remain `171`, dotted notes remain `3`, and MusicXML `<alter>` tags dropped from `38` to `21` after accidental attachment was constrained to matching staff steps.
 
+The latest Espresso local demo output is `runs/demo/espresso_screenshot_rest_beamfix_20260606/`. It fixes two observed product-path issues in the local extractor: detected rests now become ordered rest events and MusicXML `<rest/>` tags, and beam duration inference now probes visual beam lanes at the attached stem position while using geometry to cap GNN beam over-attachment. Compared with `runs/demo/espresso_screenshot_tiled_gnn_20260606/`, notes stayed at `197`, rest events improved from `0` to `17`, MusicXML `<rest/>` tags improved from `0` to `17`, stem-confirmed notes stayed at `191`, dotted notes stayed at `12`, and very short durations improved from `0.0625:4` plus `0.125:34` to `0.0625:2` plus `0.125:5`. This is local demo transcription evidence, not an official detector metric claim.
+
 M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing two real fine-tunes. The completed 1472 fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its separate `F1@0.5` is `0.8082006373091581`, and its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 The completed follow-up run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. It was resumed from the load-verified epoch-22 manual checkpoint, completed, then was re-finalized with the intended `imgsz=1536` and `max_det=2000` settings after an initial incorrect 1024/default-cap finalization was found. Corrected v2 `F1@0.5` is `0.8318461933668392`. Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
 M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The best completed v2 fine-tune still leaves `stem = 0.0` AP and only modest `ledgerLine = 0.01106603897644983`, so rhythm extraction remains limited by thin-symbol detection.
@@ -382,6 +384,9 @@ Important end-to-end caveat:
 - Passed: Fur Elise tiled+GNN local extraction under `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/`; generated MusicXML, MIDI, overlay, note JSON, detector payload JSON, and relationships JSON. Stem-confirmed notes improved from 0 to 171 while dotted notes stayed at 3.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q`, 16 tests after adding line/space pitch quantization and step-matched accidental attachment regressions.
 - Passed: Fur Elise pitch/accidental fixed extraction under `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/`; opening phrase now extracts as `E5`, `D#5`, `E5`, `D#5`, `E5`, `B4`, `D5`, `C5`, `A4`, with `171` stem-confirmed notes and `3` dotted notes.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q`, 18 tests after adding rest-event export and mixed-beam duration regression coverage.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q`, 60 tests after the rest/beam-fix extractor changes, with one upstream `torch_geometric` deprecation warning.
+- Passed: Espresso screenshot extraction under `runs/demo/espresso_screenshot_rest_beamfix_20260606/`; generated `214` ordered events, `197` notes, `17` rest events, `17` MusicXML `<rest/>` tags, `191` stem-confirmed notes, and reduced very short durations from the previous `0.0625:4` plus `0.125:34` to `0.0625:2` plus `0.125:5`.
 
 ## Milestone Tracker
 
@@ -414,8 +419,8 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Reduce beam-count over-shortening in the local extractor; Fur Elise now has corrected opening pitch and stem evidence, but some notes can still be shortened too aggressively when multiple beam boxes overlap.
-2. Test the new tiled+GNN local extraction path on Sad Romance and the Arabic page with tiled dots disabled, then compare stem-confirmed notes, dotted notes, MusicXML hashes, and subjective MIDI quality.
+1. Re-run Sad Romance, Fur Elise, and the Arabic page with the rest-aware beam-fixed local extractor, then compare stem-confirmed notes, rest counts, dotted notes, MusicXML hashes, and subjective MIDI quality.
+2. Add measure/barline-aware duration repair if the rest-aware beam-fixed outputs still drift rhythmically or if measure totals are visibly wrong.
 3. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep the tiled result labeled as tiled-validation pilot evidence unless it is separately evaluated on the original full-page validation split.

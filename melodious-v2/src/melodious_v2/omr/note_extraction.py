@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import shutil
 from collections import Counter
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any, Callable
 
@@ -79,6 +79,7 @@ class DetectionCandidate:
 class ExtractedNote:
     """Pitch-level note extracted from an image."""
 
+    event_type: str
     order: int
     staff_index: int
     x_center: float
@@ -97,6 +98,28 @@ class ExtractedNote:
     dotted: bool = False
     rhythm_source: str = "default"
     stem_detected: bool = False
+
+
+@dataclass(frozen=True)
+class ExtractedRest:
+    """Rest event extracted from an image."""
+
+    event_type: str
+    order: int
+    staff_index: int
+    x_center: float
+    y_center: float
+    bbox_xyxy: tuple[float, float, float, float]
+    class_name: str
+    confidence: float
+    source: str
+    quarter_length: float
+    onset_quarter: float
+    dotted: bool = False
+    rhythm_source: str = "rest_class"
+
+
+ExtractedMusicEvent = ExtractedNote | ExtractedRest
 
 
 @dataclass(frozen=True)
@@ -136,6 +159,7 @@ class ExtractionResult:
     thin_symbol_checkpoint: str | None
     gnn_checkpoint: str | None
     staff_systems: list[StaffSystem]
+    events: list[ExtractedMusicEvent]
     notes: list[ExtractedNote]
     key_signatures: dict[int, dict[str, int]]
     key_fifths: int = 0
@@ -634,6 +658,10 @@ def is_notehead(class_name: str) -> bool:
     return "notehead" in class_name.lower()
 
 
+def is_rest(class_name: str) -> bool:
+    return class_name.lower().startswith("rest")
+
+
 def is_beam(class_name: str) -> bool:
     return class_name.lower() == "beam"
 
@@ -671,6 +699,7 @@ def is_thin_symbol_candidate(class_name: str) -> bool:
         or is_flag(class_name)
         or is_augmentation_dot(class_name)
         or is_pitch_modifier(class_name)
+        or is_rest(class_name)
     )
 
 
@@ -684,6 +713,8 @@ def _thin_symbol_min_confidence(class_name: str) -> float:
         return 0.22
     if is_pitch_modifier(class_name):
         return 0.08
+    if is_rest(class_name):
+        return 0.10
     return 0.10
 
 
@@ -701,6 +732,8 @@ def _symbol_family(class_name: str) -> str:
         return lowered
     if is_explicit_accidental(class_name):
         return lowered
+    if is_rest(class_name):
+        return "rest"
     return lowered
 
 
@@ -765,6 +798,30 @@ def quarter_length_for_class(class_name: str, default_quarter_length: float = 1.
     return default_quarter_length
 
 
+def quarter_length_for_rest_class(class_name: str, default_quarter_length: float = 1.0) -> float:
+    """Estimate rest duration from a detector class name."""
+    lowered = class_name.lower()
+    if "128th" in lowered:
+        return 1.0 / 32.0
+    if "64th" in lowered:
+        return 1.0 / 16.0
+    if "32nd" in lowered:
+        return 1.0 / 8.0
+    if "16th" in lowered:
+        return 0.25
+    if "8th" in lowered:
+        return 0.5
+    if "quarter" in lowered:
+        return 1.0
+    if "half" in lowered:
+        return 2.0
+    if "doublewhole" in lowered:
+        return 8.0
+    if "whole" in lowered:
+        return 4.0
+    return default_quarter_length
+
+
 def _flag_quarter_length(class_name: str) -> float | None:
     lowered = class_name.lower()
     if "128th" in lowered:
@@ -821,6 +878,8 @@ def _has_stem_relationship_for_note(
 def _beam_relationship_count_for_note(
     note: DetectionCandidate,
     relationships: list[CandidateRelationship] | None,
+    staff: StaffSystem | None = None,
+    rhythm_symbols: list[DetectionCandidate] | None = None,
 ) -> int:
     related = _related_symbols_for_note(
         note,
@@ -830,47 +889,55 @@ def _beam_relationship_count_for_note(
     )
     if not related:
         return 0
-    unique = {
-        (
-            round(symbol.x_center, 1),
-            round(symbol.y_center, 1),
-            round(symbol.width, 1),
-            round(symbol.height, 1),
-        )
-        for symbol in related
-    }
-    return len(unique)
+    if staff is None:
+        return _count_unique_beam_lanes(related, spacing=10.0)
+    geometry_compatible_count = _beam_count_from_symbols(
+        note,
+        staff,
+        related,
+        rhythm_symbols=list(rhythm_symbols or []),
+        relationships=relationships,
+    )
+    return geometry_compatible_count or _count_unique_beam_lanes(related, spacing=staff.spacing)
 
 
-def _beam_count_for_note(
-    note: DetectionCandidate,
-    staff: StaffSystem,
-    rhythm_symbols: list[DetectionCandidate],
-) -> int:
-    count = 0
-    note_x = note.x_center
-    for symbol in rhythm_symbols:
-        if not is_beam(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+def _count_unique_beam_lanes(symbols: list[DetectionCandidate], *, spacing: float) -> int:
+    """Count visually separate beam lanes while collapsing duplicate tiled boxes."""
+    if not symbols:
+        return 0
+    centers = sorted(symbol.y_center for symbol in symbols)
+    threshold = max(2.0, spacing * 0.28)
+    lane_count = 0
+    previous: float | None = None
+    for center in centers:
+        if previous is None or abs(center - previous) > threshold:
+            lane_count += 1
+            previous = center
             continue
-        x1, y1, x2, y2 = symbol.bbox_xyxy
-        y_distance = min(abs(note.y_center - y1), abs(note.y_center - y2), abs(note.y_center - symbol.y_center))
-        x_margin = staff.spacing * 0.75
-        if x1 - x_margin <= note_x <= x2 + x_margin and y_distance <= staff.spacing * 7.0:
-            count += 1
-    return count
+        previous = (previous + center) / 2.0
+    return lane_count
 
 
-def _has_stem_for_note(
+def _attached_stems_for_note(
     note: DetectionCandidate,
     staff: StaffSystem,
     rhythm_symbols: list[DetectionCandidate],
     relationships: list[CandidateRelationship] | None = None,
-) -> bool:
-    """Return whether a detected stem is geometrically attached to a notehead."""
-    if _has_stem_relationship_for_note(note, relationships):
-        return True
+) -> list[DetectionCandidate]:
+    """Return detected stems that plausibly attach to a notehead."""
     nx1, ny1, nx2, ny2 = note.bbox_xyxy
     note_side_x = (nx1, nx2)
+    candidates: list[DetectionCandidate] = []
+    candidates.extend(
+        symbol
+        for symbol in _related_symbols_for_note(
+            note,
+            relationships,
+            relationship_type="stem_notehead",
+            symbol_predicate=is_stem,
+        )
+        if _symbol_staff_compatible(symbol, staff)
+    )
     for symbol in rhythm_symbols:
         if not is_stem(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
             continue
@@ -883,8 +950,80 @@ def _has_stem_for_note(
         y_overlaps_note = sy1 <= ny2 + staff.spacing * 0.75 and sy2 >= ny1 - staff.spacing * 0.75
         near_note_vertical = min(abs(sy1 - note.y_center), abs(sy2 - note.y_center)) <= staff.spacing * 7.0
         if x_distance <= staff.spacing * 1.2 and (y_overlaps_note or near_note_vertical):
-            return True
-    return False
+            candidates.append(symbol)
+
+    unique: list[DetectionCandidate] = []
+    seen: set[tuple[float, float, float, float]] = set()
+    for candidate in sorted(
+        candidates,
+        key=lambda item: (
+            min(abs(item.x_center - side_x) for side_x in note_side_x),
+            -item.confidence,
+        ),
+    ):
+        key = tuple(round(value, 1) for value in candidate.bbox_xyxy)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(candidate)
+    return unique
+
+
+def _beam_count_from_symbols(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    beam_symbols: list[DetectionCandidate],
+    *,
+    rhythm_symbols: list[DetectionCandidate],
+    relationships: list[CandidateRelationship] | None = None,
+) -> int:
+    stems = _attached_stems_for_note(note, staff, rhythm_symbols, relationships)
+    stem = stems[0] if stems else None
+    probe_x = stem.x_center if stem is not None else note.x_center
+    x_margin = staff.spacing * (0.45 if stem is not None else 0.75)
+    compatible: list[DetectionCandidate] = []
+    for symbol in beam_symbols:
+        if not is_beam(symbol.class_name) or not _symbol_staff_compatible(symbol, staff):
+            continue
+        x1, y1, x2, y2 = symbol.bbox_xyxy
+        if not (x1 - x_margin <= probe_x <= x2 + x_margin):
+            continue
+        if stem is not None:
+            _, sy1, _, sy2 = stem.bbox_xyxy
+            beam_near_stem = sy1 - staff.spacing * 1.5 <= symbol.y_center <= sy2 + staff.spacing * 1.5
+            if not beam_near_stem:
+                continue
+        else:
+            y_distance = min(abs(note.y_center - y1), abs(note.y_center - y2), abs(note.y_center - symbol.y_center))
+            if y_distance > staff.spacing * 7.0:
+                continue
+        compatible.append(symbol)
+    return _count_unique_beam_lanes(compatible, spacing=staff.spacing)
+
+
+def _beam_count_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+) -> int:
+    return _beam_count_from_symbols(
+        note,
+        staff,
+        [symbol for symbol in rhythm_symbols if is_beam(symbol.class_name)],
+        rhythm_symbols=rhythm_symbols,
+    )
+
+
+def _has_stem_for_note(
+    note: DetectionCandidate,
+    staff: StaffSystem,
+    rhythm_symbols: list[DetectionCandidate],
+    relationships: list[CandidateRelationship] | None = None,
+) -> bool:
+    """Return whether a detected stem is geometrically attached to a notehead."""
+    if _has_stem_relationship_for_note(note, relationships):
+        return True
+    return bool(_attached_stems_for_note(note, staff, rhythm_symbols, relationships))
 
 
 def _flag_duration_for_note(
@@ -944,14 +1083,19 @@ def rhythm_for_note(
     if "black" in note.class_name.lower() or note.source == "cv_fallback":
         flag_duration = _flag_duration_for_note(note, staff, rhythm_symbols)
         geometry_beam_count = _beam_count_for_note(note, staff, rhythm_symbols)
-        relationship_beam_count = _beam_relationship_count_for_note(note, rhythm_relationships)
-        beam_count = max(geometry_beam_count, relationship_beam_count)
+        relationship_beam_count = _beam_relationship_count_for_note(
+            note,
+            rhythm_relationships,
+            staff=staff,
+            rhythm_symbols=rhythm_symbols,
+        )
+        beam_count = geometry_beam_count if geometry_beam_count > 0 else relationship_beam_count
         if flag_duration is not None:
             duration = flag_duration
             source = "flag"
         elif beam_count > 0:
             duration = max(1.0 / 32.0, 1.0 / (2**beam_count))
-            source = f"gnn_beam_x{beam_count}" if relationship_beam_count > geometry_beam_count else f"beam_x{beam_count}"
+            source = f"gnn_beam_x{beam_count}" if geometry_beam_count == 0 else f"beam_x{beam_count}"
         elif stem_detected:
             duration = default_quarter_length
             source = "gnn_stem_quarter" if stem_from_relationship else "stem_quarter"
@@ -1072,6 +1216,164 @@ def document_key_fifths(key_signatures: dict[int, dict[str, int]]) -> int:
     return max(counts.items(), key=lambda item: (item[1], -abs(item[0])))[0]
 
 
+def _note_from_candidate(
+    candidate: DetectionCandidate,
+    staff: StaffSystem,
+    *,
+    rhythm_symbols: list[DetectionCandidate],
+    rhythm_relationships: list[CandidateRelationship],
+    pitch_symbols: list[DetectionCandidate],
+    key_signatures: dict[int, dict[str, int]],
+    default_quarter_length: float,
+) -> ExtractedNote:
+    step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff, candidate.class_name)
+    alter = 0
+    pitch_source = "staff_geometry"
+    explicit_accidental = explicit_accidental_for_note(candidate, staff, pitch_symbols, step)
+    if explicit_accidental is not None:
+        alter, pitch_source = explicit_accidental
+    else:
+        staff_signature = key_signatures.get(staff.index, {})
+        if step in staff_signature:
+            alter = int(staff_signature[step])
+            pitch_source = f"key_signature:{'flat' if alter < 0 else 'sharp' if alter > 0 else 'natural'}"
+    midi_pitch += alter
+    quarter_length, dotted, rhythm_source, stem_detected = rhythm_for_note(
+        candidate,
+        staff,
+        rhythm_symbols,
+        default_quarter_length=default_quarter_length,
+        rhythm_relationships=rhythm_relationships,
+    )
+    return ExtractedNote(
+        event_type="note",
+        order=0,
+        staff_index=staff.index,
+        x_center=float(candidate.x_center),
+        y_center=float(candidate.y_center),
+        bbox_xyxy=tuple(float(value) for value in candidate.bbox_xyxy),  # type: ignore[arg-type]
+        class_name=candidate.class_name,
+        confidence=float(candidate.confidence),
+        source=candidate.source,
+        step=step,
+        octave=int(octave),
+        midi_pitch=int(midi_pitch),
+        alter=int(alter),
+        quarter_length=quarter_length,
+        onset_quarter=0.0,
+        pitch_source=pitch_source,
+        dotted=dotted,
+        rhythm_source=rhythm_source,
+        stem_detected=stem_detected,
+    )
+
+
+def _rest_from_candidate(
+    candidate: DetectionCandidate,
+    staff: StaffSystem,
+    *,
+    default_quarter_length: float,
+) -> ExtractedRest:
+    quarter_length = quarter_length_for_rest_class(candidate.class_name, default_quarter_length)
+    return ExtractedRest(
+        event_type="rest",
+        order=0,
+        staff_index=staff.index,
+        x_center=float(candidate.x_center),
+        y_center=float(candidate.y_center),
+        bbox_xyxy=tuple(float(value) for value in candidate.bbox_xyxy),  # type: ignore[arg-type]
+        class_name=candidate.class_name,
+        confidence=float(candidate.confidence),
+        source=candidate.source,
+        quarter_length=quarter_length,
+        onset_quarter=0.0,
+        dotted=False,
+        rhythm_source="rest_class",
+    )
+
+
+def _order_events(
+    events: list[ExtractedMusicEvent],
+    staff_systems: list[StaffSystem],
+) -> list[ExtractedMusicEvent]:
+    events.sort(key=lambda event: (event.staff_index, event.x_center, event.y_center))
+    ordered: list[ExtractedMusicEvent] = []
+    onset = 0.0
+    previous_staff = None
+    group_x: float | None = None
+    group_duration = 0.0
+    group_threshold_by_staff = {staff.index: staff.spacing * 1.15 for staff in staff_systems}
+    for event in events:
+        if previous_staff is None or event.staff_index != previous_staff:
+            if previous_staff is not None:
+                onset += group_duration
+            group_x = None
+            group_duration = 0.0
+        elif group_x is None or abs(event.x_center - group_x) > group_threshold_by_staff[event.staff_index]:
+            onset += group_duration
+            group_x = None
+            group_duration = 0.0
+
+        if group_x is None:
+            group_x = event.x_center
+        ordered.append(replace(event, order=len(ordered) + 1, onset_quarter=onset))
+        previous_staff = event.staff_index
+        group_duration = max(group_duration, event.quarter_length)
+    return ordered
+
+
+def events_from_candidates(
+    note_candidates: list[DetectionCandidate],
+    staff_systems: list[StaffSystem],
+    *,
+    rest_candidates: list[DetectionCandidate] | None = None,
+    rhythm_symbols: list[DetectionCandidate] | None = None,
+    rhythm_relationships: list[CandidateRelationship] | None = None,
+    pitch_symbols: list[DetectionCandidate] | None = None,
+    key_signatures: dict[int, dict[str, int]] | None = None,
+    default_quarter_length: float = 1.0,
+) -> list[ExtractedMusicEvent]:
+    """Convert notehead and rest boxes into ordered musical events."""
+    if not staff_systems:
+        return []
+    spacing = float(np.median([staff.spacing for staff in staff_systems]))
+    note_candidates = _deduplicate_candidates(note_candidates, spacing=spacing)
+    rest_candidates = _deduplicate_symbol_candidates(list(rest_candidates or []), spacing=spacing)
+    rhythm_symbols = list(rhythm_symbols or [])
+    rhythm_relationships = list(rhythm_relationships or [])
+    pitch_symbols = list(pitch_symbols or [])
+    key_signatures = dict(key_signatures or {})
+
+    events: list[ExtractedMusicEvent] = []
+    for candidate in note_candidates:
+        staff = closest_staff(candidate.y_center, staff_systems)
+        if staff is None:
+            continue
+        events.append(
+            _note_from_candidate(
+                candidate,
+                staff,
+                rhythm_symbols=rhythm_symbols,
+                rhythm_relationships=rhythm_relationships,
+                pitch_symbols=pitch_symbols,
+                key_signatures=key_signatures,
+                default_quarter_length=default_quarter_length,
+            )
+        )
+    for candidate in rest_candidates:
+        staff = closest_staff(candidate.y_center, staff_systems)
+        if staff is None:
+            continue
+        events.append(
+            _rest_from_candidate(
+                candidate,
+                staff,
+                default_quarter_length=default_quarter_length,
+            )
+        )
+    return _order_events(events, staff_systems)
+
+
 def notes_from_candidates(
     candidates: list[DetectionCandidate],
     staff_systems: list[StaffSystem],
@@ -1083,106 +1385,19 @@ def notes_from_candidates(
     default_quarter_length: float = 1.0,
 ) -> list[ExtractedNote]:
     """Convert notehead boxes into ordered treble-clef note events."""
-    if not staff_systems:
-        return []
-    spacing = float(np.median([staff.spacing for staff in staff_systems]))
-    candidates = _deduplicate_candidates(candidates, spacing=spacing)
-    rhythm_symbols = list(rhythm_symbols or [])
-    rhythm_relationships = list(rhythm_relationships or [])
-    pitch_symbols = list(pitch_symbols or [])
-    key_signatures = dict(key_signatures or {})
-    notes: list[ExtractedNote] = []
-    for candidate in candidates:
-        staff = closest_staff(candidate.y_center, staff_systems)
-        if staff is None:
-            continue
-        step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff, candidate.class_name)
-        alter = 0
-        pitch_source = "staff_geometry"
-        explicit_accidental = explicit_accidental_for_note(candidate, staff, pitch_symbols, step)
-        if explicit_accidental is not None:
-            alter, pitch_source = explicit_accidental
-        else:
-            staff_signature = key_signatures.get(staff.index, {})
-            if step in staff_signature:
-                alter = int(staff_signature[step])
-                pitch_source = f"key_signature:{'flat' if alter < 0 else 'sharp' if alter > 0 else 'natural'}"
-        midi_pitch += alter
-        quarter_length, dotted, rhythm_source, stem_detected = rhythm_for_note(
-            candidate,
-            staff,
-            rhythm_symbols,
-            default_quarter_length=default_quarter_length,
+    return [
+        event
+        for event in events_from_candidates(
+            candidates,
+            staff_systems,
+            rhythm_symbols=rhythm_symbols,
             rhythm_relationships=rhythm_relationships,
+            pitch_symbols=pitch_symbols,
+            key_signatures=key_signatures,
+            default_quarter_length=default_quarter_length,
         )
-        notes.append(
-            ExtractedNote(
-                order=0,
-                staff_index=staff.index,
-                x_center=float(candidate.x_center),
-                y_center=float(candidate.y_center),
-                bbox_xyxy=tuple(float(value) for value in candidate.bbox_xyxy),  # type: ignore[arg-type]
-                class_name=candidate.class_name,
-                confidence=float(candidate.confidence),
-                source=candidate.source,
-                step=step,
-                octave=int(octave),
-                midi_pitch=int(midi_pitch),
-                alter=int(alter),
-                quarter_length=quarter_length,
-                onset_quarter=0.0,
-                pitch_source=pitch_source,
-                dotted=dotted,
-                rhythm_source=rhythm_source,
-                stem_detected=stem_detected,
-            )
-        )
-
-    notes.sort(key=lambda note: (note.staff_index, note.x_center, note.y_center))
-    ordered: list[ExtractedNote] = []
-    onset = 0.0
-    previous_staff = None
-    group_x: float | None = None
-    group_duration = 0.0
-    group_threshold_by_staff = {staff.index: staff.spacing * 1.15 for staff in staff_systems}
-    for note in notes:
-        if previous_staff is None or note.staff_index != previous_staff:
-            if previous_staff is not None:
-                onset += group_duration
-            group_x = None
-            group_duration = 0.0
-        elif group_x is None or abs(note.x_center - group_x) > group_threshold_by_staff[note.staff_index]:
-            onset += group_duration
-            group_x = None
-            group_duration = 0.0
-
-        if group_x is None:
-            group_x = note.x_center
-        ordered.append(
-            ExtractedNote(
-                order=len(ordered) + 1,
-                staff_index=note.staff_index,
-                x_center=note.x_center,
-                y_center=note.y_center,
-                bbox_xyxy=note.bbox_xyxy,
-                class_name=note.class_name,
-                confidence=note.confidence,
-                source=note.source,
-                step=note.step,
-                octave=note.octave,
-                midi_pitch=note.midi_pitch,
-                alter=note.alter,
-                quarter_length=note.quarter_length,
-                onset_quarter=onset,
-                pitch_source=note.pitch_source,
-                dotted=note.dotted,
-                rhythm_source=note.rhythm_source,
-                stem_detected=note.stem_detected,
-            )
-        )
-        previous_staff = note.staff_index
-        group_duration = max(group_duration, note.quarter_length)
-    return ordered
+        if isinstance(event, ExtractedNote)
+    ]
 
 
 def _var_len(value: int) -> bytes:
@@ -1203,7 +1418,7 @@ def _var_len(value: int) -> bytes:
 
 
 def write_midi(
-    notes: list[ExtractedNote],
+    events: list[ExtractedMusicEvent],
     output_path: str | Path,
     *,
     tempo_bpm: int = 96,
@@ -1212,20 +1427,20 @@ def write_midi(
     program: int = 40,
 ) -> None:
     """Write a simple Standard MIDI File with real note events."""
-    events: list[tuple[int, int, int, int]] = []
-    for note in notes:
+    midi_events: list[tuple[int, int, int, int]] = []
+    for note in [event for event in events if isinstance(event, ExtractedNote)]:
         start = int(round(note.onset_quarter * ticks_per_quarter))
         duration = max(1, int(round(note.quarter_length * ticks_per_quarter)))
-        events.append((start, 0, note.midi_pitch, velocity))
-        events.append((start + duration, 1, note.midi_pitch, 0))
-    events.sort(key=lambda item: (item[0], 0 if item[1] == 1 else 1))
+        midi_events.append((start, 0, note.midi_pitch, velocity))
+        midi_events.append((start + duration, 1, note.midi_pitch, 0))
+    midi_events.sort(key=lambda item: (item[0], 0 if item[1] == 1 else 1))
 
     mpqn = int(round(60_000_000 / max(1, tempo_bpm)))
     track = bytearray()
     track.extend(b"\x00\xff\x51\x03" + mpqn.to_bytes(3, "big"))
     track.extend(b"\x00" + bytes([0xC0, max(0, min(program, 127))]))
     last_tick = 0
-    for tick, event_type, pitch, value in events:
+    for tick, event_type, pitch, value in midi_events:
         track.extend(_var_len(max(0, tick - last_tick)))
         status = 0x80 if event_type == 1 else 0x90
         track.extend(bytes([status, max(0, min(pitch, 127)), max(0, min(value, 127))]))
@@ -1238,8 +1453,14 @@ def write_midi(
     Path(output_path).write_bytes(header + body)
 
 
-def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title: str, key_fifths: int = 0) -> None:
-    """Write compact MusicXML from extracted notes."""
+def write_musicxml(
+    events: list[ExtractedMusicEvent],
+    output_path: str | Path,
+    *,
+    title: str,
+    key_fifths: int = 0,
+) -> None:
+    """Write compact MusicXML from extracted note and rest events."""
     divisions = 480
     parts = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -1255,35 +1476,42 @@ def write_musicxml(notes: list[ExtractedNote], output_path: str | Path, *, title
     elapsed = 0.0
     measure_number = 1
     parts.extend(_measure_start(measure_number, divisions, include_attributes=True, key_fifths=key_fifths))
-    for note in notes:
+    for event in events:
         if elapsed >= 4.0:
             parts.append("    </measure>")
             measure_number += 1
             elapsed = 0.0
             parts.extend(_measure_start(measure_number, divisions, include_attributes=False))
-        duration = max(1, int(round(note.quarter_length * divisions)))
-        note_type = _musicxml_type(note.quarter_length)
+        duration = max(1, int(round(event.quarter_length * divisions)))
+        note_type = _musicxml_type(event.quarter_length)
+        parts.append("      <note>")
+        if isinstance(event, ExtractedRest):
+            parts.append("        <rest/>")
+        else:
+            parts.extend(
+                [
+                    "        <pitch>",
+                    f"          <step>{event.step}</step>",
+                ]
+            )
+            if event.alter:
+                parts.append(f"          <alter>{event.alter}</alter>")
+            parts.extend(
+                [
+                    f"          <octave>{event.octave}</octave>",
+                    "        </pitch>",
+                ]
+            )
         parts.extend(
             [
-                "      <note>",
-                "        <pitch>",
-                f"          <step>{note.step}</step>",
-            ]
-        )
-        if note.alter:
-            parts.append(f"          <alter>{note.alter}</alter>")
-        parts.extend(
-            [
-                f"          <octave>{note.octave}</octave>",
-                "        </pitch>",
                 f"        <duration>{duration}</duration>",
                 f"        <type>{note_type}</type>",
             ]
         )
-        if note.dotted:
+        if event.dotted:
             parts.append("        <dot/>")
         parts.append("      </note>")
-        elapsed += note.quarter_length
+        elapsed += event.quarter_length
     parts.extend(["    </measure>", "  </part>", "</score-partwise>"])
     Path(output_path).write_text("\n".join(parts) + "\n", encoding="utf-8")
 
@@ -1339,7 +1567,7 @@ def _is_dotted_length(quarter_length: float) -> bool:
 def write_overlay(
     image: np.ndarray,
     staff_systems: list[StaffSystem],
-    notes: list[ExtractedNote],
+    events: list[ExtractedMusicEvent],
     output_path: str | Path,
 ) -> None:
     """Write an image overlay showing staff geometry and extracted notes."""
@@ -1348,13 +1576,18 @@ def write_overlay(
         for y_value in staff.line_y:
             y = int(round(y_value))
             cv2.line(canvas, (int(staff.start_x), y), (int(staff.end_x), y), (0, 160, 0), 1)
-    for note in notes:
-        x1, y1, x2, y2 = [int(round(value)) for value in note.bbox_xyxy]
-        color = (0, 0, 255) if note.source.startswith("yolo") else (255, 0, 0)
+    for event in events:
+        x1, y1, x2, y2 = [int(round(value)) for value in event.bbox_xyxy]
+        color = (0, 120, 255) if isinstance(event, ExtractedRest) else (0, 0, 255)
+        if not event.source.startswith("yolo"):
+            color = (255, 0, 0)
         cv2.rectangle(canvas, (x1, y1), (x2, y2), color, 2)
-        dot_suffix = "." if note.dotted else ""
-        alter_suffix = "b" * abs(note.alter) if note.alter < 0 else "#" * note.alter
-        label = f"{note.order}:{note.step}{alter_suffix}{note.octave}/{note.quarter_length:g}{dot_suffix}"
+        dot_suffix = "." if event.dotted else ""
+        if isinstance(event, ExtractedRest):
+            label = f"{event.order}:R/{event.quarter_length:g}{dot_suffix}"
+        else:
+            alter_suffix = "b" * abs(event.alter) if event.alter < 0 else "#" * event.alter
+            label = f"{event.order}:{event.step}{alter_suffix}{event.octave}/{event.quarter_length:g}{dot_suffix}"
         cv2.putText(
             canvas,
             label,
@@ -1530,6 +1763,7 @@ def extract_notes_from_image(
     warnings: list[str] = []
 
     candidates: list[DetectionCandidate] = []
+    rest_candidates: list[DetectionCandidate] = []
     rhythm_symbols: list[DetectionCandidate] = []
     pitch_symbols: list[DetectionCandidate] = []
     checkpoint_snapshot: Path | None = None
@@ -1553,6 +1787,7 @@ def extract_notes_from_image(
                 device=device,
             )
             candidates = [candidate for candidate in all_candidates if is_notehead(candidate.class_name)]
+            rest_candidates = [candidate for candidate in all_candidates if is_rest(candidate.class_name)]
             rhythm_symbols = [
                 candidate
                 for candidate in all_candidates
@@ -1597,6 +1832,7 @@ def extract_notes_from_image(
                 and (use_tiled_dots or not is_augmentation_dot(candidate.class_name))
                 and not is_key_signature_symbol(candidate.class_name)
             ]
+            rest_candidates.extend(candidate for candidate in thin_symbols if is_rest(candidate.class_name))
             rhythm_symbols.extend(
                 candidate
                 for candidate in thin_symbols
@@ -1636,6 +1872,7 @@ def extract_notes_from_image(
         spacing = float(np.median([staff.spacing for staff in staff_systems]))
         rhythm_symbols = _deduplicate_symbol_candidates(rhythm_symbols, spacing=spacing)
         pitch_symbols = _deduplicate_symbol_candidates(pitch_symbols, spacing=spacing)
+        rest_candidates = _deduplicate_symbol_candidates(rest_candidates, spacing=spacing)
 
     key_signatures = key_signatures_from_symbols(pitch_symbols, staff_systems, candidates)
     key_fifths = document_key_fifths(key_signatures)
@@ -1657,23 +1894,25 @@ def extract_notes_from_image(
         except Exception as exc:  # pragma: no cover - runtime dependency path
             warnings.append(f"GNN relationship assembly failed: {exc}")
 
-    notes = notes_from_candidates(
+    events = events_from_candidates(
         candidates,
         staff_systems,
+        rest_candidates=rest_candidates,
         rhythm_symbols=rhythm_symbols,
         rhythm_relationships=rhythm_relationships,
         pitch_symbols=pitch_symbols,
         key_signatures=key_signatures,
         default_quarter_length=default_quarter_length,
     )
+    notes = [event for event in events if isinstance(event, ExtractedNote)]
     if not notes:
         warnings.append("No notes were extracted into MIDI events.")
 
     run_title = title or stem
 
-    write_midi(notes, midi_path)
-    write_musicxml(notes, musicxml_path, title=run_title, key_fifths=key_fifths)
-    write_overlay(image, staff_systems, notes, overlay_path)
+    write_midi(events, midi_path)
+    write_musicxml(events, musicxml_path, title=run_title, key_fifths=key_fifths)
+    write_overlay(image, staff_systems, events, overlay_path)
     detector_payload_path: str | None = None
     relationships_path: str | None = None
     if detector_payload is not None:
@@ -1709,6 +1948,7 @@ def extract_notes_from_image(
         thin_symbol_checkpoint=thin_checkpoint_for_result,
         gnn_checkpoint=str(gnn_checkpoint_path) if gnn_checkpoint_path else None,
         staff_systems=staff_systems,
+        events=events,
         notes=notes,
         key_signatures=key_signatures,
         key_fifths=key_fifths,
@@ -1726,7 +1966,9 @@ def result_to_dict(result: ExtractionResult) -> dict[str, Any]:
     """Convert extraction result dataclasses into JSON-friendly dictionaries."""
     data = asdict(result)
     data["staff_count"] = len(result.staff_systems)
+    data["event_count"] = len(result.events)
     data["note_count"] = len(result.notes)
+    data["rest_count"] = sum(1 for event in result.events if isinstance(event, ExtractedRest))
     data["disclaimer"] = (
         "Demo note extraction: pitch is estimated from treble-clef staff geometry, "
         "rhythm is heuristic, and this is not an evaluation metric run."
