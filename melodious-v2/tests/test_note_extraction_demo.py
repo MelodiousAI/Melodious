@@ -8,6 +8,7 @@ from unittest.mock import patch
 from PIL import Image, ImageDraw
 
 from melodious_v2.omr.note_extraction import (
+    CandidateRelationship,
     DetectionCandidate,
     StaffSystem,
     _merge_staff_system_candidates,
@@ -246,6 +247,58 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertTrue(extracted[0].dotted)
         self.assertFalse(extracted[0].stem_detected)
         self.assertTrue(extracted[3].stem_detected)
+
+    def test_relationships_can_drive_stem_and_beam_rhythm(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        beamed_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(120.0, 91.0, 132.0, 99.0),
+            source="yolo",
+        )
+        stemmed_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(220.0, 81.0, 232.0, 89.0),
+            source="yolo",
+        )
+        beam = DetectionCandidate(
+            class_id=47,
+            class_name="beam",
+            confidence=0.8,
+            bbox_xyxy=(10.0, 10.0, 50.0, 14.0),
+            source="yolo_tiled_0",
+        )
+        stem = DetectionCandidate(
+            class_id=1,
+            class_name="stem",
+            confidence=0.8,
+            bbox_xyxy=(10.0, 40.0, 12.0, 85.0),
+            source="yolo_tiled_0",
+        )
+        extracted = notes_from_candidates(
+            [beamed_note, stemmed_note],
+            [staff],
+            rhythm_symbols=[beam, stem],
+            rhythm_relationships=[
+                CandidateRelationship(beam, beamed_note, "beam_notegroup", 0.91),
+                CandidateRelationship(stem, stemmed_note, "stem_notehead", 0.92),
+            ],
+            default_quarter_length=1.0,
+        )
+
+        self.assertEqual([note.quarter_length for note in extracted], [0.5, 1.0])
+        self.assertEqual([note.rhythm_source for note in extracted], ["gnn_beam_x1", "gnn_stem_quarter"])
+        self.assertFalse(extracted[0].stem_detected)
+        self.assertTrue(extracted[1].stem_detected)
 
     def test_yolo_extraction_does_not_invent_cv_dots_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

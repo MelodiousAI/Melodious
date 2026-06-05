@@ -9,9 +9,10 @@ from __future__ import annotations
 
 import json
 import shutil
+from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import cv2
 import numpy as np
@@ -65,6 +66,14 @@ class DetectionCandidate:
     def y_center(self) -> float:
         return (self.bbox_xyxy[1] + self.bbox_xyxy[3]) / 2.0
 
+    @property
+    def width(self) -> float:
+        return self.bbox_xyxy[2] - self.bbox_xyxy[0]
+
+    @property
+    def height(self) -> float:
+        return self.bbox_xyxy[3] - self.bbox_xyxy[1]
+
 
 @dataclass(frozen=True)
 class ExtractedNote:
@@ -91,6 +100,16 @@ class ExtractedNote:
 
 
 @dataclass(frozen=True)
+class CandidateRelationship:
+    """Relationship between two detection candidates used during extraction."""
+
+    source: DetectionCandidate
+    target: DetectionCandidate
+    relationship_type: str
+    confidence: float
+
+
+@dataclass(frozen=True)
 class ExtractionArtifacts:
     """Paths written by an extraction run."""
 
@@ -100,6 +119,9 @@ class ExtractionArtifacts:
     musicxml_path: str
     overlay_path: str
     checkpoint_snapshot: str | None = None
+    thin_symbol_checkpoint_snapshot: str | None = None
+    detector_payload_json: str | None = None
+    relationships_json: str | None = None
 
 
 @dataclass(frozen=True)
@@ -111,10 +133,15 @@ class ExtractionResult:
     image_height: int
     extractor_mode: str
     detector_checkpoint: str | None
+    thin_symbol_checkpoint: str | None
+    gnn_checkpoint: str | None
     staff_systems: list[StaffSystem]
     notes: list[ExtractedNote]
     key_signatures: dict[int, dict[str, int]]
     key_fifths: int = 0
+    assembly_mode: dict[str, Any] | None = None
+    relationship_count: int = 0
+    relationship_counts: dict[str, int] | None = None
     artifacts: ExtractionArtifacts | None = None
     warnings: list[str] | None = None
 
@@ -287,12 +314,13 @@ def _deduplicate_candidates(candidates: list[DetectionCandidate], spacing: float
     return sorted(kept, key=lambda item: (item.y_center, item.x_center))
 
 
-def snapshot_checkpoint(checkpoint_path: str | Path, output_dir: str | Path) -> Path:
+def snapshot_checkpoint(checkpoint_path: str | Path, output_dir: str | Path, *, label: str | None = None) -> Path:
     """Copy a checkpoint before inference so live training can keep writing safely."""
     source = Path(checkpoint_path)
     if not source.exists():
         raise FileNotFoundError(f"Checkpoint not found: {source}")
-    destination = Path(output_dir) / f"{source.stem}_snapshot{source.suffix}"
+    prefix = f"{label}_" if label else ""
+    destination = Path(output_dir) / f"{prefix}{source.stem}_snapshot{source.suffix}"
     shutil.copy2(source, destination)
     return destination
 
@@ -339,6 +367,82 @@ def yolo_detection_candidates(
                 source="yolo",
             )
         )
+    return candidates
+
+
+def _axis_starts(length: int, tile_length: int, stride: int) -> list[int]:
+    if tile_length <= 0 or stride <= 0:
+        raise ValueError("Tile size and stride must be positive.")
+    if length <= tile_length:
+        return [0]
+    starts = list(range(0, length - tile_length + 1, stride))
+    final = length - tile_length
+    if starts[-1] != final:
+        starts.append(final)
+    return sorted(set(starts))
+
+
+def yolo_tiled_detection_candidates(
+    image_path: str | Path,
+    checkpoint_path: str | Path,
+    *,
+    confidence: float = 0.05,
+    imgsz: int = 1024,
+    max_det: int = 1000,
+    device: str = "cpu",
+    tile_size: int = 384,
+    stride: int = 256,
+) -> list[DetectionCandidate]:
+    """Run YOLO on overlapping source-pixel tiles and map boxes back to page coordinates."""
+    try:
+        from ultralytics import YOLO
+    except Exception as exc:  # pragma: no cover - optional runtime dependency
+        raise RuntimeError("ultralytics is required for YOLO tiled note extraction.") from exc
+
+    image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
+    if image is None:
+        raise FileNotFoundError(f"Could not read image: {Path(image_path)}")
+
+    height, width = image.shape[:2]
+    model = YOLO(str(checkpoint_path))
+    names = model.names
+    candidates: list[DetectionCandidate] = []
+    source_index = 0
+    for y0 in _axis_starts(height, tile_size, stride):
+        for x0 in _axis_starts(width, tile_size, stride):
+            tile = image[y0 : min(height, y0 + tile_size), x0 : min(width, x0 + tile_size)]
+            result = model.predict(
+                source=tile,
+                imgsz=imgsz,
+                conf=confidence,
+                iou=0.5,
+                max_det=max_det,
+                device=device,
+                verbose=False,
+            )[0]
+            for box in result.boxes:
+                class_id = int(box.cls.item())
+                if isinstance(names, dict):
+                    class_name = str(names.get(class_id, class_id))
+                else:
+                    class_name = str(names[class_id])
+                tx1, ty1, tx2, ty2 = [float(value) for value in box.xyxy[0].tolist()]
+                x1 = max(0.0, min(float(width), tx1 + x0))
+                y1 = max(0.0, min(float(height), ty1 + y0))
+                x2 = max(0.0, min(float(width), tx2 + x0))
+                y2 = max(0.0, min(float(height), ty2 + y0))
+                if x2 <= x1 or y2 <= y1:
+                    continue
+                candidates.append(
+                    DetectionCandidate(
+                        class_id=class_id,
+                        class_name=class_name,
+                        confidence=float(box.conf.item()),
+                        bbox_xyxy=(x1, y1, x2, y2),
+                        source=f"yolo_tiled_{source_index}",
+                    )
+                )
+            source_index += 1
     return candidates
 
 
@@ -540,6 +644,73 @@ def is_pitch_modifier(class_name: str) -> bool:
     return is_key_signature_symbol(class_name) or is_explicit_accidental(class_name)
 
 
+def is_thin_symbol_candidate(class_name: str) -> bool:
+    """Return whether a tiled model candidate should augment full-page extraction."""
+    return (
+        is_beam(class_name)
+        or is_stem(class_name)
+        or is_flag(class_name)
+        or is_augmentation_dot(class_name)
+        or is_pitch_modifier(class_name)
+    )
+
+
+def _thin_symbol_min_confidence(class_name: str) -> float:
+    """Use stricter thresholds for symbols where false positives damage rhythm."""
+    if is_stem(class_name):
+        return 0.03
+    if is_beam(class_name) or is_flag(class_name):
+        return 0.05
+    if is_augmentation_dot(class_name):
+        return 0.22
+    if is_pitch_modifier(class_name):
+        return 0.08
+    return 0.10
+
+
+def _symbol_family(class_name: str) -> str:
+    lowered = class_name.lower()
+    if is_stem(class_name):
+        return "stem"
+    if is_beam(class_name):
+        return "beam"
+    if is_flag(class_name):
+        return lowered
+    if is_augmentation_dot(class_name):
+        return "augmentationdot"
+    if is_key_signature_symbol(class_name):
+        return lowered
+    if is_explicit_accidental(class_name):
+        return lowered
+    return lowered
+
+
+def _deduplicate_symbol_candidates(
+    candidates: list[DetectionCandidate],
+    *,
+    spacing: float,
+) -> list[DetectionCandidate]:
+    """Deduplicate overlapping full-page and tiled symbols without mixing classes."""
+    ordered = sorted(candidates, key=lambda item: item.confidence, reverse=True)
+    kept: list[DetectionCandidate] = []
+    for candidate in ordered:
+        family = _symbol_family(candidate.class_name)
+        duplicate = False
+        for existing in kept:
+            if _symbol_family(existing.class_name) != family:
+                continue
+            center_close = (
+                abs(candidate.x_center - existing.x_center) <= spacing * 0.75
+                and abs(candidate.y_center - existing.y_center) <= spacing * 0.75
+            )
+            if center_close or _bbox_iou(candidate.bbox_xyxy, existing.bbox_xyxy) > 0.35:
+                duplicate = True
+                break
+        if not duplicate:
+            kept.append(candidate)
+    return sorted(kept, key=lambda item: (item.y_center, item.x_center, _symbol_family(item.class_name)))
+
+
 def alter_for_pitch_modifier(class_name: str) -> int | None:
     lowered = class_name.lower()
     if "doubleflat" in lowered:
@@ -594,6 +765,64 @@ def _symbol_staff_compatible(symbol: DetectionCandidate, staff: StaffSystem) -> 
     return staff.contains_y(symbol.y_center, ledger_margin_steps=9.0)
 
 
+def _related_symbols_for_note(
+    note: DetectionCandidate,
+    relationships: list[CandidateRelationship] | None,
+    *,
+    relationship_type: str,
+    symbol_predicate: Callable[[str], bool],
+) -> list[DetectionCandidate]:
+    if not relationships:
+        return []
+    related: list[DetectionCandidate] = []
+    for relationship in relationships:
+        if relationship.relationship_type != relationship_type:
+            continue
+        if relationship.source == note and symbol_predicate(relationship.target.class_name):
+            related.append(relationship.target)
+        elif relationship.target == note and symbol_predicate(relationship.source.class_name):
+            related.append(relationship.source)
+    return related
+
+
+def _has_stem_relationship_for_note(
+    note: DetectionCandidate,
+    relationships: list[CandidateRelationship] | None,
+) -> bool:
+    return bool(
+        _related_symbols_for_note(
+            note,
+            relationships,
+            relationship_type="stem_notehead",
+            symbol_predicate=is_stem,
+        )
+    )
+
+
+def _beam_relationship_count_for_note(
+    note: DetectionCandidate,
+    relationships: list[CandidateRelationship] | None,
+) -> int:
+    related = _related_symbols_for_note(
+        note,
+        relationships,
+        relationship_type="beam_notegroup",
+        symbol_predicate=is_beam,
+    )
+    if not related:
+        return 0
+    unique = {
+        (
+            round(symbol.x_center, 1),
+            round(symbol.y_center, 1),
+            round(symbol.width, 1),
+            round(symbol.height, 1),
+        )
+        for symbol in related
+    }
+    return len(unique)
+
+
 def _beam_count_for_note(
     note: DetectionCandidate,
     staff: StaffSystem,
@@ -616,8 +845,11 @@ def _has_stem_for_note(
     note: DetectionCandidate,
     staff: StaffSystem,
     rhythm_symbols: list[DetectionCandidate],
+    relationships: list[CandidateRelationship] | None = None,
 ) -> bool:
     """Return whether a detected stem is geometrically attached to a notehead."""
+    if _has_stem_relationship_for_note(note, relationships):
+        return True
     nx1, ny1, nx2, ny2 = note.bbox_xyxy
     note_side_x = (nx1, nx2)
     for symbol in rhythm_symbols:
@@ -682,24 +914,28 @@ def rhythm_for_note(
     rhythm_symbols: list[DetectionCandidate],
     *,
     default_quarter_length: float = 1.0,
+    rhythm_relationships: list[CandidateRelationship] | None = None,
 ) -> tuple[float, bool, str, bool]:
     """Infer note duration from class plus nearby beams, flags, and dots."""
     duration = quarter_length_for_class(note.class_name, default_quarter_length)
     source = "notehead_class" if duration != default_quarter_length else "black_notehead_quarter_rule"
-    stem_detected = _has_stem_for_note(note, staff, rhythm_symbols)
+    stem_from_relationship = _has_stem_relationship_for_note(note, rhythm_relationships)
+    stem_detected = stem_from_relationship or _has_stem_for_note(note, staff, rhythm_symbols)
 
     if "black" in note.class_name.lower() or note.source == "cv_fallback":
         flag_duration = _flag_duration_for_note(note, staff, rhythm_symbols)
-        beam_count = _beam_count_for_note(note, staff, rhythm_symbols)
+        geometry_beam_count = _beam_count_for_note(note, staff, rhythm_symbols)
+        relationship_beam_count = _beam_relationship_count_for_note(note, rhythm_relationships)
+        beam_count = max(geometry_beam_count, relationship_beam_count)
         if flag_duration is not None:
             duration = flag_duration
             source = "flag"
         elif beam_count > 0:
             duration = max(1.0 / 32.0, 1.0 / (2**beam_count))
-            source = f"beam_x{beam_count}"
+            source = f"gnn_beam_x{beam_count}" if relationship_beam_count > geometry_beam_count else f"beam_x{beam_count}"
         elif stem_detected:
             duration = default_quarter_length
-            source = "stem_quarter"
+            source = "gnn_stem_quarter" if stem_from_relationship else "stem_quarter"
         else:
             duration = default_quarter_length
             source = "black_notehead_quarter_rule_no_stem"
@@ -818,6 +1054,7 @@ def notes_from_candidates(
     staff_systems: list[StaffSystem],
     *,
     rhythm_symbols: list[DetectionCandidate] | None = None,
+    rhythm_relationships: list[CandidateRelationship] | None = None,
     pitch_symbols: list[DetectionCandidate] | None = None,
     key_signatures: dict[int, dict[str, int]] | None = None,
     default_quarter_length: float = 1.0,
@@ -828,6 +1065,7 @@ def notes_from_candidates(
     spacing = float(np.median([staff.spacing for staff in staff_systems]))
     candidates = _deduplicate_candidates(candidates, spacing=spacing)
     rhythm_symbols = list(rhythm_symbols or [])
+    rhythm_relationships = list(rhythm_relationships or [])
     pitch_symbols = list(pitch_symbols or [])
     key_signatures = dict(key_signatures or {})
     notes: list[ExtractedNote] = []
@@ -852,6 +1090,7 @@ def notes_from_candidates(
             staff,
             rhythm_symbols,
             default_quarter_length=default_quarter_length,
+            rhythm_relationships=rhythm_relationships,
         )
         notes.append(
             ExtractedNote(
@@ -1088,7 +1327,7 @@ def write_overlay(
             cv2.line(canvas, (int(staff.start_x), y), (int(staff.end_x), y), (0, 160, 0), 1)
     for note in notes:
         x1, y1, x2, y2 = [int(round(value)) for value in note.bbox_xyxy]
-        color = (0, 0, 255) if note.source == "yolo" else (255, 0, 0)
+        color = (0, 0, 255) if note.source.startswith("yolo") else (255, 0, 0)
         cv2.rectangle(canvas, (x1, y1), (x2, y2), color, 2)
         dot_suffix = "." if note.dotted else ""
         alter_suffix = "b" * abs(note.alter) if note.alter < 0 else "#" * note.alter
@@ -1106,15 +1345,145 @@ def write_overlay(
     cv2.imwrite(str(output_path), canvas)
 
 
+def detector_payload_from_candidates(
+    candidates: list[DetectionCandidate],
+    *,
+    image_width: int,
+    image_height: int,
+    run_id: str,
+    model_id: str,
+    source_image_uri: str | None = None,
+) -> tuple[Any, list[DetectionCandidate]]:
+    """Build a V2 detector payload from extraction candidates for relationship assembly."""
+    from melodious_v2.contracts import (
+        DetectionV2,
+        DetectorPayloadV2,
+        ImageSize,
+        NormalizedBBox,
+        PixelBBox,
+    )
+    from melodious_v2.taxonomies import DEEPSCORES_136_CLASS_NAMES, SEMANTIC_OMR_V2_CLASS_MAP
+
+    detections: list[DetectionV2] = []
+    payload_candidates: list[DetectionCandidate] = []
+    for candidate in candidates:
+        if candidate.class_name not in DEEPSCORES_136_CLASS_NAMES:
+            continue
+        x1, y1, x2, y2 = candidate.bbox_xyxy
+        x1 = max(0.0, min(float(image_width), x1))
+        x2 = max(0.0, min(float(image_width), x2))
+        y1 = max(0.0, min(float(image_height), y1))
+        y2 = max(0.0, min(float(image_height), y2))
+        if x2 <= x1 or y2 <= y1:
+            continue
+        class_id = DEEPSCORES_136_CLASS_NAMES.index(candidate.class_name)
+        detections.append(
+            DetectionV2(
+                class_id=class_id,
+                class_name=candidate.class_name,
+                semantic_group=SEMANTIC_OMR_V2_CLASS_MAP[candidate.class_name],
+                confidence=max(0.0, min(1.0, candidate.confidence)),
+                bbox=NormalizedBBox(
+                    x_center=((x1 + x2) / 2.0) / image_width,
+                    y_center=((y1 + y2) / 2.0) / image_height,
+                    width=(x2 - x1) / image_width,
+                    height=(y2 - y1) / image_height,
+                ),
+                bbox_pixels=PixelBBox(x1=x1, y1=y1, x2=x2, y2=y2),
+            )
+        )
+        payload_candidates.append(candidate)
+
+    payload = DetectorPayloadV2(
+        run_id=run_id,
+        model_id=model_id,
+        taxonomy_id="deepscores_136",
+        image_size=ImageSize(width=image_width, height=image_height),
+        detections=detections,
+        source_image_uri=source_image_uri,
+    )
+    return payload, payload_candidates
+
+
+def assemble_candidate_relationships(
+    candidates: list[DetectionCandidate],
+    *,
+    image_width: int,
+    image_height: int,
+    image_path: str | Path,
+    checkpoint_path: str | Path,
+) -> tuple[dict[str, Any], list[CandidateRelationship], Any]:
+    """Run assembly/GNN on extraction candidates and map output back to candidates."""
+    from melodious_v2.assembly.service import assemble_payload
+
+    payload, payload_candidates = detector_payload_from_candidates(
+        candidates,
+        image_width=image_width,
+        image_height=image_height,
+        run_id=f"{Path(image_path).stem}_note_extraction",
+        model_id="local_note_extraction_candidates",
+        source_image_uri=str(image_path),
+    )
+    mode, relationships = assemble_payload(payload, requested_mode="gnn", checkpoint_path=str(checkpoint_path))
+    candidate_relationships: list[CandidateRelationship] = []
+    for relationship in relationships:
+        if not (0 <= relationship.source_idx < len(payload_candidates)):
+            continue
+        if not (0 <= relationship.target_idx < len(payload_candidates)):
+            continue
+        candidate_relationships.append(
+            CandidateRelationship(
+                source=payload_candidates[relationship.source_idx],
+                target=payload_candidates[relationship.target_idx],
+                relationship_type=relationship.relationship_type,
+                confidence=relationship.confidence,
+            )
+        )
+    return asdict(mode), candidate_relationships, payload
+
+
+def candidate_relationships_to_dict(relationships: list[CandidateRelationship]) -> list[dict[str, Any]]:
+    """Return JSON-friendly relationship records with candidate metadata."""
+    records: list[dict[str, Any]] = []
+    for relationship in relationships:
+        records.append(
+            {
+                "relationship_type": relationship.relationship_type,
+                "confidence": relationship.confidence,
+                "source": {
+                    "class_name": relationship.source.class_name,
+                    "confidence": relationship.source.confidence,
+                    "bbox_xyxy": relationship.source.bbox_xyxy,
+                    "source": relationship.source.source,
+                },
+                "target": {
+                    "class_name": relationship.target.class_name,
+                    "confidence": relationship.target.confidence,
+                    "bbox_xyxy": relationship.target.bbox_xyxy,
+                    "source": relationship.target.source,
+                },
+            }
+        )
+    return records
+
+
 def extract_notes_from_image(
     image_path: str | Path,
     *,
     output_dir: str | Path,
     checkpoint_path: str | Path | None = None,
+    thin_symbol_checkpoint_path: str | Path | None = None,
+    gnn_checkpoint_path: str | Path | None = None,
     snapshot_live_checkpoint: bool = True,
     confidence: float = 0.12,
     imgsz: int = 1472,
     max_det: int = 2000,
+    thin_confidence: float = 0.05,
+    thin_imgsz: int = 1024,
+    thin_max_det: int = 1000,
+    thin_tile_size: int = 384,
+    thin_tile_stride: int = 256,
+    use_tiled_dots: bool = False,
     device: str = "cpu",
     default_quarter_length: float = 1.0,
     use_cv_fallback: bool = True,
@@ -1125,6 +1494,13 @@ def extract_notes_from_image(
     image_path = Path(image_path)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    stem = image_path.stem
+    notes_json = output_dir / f"{stem}_notes.json"
+    midi_path = output_dir / f"{stem}_notes.mid"
+    musicxml_path = output_dir / f"{stem}_notes.musicxml"
+    overlay_path = output_dir / f"{stem}_notes_overlay.png"
+    detector_payload_json = output_dir / f"{stem}_detector_payload.json"
+    relationships_json = output_dir / f"{stem}_relationships.json"
     image = read_grayscale_image(image_path)
     height, width = image.shape[:2]
     staff_systems = detect_staff_systems(image)
@@ -1134,8 +1510,10 @@ def extract_notes_from_image(
     rhythm_symbols: list[DetectionCandidate] = []
     pitch_symbols: list[DetectionCandidate] = []
     checkpoint_snapshot: Path | None = None
+    thin_checkpoint_snapshot: Path | None = None
     extractor_mode = "cv_fallback"
     checkpoint_for_result: str | None = None
+    thin_checkpoint_for_result: str | None = None
     if checkpoint_path is not None:
         try:
             checkpoint_source = Path(checkpoint_path)
@@ -1167,6 +1545,56 @@ def extract_notes_from_image(
             warnings.append(f"YOLO note extraction failed: {exc}")
             candidates = []
 
+    if thin_symbol_checkpoint_path is not None:
+        try:
+            thin_checkpoint_source = Path(thin_symbol_checkpoint_path)
+            thin_checkpoint_for_inference = thin_checkpoint_source
+            if snapshot_live_checkpoint:
+                thin_checkpoint_snapshot = snapshot_checkpoint(
+                    thin_checkpoint_source,
+                    output_dir,
+                    label="thin_symbols",
+                )
+                thin_checkpoint_for_inference = thin_checkpoint_snapshot
+            thin_candidates = yolo_tiled_detection_candidates(
+                image_path,
+                thin_checkpoint_for_inference,
+                confidence=thin_confidence,
+                imgsz=thin_imgsz,
+                max_det=thin_max_det,
+                device=device,
+                tile_size=thin_tile_size,
+                stride=thin_tile_stride,
+            )
+            thin_symbols = [
+                candidate
+                for candidate in thin_candidates
+                if is_thin_symbol_candidate(candidate.class_name)
+                and candidate.confidence >= _thin_symbol_min_confidence(candidate.class_name)
+                and (use_tiled_dots or not is_augmentation_dot(candidate.class_name))
+                and not is_key_signature_symbol(candidate.class_name)
+            ]
+            rhythm_symbols.extend(
+                candidate
+                for candidate in thin_symbols
+                if is_beam(candidate.class_name)
+                or is_stem(candidate.class_name)
+                or is_flag(candidate.class_name)
+                or is_augmentation_dot(candidate.class_name)
+            )
+            pitch_symbols.extend(candidate for candidate in thin_symbols if is_pitch_modifier(candidate.class_name))
+            if thin_symbols:
+                extractor_mode = (
+                    f"{extractor_mode}+tiled_thin_symbols"
+                    if extractor_mode != "cv_fallback"
+                    else "tiled_thin_symbols"
+                )
+            else:
+                warnings.append("Tiled thin-symbol checkpoint ran but returned no retained rhythm/pitch symbols.")
+            thin_checkpoint_for_result = str(thin_checkpoint_source)
+        except Exception as exc:  # pragma: no cover - runtime dependency path
+            warnings.append(f"Tiled thin-symbol extraction failed: {exc}")
+
     if not candidates and use_cv_fallback:
         candidates = cv_note_candidates(image, staff_systems)
         extractor_mode = "cv_staff_notehead_pitch"
@@ -1181,13 +1609,36 @@ def extract_notes_from_image(
         warnings.append(
             "CV augmentation-dot fallback disabled; only detector-confirmed augmentationDot symbols were used."
         )
+    if staff_systems:
+        spacing = float(np.median([staff.spacing for staff in staff_systems]))
+        rhythm_symbols = _deduplicate_symbol_candidates(rhythm_symbols, spacing=spacing)
+        pitch_symbols = _deduplicate_symbol_candidates(pitch_symbols, spacing=spacing)
+
     key_signatures = key_signatures_from_symbols(pitch_symbols, staff_systems, candidates)
     key_fifths = document_key_fifths(key_signatures)
+
+    assembly_mode: dict[str, Any] | None = None
+    rhythm_relationships: list[CandidateRelationship] = []
+    relationship_counts: dict[str, int] = {}
+    detector_payload: Any | None = None
+    if gnn_checkpoint_path is not None and candidates:
+        try:
+            assembly_mode, rhythm_relationships, detector_payload = assemble_candidate_relationships(
+                candidates + rhythm_symbols,
+                image_width=width,
+                image_height=height,
+                image_path=image_path,
+                checkpoint_path=gnn_checkpoint_path,
+            )
+            relationship_counts = dict(Counter(rel.relationship_type for rel in rhythm_relationships))
+        except Exception as exc:  # pragma: no cover - runtime dependency path
+            warnings.append(f"GNN relationship assembly failed: {exc}")
 
     notes = notes_from_candidates(
         candidates,
         staff_systems,
         rhythm_symbols=rhythm_symbols,
+        rhythm_relationships=rhythm_relationships,
         pitch_symbols=pitch_symbols,
         key_signatures=key_signatures,
         default_quarter_length=default_quarter_length,
@@ -1195,16 +1646,25 @@ def extract_notes_from_image(
     if not notes:
         warnings.append("No notes were extracted into MIDI events.")
 
-    stem = image_path.stem
-    notes_json = output_dir / f"{stem}_notes.json"
-    midi_path = output_dir / f"{stem}_notes.mid"
-    musicxml_path = output_dir / f"{stem}_notes.musicxml"
-    overlay_path = output_dir / f"{stem}_notes_overlay.png"
     run_title = title or stem
 
     write_midi(notes, midi_path)
     write_musicxml(notes, musicxml_path, title=run_title, key_fifths=key_fifths)
     write_overlay(image, staff_systems, notes, overlay_path)
+    detector_payload_path: str | None = None
+    relationships_path: str | None = None
+    if detector_payload is not None:
+        detector_payload_json.write_text(
+            json.dumps(detector_payload.model_dump(mode="json"), indent=2),
+            encoding="utf-8",
+        )
+        detector_payload_path = str(detector_payload_json)
+    if rhythm_relationships:
+        relationships_json.write_text(
+            json.dumps(candidate_relationships_to_dict(rhythm_relationships), indent=2),
+            encoding="utf-8",
+        )
+        relationships_path = str(relationships_json)
 
     artifacts = ExtractionArtifacts(
         output_dir=str(output_dir),
@@ -1213,6 +1673,9 @@ def extract_notes_from_image(
         musicxml_path=str(musicxml_path),
         overlay_path=str(overlay_path),
         checkpoint_snapshot=str(checkpoint_snapshot) if checkpoint_snapshot else None,
+        thin_symbol_checkpoint_snapshot=str(thin_checkpoint_snapshot) if thin_checkpoint_snapshot else None,
+        detector_payload_json=detector_payload_path,
+        relationships_json=relationships_path,
     )
     result = ExtractionResult(
         image_path=str(image_path),
@@ -1220,10 +1683,15 @@ def extract_notes_from_image(
         image_height=height,
         extractor_mode=extractor_mode,
         detector_checkpoint=checkpoint_for_result,
+        thin_symbol_checkpoint=thin_checkpoint_for_result,
+        gnn_checkpoint=str(gnn_checkpoint_path) if gnn_checkpoint_path else None,
         staff_systems=staff_systems,
         notes=notes,
         key_signatures=key_signatures,
         key_fifths=key_fifths,
+        assembly_mode=assembly_mode,
+        relationship_count=len(rhythm_relationships),
+        relationship_counts=relationship_counts,
         artifacts=artifacts,
         warnings=warnings,
     )
