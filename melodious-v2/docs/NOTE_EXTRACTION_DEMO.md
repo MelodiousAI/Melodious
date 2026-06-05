@@ -212,12 +212,59 @@ Important history: the first run on this image only detected `4` staff systems
 and should not be used as demo evidence. The corrected `v3` run detected all
 `9` visible staff systems by preserving lighter staff lines before note-to-pitch
 mapping. The later `v5` run adds detected key-signature application. This is not
-hard-coded to the song: the detector emits `keyFlat` boxes, the extractor maps
-their staff position to `B`, and then applies `B: -1` to matching notes.
+hard-coded to the page: YOLO emits `keyFlat`, the extractor maps each key-flat
+glyph to `B` by staff geometry, and then applies `B: -1` to matching notes.
 The `v6` run keeps the same note count and key-signature behavior but disables
 CV dot guessing, reducing dotted notes from `38` to `7`. Any remaining false
 dots must now be handled by detector calibration/training or stricter
 `augmentationDot` post-processing.
+
+## Fur Elise Verification
+
+User image:
+`C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png`.
+
+Command:
+
+```powershell
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py `
+  --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" `
+  --output-dir runs\demo\fur_elise_default_fullpage_stafffix_20260605 `
+  --device cpu `
+  --conf 0.12 `
+  --imgsz 1472 `
+  --max-det 2000 `
+  --default-quarter-length 1.0 `
+  --title "Fur Elise"
+```
+
+Latest verified output:
+
+- Output directory: `runs/demo/fur_elise_default_fullpage_stafffix_20260605/`.
+- Checkpoint: `artifacts/models/note_extraction_default_fullpage/best.pt`.
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Note events: `256`.
+- Stem-confirmed notes: `0`.
+- Dotted notes: `3`.
+- Explicit accidentals written as MusicXML `<alter>` tags: `36`.
+- Duration distribution: `0.125:62`, `0.25:130`, `0.375:1`,
+  `0.5:51`, `0.75:2`, `1.0:10`.
+- MusicXML path:
+  `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes.musicxml`.
+- MIDI path:
+  `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes.mid`.
+- Overlay path:
+  `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes_overlay.png`.
+- Warning: `CV augmentation-dot fallback disabled; only detector-confirmed augmentationDot symbols were used.`
+
+Important history: the first Fur Elise run detected only `8` staff systems and
+missed the dense system around measure `33`. The staff detector was adjusted to
+allow compact low-resolution staff spacing down to `5 px`, and duplicate
+candidate merging now prefers the wider five-line group when overlapping
+candidates have comparable horizontal span. The corrected run detects all `9`
+visible systems.
 
 ## Next Engineering Step
 
