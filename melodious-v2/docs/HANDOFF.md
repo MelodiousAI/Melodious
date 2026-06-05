@@ -27,6 +27,16 @@ Local note-extraction default checkpoint:
 - Compared with `runs/demo/espresso_screenshot_rest_beamfix_20260606/`, notes changed from `197` to `192` because the tempo-like annotation notehead and very small cue/grace-sized noteheads are now filtered from the normal rhythmic timeline. The latest XML contains `38` `<slur ...>` tags, `30` `<tie ...>` tags, and `30` `<tied ...>` tags.
 - Compared with `runs/demo/espresso_screenshot_slur_gracefix_20260606/`, dotted notes improved from `12` to `13`; the first event is now dotted `E5` with quarter length `3.0`, and XML contains `7` `<print new-system="yes"/>` breaks for the `8` detected staff rows.
 
+Recovery checkpoint before GNN retraining:
+
+- Git tag: `pre-gnn-retrain-20260606`.
+- Tagged commit: `c253cb2` (`Preserve systems and recover open-note dots`).
+- Restore command if the next GNN experiment makes product output worse: `git switch phase-04-assembly; git reset --hard pre-gnn-retrain-20260606`.
+- Default runtime GNN checkpoint to preserve: `..\outputs\gnn_checkpoint.pt`, SHA256 `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+- The retraining run must write to a separate V2 run directory, not overwrite `..\outputs\gnn_checkpoint.pt`, until metrics and demo MusicXML are compared.
+- Planned first retraining output directory: `runs/graph/graph_legacy_gnn_muscima_retrain_20260606/`.
+- Training source data: `..\data\muscima-pp\v2.0\data\annotations` with the existing legacy trainer and the same 15-class relationship contract as the current runtime.
+
 ## 2026-06-06 - Agent Handoff - Espresso System/Dot Fix
 
 Milestone worked:
