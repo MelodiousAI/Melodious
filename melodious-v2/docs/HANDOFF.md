@@ -1,4 +1,4 @@
-# Agent Handoff Log
+ # Agent Handoff Log
 
 Use this file at the end of every coding-agent session. The next agent must read it before coding.
 
@@ -6,12 +6,8 @@ Use this file at the end of every coding-agent session. The next agent must read
 
 Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`.
 
-M7 improved detector metrics by correcting dense-page inference settings and then completing `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`. Its separate `F1@0.5` is `0.8082006373091581`, and its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation.
-The follow-up run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` has now completed and was corrected/finalized at the intended `imgsz=1536` and `max_det=2000` settings. Its final validation `F1@0.5` is `0.8318461933668392`. Its corrected AP metrics are `mAP@0.5:0.95 = 0.707986237382828` and `mAP@0.5 = 0.8390674529615662`; threshold precision/recall are `precision@0.5 = 0.8806427974719793` and `recall@0.5 = 0.7881733414248919`. It still leaves `stem = 0.0`, so M7 moved to tiled thin-symbol training. The full tiled dataset exists, and active pilot training is `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` with PID `6100` saved in `tiled_pilot_train.pid`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
-
-Live operational update on 2026-06-04: the tiled pilot is still active. `tiled_pilot_train.pid` stores parent PID `6100`, while the actual busy training worker observed in Windows is Python PID `14544`. At the latest check, training had entered epoch `9/12`, with the last completed CSV row at epoch `8`. The epoch-8 training CSV row reports `metrics/precision(B) = 0.87592`, `metrics/recall(B) = 0.87927`, `metrics/mAP50(B) = 0.89914`, and `metrics/mAP50-95(B) = 0.83297`; treat these as live tiled-pilot validation rows, not final original-full-page detector metrics. A 300-tile validation probe against the current pilot `best.pt` found `stem` mAP@0.5:0.95 approximately `0.6064`, so the tiled setup has real evidence that stem is no longer zero on tiled validation.
-
-The same 2026-06-04 GPU check found an RTX 3080 Laptop GPU at 16 GB VRAM with about 6.5 GB used. Training had slowed to about `0.8 it/s` while Windows was on the `Balanced` power plan and the GPU core clock was briefly observed near `232 MHz`. Switching Windows to the built-in `High performance` plan and setting worker PID `14544` to `AboveNormal` priority increased live throughput to about `2.6-2.7 it/s`; the GPU was then observed around `1770 MHz`, `81 W`, and `86 C`. LM Studio GPU processes were also present. Do not kill LM Studio without user approval, but closing it manually may reduce contention if the laptop slows again.
+M7 improved detector AP metrics by correcting dense-page inference settings and then completing `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation.
+The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was manually saved and stopped at clean completed epoch 22, then resumed from the load-verified manual checkpoint. The active resume PID is `7052`, saved in `resume_epoch22.pid`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
 
 Current state:
 
@@ -82,7 +78,7 @@ Current state:
 - M7 completed fine-tune AP metrics: `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 - M7 completed fine-tune threshold metrics: `precision@0.5 = 0.8457099520968777`, `recall@0.5 = 0.7738772781467206`, and `F1@0.5 = 0.8082006373091581`.
 - M7 completed fine-tune caveat: `stem = 0.0` mAP and `ledgerLine = 0.0035627224962602928`, so rhythm extraction still needs targeted thin-symbol work.
-- M7 completed follow-up fine-tune: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
+- M7 active resumed follow-up fine-tune: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`.
 - M7 active follow-up source checkpoint: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
 - M7 active follow-up launch: 2026-06-02 local time `23:11:35`, parent PID `34896`, Python child PID `28432`.
 - M7 active follow-up files: `finetune_v2_retry.pid`, `finetune_v2_retry_child.pid`, `finetune_v2_retry_stdout.log`, `finetune_v2_retry_stderr.log`, `finetune_v2_retry_launch_command.txt`, and `finetune_v2_retry_launch_metadata.json`.
@@ -95,21 +91,9 @@ Current state:
 - M7 manual recovery checkpoint load verification: saved `last.pt` loaded with Ultralytics as `task = detect`, `class_count = 136`, first class `brace`, last class `ottavaBracket`.
 - M7 manual recovery checkpoint SHA256 values: `last.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`; `best.pt = 8c0077eff5278e90fa4023f71b5858ab193c9500333839a1c479e2829010cd51`.
 - M7 latest follow-up interim CSV values at epoch 22: `metrics/precision(B) = 0.88232`, `metrics/recall(B) = 0.76779`, `metrics/mAP50(B) = 0.83573`, and `metrics/mAP50-95(B) = 0.65517`. These are not final V2 metric provenance.
-- M7 resume launch: 2026-06-03, PID `7052`, saved in `resume_epoch22.pid`.
+- M7 active resume launch: 2026-06-03, PID `7052`, saved in `resume_epoch22.pid`.
 - M7 active resume logs: `resume_epoch22_stdout.log` and `resume_epoch22_stderr.log`.
 - M7 active resume evidence: Ultralytics reported resume from `epoch22_stop_2026-06-03_021238\last.pt` from epoch 23 to 50 total epochs and started epoch `23/50`.
-- M7 latest active resume check on 2026-06-04 before completion: PID `7052` was running, final `metrics.json` did not exist, `results.csv` had 39 completed rows, and the latest completed row was epoch `39`.
-- M7 latest active resume interim CSV values at epoch 39: `metrics/precision(B) = 0.87573`, `metrics/recall(B) = 0.78508`, `metrics/mAP50(B) = 0.83539`, and `metrics/mAP50-95(B) = 0.65404`. These are not final V2 metric provenance.
-- M7 corrected v2 final metric source: `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`.
-- M7 corrected v2 final `F1@0.5`: `0.8318461933668392`.
-- M7 corrected v2 final AP/threshold metrics: `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
-- M7 corrected v2 rhythm caveat: `stem = 0.0`, `ledgerLine = 0.01106603897644983`, `augmentationDot = 0.26796388729163445`, `beam = 0.8011588011549605`, `flag8thUp = 0.7470091255390053`, and `flag8thDown = 0.8207040444816455`.
-- M7 full tiled stem dataset output: `runs/data/deepscores_136_yolo_tiled_stem_v1/`, with 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels.
-- M7 sampled tiled pilot dataset output: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`, with 12000 train, 2500 validation, and 2500 test tile paths pointing into the full tiled dataset and zero missing labels.
-- M7 active tiled pilot training: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`.
-- M7 active tiled pilot PID: `6100`, saved in `tiled_pilot_train.pid`.
-- M7 active tiled pilot stdout log: `tiled_pilot_train_stdout.log`.
-- M7 active tiled pilot settings: source checkpoint corrected v2 `best.pt`, `epochs=12`, `imgsz=1024`, `batch=4`, `workers=0`, `device=0`, `patience=5`, and `max_det=2000`.
 - M7 stem diagnosis: local labels have abundant `stem` support, but whole-page training makes the median stem about `0.78` model pixels wide at `imgsz=1536`, and a sampled low-threshold validation probe returned zero stem predictions.
 - M7 tiled stem dataset tooling: `src/melodious_v2/datasets/yolo_tiling.py` and `scripts/materialize_tiled_yolo_dataset.py`.
 - M7 tiled stem smoke output: `runs/data/deepscores_136_yolo_tiled_stem_smoke_v1/`, with 222 train tiles, 229 validation tiles, 264 test tiles, 4361 retained stem labels, and projected median stem width `2.666645333333387` pixels at `target_imgsz=1024`.
@@ -170,103 +154,22 @@ Next exact prompt:
 Next exact implementation target:
 
 1. Continue M7 from `docs/METRIC_IMPROVEMENT.md`.
-2. Monitor the active tiled pilot `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` using `tiled_pilot_train.pid` and `tiled_pilot_train_stdout.log`.
+2. Monitor the active resumed `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` run using `resume_epoch22.pid` and `resume_epoch22_stdout.log`.
 3. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 4. Keep uploaded-image detector mode labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is intentionally added.
 5. For immediate local note extraction testing, use `scripts/extract_notes_from_image.py` from `docs/NOTE_EXTRACTION_DEMO.md`. YOLO-backed runs now disable CV augmentation-dot fallback by default; add `--use-cv-dot-fallback` only for deliberate experiments.
-6. When the pilot completes, inspect `metrics.json`, `analysis.json`, and per-class AP for `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*`.
-7. If the pilot improves `stem`, evaluate whether to run the checkpoint on full-page validation or launch a longer/full tiled run from pilot `best.pt`.
-8. If the pilot still cannot localize stems, evaluate an OBB/segmentation side branch, verified synthetic thin-symbol data, or a clearly labeled demo-only CV stem-line attachment fallback with explicit provenance.
+6. For the next rhythm-quality step, target stem detection specifically: compare `stem` after v2 completes; if it remains near zero, generate the full tiled dataset and train from it through `--dataset-yaml` instead of blindly training more whole-page epochs.
+7. If tiled detect-mode training still cannot localize stems, evaluate an OBB/segmentation side branch or add a clearly labeled demo-only CV stem-line attachment fallback with explicit provenance.
 
-Monitor command for the active tiled pilot:
-
-```powershell
-cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
-$run='runs\detection\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1'
-Get-Process -Id ([int](Get-Content "$run\tiled_pilot_train.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\tiled_pilot_train_stdout.log"
-if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
-```
-
-## 2026-06-04 - Agent Handoff - Corrected V2 Finalization And Tiled Pilot Launch
-
-Milestone worked:
-
-- M7 - Detector Metric Improvement / thin-symbol stem recovery.
-
-Files changed:
-
-- `docs/EXPERIMENTS.md`
-- `docs/METRIC_IMPROVEMENT.md`
-- `docs/STATUS.md`
-- `docs/HANDOFF.md`
-- `docs/AGENT_PROMPTS.md`
-- `docs/DATA_CARD.md`
-- `MODEL_CARD.md`
-- `README.md`
-
-Commands run:
-
-- Checked `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2` process state - passed; previous resume PID `7052` was no longer running.
-- Inspected v2 `manifest.json` - found the first finalization used `imgsz=1024`/default cap while the training args were `imgsz=1536`, `max_det=2000`.
-- Re-finalized v2 with corrected settings: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 --finalize-existing-run --checkpoint runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\ultralytics\train\weights\best.pt --model runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\ultralytics\train\weights\best.pt --epochs 50 --imgsz 1536 --batch 1 --workers 0 --device 0 --patience 15 --max-det 2000` - passed.
-- Regenerated experiments index: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\generate_experiment_index.py --runs-dir runs --output docs\EXPERIMENTS.md` - passed.
-- Materialized full tiled dataset: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\materialize_tiled_yolo_dataset.py --output-dir runs\data\deepscores_136_yolo_tiled_stem_v1 --tile-size 384 --stride 256 --target-imgsz 1024` - passed.
-- Ran full tiled materialize-only preflight through the detector runner - passed.
-- Created sampled no-copy pilot lists and YAML under `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/` - passed.
-- Fixed the pilot YAML after an initial one-line header formatting mistake - passed.
-- Ran pilot materialize-only preflight through the detector runner - passed.
-- Checked sampled image/label pairs for train/val/test - passed with zero missing labels.
-- Launched hidden active pilot training from corrected v2 `best.pt` - passed after retrying without unsupported PowerShell `Start-Process -Environment`.
-- Verified active pilot process - passed; PID `6100` with child PID `14544`; latest check showed stdout in epoch `3/12` and `results.csv` completed through epoch `2`.
-
-Generated ignored evidence:
-
-- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`
-- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/analysis.json`
-- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/manifest.json`
-- `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/onnx_parity.json`
-- `runs/data/deepscores_136_yolo_tiled_stem_v1/manifest.json`
-- `runs/data/deepscores_136_yolo_tiled_stem_v1/dataset.yaml`
-- `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/dataset.yaml`
-- `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/train.txt`
-- `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/val.txt`
-- `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/test.txt`
-- `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/manifest.json`
-- `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train.pid`
-- `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train_stdout.log`
-- `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train_stderr.log`
-- `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train_command.txt`
-- `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train_launch.json`
-
-What is complete:
-
-- Corrected v2 is now the best completed validation detector. Its `F1@0.5` is `0.8318461933668392`.
-- Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
-- v2 still has `stem = 0.0`, so whole-page training did not solve rhythm-critical stem detection.
-- Full tiled dataset exists with 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 retained stem labels.
-- No-copy pilot dataset exists with 12000 train, 2500 validation, and 2500 test tile paths.
-- Active pilot training is running from corrected v2 `best.pt` with PID `6100`. Latest completed tiled-pilot CSV row at handoff is epoch `2`: `metrics/precision(B) = 0.75342`, `metrics/recall(B) = 0.75628`, `metrics/mAP50(B) = 0.79682`, and `metrics/mAP50-95(B) = 0.6883`. These are interim tiled-pilot training CSV values, not final project metric provenance.
-
-What failed or needed correction:
-
-- The first v2 finalization used the wrong evaluation scale/cap and was corrected.
-- The first generated pilot YAML had a collapsed one-line header; it was rewritten and then passed preflight.
-- The first `Start-Process` launch attempt used `-Environment`, which this PowerShell version does not support; the retry set `PYTHONPATH` in the parent process and launched successfully.
-
-Next exact step:
-
-- Monitor the active tiled pilot:
+Monitor command for the active resumed v2 fine-tune:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
-$run='runs\detection\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1'
-Get-Process -Id ([int](Get-Content "$run\tiled_pilot_train.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\tiled_pilot_train_stdout.log"
+$run='runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2'
+Get-Process -Id ([int](Get-Content "$run\resume_epoch22.pid")) -ErrorAction SilentlyContinue
+Get-Content -Tail 80 "$run\resume_epoch22_stdout.log"
 if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
 ```
-
-- When the pilot completes, inspect `metrics.json` and `analysis.json`, especially `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*`. Do not claim tiled improvement until those generated files exist.
 
 ## 2026-06-03 - Agent Handoff - V2 Fine-Tune Resumed From Epoch 22
 
@@ -334,64 +237,6 @@ if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralyti
 ```
 
 If interrupted again, preserve the latest `last.pt`, `best.pt`, `results.csv`, `args.yaml`, resume logs, PID file, launch command, and launch metadata before stopping or resuming.
-
-## 2026-06-04 - Agent Handoff - V2 Fine-Tune Still Running At Epoch 39
-
-Milestone worked:
-
-- M7 - Detector Metric Improvement / active training monitoring
-
-Files changed:
-
-- `docs/METRIC_IMPROVEMENT.md`
-- `docs/STATUS.md`
-- `docs/HANDOFF.md`
-
-Generated ignored evidence:
-
-- None. Existing active run logs and `results.csv` were read only.
-
-What happened:
-
-- User asked to carry on with what is needed.
-- Checked the resumed v2 fine-tune before taking action.
-- PID `7052` is still running.
-- No final `metrics.json` exists yet.
-- `results.csv` has 39 completed rows.
-- Latest completed row is epoch `39`.
-- Since training is already active and healthy, no duplicate launch or resume was started.
-
-Latest interim row:
-
-- `metrics/precision(B) = 0.87573`.
-- `metrics/recall(B) = 0.78508`.
-- `metrics/mAP50(B) = 0.83539`.
-- `metrics/mAP50-95(B) = 0.65404`.
-
-What is complete:
-
-- Confirmed the resumed v2 run is alive.
-- Confirmed the correct action is to keep monitoring until epoch 50/final metrics.
-- Updated status docs with the latest active state.
-
-What is not complete:
-
-- The run has not produced final project `metrics.json`.
-- Per-class `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*` results are not available until final analysis is written.
-
-Next exact step:
-
-Monitor:
-
-```powershell
-cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
-$run='runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2'
-Get-Process -Id ([int](Get-Content "$run\resume_epoch22.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\resume_epoch22_stdout.log"
-if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
-```
-
-When final `metrics.json` appears, compare headline and per-class results against `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, then decide whether to launch the tiled stem run.
 
 ## 2026-06-03 - Agent Handoff - V2 Fine-Tune Saved And Stopped At Epoch 22
 

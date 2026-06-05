@@ -144,8 +144,11 @@
   - full tiled focus counts: `stem = 747473`, `ledgerLine = 274618`, `augmentationDot = 61150`, `beam = 216886`, `flag8thUp = 22581`, `flag8thDown = 25567`, `flag16thUp = 2712`, and `flag16thDown = 2636`,
   - pilot tiled output: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`,
   - pilot tile-list counts: 12000 train, 2500 validation, and 2500 test paths pointing into the full tiled dataset with zero missing labels,
-  - active pilot training run: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`,
-  - metric status: no tiled detector metric has been claimed yet. The active pilot must complete and write `metrics.json` before it can be used as model-performance evidence.
+  - completed pilot training run: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`,
+  - metric source: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json`,
+  - completed tiled-validation AP metrics: `mAP@0.5:0.95 = 0.8521207647641077` and `mAP@0.5 = 0.9082394885392849`,
+  - completed tiled-validation threshold/stem metrics: `F1@0.5 = 0.8893154628249349` and `stem = 0.7345783859762263`,
+  - metric caveat: this is tiled-validation pilot evidence, not original full-page validation evidence.
 
 The inferred DeepScores work-group check is heuristic. For standard names such as
 `lg-<work>-aug-<style>--page-<n>.png`, the group is inferred as `lg-<work>`.

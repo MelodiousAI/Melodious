@@ -10,9 +10,12 @@ M7 improved the best validation detector configuration first by correcting dense
 The completed follow-up run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. It was resumed from the load-verified epoch-22 manual checkpoint, completed, then was re-finalized with the intended `imgsz=1536` and `max_det=2000` settings after an initial incorrect 1024/default-cap finalization was found. Corrected v2 `F1@0.5` is `0.8318461933668392`. Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
 M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The best completed v2 fine-tune still leaves `stem = 0.0` AP and only modest `ledgerLine = 0.01106603897644983`, so rhythm extraction remains limited by thin-symbol detection.
 
-M7 has now moved the `stem` fix from a vague "train more" idea to a concrete tiled-dataset path. The local labels contain abundant `stem` supervision, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages. The new tiled materializer creates focus tiles around stems, ledger lines, dots, beams, and flags. The full tiled dataset under `runs/data/deepscores_136_yolo_tiled_stem_v1/` now contains 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels. A sampled no-copy pilot dataset under `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/` points to 12000 train tiles, 2500 validation tiles, and 2500 test tiles from the full tiled set. Active tiled pilot training is `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`, launched from the corrected v2 `best.pt`; PID `6100` is saved in `tiled_pilot_train.pid`, and Windows worker PID `14544` was observed doing the actual training work. No final tiled detector metric has been claimed yet; the next official metric claim needs the pilot or full tiled run to complete and write `metrics.json`. As live evidence only, the epoch-8 training CSV row reports precision `0.87592`, recall `0.87927`, mAP@0.5 `0.89914`, and mAP@0.5:0.95 `0.83297`, and a 300-tile probe against the current pilot `best.pt` found `stem` mAP@0.5:0.95 approximately `0.6064`.
+M7 moved the `stem` fix from a vague "train more" idea to a concrete tiled-dataset path. The local labels contain abundant `stem` supervision, but whole-page training makes the median stem approximately `0.78` model pixels wide at `imgsz=1536`, and a low-threshold probe returned zero stem predictions on sampled validation pages. The tiled materializer creates focus tiles around stems, ledger lines, dots, beams, and flags. The full tiled dataset under `runs/data/deepscores_136_yolo_tiled_stem_v1/` contains 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels. A sampled no-copy pilot dataset under `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/` points to 12000 train tiles, 2500 validation tiles, and 2500 test tile paths from the full tiled set. The tiled pilot `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`, launched from the corrected v2 `best.pt`, completed all 12 epochs and wrote final metric provenance.
 
-The 2026-06-04 GPU speed check found that the tiled pilot slowed to about `0.8 it/s` while Windows was using the `Balanced` power plan. Switching to the built-in `High performance` power plan and setting the active training worker PID `14544` to `AboveNormal` priority raised live throughput to about `2.6-2.7 it/s`. The RTX 3080 Laptop GPU was observed at about 6.5 GB VRAM used out of 16 GB, around `1770 MHz`, `81 W`, and `86 C` after the fix. LM Studio GPU processes were present; close them manually before long training if extra headroom is needed.
+On the tiled pilot validation split, final AP metrics are `mAP@0.5:0.95 = 0.8521207647641077` and `mAP@0.5 = 0.9082394885392849`.
+Final threshold metrics are `precision@0.5 = 0.9155509426073148`, `recall@0.5 = 0.8645416741076378`, and `F1@0.5 = 0.8893154628249349`. Final tiled `stem` mAP@0.5:0.95 is `0.7345783859762263` on 62411 validation stem instances. This is tiled-validation pilot evidence, not original full-page validation evidence.
+
+The 2026-06-04 GPU speed check found that the tiled pilot slowed to about `0.8 it/s` while Windows was using the `Balanced` power plan. Switching to the built-in `High performance` power plan and setting the active training worker PID `14544` to `AboveNormal` priority raised live throughput to about `2.6-2.7 it/s`. The RTX 3080 Laptop GPU was observed at about 6.5 GB VRAM used out of 16 GB, around `1770 MHz`, `81 W`, and `86 C` after the fix. LM Studio GPU processes were present during training. After completion and stop verification, parent PID `6100` and worker PID `14544` were no longer running and `nvidia-smi` showed zero training VRAM.
 
 ## Completed
 
@@ -69,7 +72,7 @@ The 2026-06-04 GPU speed check found that the tiled pilot slowed to about `0.8 i
 - M7 completed and corrected finalization of `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`; this is now the best completed validation detector metric.
 - M7 generated the full tiled stem dataset under `runs/data/deepscores_136_yolo_tiled_stem_v1/` with 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 retained stem labels across all splits.
 - M7 generated a no-copy sampled tiled pilot dataset under `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/` with 12000 train tile paths, 2500 validation tile paths, and 2500 test tile paths pointing into the full tiled dataset.
-- M7 launched active tiled pilot fine-tune `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` from the corrected v2 `best.pt`.
+- M7 completed tiled pilot fine-tune `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` from the corrected v2 `best.pt`; the run wrote final `metrics.json`, `analysis.json`, `manifest.json`, `artifacts.json`, `report.md`, `config.yaml`, and `onnx_parity.json`.
 - `docs/EXPERIMENTS.md` now includes the M7 detector evaluation runs.
 - Added local note extraction demo tooling at `src/melodious_v2/omr/note_extraction.py` and `scripts/extract_notes_from_image.py`.
 - Added focused note extraction tests in `tests/test_note_extraction_demo.py`.
@@ -149,11 +152,15 @@ Stem-focused tiled dataset path:
 - Full tiled preflight passed through `scripts/run_detection_136class_yolo.py --dataset-yaml runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml --dataset-id deepscores_136_yolo_tiled_stem_v1 --materialize-only`.
 - Sampled pilot output: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`.
 - Sampled pilot lists point into the full tiled dataset without copying images or labels: 12000 train tiles, 2500 validation tiles, and 2500 test tiles; all sampled images had matching labels.
-- Active tiled pilot training: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`.
-- Active tiled pilot PID file: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/tiled_pilot_train.pid`, containing PID `6100`.
-- Active tiled pilot source checkpoint: corrected v2 `best.pt`.
-- Active tiled pilot settings: `epochs=12`, `imgsz=1024`, `batch=4`, `workers=0`, `device=0`, `patience=5`, `max_det=2000`.
-- Metric status: no tiled detector metric exists yet. The pilot must complete and write `metrics.json` before any tiled improvement claim is made.
+- Completed tiled pilot run: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/`.
+- Completed tiled pilot metric source: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json`.
+- Completed tiled pilot source checkpoint: corrected v2 `best.pt`.
+- Completed tiled pilot settings: `epochs=12`, `imgsz=1024`, `batch=4`, `workers=0`, `device=0`, `patience=5`, `max_det=2000`.
+- Completed tiled pilot AP metrics on tiled validation: `mAP@0.5:0.95 = 0.8521207647641077` and `mAP@0.5 = 0.9082394885392849`.
+- Completed tiled pilot threshold metrics on tiled validation: `precision@0.5 = 0.9155509426073148`, `recall@0.5 = 0.8645416741076378`, and `F1@0.5 = 0.8893154628249349`.
+- Completed tiled pilot rhythm metrics on tiled validation: `stem = 0.7345783859762263`, `ledgerLine = 0.8956514487613261`, `augmentationDot = 0.951387713738491`, `beam = 0.8769708350968146`, `flag8thUp = 0.8579518244687186`, `flag8thDown = 0.8995411921354421`, `flag16thUp = 0.8172923253618494`, and `flag16thDown = 0.8974812907299483`.
+- Completed tiled pilot caveat: this is a tiled-validation pilot metric. It proves the detector can learn stems when stems are visible at tile scale, but it is not the same distribution as original full-page validation.
+- Saved/load-verified checkpoint snapshot: `artifacts/manual_checkpoints/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/final_epoch12_completed_2026-06-04_225710/`, containing copied `best.pt` and `last.pt` that both loaded as 136-class Ultralytics detect checkpoints.
 
 Original M3 training run id: `detection_136class_yolov8m_v1`.
 
@@ -341,7 +348,13 @@ Important end-to-end caveat:
 - Passed: materialize-only runner preflight for `runs\data\deepscores_136_yolo_tiled_stem_v1\dataset.yaml`.
 - Passed: sampled no-copy tiled pilot manifest at `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`; generated text lists for 12000 train, 2500 validation, and 2500 test tiles with zero missing labels.
 - Passed: materialize-only runner preflight for `runs\data\deepscores_136_yolo_tiled_stem_pilot_v1\dataset.yaml`.
-- Passed: active tiled pilot launch for `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`; PID `6100` is saved in `tiled_pilot_train.pid`, latest live check showed stdout in epoch `3/12`, and `results.csv` had completed through epoch `2`.
+- Passed: tiled pilot launch for `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`; PID `6100` was saved in `tiled_pilot_train.pid`, startup logs showed CUDA training from the corrected v2 `best.pt`, and the run later completed all 12 epochs.
+- Passed: final tiled pilot artifact generation for `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`; generated `metrics.json`, `analysis.json`, `manifest.json`, `artifacts.json`, `report.md`, `config.yaml`, and `onnx_parity.json`.
+- Passed: final tiled pilot AP metrics check; tiled validation `mAP@0.5:0.95 = 0.8521207647641077` and `mAP@0.5 = 0.9082394885392849`.
+- Passed: final tiled pilot threshold/stem metrics check; tiled validation `F1@0.5 = 0.8893154628249349` and `stem = 0.7345783859762263` on 62411 validation stem instances.
+- Passed: manual checkpoint snapshot for the completed tiled pilot under `artifacts/manual_checkpoints/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/final_epoch12_completed_2026-06-04_225710/`.
+- Passed: load verification for the completed tiled pilot snapshot; copied `best.pt` and `last.pt` both loaded with Ultralytics as `task=detect`, `class_count=136`, first class `brace`, last class `ottavaBracket`.
+- Passed: stop verification for the tiled pilot; parent PID `6100` and worker PID `14544` were not running, and `nvidia-smi` showed zero training VRAM.
 
 ## Milestone Tracker
 
@@ -354,7 +367,7 @@ Important end-to-end caveat:
 | M4 - Real Assembly Runtime | Done | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
 | M5 - End-to-End Export Quality | Done | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported MusicXML/MIDI artifacts |
 | M6 - AWS Public Demo | Prepared / blocked on AWS values | `infra/aws/README.md`, `scripts/smoke_public_demo.py`, local smoke evidence; public smoke pending |
-| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/metrics.json`, active `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/`, `docs/METRIC_IMPROVEMENT.md` |
+| M7 - Detector Metric Improvement | Active | `runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json`, completed tiled pilot `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
 | M8 - Final Grading Package | Planned | Frozen docs and presentation evidence |
 
 ## Active Blockers
@@ -365,7 +378,7 @@ Important end-to-end caveat:
 - Account-local AWS values are unavailable and must not be committed: region/profile, execution role ARN, task role ARN, subnet IDs, security group IDs, ALB target group/listener, S3 frontend bucket, CloudFront distribution ID, and public API host.
 - DeepScores leakage report is `warning` because 202 filename-inferred work groups repeat across splits. Duplicate image ids and duplicate filenames passed.
 - Full detector metrics are validation-split metrics. Test-set detector performance should be produced only after the team freezes the detector family and avoids iterative tuning on test data.
-- Several high-support symbol classes still have zero detector mAP on validation, especially `ledgerLine` and `stem`; this is a real model limitation and should not be hidden in the final report.
+- Several high-support symbol classes still have zero or weak detector mAP on original full-page validation, especially `stem` and `ledgerLine`; the tiled pilot fixes these on tiled validation but must not be presented as original full-page validation performance.
 - The improved M7 detector metric is validation-only inference tuning. Test-set detector performance remains intentionally unreported.
 - Twenty-one detector taxonomy classes have zero labels across the local train/validation/test manifests, so training on the same local dataset cannot teach those classes.
 - The validation split has 33 taxonomy-class blind spots; validation-selected settings do not prove all 136 classes work.
@@ -374,14 +387,11 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Monitor active tiled pilot run `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` using `tiled_pilot_train.pid` and `tiled_pilot_train_stdout.log`.
-2. If the pilot is interrupted, preserve the latest `last.pt`, `best.pt`, `results.csv`, logs, PID file, command, and launch metadata before stopping or resuming.
-3. When the pilot completes, inspect `metrics.json`, `analysis.json`, and per-class AP for `stem`, `ledgerLine`, `augmentationDot`, `beam`, and `flag*`; compare against corrected v2, but label it as a tiled-validation pilot unless evaluated back on the original full-page validation set.
-4. If the pilot moves `stem` meaningfully, decide whether to launch a longer/full tiled run from the pilot `best.pt` or evaluate the pilot checkpoint on the full-page validation split to check regression.
-5. If the pilot still has `stem = 0.0`, do not spend days on the full tiled run without a new idea. Evaluate OBB/segmentation for thin symbols, a verified synthetic stem/dot supplement, or a clearly labeled demo-only CV stem-line attachment fallback with explicit `rhythm_source` provenance.
-6. Keep test-set detector metrics untouched until the team freezes the final model and inference configuration.
-7. Keep uploaded-image detector inference labeled `heuristic_bootstrap` unless a tested ONNX detector adapter is implemented.
-8. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
+1. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
+2. If full-page uploaded-image quality is the priority, wire a tested ONNX/PyTorch detector adapter into the API or the local note-extraction CLI and run controlled demo-page checks; keep the route labeled `heuristic_bootstrap` until this is intentionally changed.
+3. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
+4. Keep the tiled result labeled as tiled-validation pilot evidence unless it is separately evaluated on the original full-page validation split.
+5. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 
 ## Roadmap
 

@@ -20,6 +20,7 @@ Generated from `runs/**/metrics.json`. Do not hand-edit metric values.
 | detection_136class_yolov8m_eval_img1536_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.4801245622281405 | runs\detection\detection_136class_yolov8m_eval_img1536_v1\metrics.json |
 | detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.6777474953487629 | runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\metrics.json |
 | detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.707986237382828 | runs\detection\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\metrics.json |
+| detection_136class_yolov8m_tiled_stem_pilot_img1024_v1 | deepscores_136_yolo_tiled_stem_pilot_v1 | val | mAP@0.5:0.95 | 0.8521207647641077 | runs\detection\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1\metrics.json |
 | detection_136class_yolov8m_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.4747370751116288 | runs\detection\detection_136class_yolov8m_v1\metrics.json |
 | detection_136class_yolov8s_smoke_v1 | deepscores_136_yolo_materialized | val | mAP@0.5:0.95 | 0.00814658592551654 | runs\detection\detection_136class_yolov8s_smoke_v1\metrics.json |
 | detection_15class_repro_sample_v1 | legacy_deepscores_15class_sample | sample_quick | mAP@0.5:0.95 | 0.22530004875164616 | runs\detection\detection_15class_repro_sample_v1\metrics.json |
