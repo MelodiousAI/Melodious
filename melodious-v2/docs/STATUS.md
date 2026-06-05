@@ -6,6 +6,8 @@ M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deploym
 
 The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. A separate local clean-sheet note extraction demo now exists at `scripts/extract_notes_from_image.py`; it snapshots a YOLO checkpoint, detects noteheads on CPU, estimates treble-clef pitch from staff geometry, applies detected key-signature and explicit-accidental symbols, and writes actual note JSON, overlay, MusicXML, and MIDI artifacts. This demo path is not a metric run and is not yet wired into the FastAPI upload route.
 
+The local note-extraction CLI now has a pinned default full-page demo checkpoint. When `--checkpoint` is omitted, it first uses `artifacts/models/note_extraction_default_fullpage/best.pt`, a generated artifact copied from `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`. If that artifact is missing, the CLI falls back to the source run checkpoint and then to the original M3 model artifact. The tiled stem pilot remains metric evidence for tiled validation and is not the default full-page demo checkpoint.
+
 M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing two real fine-tunes. The completed 1472 fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its separate `F1@0.5` is `0.8082006373091581`, and its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 The completed follow-up run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. It was resumed from the load-verified epoch-22 manual checkpoint, completed, then was re-finalized with the intended `imgsz=1536` and `max_det=2000` settings after an initial incorrect 1024/default-cap finalization was found. Corrected v2 `F1@0.5` is `0.8318461933668392`. Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
 M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The best completed v2 fine-tune still leaves `stem = 0.0` AP and only modest `ledgerLine = 0.01106603897644983`, so rhythm extraction remains limited by thin-symbol detection.
@@ -355,6 +357,13 @@ Important end-to-end caveat:
 - Passed: manual checkpoint snapshot for the completed tiled pilot under `artifacts/manual_checkpoints/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/final_epoch12_completed_2026-06-04_225710/`.
 - Passed: load verification for the completed tiled pilot snapshot; copied `best.pt` and `last.pt` both loaded with Ultralytics as `task=detect`, `class_count=136`, first class `brace`, last class `ottavaBracket`.
 - Passed: stop verification for the tiled pilot; parent PID `6100` and worker PID `14544` were not running, and `nvidia-smi` showed zero training VRAM.
+- Passed: saved the default local full-page note-extraction checkpoint to `artifacts/models/note_extraction_default_fullpage/best.pt`.
+- Passed: hash verification for the saved default checkpoint; SHA256 `8e4eb9f898c781c32d332b5c5b998a4882dbb343daa856563bf3b88ce6de211a` matches the source checkpoint from `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`.
+- Passed: default-checkpoint Sad Romance retry exists under `runs/demo/sad_romance_default_fullpage_20260605/` with 9 staff systems, 197 notes, 0 stem-confirmed notes, and 3 detector-confirmed dotted notes.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile scripts\extract_notes_from_image.py tests\test_note_extraction_cli.py`.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q`, 9 tests.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 14 documentation files.
+- Passed after fix: `..\.venv\Scripts\python.exe -m json.tool artifacts\models\note_extraction_default_fullpage\metadata.json`; first attempt caught a UTF-8 BOM from PowerShell metadata writing, then the metadata was rewritten without BOM.
 
 ## Milestone Tracker
 
@@ -387,8 +396,8 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
-2. If full-page uploaded-image quality is the priority, wire a tested ONNX/PyTorch detector adapter into the API or the local note-extraction CLI and run controlled demo-page checks; keep the route labeled `heuristic_bootstrap` until this is intentionally changed.
+1. If full-page uploaded-image quality is the priority, implement and test a full-page tiled-inference merger for the local note-extraction CLI so the tiled stem pilot can contribute thin-symbol detections without losing full-page notehead/staff context.
+2. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
 3. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 4. Keep the tiled result labeled as tiled-validation pilot evidence unless it is separately evaluated on the original full-page validation split.
 5. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.

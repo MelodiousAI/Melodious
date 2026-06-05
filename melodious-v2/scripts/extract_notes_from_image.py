@@ -9,6 +9,7 @@ from pathlib import Path
 from melodious_v2.omr.note_extraction import extract_notes_from_image, result_to_dict
 
 
+DEFAULT_DEMO_CHECKPOINT = Path("artifacts/models/note_extraction_default_fullpage/best.pt")
 DEFAULT_FINETUNE_CHECKPOINT = Path(
     "runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/"
     "ultralytics/train/weights/best.pt"
@@ -17,11 +18,14 @@ DEFAULT_BASE_CHECKPOINT = Path("artifacts/models/detection_136class_yolov8m_v1/b
 
 
 def default_checkpoint() -> Path | None:
-    """Prefer the current fine-tune checkpoint if it exists."""
-    if DEFAULT_FINETUNE_CHECKPOINT.exists():
-        return DEFAULT_FINETUNE_CHECKPOINT
-    if DEFAULT_BASE_CHECKPOINT.exists():
-        return DEFAULT_BASE_CHECKPOINT
+    """Return the stable local demo checkpoint when it exists."""
+    for checkpoint in (
+        DEFAULT_DEMO_CHECKPOINT,
+        DEFAULT_FINETUNE_CHECKPOINT,
+        DEFAULT_BASE_CHECKPOINT,
+    ):
+        if checkpoint.exists():
+            return checkpoint
     return None
 
 
@@ -32,7 +36,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--checkpoint",
         default=None,
-        help="YOLO checkpoint. If omitted, the script uses the current fine-tune best.pt when available.",
+        help="YOLO checkpoint. If omitted, the script uses the saved default local demo checkpoint when available.",
     )
     parser.add_argument("--no-yolo", action="store_true", help="Use only the CV fallback extractor.")
     parser.add_argument(

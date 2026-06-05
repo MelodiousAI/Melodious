@@ -116,6 +116,10 @@ The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
 The FastAPI uploaded-image route still reports `detector_mode = "heuristic_bootstrap"`.
 For testing a clean sheet image with the trained detector checkpoint right now,
 use the separate CLI demo path documented in `docs/NOTE_EXTRACTION_DEMO.md`.
+When `--checkpoint` is omitted, the CLI uses the saved local full-page demo
+checkpoint at `artifacts/models/note_extraction_default_fullpage/best.pt` if it
+exists. That generated artifact is copied from the completed 1472 full-page
+fine-tune checkpoint and is ignored by git like other model files.
 
 Example:
 
@@ -133,11 +137,13 @@ python scripts/extract_notes_from_image.py `
 ```
 
 This writes `*_notes.json`, `*_notes_overlay.png`, `*_notes.musicxml`, and
-`*_notes.mid`. The Sad Romance verification run used
+`*_notes.mid`. The latest default-checkpoint Sad Romance verification run under
+`runs/demo/sad_romance_default_fullpage_20260605/` used
 `extractor_mode = yolo_notehead_staff_pitch`, detected 9 staff systems, wrote
-197 note events, inferred 17 dotted notes, and produced MusicXML with 17
-`<dot/>` tags. The same run had 0 stem-confirmed notes because the current
-checkpoint did not return usable `stem` boxes on that page. This is a demo
+197 note events, inferred 3 detector-confirmed dotted notes, and produced
+MusicXML with 3 `<dot/>` tags. The same run had 0 stem-confirmed notes because
+the default full-page demo checkpoint did not return usable `stem` boxes on that
+page. This is a demo
 extraction artifact, not an evaluation metric.
 
 The uploaded Arabic page check for
