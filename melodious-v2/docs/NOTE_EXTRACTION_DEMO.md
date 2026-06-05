@@ -443,7 +443,7 @@ Latest fixed output:
 - MusicXML SHA256:
   `0FEF8DA42F1B27B5EBF567AADEB1FD156EADFFD14CA62C7606E003FC23894430`.
 
-### Espresso Rest and Beam-Count Fix
+### Espresso Rest, Beam, Slur, and Annotation Fix
 
 The uploaded Espresso screenshot exposed two product-path failures:
 
@@ -452,6 +452,10 @@ The uploaded Espresso screenshot exposed two product-path failures:
 - mixed beamed groups could over-shorten notes because GNN `beam_notegroup`
   relationships and overlapping tiled beam boxes could make an eighth note
   inherit the shortest neighboring duration.
+- the tempo-marking quarter note was accepted as a musical note because it was
+  close enough to the first staff's vertical ledger margin;
+- small cue/grace-sized noteheads were exported as normal rhythmic notes;
+- detected `slur` and `tie` boxes were ignored before MusicXML export.
 
 The extractor now writes an ordered musical event stream containing both notes
 and rests. The old `notes` list remains in the JSON for compatibility, but the
@@ -459,19 +463,30 @@ new `events` list is the timeline used by MusicXML/MIDI. Rests are written as
 MusicXML `<rest/>` events and advance onset time for later MIDI notes. Beam
 duration inference now probes beam lanes at the attached stem x-position,
 deduplicates tiled beam boxes into visual lanes, and uses geometry to cap GNN
-beam over-attachment when geometry is available.
+beam over-attachment when geometry is available. Annotation-like noteheads above
+the staff before the first real staff note are filtered, and very small
+cue/grace-sized noteheads are excluded from the normal rhythmic timeline.
+Detected `slur` and `tie` boxes are retained as notation symbols; their
+endpoints are attached to nearby notes and emitted as MusicXML `<slur>`,
+`<tie>`, and `<tied>` tags.
 
 Measured comparison on the same uploaded Espresso screenshot:
 
 - Previous output directory:
   `runs/demo/espresso_screenshot_tiled_gnn_20260606/`.
-- New output directory:
+- Rest/beam-fix output directory:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/`.
+- Latest output directory:
+  `runs/demo/espresso_screenshot_slur_gracefix_20260606/`.
 - Staff systems: unchanged at `8`.
-- Notes: unchanged at `197`.
+- Notes: changed from `197` before annotation filtering to `192`.
+- Ordered events: `209`.
 - Rest events: improved from `0` to `17`.
 - MusicXML `<rest/>` tags: improved from `0` to `17`.
-- Stem-confirmed notes: unchanged at `191`.
+- Slur starts: `19`; MusicXML `<slur ...>` tags: `38`.
+- Tie starts: `15`; MusicXML `<tie ...>` tags: `30` and `<tied ...>` tags:
+  `30`.
+- Stem-confirmed notes after annotation/small-note filtering: `186`.
 - Dotted notes: unchanged at `12`.
 - Relationship count: unchanged at `1257`.
 - Very short durations changed from `0.0625:4` and `0.125:34` to
@@ -479,19 +494,30 @@ Measured comparison on the same uploaded Espresso screenshot:
 - New duration distribution over all events:
   `0.0625:2`, `0.125:5`, `0.25:81`, `0.375:2`, `0.5:103`, `0.75:8`,
   `1.0:9`, `2.0:2`, `3.0:2`.
-- New MusicXML path:
+- Latest duration distribution over all events:
+  `0.0625:2`, `0.125:5`, `0.25:81`, `0.375:2`, `0.5:99`, `0.75:8`,
+  `1.0:8`, `2.0:2`, `3.0:2`.
+- Rest/beam-fix MusicXML path:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
-- New MIDI path:
+- Latest MusicXML path:
+  `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
+- Latest MIDI path:
+  `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.mid`.
+- Latest overlay path:
+  `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`.
+- Rest/beam-fix MIDI path:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.mid`.
-- New overlay path:
+- Rest/beam-fix overlay path:
   `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`.
-- New MusicXML SHA256:
+- Rest/beam-fix MusicXML SHA256:
   `df722438ab04d184e4f4ff3f03cb11cfacc89219c6c8e6ccbbc942fa45dbd55a`.
+- Latest MusicXML SHA256:
+  `503d7300f2e1fd72b14c54a2c5d9071b4339a54778c6648c0a193df6ba2836ac`.
 
 This is still a local demo transcription artifact, not an official detector
-metric run. It improves the two observed failure classes, but ties, slurs,
-measure-level repair, voice separation, and exact barline-constrained rhythm
-normalization remain incomplete.
+metric run. It improves the observed failure classes, but measure-level repair,
+voice separation, exact barline-constrained rhythm normalization, and musically
+perfect slur/tie endpoint pairing remain incomplete.
 
 ## Next Engineering Step
 

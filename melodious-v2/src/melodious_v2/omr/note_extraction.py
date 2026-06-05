@@ -98,6 +98,10 @@ class ExtractedNote:
     dotted: bool = False
     rhythm_source: str = "default"
     stem_detected: bool = False
+    slur_starts: tuple[int, ...] = ()
+    slur_stops: tuple[int, ...] = ()
+    tie_starts: tuple[int, ...] = ()
+    tie_stops: tuple[int, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -166,6 +170,7 @@ class ExtractionResult:
     assembly_mode: dict[str, Any] | None = None
     relationship_count: int = 0
     relationship_counts: dict[str, int] | None = None
+    notation_symbol_count: int = 0
     artifacts: ExtractionArtifacts | None = None
     warnings: list[str] | None = None
 
@@ -662,6 +667,18 @@ def is_rest(class_name: str) -> bool:
     return class_name.lower().startswith("rest")
 
 
+def is_slur(class_name: str) -> bool:
+    return class_name.lower() == "slur"
+
+
+def is_tie(class_name: str) -> bool:
+    return class_name.lower() == "tie"
+
+
+def is_curve_notation(class_name: str) -> bool:
+    return is_slur(class_name) or is_tie(class_name)
+
+
 def is_beam(class_name: str) -> bool:
     return class_name.lower() == "beam"
 
@@ -700,6 +717,7 @@ def is_thin_symbol_candidate(class_name: str) -> bool:
         or is_augmentation_dot(class_name)
         or is_pitch_modifier(class_name)
         or is_rest(class_name)
+        or is_curve_notation(class_name)
     )
 
 
@@ -715,6 +733,8 @@ def _thin_symbol_min_confidence(class_name: str) -> float:
         return 0.08
     if is_rest(class_name):
         return 0.10
+    if is_curve_notation(class_name):
+        return 0.08
     return 0.10
 
 
@@ -734,6 +754,8 @@ def _symbol_family(class_name: str) -> str:
         return lowered
     if is_rest(class_name):
         return "rest"
+    if is_curve_notation(class_name):
+        return lowered
     return lowered
 
 
@@ -1292,6 +1314,180 @@ def _rest_from_candidate(
     )
 
 
+def _staff_by_candidate(
+    candidate: DetectionCandidate,
+    staff_systems: list[StaffSystem],
+) -> StaffSystem | None:
+    return closest_staff(candidate.y_center, staff_systems)
+
+
+def _is_small_notehead_candidate(
+    candidate: DetectionCandidate,
+    median_area_by_staff: dict[int, float],
+    staff: StaffSystem,
+) -> bool:
+    lowered = candidate.class_name.lower()
+    if "small" in lowered or lowered.startswith("gracenote"):
+        return True
+    median_area = median_area_by_staff.get(staff.index)
+    if not median_area:
+        return False
+    area = max(0.0, candidate.width) * max(0.0, candidate.height)
+    return area < median_area * 0.58 and (
+        candidate.width < staff.spacing * 0.92 or candidate.height < staff.spacing * 0.85
+    )
+
+
+def _is_annotation_notehead_candidate(
+    candidate: DetectionCandidate,
+    staff: StaffSystem,
+    first_regular_x_by_staff: dict[int, float],
+) -> bool:
+    first_regular_x = first_regular_x_by_staff.get(staff.index)
+    if first_regular_x is None:
+        return False
+    far_above_staff = candidate.y_center < staff.top_y - staff.spacing * 1.75
+    before_first_staff_note = candidate.x_center < first_regular_x - staff.spacing * 1.4
+    return far_above_staff and before_first_staff_note
+
+
+def _filter_normal_notehead_candidates(
+    candidates: list[DetectionCandidate],
+    staff_systems: list[StaffSystem],
+) -> list[DetectionCandidate]:
+    """Remove notehead-like annotations and small cue/grace notes from normal rhythm."""
+    by_staff: dict[int, list[DetectionCandidate]] = {}
+    for candidate in candidates:
+        staff = _staff_by_candidate(candidate, staff_systems)
+        if staff is None:
+            continue
+        by_staff.setdefault(staff.index, []).append(candidate)
+
+    first_regular_x_by_staff: dict[int, float] = {}
+    median_area_by_staff: dict[int, float] = {}
+    staff_by_index = {staff.index: staff for staff in staff_systems}
+    for staff_index, staff_candidates in by_staff.items():
+        staff = staff_by_index[staff_index]
+        regular_vertical = [
+            candidate
+            for candidate in staff_candidates
+            if staff.top_y - staff.spacing * 1.5 <= candidate.y_center <= staff.bottom_y + staff.spacing * 1.5
+        ]
+        if regular_vertical:
+            first_regular_x_by_staff[staff_index] = min(candidate.x_center for candidate in regular_vertical)
+        areas = [
+            max(0.0, candidate.width) * max(0.0, candidate.height)
+            for candidate in regular_vertical or staff_candidates
+        ]
+        if areas:
+            median_area_by_staff[staff_index] = float(np.median(areas))
+
+    filtered: list[DetectionCandidate] = []
+    for candidate in candidates:
+        staff = _staff_by_candidate(candidate, staff_systems)
+        if staff is None:
+            continue
+        if _is_annotation_notehead_candidate(candidate, staff, first_regular_x_by_staff):
+            continue
+        if _is_small_notehead_candidate(candidate, median_area_by_staff, staff):
+            continue
+        filtered.append(candidate)
+    return filtered
+
+
+def _nearest_note_for_curve_endpoint(
+    notes: list[ExtractedNote],
+    *,
+    staff: StaffSystem,
+    x: float,
+    y: float,
+    prefer_left: bool,
+) -> ExtractedNote | None:
+    same_staff = [note for note in notes if note.staff_index == staff.index]
+    if not same_staff:
+        return None
+    if prefer_left:
+        directional = [note for note in same_staff if note.x_center <= x + staff.spacing * 3.0]
+    else:
+        directional = [note for note in same_staff if note.x_center >= x - staff.spacing * 3.0]
+    candidates = directional or same_staff
+    return min(
+        candidates,
+        key=lambda note: abs(note.x_center - x) + abs(note.y_center - y) * 0.15,
+    )
+
+
+def _attach_curve_notations(
+    events: list[ExtractedMusicEvent],
+    notation_symbols: list[DetectionCandidate],
+    staff_systems: list[StaffSystem],
+) -> list[ExtractedMusicEvent]:
+    """Attach detected slur/tie boxes to nearby note endpoints."""
+    notes = [event for event in events if isinstance(event, ExtractedNote)]
+    if not notes or not notation_symbols:
+        return events
+
+    slur_starts: dict[int, list[int]] = {}
+    slur_stops: dict[int, list[int]] = {}
+    tie_starts: dict[int, list[int]] = {}
+    tie_stops: dict[int, list[int]] = {}
+    next_slur_id = 1
+    next_tie_id = 1
+
+    for symbol in sorted(notation_symbols, key=lambda item: (item.y_center, item.x_center, -item.confidence)):
+        if not is_curve_notation(symbol.class_name):
+            continue
+        staff = closest_staff(symbol.y_center, staff_systems)
+        if staff is None:
+            continue
+        x1, y1, x2, y2 = symbol.bbox_xyxy
+        start_note = _nearest_note_for_curve_endpoint(
+            notes,
+            staff=staff,
+            x=x1,
+            y=(y1 + y2) / 2.0,
+            prefer_left=True,
+        )
+        stop_note = _nearest_note_for_curve_endpoint(
+            notes,
+            staff=staff,
+            x=x2,
+            y=(y1 + y2) / 2.0,
+            prefer_left=False,
+        )
+        if start_note is None or stop_note is None or start_note.order == stop_note.order:
+            continue
+        if abs(stop_note.x_center - start_note.x_center) < staff.spacing * 1.2:
+            continue
+
+        if is_tie(symbol.class_name):
+            tie_id = next_tie_id
+            next_tie_id += 1
+            tie_starts.setdefault(start_note.order, []).append(tie_id)
+            tie_stops.setdefault(stop_note.order, []).append(tie_id)
+        else:
+            slur_id = next_slur_id
+            next_slur_id += 1
+            slur_starts.setdefault(start_note.order, []).append(slur_id)
+            slur_stops.setdefault(stop_note.order, []).append(slur_id)
+
+    attached: list[ExtractedMusicEvent] = []
+    for event in events:
+        if not isinstance(event, ExtractedNote):
+            attached.append(event)
+            continue
+        attached.append(
+            replace(
+                event,
+                slur_starts=tuple(slur_starts.get(event.order, ())),
+                slur_stops=tuple(slur_stops.get(event.order, ())),
+                tie_starts=tuple(tie_starts.get(event.order, ())),
+                tie_stops=tuple(tie_stops.get(event.order, ())),
+            )
+        )
+    return attached
+
+
 def _order_events(
     events: list[ExtractedMusicEvent],
     staff_systems: list[StaffSystem],
@@ -1327,6 +1523,7 @@ def events_from_candidates(
     staff_systems: list[StaffSystem],
     *,
     rest_candidates: list[DetectionCandidate] | None = None,
+    notation_symbols: list[DetectionCandidate] | None = None,
     rhythm_symbols: list[DetectionCandidate] | None = None,
     rhythm_relationships: list[CandidateRelationship] | None = None,
     pitch_symbols: list[DetectionCandidate] | None = None,
@@ -1338,7 +1535,9 @@ def events_from_candidates(
         return []
     spacing = float(np.median([staff.spacing for staff in staff_systems]))
     note_candidates = _deduplicate_candidates(note_candidates, spacing=spacing)
+    note_candidates = _filter_normal_notehead_candidates(note_candidates, staff_systems)
     rest_candidates = _deduplicate_symbol_candidates(list(rest_candidates or []), spacing=spacing)
+    notation_symbols = _deduplicate_symbol_candidates(list(notation_symbols or []), spacing=spacing)
     rhythm_symbols = list(rhythm_symbols or [])
     rhythm_relationships = list(rhythm_relationships or [])
     pitch_symbols = list(pitch_symbols or [])
@@ -1371,7 +1570,8 @@ def events_from_candidates(
                 default_quarter_length=default_quarter_length,
             )
         )
-    return _order_events(events, staff_systems)
+    ordered = _order_events(events, staff_systems)
+    return _attach_curve_notations(ordered, notation_symbols, staff_systems)
 
 
 def notes_from_candidates(
@@ -1390,6 +1590,7 @@ def notes_from_candidates(
         for event in events_from_candidates(
             candidates,
             staff_systems,
+            notation_symbols=None,
             rhythm_symbols=rhythm_symbols,
             rhythm_relationships=rhythm_relationships,
             pitch_symbols=pitch_symbols,
@@ -1502,6 +1703,10 @@ def write_musicxml(
                     "        </pitch>",
                 ]
             )
+            for _ in event.tie_stops:
+                parts.append('        <tie type="stop"/>')
+            for _ in event.tie_starts:
+                parts.append('        <tie type="start"/>')
         parts.extend(
             [
                 f"        <duration>{duration}</duration>",
@@ -1510,6 +1715,20 @@ def write_musicxml(
         )
         if event.dotted:
             parts.append("        <dot/>")
+        if isinstance(event, ExtractedNote):
+            notation_lines: list[str] = []
+            for tie_id in event.tie_stops:
+                notation_lines.append(f'          <tied type="stop" number="{tie_id}"/>')
+            for tie_id in event.tie_starts:
+                notation_lines.append(f'          <tied type="start" number="{tie_id}"/>')
+            for slur_id in event.slur_stops:
+                notation_lines.append(f'          <slur type="stop" number="{slur_id}"/>')
+            for slur_id in event.slur_starts:
+                notation_lines.append(f'          <slur type="start" number="{slur_id}"/>')
+            if notation_lines:
+                parts.append("        <notations>")
+                parts.extend(notation_lines)
+                parts.append("        </notations>")
         parts.append("      </note>")
         elapsed += event.quarter_length
     parts.extend(["    </measure>", "  </part>", "</score-partwise>"])
@@ -1766,6 +1985,7 @@ def extract_notes_from_image(
     rest_candidates: list[DetectionCandidate] = []
     rhythm_symbols: list[DetectionCandidate] = []
     pitch_symbols: list[DetectionCandidate] = []
+    notation_symbols: list[DetectionCandidate] = []
     checkpoint_snapshot: Path | None = None
     thin_checkpoint_snapshot: Path | None = None
     extractor_mode = "cv_fallback"
@@ -1788,6 +2008,7 @@ def extract_notes_from_image(
             )
             candidates = [candidate for candidate in all_candidates if is_notehead(candidate.class_name)]
             rest_candidates = [candidate for candidate in all_candidates if is_rest(candidate.class_name)]
+            notation_symbols = [candidate for candidate in all_candidates if is_curve_notation(candidate.class_name)]
             rhythm_symbols = [
                 candidate
                 for candidate in all_candidates
@@ -1833,6 +2054,7 @@ def extract_notes_from_image(
                 and not is_key_signature_symbol(candidate.class_name)
             ]
             rest_candidates.extend(candidate for candidate in thin_symbols if is_rest(candidate.class_name))
+            notation_symbols.extend(candidate for candidate in thin_symbols if is_curve_notation(candidate.class_name))
             rhythm_symbols.extend(
                 candidate
                 for candidate in thin_symbols
@@ -1873,6 +2095,7 @@ def extract_notes_from_image(
         rhythm_symbols = _deduplicate_symbol_candidates(rhythm_symbols, spacing=spacing)
         pitch_symbols = _deduplicate_symbol_candidates(pitch_symbols, spacing=spacing)
         rest_candidates = _deduplicate_symbol_candidates(rest_candidates, spacing=spacing)
+        notation_symbols = _deduplicate_symbol_candidates(notation_symbols, spacing=spacing)
 
     key_signatures = key_signatures_from_symbols(pitch_symbols, staff_systems, candidates)
     key_fifths = document_key_fifths(key_signatures)
@@ -1898,6 +2121,7 @@ def extract_notes_from_image(
         candidates,
         staff_systems,
         rest_candidates=rest_candidates,
+        notation_symbols=notation_symbols,
         rhythm_symbols=rhythm_symbols,
         rhythm_relationships=rhythm_relationships,
         pitch_symbols=pitch_symbols,
@@ -1955,6 +2179,7 @@ def extract_notes_from_image(
         assembly_mode=assembly_mode,
         relationship_count=len(rhythm_relationships),
         relationship_counts=relationship_counts,
+        notation_symbol_count=len(notation_symbols),
         artifacts=artifacts,
         warnings=warnings,
     )
@@ -1969,6 +2194,8 @@ def result_to_dict(result: ExtractionResult) -> dict[str, Any]:
     data["event_count"] = len(result.events)
     data["note_count"] = len(result.notes)
     data["rest_count"] = sum(1 for event in result.events if isinstance(event, ExtractedRest))
+    data["slur_count"] = sum(len(note.slur_starts) for note in result.notes)
+    data["tie_count"] = sum(len(note.tie_starts) for note in result.notes)
     data["disclaimer"] = (
         "Demo note extraction: pitch is estimated from treble-clef staff geometry, "
         "rhythm is heuristic, and this is not an evaluation metric run."
