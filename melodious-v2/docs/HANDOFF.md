@@ -21,9 +21,64 @@ Local note-extraction default checkpoint:
 - Sad Romance default-checkpoint retry artifact: `runs/demo/sad_romance_default_fullpage_20260605/`, with MusicXML at `runs/demo/sad_romance_default_fullpage_20260605/sad_romance_clearer_smooth_notes.musicxml`.
 - Latest default-checkpoint Sad Romance extraction: `9` staff systems, `197` note events, `0` stem-confirmed notes, and `3` detector-confirmed dotted notes.
 - The tiled stem pilot checkpoint is now used as a second tiled thin-symbol pass by default when the generated artifact exists. It does not replace the full-page notehead checkpoint.
-- Latest Espresso rest/beam-fix artifact: `runs/demo/espresso_screenshot_rest_beamfix_20260606/`, with MusicXML at `runs/demo/espresso_screenshot_rest_beamfix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
-- Latest Espresso extraction now reports `214` ordered events, `197` notes, `17` rest events, `17` MusicXML `<rest/>` tags, `191` stem-confirmed notes, and `12` dotted notes.
+- Latest Espresso rest/beam/slur/grace artifact: `runs/demo/espresso_screenshot_slur_gracefix_20260606/`, with MusicXML at `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`.
+- Latest Espresso extraction now reports `209` ordered events, `192` notes, `17` rest events, `17` MusicXML `<rest/>` tags, `186` stem-confirmed notes, `12` dotted notes, `19` slur starts, and `15` tie starts.
 - Compared with `runs/demo/espresso_screenshot_tiled_gnn_20260606/`, very short durations improved from `0.0625:4` and `0.125:34` to `0.0625:2` and `0.125:5` after beam-lane deduplication and geometry-capped GNN beam relationships.
+- Compared with `runs/demo/espresso_screenshot_rest_beamfix_20260606/`, notes changed from `197` to `192` because the tempo-like annotation notehead and very small cue/grace-sized noteheads are now filtered from the normal rhythmic timeline. The latest XML contains `38` `<slur ...>` tags, `30` `<tie ...>` tags, and `30` `<tied ...>` tags.
+
+## 2026-06-06 - Agent Handoff - Espresso Slur/Annotation Fix
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local note-extraction slur, tie, and annotation filtering.
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+
+Commands run:
+
+- Full-page detector probe on `Screenshot 2026-06-06 001627.png` - passed; the full-page checkpoint returned `24` `slur` boxes and `7` `tie` boxes at confidence `0.05`, proving the extractor was discarding available slur/tie detections.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 21 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` - passed, 63 tests, with one upstream `torch_geometric` deprecation warning.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\Screenshot 2026-06-06 001627.png" --output-dir runs\demo\espresso_screenshot_slur_gracefix_20260606 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --thin-conf 0.05 --thin-imgsz 1024 --thin-max-det 1000 --thin-tile-size 384 --thin-tile-stride 256 --default-quarter-length 1.0 --title "Espresso"` - passed.
+- Espresso MusicXML count check - passed, `209` `<note>` elements, `17` `<rest/>` tags, `38` `<slur ...>` tags, `30` `<tie ...>` tags, and `30` `<tied ...>` tags.
+
+Generated artifacts:
+
+- `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.musicxml`
+- `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.mid`
+- `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes_overlay.png`
+- `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_notes.json`
+- `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_detector_payload.json`
+- `runs/demo/espresso_screenshot_slur_gracefix_20260606/Screenshot 2026-06-06 001627_relationships.json`
+
+What is complete:
+
+- Slur and tie detector boxes are retained as notation symbols instead of being discarded.
+- Slur/tie endpoints are attached to nearby note events and written into MusicXML notations.
+- Tempo-like annotation noteheads above the first staff and before the first regular staff note are filtered from the normal event stream.
+- Very small cue/grace-sized noteheads are filtered from the normal rhythmic timeline so they do not consume beat duration as full notes.
+- Regression coverage verifies annotation-note filtering, small-note filtering, and MusicXML slur/tie export.
+- The uploaded Espresso page now starts with the real first score note (`E5`) rather than the tempo-marking quarter note.
+
+What failed:
+
+- A combined PowerShell summary command again hit a Windows access error while expanding paths. Smaller `-LiteralPath` summary commands passed and produced the counts recorded above.
+
+What is blocked:
+
+- Slur/tie endpoint pairing is heuristic and may not be musically perfect in dense passages.
+- Grace notes are currently excluded from normal rhythm rather than exported as true MusicXML grace notes.
+- Measure/barline-aware repair and voice separation remain incomplete.
+
+Next exact step:
+
+- Decide whether grace notes should be ignored for demo stability or exported as MusicXML `<grace/>` events; then re-run Sad Romance, Fur Elise, and the Arabic page with the latest extractor and inspect whether the annotation/small-note filters remove any legitimate notes.
 
 ## 2026-06-06 - Agent Handoff
 

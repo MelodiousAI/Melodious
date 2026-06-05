@@ -467,6 +467,124 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertEqual([note.quarter_length for note in extracted], [0.5, 0.25])
         self.assertEqual([note.rhythm_source for note in extracted], ["beam_x1", "beam_x2"])
 
+    def test_annotation_notehead_before_staff_music_is_filtered(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(100.0, 112.0, 124.0, 136.0, 148.0),
+            spacing=12.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        tempo_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(78.0, 70.0, 94.0, 84.0),
+            source="unit",
+        )
+        first_score_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadHalfInSpace",
+            confidence=0.9,
+            bbox_xyxy=(118.0, 102.0, 136.0, 120.0),
+            source="unit",
+        )
+
+        events = events_from_candidates([tempo_note, first_score_note], [staff])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].x_center, first_score_note.x_center)
+
+    def test_small_noteheads_do_not_consume_normal_rhythm(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        normal_left = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 91.0, 118.0, 106.0),
+            source="unit",
+        )
+        small_middle = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(145.0, 93.0, 154.0, 102.0),
+            source="unit",
+        )
+        normal_right = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(190.0, 91.0, 208.0, 106.0),
+            source="unit",
+        )
+
+        events = events_from_candidates([normal_left, small_middle, normal_right], [staff])
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual([event.x_center for event in events], [normal_left.x_center, normal_right.x_center])
+
+    def test_slur_and_tie_symbols_are_written_to_musicxml(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        notes = [
+            DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(100.0, 91.0, 112.0, 99.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=1,
+                class_name="noteheadBlackInSpace",
+                confidence=0.9,
+                bbox_xyxy=(170.0, 91.0, 182.0, 99.0),
+                source="unit",
+            ),
+        ]
+        slur = DetectionCandidate(
+            class_id=120,
+            class_name="slur",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 63.0, 182.0, 69.0),
+            source="unit",
+        )
+        tie = DetectionCandidate(
+            class_id=122,
+            class_name="tie",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 104.0, 182.0, 110.0),
+            source="unit",
+        )
+
+        events = events_from_candidates(notes, [staff], notation_symbols=[slur, tie])
+
+        self.assertEqual(events[0].slur_starts, (1,))
+        self.assertEqual(events[1].slur_stops, (1,))
+        self.assertEqual(events[0].tie_starts, (1,))
+        self.assertEqual(events[1].tie_stops, (1,))
+
+        with tempfile.TemporaryDirectory() as tmp:
+            musicxml_path = Path(tmp) / "curves.musicxml"
+            write_musicxml(events, musicxml_path, title="Curves")
+            xml = musicxml_path.read_text(encoding="utf-8")
+        self.assertIn('<slur type="start"', xml)
+        self.assertIn('<slur type="stop"', xml)
+        self.assertIn('<tie type="start"/>', xml)
+        self.assertIn('<tie type="stop"/>', xml)
+
     def test_yolo_extraction_does_not_invent_cv_dots_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
