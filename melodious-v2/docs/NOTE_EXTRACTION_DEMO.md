@@ -10,6 +10,27 @@ The script `scripts/extract_notes_from_image.py` is a demo extractor, not a
 metric run. It is meant to answer: "Can I upload a clean sheet image and get
 actual extracted note events plus a playable MIDI artifact right now?"
 
+## Default Checkpoint
+
+When `--checkpoint` is omitted, the CLI now looks first for the saved local
+full-page demo checkpoint:
+
+`artifacts/models/note_extraction_default_fullpage/best.pt`
+
+That generated artifact is copied from:
+
+`runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`
+
+The stable artifact copy is intentionally ignored by git, like every model
+checkpoint. Its local metadata is stored at
+`artifacts/models/note_extraction_default_fullpage/metadata.json`. If the saved
+artifact is missing, the CLI falls back to the source run checkpoint above, and
+then to the original M3 full-detector artifact.
+
+The detector metric docs remain tied to their own `runs/**/metrics.json` files.
+This demo checkpoint selection is a local transcription/demo choice, not a new
+metric result.
+
 It does the following:
 
 1. Detects five-line staff systems from long horizontal staff strokes, using
@@ -81,6 +102,10 @@ Use `--device cpu` while fine-tuning is running so the GPU remains dedicated to
 training. Add `--use-cv-dot-fallback` only if you explicitly want contour-based
 augmentation-dot guesses in addition to YOLO detections.
 
+Because the saved full-page demo checkpoint is the default, the command above
+does not need an explicit `--checkpoint` argument unless you want to compare
+another checkpoint.
+
 ## Interpreting Output
 
 - `extractor_mode = yolo_notehead_staff_pitch` means the YOLO checkpoint was
@@ -109,7 +134,23 @@ augmentation-dot guesses in addition to YOLO detections.
 
 ## Sad Romance Verification
 
-Latest verified output:
+Latest default-checkpoint output:
+
+- Output directory: `runs/demo/sad_romance_default_fullpage_20260605/`.
+- Checkpoint: `artifacts/models/note_extraction_default_fullpage/best.pt` when
+  the stable copy exists, otherwise the source 1472 full-page fine-tune path.
+- Extractor mode: `yolo_notehead_staff_pitch`.
+- Staff systems: `9`.
+- Note events: `197`.
+- Stem-confirmed notes: `0`.
+- Dotted notes: `3`.
+- Duration distribution: `0.25:1`, `0.5:82`, `0.75:1`, `1.0:78`,
+  `1.5:2`, `2.0:28`, `4.0:5`.
+- MusicXML path:
+  `runs/demo/sad_romance_default_fullpage_20260605/sad_romance_clearer_smooth_notes.musicxml`.
+- MusicXML parse check passed with `197` notes and `3` `<dot/>` tags.
+
+Earlier saved comparison output:
 
 - Output directory: `runs/demo/sad_romance_note_extraction_v3/`.
 - Extractor mode: `yolo_notehead_staff_pitch`.
@@ -117,17 +158,10 @@ Latest verified output:
 - Note events: `197`.
 - Stem-confirmed notes: `0`.
 - Dotted notes: `17`.
-- Duration distribution: `0.25:1`, `0.5:80`, `0.75:7`, `1.0:71`,
-  `1.5:8`, `2.0:23`, `3.0:2`, `4.0:5`.
-- Rhythm sources: `black_notehead_quarter_rule_no_stem:71`, `beam_x1:68`,
-  `notehead_class:28`, `flag:13`,
-  `black_notehead_quarter_rule_no_stem+augmentation_dot:8`,
-  `beam_x1+augmentation_dot:4`, `flag+augmentation_dot:3`,
-  `notehead_class+augmentation_dot:2`.
 - MusicXML parse check passed with `197` notes and `17` `<dot/>` tags.
 
 The `0` stem-confirmed note count is important. The DeepScores detector head
-has a `stem` class, but the current Sad Romance checkpoint inference did not
+has a `stem` class, but the default Sad Romance checkpoint inference did not
 return usable stem boxes at the selected threshold. Quarter notes are therefore
 inferred from black noteheads that have no nearby beam/flag, which is a notation
 rule fallback rather than direct stem evidence.

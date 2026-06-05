@@ -7,7 +7,65 @@ Use this file at the end of every coding-agent session. The next agent must read
 Active milestone: M7 - Detector Metric Improvement is active. M6 - AWS Public Demo is deployment-prepared, but actual public deployment remains blocked on AWS CLI/account values. M1 - Dataset Manifests, M2 - Metric Reproduction, M3 - Full 136-Class Detector, M4 - Real Assembly Runtime, and M5 - End-to-End Export Quality are complete enough to hand off. The full configured YOLOv8m detector run `detection_136class_yolov8m_v1` completed 150 epochs, was finalized from `best.pt`, wrote project-standard V2 artifacts, exported ONNX, copied model metadata, and regenerated `docs/EXPERIMENTS.md`.
 
 M7 improved detector AP metrics by correcting dense-page inference settings and then completing `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`, which reaches `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271` on validation.
-The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was manually saved and stopped at clean completed epoch 22, then resumed from the load-verified manual checkpoint. The active resume PID is `7052`, saved in `resume_epoch22.pid`. A separate local note-extraction demo path now exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
+The same completed fine-tune has validation `F1@0.5 = 0.8082006373091581`. A follow-up run, `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, was completed and finalized with corrected dense-page settings; its validation `F1@0.5 = 0.8318461933668392`, `mAP@0.5:0.95 = 0.707986237382828`, and `mAP@0.5 = 0.8390674529615662`. The tiled stem pilot `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1` also completed, reaching tiled-validation `stem = 0.7345783859762263`, but that result is tiled-validation evidence and not an original full-page validation claim. A separate local note-extraction demo path exists for clean sheet images, but the FastAPI uploaded-image route is still `heuristic_bootstrap` unless intentionally rewired.
+
+Local note-extraction default checkpoint:
+
+- Default path used by `scripts/extract_notes_from_image.py` when `--checkpoint` is omitted: `artifacts/models/note_extraction_default_fullpage/best.pt`.
+- Source checkpoint copied into that generated artifact: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
+- Local artifact metadata: `artifacts/models/note_extraction_default_fullpage/metadata.json`.
+- Stable checkpoint SHA256: `8e4eb9f898c781c32d332b5c5b998a4882dbb343daa856563bf3b88ce6de211a`.
+- Sad Romance default-checkpoint retry artifact: `runs/demo/sad_romance_default_fullpage_20260605/`, with MusicXML at `runs/demo/sad_romance_default_fullpage_20260605/sad_romance_clearer_smooth_notes.musicxml`.
+- Latest default-checkpoint Sad Romance extraction: `9` staff systems, `197` note events, `0` stem-confirmed notes, and `3` detector-confirmed dotted notes.
+- The tiled stem pilot checkpoint is not the default full-page demo checkpoint. Use it only for explicit comparison or after a separately tested tiled/full-page inference strategy is wired in.
+
+## 2026-06-05 - Agent Handoff
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local note-extraction default checkpoint.
+
+Files changed:
+
+- `scripts/extract_notes_from_image.py`
+- `tests/test_note_extraction_cli.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+- `MODEL_CARD.md`
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile scripts\extract_notes_from_image.py tests\test_note_extraction_cli.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 9 tests.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py` - passed, checked 14 documentation files.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -c "from scripts.extract_notes_from_image import default_checkpoint; print(default_checkpoint())"` - passed, returned `artifacts\models\note_extraction_default_fullpage\best.pt`.
+- `..\.venv\Scripts\python.exe -m json.tool artifacts\models\note_extraction_default_fullpage\metadata.json` - initially failed because PowerShell wrote a UTF-8 BOM; metadata was rewritten without BOM and validation passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\sad_romance_clearer_smooth.png --output-dir runs\demo\sad_romance_default_fullpage_20260605 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 1.0 --title "Sad Romance"` - passed, used `artifacts\models\note_extraction_default_fullpage\best.pt`.
+- MusicXML count check for `runs\demo\sad_romance_default_fullpage_20260605\sad_romance_clearer_smooth_notes.musicxml` - passed, 197 `<note>` elements and 3 `<dot/>` tags.
+
+Generated artifacts:
+
+- `artifacts/models/note_extraction_default_fullpage/best.pt`
+- `artifacts/models/note_extraction_default_fullpage/metadata.json`
+- `runs/demo/sad_romance_default_fullpage_20260605/`
+
+What is complete:
+
+- The local note-extraction CLI has a stable default checkpoint path for full-page demo transcription when `--checkpoint` is omitted.
+- The saved checkpoint copy was hash-verified against its source checkpoint.
+- Documentation now names the default checkpoint path and keeps detector metric provenance tied to the original run-specific `metrics.json` files.
+- The generated metadata JSON is strict JSON after the no-BOM rewrite.
+
+What is blocked:
+
+- Nothing is blocked for checkpoint pinning.
+- The FastAPI uploaded-image route still uses `heuristic_bootstrap`; wiring this CLI into the API remains future integration work.
+
+Next exact step:
+
+- If improving demo transcription quality is the priority, implement and test a full-page tiled-inference merger that can use the tiled stem pilot for thin-symbol detections without losing full-page notehead/staff context.
 
 Current state:
 
