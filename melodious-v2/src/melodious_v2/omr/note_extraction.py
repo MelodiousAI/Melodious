@@ -600,10 +600,29 @@ def closest_staff(y: float, staff_systems: list[StaffSystem]) -> StaffSystem | N
     return min(compatible, key=lambda staff: abs(y - (staff.top_y + staff.bottom_y) / 2.0))
 
 
-def pitch_from_y(y: float, staff: StaffSystem) -> tuple[str, int, int]:
-    """Map a notehead y coordinate to treble-clef pitch."""
+def _nearest_offset_with_parity(raw_offset: float, *, odd: bool) -> int:
+    base = int(round(raw_offset))
+    target_remainder = 1 if odd else 0
+    if base % 2 == target_remainder:
+        return base
+    candidates = [base - 1, base + 1]
+    return min(candidates, key=lambda value: (abs(raw_offset - value), abs(value)))
+
+
+def _staff_position_offset(y: float, staff: StaffSystem, class_name: str | None = None) -> int:
     half_spacing = staff.spacing / 2.0
-    diatonic_offset = int(round((staff.bottom_y - y) / half_spacing))
+    raw_offset = (staff.bottom_y - y) / half_spacing
+    lowered = (class_name or "").lower()
+    if "notehead" in lowered and "inspace" in lowered:
+        return _nearest_offset_with_parity(raw_offset, odd=True)
+    if "notehead" in lowered and "online" in lowered:
+        return _nearest_offset_with_parity(raw_offset, odd=False)
+    return int(round(raw_offset))
+
+
+def pitch_from_y(y: float, staff: StaffSystem, class_name: str | None = None) -> tuple[str, int, int]:
+    """Map a notehead y coordinate to treble-clef pitch."""
+    diatonic_offset = _staff_position_offset(y, staff, class_name)
     diatonic = TREBLE_BOTTOM_LINE_DIATONIC + diatonic_offset
     step = STEP_NAMES[diatonic % 7]
     octave = diatonic // 7
@@ -997,6 +1016,7 @@ def explicit_accidental_for_note(
     note: DetectionCandidate,
     staff: StaffSystem,
     pitch_symbols: list[DetectionCandidate],
+    note_step: str,
 ) -> tuple[int, str] | None:
     """Return the nearest explicit accidental attached to a notehead, if any."""
     note_x1, _, _, _ = note.bbox_xyxy
@@ -1006,6 +1026,9 @@ def explicit_accidental_for_note(
             continue
         alter = alter_for_pitch_modifier(symbol.class_name)
         if alter is None:
+            continue
+        symbol_step, _, _ = pitch_from_y(pitch_modifier_anchor_y(symbol), staff)
+        if symbol_step != note_step:
             continue
         _, _, symbol_x2, _ = symbol.bbox_xyxy
         x_distance = note_x1 - symbol_x2
@@ -1073,10 +1096,10 @@ def notes_from_candidates(
         staff = closest_staff(candidate.y_center, staff_systems)
         if staff is None:
             continue
-        step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff)
+        step, octave, midi_pitch = pitch_from_y(candidate.y_center, staff, candidate.class_name)
         alter = 0
         pitch_source = "staff_geometry"
-        explicit_accidental = explicit_accidental_for_note(candidate, staff, pitch_symbols)
+        explicit_accidental = explicit_accidental_for_note(candidate, staff, pitch_symbols, step)
         if explicit_accidental is not None:
             alter, pitch_source = explicit_accidental
         else:

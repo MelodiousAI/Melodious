@@ -14,6 +14,8 @@ Fur Elise has also been tried through the legacy GNN relationship runtime after 
 
 The follow-up Fur Elise tiled+GNN run is `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/`. It reports `extractor_mode = yolo_notehead_staff_pitch+tiled_thin_symbols`, `applied_mode = gnn`, `relationship_count = 1259`, `stem_notehead = 950`, `beam_notegroup = 309`, `9` staff systems, and `256` note events. Compared with `runs/demo/fur_elise_default_fullpage_stafffix_20260605/`, stem-confirmed notes improved from `0` to `171`, dotted notes stayed at `3`, key signatures stayed `{}`, and the MusicXML changed. This is local demo transcription evidence, not a new official detector metric.
 
+The latest Fur Elise local demo output is `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/`. It fixes a pitch-quantization bug where `notehead*InSpace` boxes could be rounded onto staff lines, causing the opening E notes to appear as D. The opening phrase now extracts as `E5`, `D#5`, `E5`, `D#5`, `E5`, `B4`, `D5`, `C5`, `A4`. Stem-confirmed notes remain `171`, dotted notes remain `3`, and MusicXML `<alter>` tags dropped from `38` to `21` after accidental attachment was constrained to matching staff steps.
+
 M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing two real fine-tunes. The completed 1472 fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its separate `F1@0.5` is `0.8082006373091581`, and its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 The completed follow-up run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. It was resumed from the load-verified epoch-22 manual checkpoint, completed, then was re-finalized with the intended `imgsz=1536` and `max_det=2000` settings after an initial incorrect 1024/default-cap finalization was found. Corrected v2 `F1@0.5` is `0.8318461933668392`. Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
 M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The best completed v2 fine-tune still leaves `stem = 0.0` AP and only modest `ledgerLine = 0.01106603897644983`, so rhythm extraction remains limited by thin-symbol detection.
@@ -378,6 +380,8 @@ Important end-to-end caveat:
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q`, 14 tests after adding tiled thin-symbol defaults and relationship-driven rhythm tests.
 - Passed: saved local tiled stem pilot checkpoint copy at `artifacts/models/note_extraction_tiled_stem_pilot/best.pt`; metadata validation with `python -m json.tool` passed.
 - Passed: Fur Elise tiled+GNN local extraction under `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/`; generated MusicXML, MIDI, overlay, note JSON, detector payload JSON, and relationships JSON. Stem-confirmed notes improved from 0 to 171 while dotted notes stayed at 3.
+- Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q`, 16 tests after adding line/space pitch quantization and step-matched accidental attachment regressions.
+- Passed: Fur Elise pitch/accidental fixed extraction under `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/`; opening phrase now extracts as `E5`, `D#5`, `E5`, `D#5`, `E5`, `B4`, `D5`, `C5`, `A4`, with `171` stem-confirmed notes and `3` dotted notes.
 
 ## Milestone Tracker
 
@@ -410,8 +414,8 @@ Important end-to-end caveat:
 
 ## Next Actions
 
-1. Test the new tiled+GNN local extraction path on Sad Romance and the Arabic page with tiled dots disabled, then compare stem-confirmed notes, dotted notes, MusicXML hashes, and subjective MIDI quality.
-2. Reduce beam-count over-shortening in the local extractor; Fur Elise now has stem evidence, but some notes can still be shortened too aggressively when multiple beam boxes overlap.
+1. Reduce beam-count over-shortening in the local extractor; Fur Elise now has corrected opening pitch and stem evidence, but some notes can still be shortened too aggressively when multiple beam boxes overlap.
+2. Test the new tiled+GNN local extraction path on Sad Romance and the Arabic page with tiled dots disabled, then compare stem-confirmed notes, dotted notes, MusicXML hashes, and subjective MIDI quality.
 3. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
 4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
 5. Keep the tiled result labeled as tiled-validation pilot evidence unless it is separately evaluated on the original full-page validation split.

@@ -403,6 +403,38 @@ stem evidence and that GNN relationships can change exported rhythm. Remaining
 risks are musical: beam counts can still over-shorten some passages, voices and
 measures are still heuristic, and pitch remains treble-staff geometry based.
 
+### Fur Elise Pitch/Accidental Fix
+
+The first tiled+GNN Fur Elise run still mapped some `notehead*InSpace`
+detections onto nearby staff lines because pitch used the raw YOLO box center.
+That made the opening E notes appear as D notes. The extractor now quantizes
+`notehead*InSpace` detections to staff spaces and `notehead*OnLine` detections
+to staff lines before computing pitch. Explicit accidental attachment also now
+requires the accidental's staff-position step to match the note's step, so a
+D-sharp cannot attach to an E-space note just because it is horizontally close.
+
+Latest fixed output:
+
+- Output directory: `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/`.
+- MusicXML path:
+  `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes.musicxml`.
+- MIDI path:
+  `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes.mid`.
+- Overlay path:
+  `runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/image(305)_notes_overlay.png`.
+- Staff systems: `9`.
+- Note events: `256`.
+- Stem-confirmed notes: `171`.
+- Dotted notes: `3`.
+- Relationship counts: `950` `stem_notehead`, `309` `beam_notegroup`, total
+  `1259`.
+- The opening nine extracted pitches are now:
+  `E5`, `D#5`, `E5`, `D#5`, `E5`, `B4`, `D5`, `C5`, `A4`.
+- MusicXML `<alter>` tags changed from `38` to `21` after step-matched
+  accidental attachment removed false nearby accidentals.
+- MusicXML SHA256:
+  `0FEF8DA42F1B27B5EBF567AADEB1FD156EADFFD14CA62C7606E003FC23894430`.
+
 ## Next Engineering Step
 
 The next product step is to wire this path into the upload API behind an

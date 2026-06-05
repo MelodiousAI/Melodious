@@ -94,6 +94,24 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertEqual(len(staff_systems), 1)
         self.assertEqual(staff_systems[0].line_y, full_staff_group.line_y)
 
+    def test_pitch_mapping_respects_notehead_line_or_space_class(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(120.5, 129.5, 135.5, 141.5, 150.5),
+            spacing=7.5,
+            start_x=35.0,
+            end_x=698.0,
+        )
+
+        self.assertEqual(
+            pitch_from_y(126.63382720947266, staff, "noteheadBlackInSpace"),
+            ("E", 5, 76),
+        )
+        self.assertEqual(
+            pitch_from_y(129.64337158203125, staff, "noteheadBlackOnLine"),
+            ("D", 5, 74),
+        )
+
     def test_detected_key_flat_applies_b_flat_pitch(self) -> None:
         staff = StaffSystem(
             index=0,
@@ -139,6 +157,53 @@ class NoteExtractionDemoTest(unittest.TestCase):
             text = musicxml_path.read_text(encoding="utf-8")
         self.assertIn("<fifths>-1</fifths>", text)
         self.assertIn("<alter>-1</alter>", text)
+
+    def test_explicit_accidental_must_match_note_staff_step(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(120.5, 129.5, 135.5, 141.5, 150.5),
+            spacing=7.5,
+            start_x=35.0,
+            end_x=698.0,
+        )
+        e_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(120.0, 123.5, 127.0, 129.7),
+            source="unit",
+        )
+        d_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackOnLine",
+            confidence=0.9,
+            bbox_xyxy=(150.0, 126.6, 157.0, 132.7),
+            source="unit",
+        )
+        d_sharp = DetectionCandidate(
+            class_id=3,
+            class_name="accidentalSharp",
+            confidence=0.9,
+            bbox_xyxy=(111.0, 123.0, 118.0, 134.0),
+            source="unit",
+        )
+        d_sharp_near_d = DetectionCandidate(
+            class_id=3,
+            class_name="accidentalSharp",
+            confidence=0.9,
+            bbox_xyxy=(142.0, 123.0, 148.0, 134.0),
+            source="unit",
+        )
+
+        extracted = notes_from_candidates(
+            [e_note, d_note],
+            [staff],
+            pitch_symbols=[d_sharp, d_sharp_near_d],
+            default_quarter_length=1.0,
+        )
+
+        self.assertEqual((extracted[0].step, extracted[0].alter), ("E", 0))
+        self.assertEqual((extracted[1].step, extracted[1].alter), ("D", 1))
 
     def test_cv_extraction_writes_real_midi(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
