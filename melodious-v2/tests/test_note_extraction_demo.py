@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw
 from melodious_v2.omr.note_extraction import (
     DetectionCandidate,
     StaffSystem,
+    _merge_staff_system_candidates,
     detect_staff_systems,
     document_key_fifths,
     extract_notes_from_image,
@@ -58,6 +59,39 @@ class NoteExtractionDemoTest(unittest.TestCase):
         staff_systems = detect_staff_systems(np.asarray(image))
         self.assertEqual(len(staff_systems), 2)
         self.assertEqual([round(staff.spacing) for staff in staff_systems], [10, 10])
+
+    def test_staff_detection_keeps_compact_low_resolution_staff(self) -> None:
+        image = Image.new("L", (300, 120), color=255)
+        draw = ImageDraw.Draw(image)
+        for y in [40, 45, 50, 55, 60]:
+            draw.line((25, y, 275, y), fill=0, width=1)
+
+        import numpy as np
+
+        staff_systems = detect_staff_systems(np.asarray(image))
+        self.assertEqual(len(staff_systems), 1)
+        self.assertAlmostEqual(staff_systems[0].spacing, 5.0)
+
+    def test_staff_merge_prefers_wider_overlapping_five_line_group(self) -> None:
+        compact_false_group = StaffSystem(
+            index=0,
+            line_y=(118.0, 123.5, 129.0, 135.0, 141.0),
+            spacing=5.75,
+            start_x=36.0,
+            end_x=698.0,
+        )
+        full_staff_group = StaffSystem(
+            index=0,
+            line_y=(120.5, 129.5, 135.5, 141.5, 150.5),
+            spacing=7.5,
+            start_x=35.0,
+            end_x=698.0,
+        )
+
+        staff_systems = _merge_staff_system_candidates([compact_false_group, full_staff_group])
+
+        self.assertEqual(len(staff_systems), 1)
+        self.assertEqual(staff_systems[0].line_y, full_staff_group.line_y)
 
     def test_detected_key_flat_applies_b_flat_pitch(self) -> None:
         staff = StaffSystem(

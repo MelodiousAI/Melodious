@@ -184,7 +184,7 @@ def _staff_candidates_from_horizontal(horizontal: np.ndarray, height: int, width
         while i <= len(line_centers) - 5:
             group = line_centers[i : i + 5]
             diffs = np.diff(group)
-            if len(diffs) == 4 and float(np.std(diffs)) < 3.0 and 6.0 <= float(np.mean(diffs)) <= 30.0:
+            if len(diffs) == 4 and float(np.std(diffs)) < 3.0 and 5.0 <= float(np.mean(diffs)) <= 30.0:
                 spacing = float(np.mean(diffs))
                 y0 = max(0, int(min(group)) - 3)
                 y1 = min(height, int(max(group)) + 4)
@@ -225,7 +225,11 @@ def _merge_staff_system_candidates(candidates: list[StaffSystem]) -> list[StaffS
         existing = merged[replacement_index]
         candidate_span = candidate.end_x - candidate.start_x
         existing_span = existing.end_x - existing.start_x
-        if candidate_span > existing_span * 1.05:
+        candidate_height = candidate.bottom_y - candidate.top_y
+        existing_height = existing.bottom_y - existing.top_y
+        if candidate_span > existing_span * 1.05 or (
+            candidate_span >= existing_span * 0.95 and candidate_height > existing_height * 1.1
+        ):
             merged[replacement_index] = candidate
 
     return [

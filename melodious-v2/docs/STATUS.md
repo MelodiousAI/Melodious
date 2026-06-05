@@ -364,6 +364,9 @@ Important end-to-end caveat:
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q`, 9 tests.
 - Passed: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\validate_metric_claims.py`, checked 14 documentation files.
 - Passed after fix: `..\.venv\Scripts\python.exe -m json.tool artifacts\models\note_extraction_default_fullpage\metadata.json`; first attempt caught a UTF-8 BOM from PowerShell metadata writing, then the metadata was rewritten without BOM.
+- Passed: Fur Elise input `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png` was run through the local default note-extraction CLI.
+- Passed after staff detection fix: corrected Fur Elise artifact under `runs/demo/fur_elise_default_fullpage_stafffix_20260605/` detects all 9 visible staff systems, writes 256 note events, 3 detector-confirmed dotted notes, 36 MusicXML `<alter>` tags, MusicXML, MIDI, JSON, and overlay.
+- Passed: compact low-resolution staff regression tests added; `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` passed with 11 tests.
 
 ## Milestone Tracker
 

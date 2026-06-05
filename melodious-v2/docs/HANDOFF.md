@@ -67,6 +67,48 @@ Next exact step:
 
 - If improving demo transcription quality is the priority, implement and test a full-page tiled-inference merger that can use the tiled stem pilot for thin-symbol detections without losing full-page notehead/staff context.
 
+## 2026-06-05 - Agent Handoff
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / local note-extraction demo robustness.
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `tests/test_note_extraction_demo.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" --output-dir runs\demo\fur_elise_default_fullpage_20260605 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 1.0 --title "Fur Elise"` - passed, but detected only 8 staff systems and missed the dense system around measure 33.
+- Staff detector probe for `image(305).png` - initially found the missed system line centers around `545.0, 551.0, 557.0, 563.0, 568.5`, but the old candidate rule rejected that group because mean spacing was below `6 px`.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 11 tests after adding compact-staff and overlapping-candidate merge regressions.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py tests\test_note_extraction_demo.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" --output-dir runs\demo\fur_elise_default_fullpage_stafffix_20260605 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --default-quarter-length 1.0 --title "Fur Elise"` - passed, detected all 9 visible staff systems.
+
+Generated artifacts:
+
+- `runs/demo/fur_elise_default_fullpage_20260605/` - initial 8-staff output; keep only as comparison evidence.
+- `runs/demo/fur_elise_default_fullpage_stafffix_20260605/` - corrected output with JSON, MusicXML, MIDI, overlay, and checkpoint snapshot.
+
+What is complete:
+
+- Compact staff spacing down to `5 px` is accepted by the staff detector.
+- Overlapping staff candidates now prefer the wider five-line group when horizontal span is comparable, preventing a compact false group from replacing the real staff.
+- Corrected Fur Elise output has `9` staff systems, `256` note events, `0` stem-confirmed notes, `3` dotted notes, and `36` MusicXML `<alter>` tags.
+
+What is blocked:
+
+- Nothing is blocked for staff detection on this page.
+- Rhythm remains heuristic because the default full-page detector still returns no usable stem boxes on this demo page.
+
+Next exact step:
+
+- If Fur Elise quality is demo-critical, inspect `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes_overlay.png` and compare the MIDI/MusicXML against the source page; remaining errors will likely require rhythm/stem post-processing rather than staff-line fixes.
+
 Current state:
 
 - V2 foundation is implemented.
