@@ -30,12 +30,23 @@ Local note-extraction default checkpoint:
 Recovery checkpoint before GNN retraining:
 
 - Git tag: `pre-gnn-retrain-20260606`.
-- Tagged commit: `c253cb2` (`Preserve systems and recover open-note dots`).
+- Product-code checkpoint commit: `c253cb2` (`Preserve systems and recover open-note dots`).
+- The tag is maintained as the rollback target for the documented pre-retrain state; resolve it with `git rev-parse --short pre-gnn-retrain-20260606`.
 - Restore command if the next GNN experiment makes product output worse: `git switch phase-04-assembly; git reset --hard pre-gnn-retrain-20260606`.
 - Default runtime GNN checkpoint to preserve: `..\outputs\gnn_checkpoint.pt`, SHA256 `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
 - The retraining run must write to a separate V2 run directory, not overwrite `..\outputs\gnn_checkpoint.pt`, until metrics and demo MusicXML are compared.
 - Planned first retraining output directory: `runs/graph/graph_legacy_gnn_muscima_retrain_20260606/`.
 - Training source data: `..\data\muscima-pp\v2.0\data\annotations` with the existing legacy trainer and the same 15-class relationship contract as the current runtime.
+
+Active GNN retraining run:
+
+- Run directory: `runs/graph/graph_legacy_gnn_muscima_retrain_20260606/`.
+- Launch command saved at `runs/graph/graph_legacy_gnn_muscima_retrain_20260606/train_command.ps1`.
+- Parent PID file: `runs/graph/graph_legacy_gnn_muscima_retrain_20260606/train.pid`.
+- Current launched parent PID: `31224`; current Python worker PID observed at launch check: `412`.
+- The first launch failed after dataset load/first epoch print because redirected Windows stdout used `cp1252` and the legacy script printed a Unicode arrow. Logs and the partial epoch-1 checkpoint were preserved as `train_stdout_failed_cp1252.log`, `train_stderr_failed_cp1252.log`, and `gnn_checkpoint_failed_epoch1.pt`.
+- The relaunch sets `PYTHONUTF8=1` and `PYTHONIOENCODING=utf-8`, resumes from `..\outputs\gnn_checkpoint.pt`, uses CUDA, and saves only under the run directory.
+- Check progress with: `Get-Content -Tail 80 runs\graph\graph_legacy_gnn_muscima_retrain_20260606\train_stdout.log; Get-Content -Tail 40 runs\graph\graph_legacy_gnn_muscima_retrain_20260606\train_stderr.log`.
 
 ## 2026-06-06 - Agent Handoff - Espresso System/Dot Fix
 
