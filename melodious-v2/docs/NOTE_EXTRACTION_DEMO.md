@@ -31,31 +31,61 @@ The detector metric docs remain tied to their own `runs/**/metrics.json` files.
 This demo checkpoint selection is a local transcription/demo choice, not a new
 metric result.
 
+The CLI also looks for a saved tiled thin-symbol checkpoint when
+`--thin-symbol-checkpoint` is omitted:
+
+`artifacts/models/note_extraction_tiled_stem_pilot/best.pt`
+
+That generated artifact is copied from:
+
+`runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train/weights/best.pt`
+
+When present, this checkpoint is used on overlapping `384 x 384` source-pixel
+tiles to add stem, beam, flag, and explicit-accidental detections to the
+full-page notehead pass. Tiled augmentation-dot detections are disabled by
+default because the Fur Elise test showed they can create many false dotted
+notes; pass `--use-tiled-dots` only for controlled experiments. Tiled
+key-signature glyphs are not allowed to set document key signatures because
+inline accidentals can otherwise be mis-promoted into false key signatures.
+
+If `..\outputs\gnn_checkpoint.pt` exists, the CLI also runs the legacy GNN
+relationship adapter by default. The GNN relationships are now consumed during
+local rhythm inference: `stem_notehead` relationships can confirm stems and
+`beam_notegroup` relationships can produce `gnn_beam_x*` rhythm sources.
+
 It does the following:
 
 1. Detects five-line staff systems from long horizontal staff strokes, using
    dark-line, light-line, and adaptive masks so faded/antialiased staff lines
    are not silently dropped.
-2. Uses a YOLO checkpoint, when available, to detect notehead, stem, beam,
-   flag, augmentation-dot, key-signature, and explicit-accidental boxes.
-3. Snapshots the checkpoint into the output directory before inference so a
+2. Uses a full-page YOLO checkpoint, when available, to detect notehead,
+   beam, flag, augmentation-dot, key-signature, and explicit-accidental boxes.
+3. Uses the tiled thin-symbol YOLO checkpoint, when available, to recover
+   stems, beams, flags, and explicit accidentals from cropped source windows.
+4. Snapshots each checkpoint into the output directory before inference so a
    live training process can continue writing `best.pt` or `last.pt`.
-4. Maps notehead vertical position to treble-clef pitch.
-5. Applies detected `keyFlat`, `keySharp`, and `keyNatural` symbols to matching
+5. Maps notehead vertical position to treble-clef pitch.
+6. Applies detected `keyFlat`, `keySharp`, and `keyNatural` symbols to matching
    note steps on the same staff; detected explicit accidentals override the key
    signature for the attached note.
-6. Infers simple rhythm:
+7. Runs the legacy GNN relationship adapter when the local checkpoint exists,
+   then uses graph relationships as rhythm evidence before MusicXML export.
+8. Infers simple rhythm:
    - black noteheads default to quarter notes;
    - nearby stems confirm unbeamed black noteheads as quarter notes;
    - nearby beams or flags shorten black noteheads to eighth/smaller values;
    - nearby detector-confirmed augmentation dots multiply the duration by 1.5;
+   - GNN `stem_notehead` and `beam_notegroup` relationships can produce
+     `gnn_stem_quarter` and `gnn_beam_x*` rhythm sources.
    - half/whole notehead classes set longer base durations.
-7. Writes:
+9. Writes:
    - `*_notes.json` with note order, staff index, bounding box, pitch, MIDI
      pitch, confidence, duration, dotted flag, and rhythm source.
    - `*_notes_overlay.png` with staff lines and note labels.
    - `*_notes.musicxml` with compact extracted notes.
    - `*_notes.mid` with real MIDI note events.
+   - `*_detector_payload.json` and `*_relationships.json` when GNN assembly
+     runs.
 
 ## Limitations
 
@@ -71,6 +101,9 @@ It does the following:
   being silently converted into dotted rhythms. Detector-confirmed
   `augmentationDot` boxes still count. Use `--use-cv-dot-fallback` only for
   deliberate experiments where false dotted notes are acceptable.
+- Tiled augmentation-dot detections are also off by default. The tiled pilot is
+  useful for stems, beams, and flags, but on Fur Elise it created many false
+  dots before this guard was added.
 - Pitch assumes treble clef. Basic detected key signatures and explicit
   accidentals are applied when YOLO returns `keyFlat`, `keySharp`,
   `keyNatural`, or `accidental*` boxes.
@@ -106,18 +139,30 @@ Because the saved full-page demo checkpoint is the default, the command above
 does not need an explicit `--checkpoint` argument unless you want to compare
 another checkpoint.
 
+Because the saved tiled stem pilot checkpoint and `..\outputs\gnn_checkpoint.pt`
+are also auto-detected when present, the command now uses tiled thin-symbol
+inference and relationship-aware rhythm by default. Add `--no-thin-symbols` or
+`--no-gnn` for an ablation/comparison run.
+
 ## Interpreting Output
 
 - `extractor_mode = yolo_notehead_staff_pitch` means the YOLO checkpoint was
   used for notehead boxes and the staff geometry layer estimated pitches.
+- `extractor_mode = yolo_notehead_staff_pitch+tiled_thin_symbols` means the
+  full-page checkpoint supplied noteheads and the tiled checkpoint supplied
+  additional rhythm/pitch symbols.
 - `extractor_mode = cv_staff_notehead_pitch` means the checkpoint was missing
   or YOLO failed, so the contour fallback was used.
+- `assembly_mode.applied_mode = gnn` means the local GNN checkpoint actually
+  ran. `relationship_count` and `relationship_counts` record the graph evidence
+  volume.
 - `note_count` is the number of note events written to MIDI.
 - `quarter_length` is the extracted duration in quarter-note units:
   `1.0` is quarter, `0.5` is eighth, `1.5` is dotted quarter, and
   `0.75` is dotted eighth.
 - `rhythm_source` explains why that duration was chosen, for example
-  `stem_quarter`, `black_notehead_quarter_rule_no_stem`, `beam_x1`, `flag`, or
+  `stem_quarter`, `gnn_stem_quarter`, `black_notehead_quarter_rule_no_stem`,
+  `beam_x1`, `gnn_beam_x1`, `flag`, or
   `black_notehead_quarter_rule_no_stem+augmentation_dot`.
 - `stem_detected` records whether a nearby detected `stem` box was attached to
   the notehead.
@@ -297,12 +342,72 @@ durations, voices, beams, or measures. Also, this Fur Elise detector payload has
 no actual `stem` class detections, so GNN relationships alone cannot prove that
 stem detection has been solved on full-page uploaded images.
 
+### Fur Elise Tiled Stem + GNN Rhythm Trial
+
+The next run added the tiled stem pilot checkpoint to the local extraction path
+and allowed GNN relationships to influence rhythm before writing MusicXML:
+
+```powershell
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py `
+  --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" `
+  --output-dir runs\demo\fur_elise_tiled_gnn_rhythm_nodots_20260605 `
+  --device cpu `
+  --conf 0.12 `
+  --imgsz 1472 `
+  --max-det 2000 `
+  --thin-conf 0.05 `
+  --thin-imgsz 1024 `
+  --thin-max-det 1000 `
+  --thin-tile-size 384 `
+  --thin-tile-stride 256 `
+  --default-quarter-length 1.0 `
+  --title "Fur Elise"
+```
+
+Measured comparison against the staff-fixed full-page run:
+
+- Output directory: `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/`.
+- MusicXML path:
+  `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes.musicxml`.
+- MIDI path:
+  `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes.mid`.
+- Detector payload:
+  `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_detector_payload.json`.
+- Relationships:
+  `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_relationships.json`.
+- Extractor mode: `yolo_notehead_staff_pitch+tiled_thin_symbols`.
+- Assembly mode: `applied_mode = gnn`, `inference_ran = true`,
+  `fallback_applied = false`.
+- Staff systems: unchanged at `9`.
+- Note events: unchanged at `256`.
+- Stem-confirmed notes: improved from `0` to `171`.
+- Dotted notes: unchanged at `3`; tiled dots were not allowed to affect rhythm.
+- Key signatures: unchanged at `{}`; tiled key-signature detections were not
+  allowed to create false key signatures.
+- Explicit accidentals written as MusicXML `<alter>` tags: changed from `36`
+  to `38`.
+- Relationship counts: `950` `stem_notehead`, `309` `beam_notegroup`, total
+  `1259`.
+- Duration distribution changed from `0.125:62`, `0.25:130`, `0.375:1`,
+  `0.5:51`, `0.75:2`, `1.0:10` to `0.0625:9`, `0.125:40`, `0.25:145`,
+  `0.375:1`, `0.5:56`, `0.75:2`, `1.0:3`.
+- GNN-influenced rhythm sources appeared in the output:
+  `gnn_beam_x1`, `gnn_beam_x2`, `gnn_beam_x3`, and `gnn_beam_x4`.
+- The MusicXML changed from the staff-fixed run; SHA256 is
+  `5E00C75335236D71F613F7D280B385CA3BC1460971DFF8BD3587B25C59F7943D`.
+
+This is a local demo transcription improvement, not an official detector metric
+claim. It proves that the tiled stem model can supply full-page uploaded-image
+stem evidence and that GNN relationships can change exported rhythm. Remaining
+risks are musical: beam counts can still over-shorten some passages, voices and
+measures are still heuristic, and pitch remains treble-staff geometry based.
+
 ## Next Engineering Step
 
 The next product step is to wire this path into the upload API behind an
 explicit mode, for example `MELODIOUS_UPLOAD_DETECTOR=yolo_note_demo`, and keep
 the response warnings honest until measures, ties, and graph assembly are more
-complete. The next rhythm-quality step is to either add a full-page tiled
-inference merger so thin-symbol detections such as stems become available, or
-add a tested rhythm-integration layer that consumes detector/GNN beam, flag,
-dot, and stem evidence before MusicXML export.
+complete. The next rhythm-quality step is to reduce beam-count over-shortening,
+add measure/barline-aware rhythm normalization, and test the tiled+GNN path on
+Sad Romance and the Arabic page without enabling tiled dots.

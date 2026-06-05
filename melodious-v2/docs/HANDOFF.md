@@ -15,9 +15,12 @@ Local note-extraction default checkpoint:
 - Source checkpoint copied into that generated artifact: `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`.
 - Local artifact metadata: `artifacts/models/note_extraction_default_fullpage/metadata.json`.
 - Stable checkpoint SHA256: `8e4eb9f898c781c32d332b5c5b998a4882dbb343daa856563bf3b88ce6de211a`.
+- Default tiled thin-symbol checkpoint path used by `scripts/extract_notes_from_image.py` when `--thin-symbol-checkpoint` is omitted: `artifacts/models/note_extraction_tiled_stem_pilot/best.pt`.
+- Source tiled checkpoint copied into that generated artifact: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train/weights/best.pt`.
+- Stable tiled checkpoint SHA256: `ab72ff42e5ecf916bd4768b3a6413d67059ff6b51d37588375d274bf4d1b5bef`.
 - Sad Romance default-checkpoint retry artifact: `runs/demo/sad_romance_default_fullpage_20260605/`, with MusicXML at `runs/demo/sad_romance_default_fullpage_20260605/sad_romance_clearer_smooth_notes.musicxml`.
 - Latest default-checkpoint Sad Romance extraction: `9` staff systems, `197` note events, `0` stem-confirmed notes, and `3` detector-confirmed dotted notes.
-- The tiled stem pilot checkpoint is not the default full-page demo checkpoint. Use it only for explicit comparison or after a separately tested tiled/full-page inference strategy is wired in.
+- The tiled stem pilot checkpoint is now used as a second tiled thin-symbol pass by default when the generated artifact exists. It does not replace the full-page notehead checkpoint.
 
 ## 2026-06-05 - Agent Handoff
 
@@ -152,6 +155,70 @@ What is blocked:
 Next exact step:
 
 - Implement a tested rhythm-integration layer that consumes detector/GNN beam, flag, dot, and stem evidence before MusicXML export, or first wire tiled/thin-symbol inference into the local note-extraction CLI so true stem boxes exist on full-page demo images.
+
+## 2026-06-05 - Agent Handoff
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / tiled thin-symbol + GNN local extraction integration.
+
+Files changed:
+
+- `src/melodious_v2/omr/note_extraction.py`
+- `scripts/extract_notes_from_image.py`
+- `tests/test_note_extraction_demo.py`
+- `tests/test_note_extraction_cli.py`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `README.md`
+- `MODEL_CARD.md`
+
+Commands run:
+
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m py_compile src\melodious_v2\omr\note_extraction.py scripts\extract_notes_from_image.py tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py` - passed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` - passed, 14 tests.
+- `Copy-Item runs\detection\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1\ultralytics\train\weights\best.pt artifacts\models\note_extraction_tiled_stem_pilot\best.pt` - passed after creating the generated artifact directory.
+- `..\.venv\Scripts\python.exe -m json.tool artifacts\models\note_extraction_tiled_stem_pilot\metadata.json` - passed after rewriting metadata without a UTF-8 BOM.
+- Initial Fur Elise tiled+GNN run under `runs/demo/fur_elise_tiled_gnn_rhythm_20260605/` - passed, but produced too many dotted notes (`53`) because tiled `augmentationDot` detections were allowed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe scripts\extract_notes_from_image.py --image "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png" --output-dir runs\demo\fur_elise_tiled_gnn_rhythm_nodots_20260605 --device cpu --conf 0.12 --imgsz 1472 --max-det 2000 --thin-conf 0.05 --thin-imgsz 1024 --thin-max-det 1000 --thin-tile-size 384 --thin-tile-stride 256 --default-quarter-length 1.0 --title "Fur Elise"` - passed after disabling tiled dots by default.
+- Visual inspection of `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes_overlay.png` - passed for notehead/staff alignment; overlay is text-dense.
+
+Generated artifacts:
+
+- `artifacts/models/note_extraction_tiled_stem_pilot/best.pt`
+- `artifacts/models/note_extraction_tiled_stem_pilot/metadata.json`
+- `runs/demo/fur_elise_tiled_gnn_rhythm_20260605/` - keep only as comparison evidence showing why tiled dots are disabled by default.
+- `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes.musicxml`
+- `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes.mid`
+- `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes_overlay.png`
+- `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_notes.json`
+- `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_detector_payload.json`
+- `runs/demo/fur_elise_tiled_gnn_rhythm_nodots_20260605/image(305)_relationships.json`
+
+What is complete:
+
+- The local extraction CLI now auto-detects the saved tiled stem pilot checkpoint as a second inference pass.
+- Tiled inference scans overlapping `384 x 384` source-pixel windows and maps detections back to page coordinates.
+- The tiled pass contributes stems, beams, flags, and explicit accidentals while leaving full-page notehead detection intact.
+- Tiled augmentation-dot detections are disabled by default because they over-dotted Fur Elise. Existing full-page detector-confirmed dots still count.
+- Tiled key-signature glyphs are blocked from setting document key signatures to prevent inline accidentals from becoming false key signatures.
+- The local extraction CLI now auto-detects `..\outputs\gnn_checkpoint.pt` and consumes GNN relationships in rhythm inference.
+- Unit coverage now verifies relationship-driven `gnn_beam_x1` and `gnn_stem_quarter` rhythm sources.
+- Fur Elise improved from `0` to `171` stem-confirmed notes while keeping dotted notes at `3`.
+- Fur Elise GNN assembly ran with `applied_mode = gnn`, `relationship_count = 1259`, `stem_notehead = 950`, and `beam_notegroup = 309`.
+- Fur Elise MusicXML changed from the staff-fixed output; new MusicXML SHA256 is `5E00C75335236D71F613F7D280B385CA3BC1460971DFF8BD3587B25C59F7943D`.
+
+What is blocked:
+
+- This is not an official detector metric. It is local demo transcription evidence using a second tiled inference path.
+- Beam-count over-shortening still exists. The latest Fur Elise run has `0.0625:9` durations and some `gnn_beam_x4` / `beam_x4` rhythm sources, which may be too short for the target demo.
+- Voices, measure reconstruction, barline-aware duration repair, ties, and measure-scoped accidental persistence remain incomplete.
+- The FastAPI uploaded-image route still uses `heuristic_bootstrap`; the improved CLI is not yet wired into the product upload route.
+
+Next exact step:
+
+- Run the new default tiled+GNN local extractor on Sad Romance and `image.png` with tiled dots disabled, then compare stem-confirmed notes, dotted notes, MusicXML hashes, and subjective MIDI quality. After that, implement a beam-count normalization rule if over-shortened notes are still obvious.
 
 Current state:
 
