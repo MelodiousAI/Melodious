@@ -266,12 +266,43 @@ candidate merging now prefers the wider five-line group when overlapping
 candidates have comparable horizontal span. The corrected run detects all `9`
 visible systems.
 
+### Fur Elise GNN Relationship Trial
+
+A follow-up trial ran the corrected Fur Elise detector output through the legacy
+MUSCIMA GNN relationship runtime:
+
+- Output directory: `runs/demo/fur_elise_gnn_relationship_trial_20260605/`.
+- MusicXML path:
+  `runs/demo/fur_elise_gnn_relationship_trial_20260605/image(305)_notes.musicxml`.
+- MIDI path:
+  `runs/demo/fur_elise_gnn_relationship_trial_20260605/image(305)_notes.mid`.
+- Relationship summary:
+  `runs/demo/fur_elise_gnn_relationship_trial_20260605/relationships.json`.
+- Trial summary:
+  `runs/demo/fur_elise_gnn_relationship_trial_20260605/gnn_trial_summary.json`.
+- Assembly metadata: `applied_mode = gnn`, `inference_ran = true`,
+  `fallback_applied = false`, `checkpoint_ready = true`.
+- Relationship counts: `641` `stem_notehead`, `54` `beam_notegroup`, total
+  `695`.
+- Note-extraction counts remained `9` staff systems, `256` note events,
+  `0` stem-confirmed notes, `3` dotted notes, and `36` MusicXML `<alter>` tags.
+
+This trial did not improve the exported Fur Elise MusicXML. The GNN-trial
+MusicXML is byte-identical to the staff-fixed MusicXML, with SHA256
+`E97ECC091AAB109B7FC2C58C1D17DB661F5E93F0480C542489C0F2866EFCC126`. The reason
+is architectural: `scripts/extract_notes_from_image.py` currently writes
+MusicXML from detected note events and simple rhythm rules, while the graph
+relationships are saved as evidence but are not yet consumed to rewrite
+durations, voices, beams, or measures. Also, this Fur Elise detector payload has
+no actual `stem` class detections, so GNN relationships alone cannot prove that
+stem detection has been solved on full-page uploaded images.
+
 ## Next Engineering Step
 
 The next product step is to wire this path into the upload API behind an
 explicit mode, for example `MELODIOUS_UPLOAD_DETECTOR=yolo_note_demo`, and keep
 the response warnings honest until measures, ties, and graph assembly are more
-complete. The next rhythm-quality step is stem detection and attachment:
-evaluate a separate `stem` threshold, add a CV stem-line attachment fallback for
-clean printed pages, or build a tiled/thin-symbol training set so stems occupy
-more pixels during training.
+complete. The next rhythm-quality step is to either add a full-page tiled
+inference merger so thin-symbol detections such as stems become available, or
+add a tested rhythm-integration layer that consumes detector/GNN beam, flag,
+dot, and stem evidence before MusicXML export.
