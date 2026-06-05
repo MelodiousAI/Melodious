@@ -14,6 +14,7 @@ from melodious_v2.omr.note_extraction import (
     _merge_staff_system_candidates,
     detect_staff_systems,
     document_key_fifths,
+    events_from_candidates,
     extract_notes_from_image,
     key_signatures_from_symbols,
     notes_from_candidates,
@@ -364,6 +365,107 @@ class NoteExtractionDemoTest(unittest.TestCase):
         self.assertEqual([note.rhythm_source for note in extracted], ["gnn_beam_x1", "gnn_stem_quarter"])
         self.assertFalse(extracted[0].stem_detected)
         self.assertTrue(extracted[1].stem_detected)
+
+    def test_rest_candidates_are_exported_and_advance_onset(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        first_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 91.0, 112.0, 99.0),
+            source="unit",
+        )
+        rest = DetectionCandidate(
+            class_id=2,
+            class_name="restQuarter",
+            confidence=0.85,
+            bbox_xyxy=(148.0, 72.0, 158.0, 92.0),
+            source="unit",
+        )
+        second_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(200.0, 91.0, 212.0, 99.0),
+            source="unit",
+        )
+
+        events = events_from_candidates([first_note, second_note], [staff], rest_candidates=[rest])
+
+        self.assertEqual([event.event_type for event in events], ["note", "rest", "note"])
+        self.assertEqual([event.quarter_length for event in events], [1.0, 1.0, 1.0])
+        self.assertEqual([event.onset_quarter for event in events], [0.0, 1.0, 2.0])
+
+        with tempfile.TemporaryDirectory() as tmp:
+            musicxml_path = Path(tmp) / "rests.musicxml"
+            write_musicxml(events, musicxml_path, title="Rests")
+            xml = musicxml_path.read_text(encoding="utf-8")
+        self.assertIn("<rest/>", xml)
+        self.assertEqual(xml.count("<note>"), 3)
+
+    def test_mixed_beam_groups_do_not_force_shortest_neighbor_duration(self) -> None:
+        staff = StaffSystem(
+            index=0,
+            line_y=(60.0, 70.0, 80.0, 90.0, 100.0),
+            spacing=10.0,
+            start_x=40.0,
+            end_x=380.0,
+        )
+        eighth_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(100.0, 91.0, 112.0, 99.0),
+            source="unit",
+        )
+        sixteenth_note = DetectionCandidate(
+            class_id=1,
+            class_name="noteheadBlackInSpace",
+            confidence=0.9,
+            bbox_xyxy=(170.0, 91.0, 182.0, 99.0),
+            source="unit",
+        )
+        symbols = [
+            DetectionCandidate(
+                class_id=3,
+                class_name="stem",
+                confidence=0.9,
+                bbox_xyxy=(112.0, 55.0, 115.0, 96.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=3,
+                class_name="stem",
+                confidence=0.9,
+                bbox_xyxy=(182.0, 55.0, 185.0, 96.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=4,
+                class_name="beam",
+                confidence=0.9,
+                bbox_xyxy=(88.0, 55.0, 210.0, 58.0),
+                source="unit",
+            ),
+            DetectionCandidate(
+                class_id=4,
+                class_name="beam",
+                confidence=0.9,
+                bbox_xyxy=(140.0, 62.0, 210.0, 65.0),
+                source="unit",
+            ),
+        ]
+
+        extracted = notes_from_candidates([eighth_note, sixteenth_note], [staff], rhythm_symbols=symbols)
+
+        self.assertEqual([note.quarter_length for note in extracted], [0.5, 0.25])
+        self.assertEqual([note.rhythm_source for note in extracted], ["beam_x1", "beam_x2"])
 
     def test_yolo_extraction_does_not_invent_cv_dots_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
