@@ -742,9 +742,10 @@ Fine-tune launch:
 
 M7 remaining risk:
 
-- High-support classes such as `ledgerLine` and `stem` remain unresolved.
+- High-support classes such as `ledgerLine` and `stem` remain unresolved on original full-page validation.
+- The completed tiled pilot resolves `stem` and `ledgerLine` on tiled validation, but that is a different validation distribution and must be labeled as tiled-validation pilot evidence.
 - Test-set performance is intentionally still unreported.
-- More real improvement likely requires fine-tuning or a special treatment for thin line-like symbols.
+- More real full-page improvement likely requires evaluating tiled checkpoints back on full pages, a full tiled training run, tiled inference, OBB/segmentation, or verified synthetic thin-symbol data.
 - Twenty-one taxonomy classes have no local labels and cannot be learned by another run on the same dataset.
 - The current validation split cannot measure 33 taxonomy classes, so validation-selected settings are not proof that all 136 classes work.
 
@@ -783,9 +784,13 @@ Tiled stem training path:
 - Full tiled counts: 88137 train tiles, 10709 validation tiles, 26019 test tiles, and 747473 total retained stem labels.
 - Pilot tiled dataset: `runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/`.
 - Pilot list counts: 12000 train, 2500 validation, and 2500 test tile paths pointing into the full tiled dataset.
-- Active pilot training run: `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`.
+- Completed pilot training run: `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`.
 - Pilot launch settings: corrected v2 `best.pt`, `epochs=12`, `imgsz=1024`, `batch=4`, `workers=0`, `device=0`, `patience=5`, and `max_det=2000`.
-- Pilot status: running at handoff with PID `6100`; no tiled metric claim exists until `metrics.json` is written.
+- Pilot metric source: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json`.
+- Pilot AP tiled-validation metrics: `mAP@0.5:0.95 = 0.8521207647641077` and `mAP@0.5 = 0.9082394885392849`.
+- Pilot threshold tiled-validation metrics: `precision@0.5 = 0.9155509426073148`, `recall@0.5 = 0.8645416741076378`, and `F1@0.5 = 0.8893154628249349`.
+- Pilot rhythm tiled-validation metrics: `stem = 0.7345783859762263`, `ledgerLine = 0.8956514487613261`, `augmentationDot = 0.951387713738491`, `beam = 0.8769708350968146`, `flag8thUp = 0.8579518244687186`, `flag8thDown = 0.8995411921354421`, `flag16thUp = 0.8172923253618494`, and `flag16thDown = 0.8974812907299483`.
+- Pilot stop/save status: completed all 12 epochs, was manually snapshotted under `artifacts/manual_checkpoints/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/final_epoch12_completed_2026-06-04_225710/`, and copied `best.pt`/`last.pt` were load-verified as 136-class detect checkpoints.
 
 ## M8 - Final Grading Package
 

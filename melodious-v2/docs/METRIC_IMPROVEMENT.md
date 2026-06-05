@@ -366,8 +366,8 @@ Sampled pilot output now exists:
 Interpretation:
 
 - The smoke run proved the tiling pipeline works and changes `stem` from subpixel whole-page geometry to a visible small object.
-- The completed full tiled materialization proves the full training corpus can be generated locally, but it is large enough that a pilot run is the responsible next step.
-- No tiled metric improvement has been claimed yet. The next metric claim must come from a completed tiled detector run with `runs/**/metrics.json`.
+- The completed full tiled materialization proves the full training corpus can be generated locally, but it is large enough that a pilot run was the responsible next step.
+- The sampled tiled pilot has now completed and written final `runs/**/metrics.json` evidence. This is a tiled-validation result and should not be described as original full-page validation performance.
 
 Full tiled dataset command already run:
 
@@ -392,7 +392,7 @@ $env:PYTHONPATH='src'
   --materialize-only
 ```
 
-Active tiled pilot command:
+Completed tiled pilot command:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
@@ -411,17 +411,32 @@ $env:PYTHONPATH='src'
   --max-det 2000
 ```
 
-Monitor command for the active tiled pilot:
+Completed tiled pilot result:
+
+- Run id: `detection_136class_yolov8m_tiled_stem_pilot_img1024_v1`.
+- Dataset id: `deepscores_136_yolo_tiled_stem_pilot_v1`.
+- Metric source: `runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json`.
+- Checkpoint source: corrected v2 `best.pt` from `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`.
+- Training completed all 12 epochs.
+- Final AP metrics on tiled validation: `mAP@0.5:0.95 = 0.8521207647641077` and `mAP@0.5 = 0.9082394885392849`.
+- Final threshold metrics on tiled validation: `precision@0.5 = 0.9155509426073148`, `recall@0.5 = 0.8645416741076378`, and `F1@0.5 = 0.8893154628249349`.
+- Final tiled-validation rhythm metrics: `stem = 0.7345783859762263`, `ledgerLine = 0.8956514487613261`, `augmentationDot = 0.951387713738491`, `beam = 0.8769708350968146`, `flag8thUp = 0.8579518244687186`, `flag8thDown = 0.8995411921354421`, `flag16thUp = 0.8172923253618494`, and `flag16thDown = 0.8974812907299483`.
+- `stem` validation support in the tiled pilot analysis: 62411 instances.
+- Supported zero-mAP classes remaining in the tiled pilot analysis: `articTenutoBelow`, `dynamicR`, `restHBar`, and `tuplet1`.
+- Manual load-verified snapshot: `artifacts/manual_checkpoints/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/final_epoch12_completed_2026-06-04_225710/`.
+- Stop verification: parent PID `6100` and worker PID `14544` were no longer running, and `nvidia-smi` showed zero training VRAM.
+
+Metric check command for the completed tiled pilot:
 
 ```powershell
 cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
 $run='runs\detection\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1'
-Get-Process -Id ([int](Get-Content "$run\tiled_pilot_train.pid")) -ErrorAction SilentlyContinue
-Get-Content -Tail 80 "$run\tiled_pilot_train_stdout.log"
-if (Test-Path "$run\ultralytics\train\results.csv") { Import-Csv "$run\ultralytics\train\results.csv" | Select-Object -Last 1 }
+$metrics = Get-Content "$run\metrics.json" -Raw | ConvertFrom-Json
+$metrics.metrics.'mAP@0.5:0.95'
+$metrics.metrics.'per_class_mAP@0.5:0.95'.stem
 ```
 
-If the pilot improves `stem`, a longer or full tiled run can reuse the full tiled YAML and start from the pilot `best.pt`. If the pilot does not move `stem`, the next better experiment is OBB/segmentation or verified synthetic thin-symbol data rather than blindly running 40 epochs over 88137 full tiles.
+Because the pilot improves `stem`, a longer or full tiled run can reuse the full tiled YAML and start from the pilot `best.pt`. The other high-value follow-up is evaluating the pilot checkpoint back on the original full-page validation split to measure whether tiled training regressed whole-page behavior.
 
 ## Presentation Guidance
 
@@ -429,11 +444,11 @@ Use this language:
 
 - "Our best completed validation detector is the M7 follow-up fine-tuned YOLOv8m run `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`, finalized at `imgsz=1536` and `max_det=2000`, which reaches `mAP@0.5:0.95 = 0.707986237382828` and `mAP@0.5 = 0.8390674529615662` on validation."
 - "The earlier dense-page inference sweep on the original full YOLOv8m checkpoint found that `imgsz=1472` and `max_det=2000` were necessary for fair validation on dense music pages."
-- "The remaining detector weakness is specific: `stem` remains at `0.0` AP after whole-page fine-tuning, so rhythm extraction needs the active tiled thin-symbol/stem experiment or a different thin-symbol formulation."
+- "The remaining full-page detector weakness is specific: `stem` remains at `0.0` AP after whole-page fine-tuning. A tiled pilot fixes `stem` on tiled validation with `stem = 0.7345783859762263`, but that result must be labeled as tiled-validation evidence unless it is separately evaluated on original full pages."
 
 Avoid this language:
 
 - Do not call the sweep a new trained model.
 - Do not call the validation result a test result.
-- Do not hide the `ledgerLine` and `stem` failures.
+- Do not hide that full-page validation and tiled validation are different distributions.
 - Do not compare `mAP` directly to graph F1.
