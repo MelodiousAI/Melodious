@@ -109,6 +109,50 @@ Next exact step:
 
 - If Fur Elise quality is demo-critical, inspect `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes_overlay.png` and compare the MIDI/MusicXML against the source page; remaining errors will likely require rhythm/stem post-processing rather than staff-line fixes.
 
+## 2026-06-05 - Agent Handoff
+
+Milestone worked:
+
+- M7 - Detector Metric Improvement / Fur Elise GNN relationship trial.
+
+Files changed:
+
+- `docs/HANDOFF.md`
+- `docs/STATUS.md`
+- `docs/NOTE_EXTRACTION_DEMO.md`
+
+Commands run:
+
+- `git status --short -- .; git log --oneline -3` - passed; the code/doc baseline was clean and previously committed as `2c2dd40 Improve compact staff detection for demos`.
+- Fur Elise GNN relationship trial - passed; wrote artifacts under `runs/demo/fur_elise_gnn_relationship_trial_20260605/`.
+- Trial summary check - passed; `applied_mode = gnn`, `inference_ran = true`, `fallback_applied = false`, and `checkpoint_ready = true`.
+- XML/stat comparison against `runs/demo/fur_elise_default_fullpage_stafffix_20260605/` - passed; the MusicXML files are byte-identical with SHA256 `E97ECC091AAB109B7FC2C58C1D17DB661F5E93F0480C542489C0F2866EFCC126`.
+
+Generated artifacts:
+
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/image(305)_notes.musicxml`.
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/image(305)_notes.mid`.
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/image(305)_notes_overlay.png`.
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/image(305)_notes.json`.
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/gnn_trial_summary.json`.
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/relationships.json`.
+- `runs/demo/fur_elise_gnn_relationship_trial_20260605/detector_payload.json`.
+
+What is complete:
+
+- The legacy MUSCIMA GNN checkpoint was tested on the Fur Elise detector payload after the staff fix.
+- The relationship runtime produced `695` relationships: `641` `stem_notehead` relationships and `54` `beam_notegroup` relationships.
+- The extractor still reports `9` staff systems, `256` note events, `0` stem-confirmed notes, `3` dotted notes, and `36` MusicXML `<alter>` tags.
+
+What is blocked:
+
+- The GNN trial did not improve the Fur Elise MusicXML. The local note-extraction writer still builds MusicXML directly from detected notes and heuristic rhythm, and does not consume graph relationships to rewrite durations, voices, measures, or beams.
+- The detector payload for this Fur Elise page has no actual `stem` class detections, so the emitted `stem_notehead` relationships are not sufficient evidence that stems were solved on the uploaded image.
+
+Next exact step:
+
+- Implement a tested rhythm-integration layer that consumes detector/GNN beam, flag, dot, and stem evidence before MusicXML export, or first wire tiled/thin-symbol inference into the local note-extraction CLI so true stem boxes exist on full-page demo images.
+
 Current state:
 
 - V2 foundation is implemented.

@@ -8,6 +8,8 @@ The current detector artifact is ready for integration work, but the API still u
 
 The local note-extraction CLI now has a pinned default full-page demo checkpoint. When `--checkpoint` is omitted, it first uses `artifacts/models/note_extraction_default_fullpage/best.pt`, a generated artifact copied from `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`. If that artifact is missing, the CLI falls back to the source run checkpoint and then to the original M3 model artifact. The tiled stem pilot remains metric evidence for tiled validation and is not the default full-page demo checkpoint.
 
+Fur Elise has also been tried through the legacy GNN relationship runtime after the staff fix. The trial artifact is `runs/demo/fur_elise_gnn_relationship_trial_20260605/`; it reports `applied_mode = gnn`, `inference_ran = true`, `fallback_applied = false`, `695` relationships, `9` staff systems, and `256` note events. It did not improve the generated MusicXML: the GNN-trial MusicXML is byte-identical to the staff-fixed MusicXML because the local note-extraction writer does not yet consume relationships to rewrite rhythm, voices, beams, or measures.
+
 M7 improved the best validation detector configuration first by correcting dense-page inference settings for the selected YOLOv8m checkpoint, then by completing two real fine-tunes. The completed 1472 fine-tune run is `detection_136class_yolov8m_finetune_img1472_maxdet2000_v1`; its separate `F1@0.5` is `0.8082006373091581`, and its AP metrics are `mAP@0.5:0.95 = 0.6777474953487629` and `mAP@0.5 = 0.8226206920791271`.
 The completed follow-up run is `detection_136class_yolov8m_finetune_img1536_maxdet2000_v2`. It was resumed from the load-verified epoch-22 manual checkpoint, completed, then was re-finalized with the intended `imgsz=1536` and `max_det=2000` settings after an initial incorrect 1024/default-cap finalization was found. Corrected v2 `F1@0.5` is `0.8318461933668392`. Corrected v2 AP/threshold metrics are `mAP@0.5:0.95 = 0.707986237382828`, `mAP@0.5 = 0.8390674529615662`, `precision@0.5 = 0.8806427974719793`, and `recall@0.5 = 0.7881733414248919`.
 M7 also added a detector class-coverage audit: the model head preserves the 136-class taxonomy, but the local DeepScores labels support 115 classes across train/validation/test, validation measures 103 classes, and 21 taxonomy classes have zero local labels. The best completed v2 fine-tune still leaves `stem = 0.0` AP and only modest `ledgerLine = 0.01106603897644983`, so rhythm extraction remains limited by thin-symbol detection.
@@ -367,6 +369,7 @@ Important end-to-end caveat:
 - Passed: Fur Elise input `C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\image(305).png` was run through the local default note-extraction CLI.
 - Passed after staff detection fix: corrected Fur Elise artifact under `runs/demo/fur_elise_default_fullpage_stafffix_20260605/` detects all 9 visible staff systems, writes 256 note events, 3 detector-confirmed dotted notes, 36 MusicXML `<alter>` tags, MusicXML, MIDI, JSON, and overlay.
 - Passed: compact low-resolution staff regression tests added; `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest tests\test_note_extraction_demo.py tests\test_note_extraction_cli.py -q` passed with 11 tests.
+- Passed with no XML improvement: Fur Elise GNN relationship trial under `runs/demo/fur_elise_gnn_relationship_trial_20260605/` ran `applied_mode = gnn`, produced 695 relationships, and wrote MusicXML/MIDI/JSON/overlay artifacts; comparison showed the MusicXML is byte-identical to `runs/demo/fur_elise_default_fullpage_stafffix_20260605/image(305)_notes.musicxml`.
 
 ## Milestone Tracker
 
@@ -400,10 +403,11 @@ Important end-to-end caveat:
 ## Next Actions
 
 1. If full-page uploaded-image quality is the priority, implement and test a full-page tiled-inference merger for the local note-extraction CLI so the tiled stem pilot can contribute thin-symbol detections without losing full-page notehead/staff context.
-2. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
-3. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
-4. Keep the tiled result labeled as tiled-validation pilot evidence unless it is separately evaluated on the original full-page validation split.
-5. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
+2. Add a tested rhythm-integration layer before MusicXML export; the Fur Elise GNN trial proved relationship inference can run, but those relationships currently do not change exported durations or notation.
+3. Decide whether the completed tiled pilot should be evaluated back on the original full-page validation split, or whether to launch a longer/full tiled run from the pilot `best.pt`.
+4. Keep test-set detector metrics untouched until the final model and inference configuration are frozen.
+5. Keep the tiled result labeled as tiled-validation pilot evidence unless it is separately evaluated on the original full-page validation split.
+6. After detector metrics are frozen, return to M6 public deployment or move to M8 final grading package depending on professor priorities.
 
 ## Roadmap
 
