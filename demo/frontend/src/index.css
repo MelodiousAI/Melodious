@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: 30 25% 97%;
+  --foreground: 20 14% 10%;
+
+  --card: 36 28% 96%;
+  --card-foreground: 20 14% 10%;
+
+  --popover: 30 20% 99%;
+  --popover-foreground: 20 14% 10%;
+
+  --primary: 38 75% 38%;
+  --primary-foreground: 40 30% 97%;
+
+  --secondary: 30 15% 93%;
+  --secondary-foreground: 20 14% 20%;
+
+  --muted: 30 10% 93%;
+  --muted-foreground: 20 8% 48%;
+
+  --accent: 30 20% 90%;
+  --accent-foreground: 20 14% 15%;
+
+  --destructive: 0 60% 48%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 30 15% 87%;
+  --input: 30 15% 87%;
+  --ring: 38 75% 38%;
+
+  --radius: 0.75rem;
+
+  --success: 145 40% 38%;
+  --success-foreground: 145 30% 95%;
+  --gold: 38 75% 38%;
+  --gold-soft: 38 50% 85%;
+}
+
+@theme {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-gold: hsl(var(--gold));
+  --color-gold-soft: hsl(var(--gold-soft));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: "Inter", system-ui, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+midi-player {
+  --color: #fef3c7;
+  --background: #1c1917;
+  --hover-color: #fde68a;
+  --text-color: #fafaf9;
+  width: 100%;
+}

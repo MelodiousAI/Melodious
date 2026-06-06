@@ -1,0 +1,23 @@
+{
+  "page_count": 5,
+  "node_count": 1885,
+  "edge_count": 89912,
+  "stem_notehead_count": 3596,
+  "beam_notegroup_count": 660,
+  "slur_phrase_count": 522,
+  "tie_sustained_count": 106,
+  "no_relation_count": 85028,
+  "edge_type_vocabulary": [
+    "knn",
+    "same_staff_local",
+    "vertical_overlap",
+    "horizontal_neighbor"
+  ],
+  "edge_label_vocabulary": [
+    "no_relation",
+    "stem_notehead",
+    "beam_notegroup",
+    "slur_phrase",
+    "tie_sustained"
+  ]
+}
