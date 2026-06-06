@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Headphones, Download, Repeat, Gauge, Piano } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Headphones, Download, Repeat, Gauge, Piano, Loader2 } from 'lucide-react'
 import { artifactUrl } from '../lib/api'
 
 interface Props {
@@ -15,7 +15,22 @@ const BASE_BPM = 96
 export function PlaybackPanel({ jobId, instrument, instruments, onInstrument }: Props) {
   const [multiplier, setMultiplier] = useState(1)
   const [loop, setLoop] = useState(false)
+  const [midiReady, setMidiReady] = useState(false)
   const tempoBpm = Math.round(BASE_BPM * multiplier)
+
+  useEffect(() => {
+    let cancelled = false
+    import('html-midi-player')
+      .then(() => {
+        if (!cancelled) setMidiReady(true)
+      })
+      .catch(() => {
+        if (!cancelled) setMidiReady(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const midiSrc = useMemo(
     () => artifactUrl(jobId, 'midi', { instrument, tempoBpm }),
@@ -39,15 +54,23 @@ export function PlaybackPanel({ jobId, instrument, instruments, onInstrument }: 
       <div className="panel-body">
         <div className="playback-body">
           <div className="midi-frame">
-            {/* key forces a clean reload of the web component when audio source changes */}
-            <midi-player
-              key={midiSrc}
-              src={midiSrc}
-              sound-font={SOUND_FONT}
-              visualizer={`#${visualizerId}`}
-              loop={loop || undefined}
-            />
-            <midi-visualizer id={visualizerId} type="piano-roll" src={midiSrc} />
+            {midiReady ? (
+              <>
+                {/* key forces a clean reload of the web component when audio source changes */}
+                <midi-player
+                  key={midiSrc}
+                  src={midiSrc}
+                  sound-font={SOUND_FONT}
+                  visualizer={`#${visualizerId}`}
+                  loop={loop || undefined}
+                />
+                <midi-visualizer id={visualizerId} type="piano-roll" src={midiSrc} />
+              </>
+            ) : (
+              <div className="osmd-fallback">
+                <Loader2 size={18} className="spin-ic" /> Loading MIDI player...
+              </div>
+            )}
           </div>
 
           <div className="play-controls">
