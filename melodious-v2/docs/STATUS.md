@@ -6,6 +6,8 @@ M7 - Detector Metric Improvement is active. M6 - AWS Public Demo remains deploym
 
 The current detector artifact is ready for integration work, but the API still uses `heuristic_bootstrap` for uploaded images. A separate local clean-sheet note extraction demo now exists at `scripts/extract_notes_from_image.py`; it snapshots a YOLO checkpoint, detects noteheads on CPU, estimates treble-clef pitch from staff geometry, applies detected key-signature and explicit-accidental symbols, and writes actual note JSON, overlay, MusicXML, and MIDI artifacts. This demo path is not a metric run and is not yet wired into the FastAPI upload route.
 
+The app-build branch audit is now recorded in `docs/APP_BUILD_AUDIT.md`. The strongest historical product UI/backend source is `caba712` / `origin/hassan/week-5`, which contains the polished upload page, workspace page, MIDI player component, and legacy `/product/transcribe-image` route. The current `phase-04-assembly` V2 branch remains the correct implementation base because it contains the current contracts, note-extraction CLI, GNN integration, metrics, and documentation. The exact next product-app step is to add a V2 multipart `/product/transcribe-image` endpoint that calls `melodious_v2.omr.note_extraction`, persists upload artifacts, and feeds a richer React workspace.
+
 The local note-extraction CLI now has a pinned default full-page demo checkpoint. When `--checkpoint` is omitted, it first uses `artifacts/models/note_extraction_default_fullpage/best.pt`, a generated artifact copied from `runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt`. If that artifact is missing, the CLI falls back to the source run checkpoint and then to the original M3 model artifact. The tiled stem pilot remains metric evidence for tiled validation and is not the default full-page notehead checkpoint.
 
 The local note-extraction CLI now also auto-detects `artifacts/models/note_extraction_tiled_stem_pilot/best.pt`, a generated artifact copied from the completed tiled pilot `best.pt`, and uses it as a second tiled thin-symbol pass for stems, beams, flags, and explicit accidentals. Tiled augmentation-dot detections are disabled by default because they produced many false dotted notes on Fur Elise before that guard was added. If `..\outputs\gnn_checkpoint.pt` exists, the CLI runs the legacy GNN relationship adapter and consumes `stem_notehead` and `beam_notegroup` relationships during rhythm inference before MusicXML export.
@@ -38,6 +40,7 @@ The 2026-06-04 GPU speed check found that the tiled pilot slowed to about `0.8 i
 - Versioned detector payload contract generated at `docs/detector_payload_v2.schema.json`.
 - Metric rules locked before training in `docs/METRICS.md`.
 - Local API/UI scaffold verified with sample transcription.
+- App-build branch audit added at `docs/APP_BUILD_AUDIT.md`, identifying the latest reusable product frontend/backend pieces and the missing V2 upload-to-extractor integration.
 - AWS deployment path selected: ECS Express Mode or ECS Fargate with ECR, S3, and CloudFront.
 - DeepScores 136-class manifest run generated under `runs/data/deepscores_136_manifest/`.
 - MUSCIMA graph page manifest run generated under `runs/data/muscima_graph_manifest/`.
