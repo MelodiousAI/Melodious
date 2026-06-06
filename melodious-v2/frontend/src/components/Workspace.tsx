@@ -17,9 +17,26 @@ interface Props {
   onInstrument: (value: string) => void
 }
 
+const containerVariants = {
+  initial: {},
+  animate: {
+    transition: {
+      staggerChildren: 0.08
+    }
+  }
+}
+
 const fade = {
-  initial: { opacity: 0, y: 18 },
-  animate: { opacity: 1, y: 0 },
+  initial: { opacity: 0, y: 22 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 70,
+      damping: 14
+    }
+  },
 }
 
 export function Workspace({ job, instrument, instruments, onInstrument }: Props) {
@@ -39,8 +56,13 @@ export function Workspace({ job, instrument, instruments, onInstrument }: Props)
   }, [job.musicxml_url])
 
   return (
-    <motion.div className="workspace" initial="initial" animate="animate" transition={{ staggerChildren: 0.06 }}>
-      <motion.div className="ws-head" variants={fade} transition={{ duration: 0.4 }}>
+    <motion.div 
+      className="workspace" 
+      variants={containerVariants}
+      initial="initial" 
+      animate="animate"
+    >
+      <motion.div className="ws-head" variants={fade}>
         <div>
           <span className="section-eyebrow">
             <CheckCircle2 size={12} style={{ verticalAlign: '-1px', marginRight: 6 }} />
@@ -54,41 +76,57 @@ export function Workspace({ job, instrument, instruments, onInstrument }: Props)
         </div>
       </motion.div>
 
-      <motion.div className="ws-grid" variants={fade} transition={{ duration: 0.45 }}>
+      <div className="ws-grid">
         <div className="col">
-          <ScoreViewer
-            originalUrl={absoluteUrl(job.original_image_url)}
-            overlayUrl={absoluteUrl(job.overlay_image_url)}
-          />
-          <EngravedScore musicXml={xml} />
-          <MusicXmlPanel musicXml={xml} downloadUrl={artifactUrl(job.job_id, 'musicxml', { download: true })} />
+          <motion.div variants={fade}>
+            <ScoreViewer
+              originalUrl={absoluteUrl(job.original_image_url)}
+              overlayUrl={absoluteUrl(job.overlay_image_url)}
+            />
+          </motion.div>
+          <motion.div variants={fade}>
+            <EngravedScore musicXml={xml} />
+          </motion.div>
+          <motion.div variants={fade}>
+            <MusicXmlPanel musicXml={xml} downloadUrl={artifactUrl(job.job_id, 'musicxml', { download: true })} />
+          </motion.div>
         </div>
 
         <div className="col">
-          <QualityPanel quality={job.quality} />
-          <PlaybackPanel
-            jobId={job.job_id}
-            instrument={instrument}
-            instruments={instruments}
-            onInstrument={onInstrument}
-          />
-          <CountsPanel counts={job.counts} />
-          <ProvenancePanel
-            provenance={job.model_provenance}
-            availability={job.model_availability}
-            keyFifths={job.key_fifths}
-            width={job.image_width}
-            height={job.image_height}
-          />
-          <ReviewPanel warnings={job.warnings} />
+          <motion.div variants={fade}>
+            <QualityPanel quality={job.quality} />
+          </motion.div>
+          <motion.div variants={fade}>
+            <PlaybackPanel
+              jobId={job.job_id}
+              instrument={instrument}
+              instruments={instruments}
+              onInstrument={onInstrument}
+            />
+          </motion.div>
+          <motion.div variants={fade}>
+            <CountsPanel counts={job.counts} />
+          </motion.div>
+          <motion.div variants={fade}>
+            <ProvenancePanel
+              provenance={job.model_provenance}
+              availability={job.model_availability}
+              keyFifths={job.key_fifths}
+              width={job.image_width}
+              height={job.image_height}
+            />
+          </motion.div>
+          <motion.div variants={fade}>
+            <ReviewPanel warnings={job.warnings} />
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div variants={fade} transition={{ duration: 0.45 }}>
+      <motion.div variants={fade}>
         <NoteTable events={job.note_events} />
       </motion.div>
 
-      <motion.div variants={fade} transition={{ duration: 0.45 }}>
+      <motion.div variants={fade}>
         <Downloads job={job} instrument={instrument} />
       </motion.div>
     </motion.div>

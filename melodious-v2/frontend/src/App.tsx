@@ -112,6 +112,9 @@ export function App() {
   return (
     <div className="app">
       <div className="app-bg" />
+      <div className="glowing-orb orb-1" />
+      <div className="glowing-orb orb-2" />
+      <div className="glowing-orb orb-3" />
       <TopBar
         availability={models?.availability ?? null}
         onReset={reset}

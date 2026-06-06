@@ -54,12 +54,29 @@ export function UploadHero({ samples, instrument, instruments, onInstrument, onF
           graph assembly, and export — then shows you the overlay, engraved score, audio, and every
           extracted note.
         </p>
+
+        <div className="animated-staff">
+          <div className="staff-line" />
+          <div className="staff-line" />
+          <div className="staff-line" />
+          <div className="staff-line" />
+          <div className="staff-line" />
+          <div className="floating-note note-1" />
+          <div className="floating-note note-2" />
+        </div>
+
         <div className="hero-points">
-          {POINTS.map((point) => (
-            <div className="hero-point" key={point.text}>
+          {POINTS.map((point, idx) => (
+            <motion.div 
+              className="hero-point" 
+              key={point.text}
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.15 + idx * 0.08, duration: 0.4 }}
+            >
               <span className="ic">{point.ic}</span>
               <span>{point.text}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -93,8 +110,12 @@ export function UploadHero({ samples, instrument, instruments, onInstrument, onF
           onDrop={handleDrop}
         >
           <div className="dropzone-inner">
-            <div className="upload-orb float">
-              <UploadCloud size={34} />
+            <div className="upload-orb-container">
+              <div className="orb-pulse" />
+              <div className="orb-pulse orb-pulse-2" />
+              <div className="upload-orb float">
+                <UploadCloud size={34} />
+              </div>
             </div>
             <h3>Drop a score image here</h3>
             <p>PNG, JPG or WEBP · single page works best</p>
@@ -128,13 +149,18 @@ export function UploadHero({ samples, instrument, instruments, onInstrument, onF
             </div>
           </div>
           <div className="sample-grid">
-            {samples.map((sample) => (
-              <button
+            {samples.map((sample, idx) => (
+              <motion.button
                 key={sample.sample_id}
                 className="sample-card"
                 disabled={busy || !sample.available}
                 onClick={() => onSample(sample.sample_id)}
                 title={sample.available ? sample.description : 'Sample image not present on this host'}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={sample.available ? { y: -4, scale: 1.02 } : {}}
+                whileTap={sample.available ? { scale: 0.98 } : {}}
+                transition={{ delay: 0.2 + idx * 0.05, duration: 0.35 }}
               >
                 <div className="s-top">
                   <span className="s-ic">
@@ -148,7 +174,7 @@ export function UploadHero({ samples, instrument, instruments, onInstrument, onF
                   {sample.available && <Play size={15} style={{ color: 'var(--accent-2)' }} />}
                 </div>
                 <div className="s-desc">{sample.description}</div>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
