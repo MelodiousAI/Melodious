@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, RotateCcw } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { absoluteUrl, artifactUrl, type ProductTranscription } from '../lib/api'
+import { useTranscription } from '../lib/transcription-context'
 import { ScoreViewer } from './ScoreViewer'
 import { EngravedScore } from './EngravedScore'
 import { MusicXmlPanel } from './MusicXmlPanel'
@@ -41,6 +43,8 @@ const fade = {
 
 export function Workspace({ job, instrument, instruments, onInstrument }: Props) {
   const [xml, setXml] = useState<string | null>(null)
+  const { reset } = useTranscription()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const url = absoluteUrl(job.musicxml_url)
@@ -70,10 +74,19 @@ export function Workspace({ job, instrument, instruments, onInstrument }: Props)
           </span>
           <h2>{job.filename ?? 'Score transcription'}</h2>
           <div className="file">
-            {job.counts.notes} notes · {job.counts.staff_systems} staff systems · {job.counts.relationship_count} GNN
-            links · {job.model_provenance.extractor_mode}
+            {job.counts.notes} notes · {job.counts.staff_systems} staff systems · {job.counts.relationship_count}{' '}
+            symbol links · {job.model_provenance.extractor_mode}
           </div>
         </div>
+        <button
+          className="btn btn--ghost btn--sm"
+          onClick={() => {
+            reset()
+            navigate('/')
+          }}
+        >
+          <RotateCcw size={14} /> New score
+        </button>
       </motion.div>
 
       <div className="ws-grid">

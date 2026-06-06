@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { motion } from 'framer-motion'
 import {
   Gauge,
   ListChecks,
@@ -15,6 +16,7 @@ import type {
   ProductCounts,
   QualitySummary,
 } from '../lib/api'
+import { CountUp } from './CountUp'
 
 const QUALITY_COLORS: Record<string, string> = {
   high: 'var(--good)',
@@ -35,12 +37,15 @@ export function QualityPanel({ quality }: { quality: QualitySummary }) {
       </div>
       <div className="panel-body">
         <div className="quality">
-          <div
+          <motion.div
             className="quality-ring"
             style={{ '--val': pct, '--col': color } as CSSProperties}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 80, damping: 14 }}
           >
             <span>{pct}</span>
-          </div>
+          </motion.div>
           <div className="quality-meta">
             <h4>{quality.headline}</h4>
             <ul className="quality-reasons">
@@ -67,7 +72,7 @@ const COUNT_FIELDS: { key: keyof ProductCounts; label: string }[] = [
   { key: 'stem_confirmed_notes', label: 'Stem-confirmed' },
   { key: 'slur_starts', label: 'Slurs' },
   { key: 'tie_starts', label: 'Ties' },
-  { key: 'relationship_count', label: 'GNN links' },
+  { key: 'relationship_count', label: 'Links' },
 ]
 
 export function CountsPanel({ counts }: { counts: ProductCounts }) {
@@ -82,7 +87,9 @@ export function CountsPanel({ counts }: { counts: ProductCounts }) {
         <div className="counts-grid">
           {COUNT_FIELDS.map((field) => (
             <div className="count-card" key={field.key}>
-              <div className="v">{counts[field.key]}</div>
+              <div className="v">
+                <CountUp value={counts[field.key]} />
+              </div>
               <div className="k">{field.label}</div>
             </div>
           ))}
@@ -112,22 +119,21 @@ export function ProvenancePanel({
   height: number | null
 }) {
   const stages = [
-    { on: availability.full_page_detector, label: 'Full-page detector', icon: <Cpu size={13} /> },
-    { on: availability.tiled_detector, label: 'Tiled thin-symbol pass', icon: <Layers size={13} /> },
-    { on: availability.gnn, label: 'GNN relationships', icon: <Workflow size={13} /> },
+    { on: availability.full_page_detector, label: 'Symbol detection', icon: <Cpu size={13} /> },
+    { on: availability.tiled_detector, label: 'Fine detail pass', icon: <Layers size={13} /> },
+    { on: availability.gnn, label: 'Relationship assembly', icon: <Workflow size={13} /> },
   ]
   return (
     <div className="panel">
       <div className="panel-head">
         <div className="ttl">
-          <Cpu className="ic" size={17} /> Model provenance
+          <Cpu className="ic" size={17} /> Processing details
         </div>
       </div>
       <div className="panel-body">
-        <div className="badge-row" style={{ marginBottom: 14 }}>
+        <div className="stage-badges">
           {stages.map((stage) => (
-            <span key={stage.label} className={`model-badge ${stage.on ? 'on' : ''}`}>
-              <span className="dot" />
+            <span key={stage.label} className={`stage-badge${stage.on ? ' on' : ''}`}>
               {stage.icon}
               {stage.label}
             </span>
@@ -135,7 +141,7 @@ export function ProvenancePanel({
         </div>
         <div className="kv">
           <div className="kv-row">
-            <span className="k">Extractor mode</span>
+            <span className="k">Mode</span>
             <span className="v">{provenance.extractor_mode}</span>
           </div>
           <div className="kv-row">
@@ -143,15 +149,15 @@ export function ProvenancePanel({
             <span className="v">{provenance.assembly_mode}</span>
           </div>
           <div className="kv-row">
-            <span className="k">Detector ckpt</span>
+            <span className="k">Detector</span>
             <span className="v">{shortPath(provenance.detector_checkpoint)}</span>
           </div>
           <div className="kv-row">
-            <span className="k">Tiled ckpt</span>
+            <span className="k">Fine pass</span>
             <span className="v">{shortPath(provenance.thin_symbol_checkpoint)}</span>
           </div>
           <div className="kv-row">
-            <span className="k">GNN ckpt</span>
+            <span className="k">Assembly model</span>
             <span className="v">{shortPath(provenance.gnn_checkpoint)}</span>
           </div>
           <div className="kv-row">
@@ -195,8 +201,8 @@ export function ReviewPanel({ warnings }: { warnings: string[] }) {
         <div className="disclaimer" style={{ marginTop: 14 }}>
           <Info className="ic" size={15} />
           <span>
-            Pitch is estimated from treble-clef staff geometry and rhythm is heuristic. This is a demo
-            transcription, not an official accuracy metric.
+            Pitch is estimated from treble-clef staff geometry and rhythm is heuristic. This is a demo transcription,
+            not an official accuracy metric.
           </span>
         </div>
       </div>

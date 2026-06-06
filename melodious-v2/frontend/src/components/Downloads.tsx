@@ -29,7 +29,7 @@ export function Downloads({ job, instrument }: Props) {
     {
       name: 'relationships',
       label: 'Relationships',
-      sub: 'GNN edges',
+      sub: 'Symbol links',
       icon: <Network size={18} />,
       show: !!job.relationships_url,
     },
