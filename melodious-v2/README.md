@@ -8,6 +8,9 @@ Melodious V2 is a clean rebuild of the original OMR project. It targets a full-g
 - Strict metric registry so `mAP`, `F1`, precision, and recall are never mixed.
 - Versioned detector payload contract with taxonomy, run id, model id, and artifact hash provenance.
 - FastAPI product service with sample and upload transcription routes.
+- Real product upload app (`/product/*`) that runs the trained YOLO + tiled + GNN
+  note-extraction path on uploaded images and returns overlay, MusicXML, MIDI,
+  note table, model provenance, and warnings. See "Product App" below.
 - Checkpoint-gated legacy GNN assembly runtime with explicit fallback metadata.
 - Local YOLO-backed clean-sheet note extraction demo script for testing actual
   note events and playable MIDI before the upload API is fully rewired.
@@ -75,6 +78,52 @@ npm run dev
 ```
 
 The frontend expects `VITE_API_BASE_URL=http://127.0.0.1:8000` by default.
+
+## Product App (Upload -> MusicXML / MIDI)
+
+The product app is the real upload-to-transcription experience. It runs the
+trained V2 note-extraction path (`src/melodious_v2/omr/note_extraction.py`,
+`extract_notes_from_image`) — full-page YOLO notehead detection, the tiled
+thin-symbol pass for stems/beams/flags, and the legacy GNN for relationship-aware
+rhythm — then returns persisted artifacts and a rich result payload.
+
+Run it locally:
+
+```powershell
+# Terminal 1 - backend
+cd melodious-v2
+$env:PYTHONPATH="src"
+python scripts/run_api.py        # http://127.0.0.1:8000
+
+# Terminal 2 - frontend
+cd melodious-v2/frontend
+npm install
+npm run dev                      # http://127.0.0.1:5173
+```
+
+Open `http://127.0.0.1:5173`, drag in a score image (or pick a demo sample), and
+watch the live pipeline. The result workspace shows the original/overlay compare
+viewer, an engraved score (OpenSheetMusicDisplay), MusicXML with copy/download,
+in-browser MIDI playback with instrument + tempo controls, a searchable
+note/event table, a model-availability badge, model provenance, a confidence
+summary, and review notes.
+
+Key endpoints:
+
+- `POST /product/transcribe-image` — multipart image upload, starts a background job.
+- `POST /product/transcribe-sample` — transcribe a curated demo sample.
+- `GET /product/jobs/{job_id}` — poll job status, stage, progress, and full result.
+- `GET /product/jobs/{job_id}/artifacts/{name}` — serve `original`, `overlay`,
+  `musicxml`, `midi`, `notes`, `detector_payload`, `relationships`, `bundle`
+  (supports `?download=true`, `?instrument=`, `?tempo_bpm=`).
+- `GET /product/models` — model-artifact availability and instrument list.
+- `GET /product/samples` — curated demo samples available on the host.
+
+Generated upload artifacts are written under the ignored app run directory
+`runs/app/uploads/{job_id}/` (override with `MELODIOUS_APP_UPLOAD_ROOT`). Model
+checkpoints are resolved automatically and can be overridden with
+`MELODIOUS_MODEL_ROOT` and `MELODIOUS_GNN_CHECKPOINT`. Uploaded transcriptions are
+labeled demo transcriptions, not official metric runs.
 
 ## Detection Training Path
 

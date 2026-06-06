@@ -127,3 +127,22 @@ Until the product endpoint is implemented, the app that can be run locally is th
 
 Important caveat: the current browser upload path is not the full trained YOLO/tiled/GNN extraction path yet. It is useful for validating the API/frontend shell, not for judging final transcription quality.
 
+## Implementation Update (2026-06-06)
+
+The recommended implementation order above is now done for the core product app. The browser upload path runs the real trained extraction pipeline.
+
+What was built:
+
+- Backend product contract: `src/melodious_v2/api/product_models.py` (typed `ProductTranscription`, `ProductCounts`, `ModelProvenance`, `ModelAvailability`, `QualitySummary`, `NoteEvent`, `ProductSample`).
+- Backend product service: `src/melodious_v2/api/product_service.py`. It saves uploads under `runs/app/uploads/{job_id}/`, runs `melodious_v2.omr.note_extraction.extract_notes_from_image` in a background worker thread (serialized by a small semaphore), resolves the default full-page/tiled/GNN checkpoints (with `MELODIOUS_MODEL_ROOT` / `MELODIOUS_GNN_CHECKPOINT` / `MELODIOUS_APP_UPLOAD_ROOT` overrides), and serves persisted artifacts. It also re-renders MIDI per selected instrument + tempo.
+- Backend routes added in `src/melodious_v2/api/app.py`: `POST /product/transcribe-image`, `POST /product/transcribe-sample`, `GET /product/jobs/{job_id}`, `GET /product/jobs/{job_id}/artifacts/{name}`, `GET /product/models`, `GET /product/samples`. Existing `/health`, `/version`, `/samples`, `/transcriptions` routes were left intact.
+- `extract_notes_from_image` gained an optional, side-effect-free `progress_callback` so the API can report honest pipeline stages.
+- Frontend rebuilt into a full app (`frontend/src/App.tsx` plus `frontend/src/components/*` and `frontend/src/lib/*`) using `lucide-react`, `framer-motion`, `html-midi-player`, and `opensheetmusicdisplay`.
+- Tests: `tests/test_product_api.py` covers the upload lifecycle, artifact serving, instrument re-render, and validation using the offline CV fallback (checkpoint resolvers patched to `None`).
+
+What is intentionally still pending:
+
+- The real path runs CPU PyTorch via ultralytics (about a minute per page), not the ONNX detector adapter.
+- Jobs and the result store are in-process memory; multi-worker/horizontal deployments would need shared storage.
+- The legacy `/transcriptions` route still uses `heuristic_bootstrap`.
+

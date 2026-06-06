@@ -2031,8 +2031,24 @@ def extract_notes_from_image(
     use_cv_fallback: bool = True,
     use_cv_dot_fallback: bool | None = None,
     title: str | None = None,
+    progress_callback: Callable[[str, float], None] | None = None,
 ) -> ExtractionResult:
-    """Extract approximate notes and write JSON, overlay, MusicXML, and MIDI."""
+    """Extract approximate notes and write JSON, overlay, MusicXML, and MIDI.
+
+    ``progress_callback`` is an optional ``(stage, fraction)`` hook used by the
+    product API to report coarse, honest pipeline stages while extraction runs.
+    Stage callbacks never affect extraction output and any callback error is
+    swallowed so progress reporting can never break a transcription.
+    """
+
+    def _emit(stage: str, fraction: float) -> None:
+        if progress_callback is None:
+            return
+        try:
+            progress_callback(stage, max(0.0, min(1.0, float(fraction))))
+        except Exception:  # pragma: no cover - progress reporting must never break extraction
+            pass
+
     image_path = Path(image_path)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -2043,8 +2059,10 @@ def extract_notes_from_image(
     overlay_path = output_dir / f"{stem}_notes_overlay.png"
     detector_payload_json = output_dir / f"{stem}_detector_payload.json"
     relationships_json = output_dir / f"{stem}_relationships.json"
+    _emit("reading_image", 0.02)
     image = read_grayscale_image(image_path)
     height, width = image.shape[:2]
+    _emit("detecting_staff", 0.06)
     staff_systems = detect_staff_systems(image)
     warnings: list[str] = []
 
@@ -2060,6 +2078,7 @@ def extract_notes_from_image(
     thin_checkpoint_for_result: str | None = None
     if checkpoint_path is not None:
         try:
+            _emit("detecting_symbols", 0.15)
             checkpoint_source = Path(checkpoint_path)
             checkpoint_for_inference = checkpoint_source
             if snapshot_live_checkpoint:
@@ -2093,6 +2112,7 @@ def extract_notes_from_image(
 
     if thin_symbol_checkpoint_path is not None:
         try:
+            _emit("detecting_thin_symbols", 0.45)
             thin_checkpoint_source = Path(thin_symbol_checkpoint_path)
             thin_checkpoint_for_inference = thin_checkpoint_source
             if snapshot_live_checkpoint:
@@ -2175,6 +2195,7 @@ def extract_notes_from_image(
     detector_payload: Any | None = None
     if gnn_checkpoint_path is not None and candidates:
         try:
+            _emit("building_graph", 0.78)
             assembly_mode, rhythm_relationships, detector_payload = assemble_candidate_relationships(
                 candidates + rhythm_symbols,
                 image_width=width,
@@ -2186,6 +2207,7 @@ def extract_notes_from_image(
         except Exception as exc:  # pragma: no cover - runtime dependency path
             warnings.append(f"GNN relationship assembly failed: {exc}")
 
+    _emit("assembling_events", 0.90)
     events = events_from_candidates(
         candidates,
         staff_systems,
@@ -2203,6 +2225,7 @@ def extract_notes_from_image(
 
     run_title = title or stem
 
+    _emit("exporting", 0.94)
     write_midi(events, midi_path)
     write_musicxml(events, musicxml_path, title=run_title, key_fifths=key_fifths)
     write_overlay(image, staff_systems, events, overlay_path)
@@ -2253,6 +2276,7 @@ def extract_notes_from_image(
         warnings=warnings,
     )
     notes_json.write_text(json.dumps(result_to_dict(result), indent=2), encoding="utf-8")
+    _emit("complete", 1.0)
     return result
 
 

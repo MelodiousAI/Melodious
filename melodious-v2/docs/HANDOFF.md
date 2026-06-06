@@ -59,7 +59,51 @@ App-build branch audit:
 - Best old product backend source: `caba712`, especially `src/api/product_models.py`, `src/api/product_routes.py`, and `src/api/product_service.py`.
 - Best current implementation base remains `phase-04-assembly` because it has the current V2 contracts, latest note-extraction CLI, GNN integration, metrics, docs, and tests.
 - Do not blindly copy the old product branch into V2. Port the UI ideas and adapt the API contract to `src/melodious_v2`.
-- Exact next app step: add a V2 multipart `/product/transcribe-image` endpoint that saves the upload, calls `melodious_v2.omr.note_extraction`, persists MusicXML/MIDI/overlay/JSON artifacts under an ignored run directory, and returns a typed product response consumed by a richer React workspace.
+- DONE (2026-06-06): the V2 multipart `/product/transcribe-image` endpoint now exists. It saves the upload under `runs/app/uploads/{job_id}/`, calls `melodious_v2.omr.note_extraction.extract_notes_from_image`, persists MusicXML/MIDI/overlay/JSON artifacts, and returns a typed `ProductTranscription` consumed by the rebuilt React workspace. See the "2026-06-06 - Agent Handoff - Product Upload App" entry below and `docs/APP_BUILD_AUDIT.md` (Implementation Update). Backend: `src/melodious_v2/api/product_models.py`, `product_service.py`, `app.py`. Frontend: `frontend/src/App.tsx` + `frontend/src/components/*`.
+
+## 2026-06-06 - Agent Handoff - Product Upload App
+
+Milestone worked:
+
+- Product app: wire the real V2 note-extraction path into a polished upload-to-MusicXML/MIDI web app.
+
+Files changed:
+
+- `src/melodious_v2/api/product_models.py` (new) - typed product contract.
+- `src/melodious_v2/api/product_service.py` (new) - background-job upload service, checkpoint resolution, artifact serving, instrument/tempo MIDI re-render, curated samples.
+- `src/melodious_v2/api/app.py` - added `/product/*` routes; kept `/health`, `/version`, `/samples`, `/transcriptions`.
+- `src/melodious_v2/omr/note_extraction.py` - added optional `progress_callback(stage, fraction)`.
+- `scripts/run_api.py` - scoped uvicorn reload to `src` only.
+- `requirements.txt` - added `python-multipart`.
+- `tests/test_product_api.py` (new) - product upload lifecycle + artifact tests (offline CV fallback).
+- `frontend/` - rebuilt into a full app: `src/App.tsx`, `src/main.tsx`, `src/styles.css`, `src/lib/api.ts`, `src/lib/stages.ts`, `src/custom-elements.d.ts`, and `src/components/*` (TopBar, UploadHero, ProgressView, ScoreViewer, EngravedScore, MusicXmlPanel, PlaybackPanel, InsightPanels, NoteTable, Downloads, Workspace). Added deps `lucide-react`, `framer-motion`, `html-midi-player`, `opensheetmusicdisplay`.
+- `docs/STATUS.md`, `docs/APP_BUILD_AUDIT.md`, `README.md` - documented the product app.
+
+Commands run:
+
+- `..\.venv\Scripts\python.exe -m pip install python-multipart` - installed.
+- `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` - passed, 70 tests.
+- `cd frontend; npm install lucide-react framer-motion html-midi-player opensheetmusicdisplay` - added 248 packages.
+- `cd frontend; npm run build` - passed (bundle ~2.86 MB; large because of OSMD/magenta/tone, acceptable for local demo).
+- Live HTTP smoke: uploaded `sad_romance_clearer_smooth.png` to `POST /product/transcribe-image`, polled to `complete`, verified all artifact endpoints returned 200 with correct content types.
+
+Generated artifacts:
+
+- `runs/app/uploads/{job_id}/` per upload (ignored): `original.*`, `*_notes_overlay.png`, `*_notes.musicxml`, `*_notes.mid`, `*_notes.json`, `*_detector_payload.json`, `*_relationships.json`, `melodious_v2_result_bundle.zip`, plus instrument/tempo MIDI variants.
+
+What is complete:
+
+- Real upload path runs full-page YOLO + tiled thin-symbol + GNN extraction and returns counts, provenance, model availability, confidence summary, note-event table, warnings, and artifact URLs.
+- Live progress stages reported from the extractor; frontend shows a 5-step timeline, overlay/original compare viewer, engraved score, MusicXML copy/download, MIDI playback with instrument + tempo, searchable note table, and downloads.
+- Verified end-to-end: 9 staff systems, 196 notes, 182 stem-confirmed, 866 GNN relationships, `assembly_mode=gnn`, quality `high` for Sad Romance (demo transcription, not a metric run).
+
+What is blocked:
+
+- None for the core app. Real path uses CPU PyTorch (about a minute per page), not ONNX; jobs are in-process memory only; legacy `/transcriptions` route is still `heuristic_bootstrap`.
+
+Next exact step:
+
+- Optional: swap the CPU PyTorch detector for the exported ONNX adapter to cut latency, and/or persist jobs to shared storage for multi-worker deployment. Then resume M6 public deployment.
 
 ## 2026-06-06 - Agent Handoff - Espresso System/Dot Fix
 

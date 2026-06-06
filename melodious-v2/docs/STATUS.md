@@ -33,6 +33,17 @@ Final threshold metrics are `precision@0.5 = 0.9155509426073148`, `recall@0.5 = 
 
 The 2026-06-04 GPU speed check found that the tiled pilot slowed to about `0.8 it/s` while Windows was using the `Balanced` power plan. Switching to the built-in `High performance` power plan and setting the active training worker PID `14544` to `AboveNormal` priority raised live throughput to about `2.6-2.7 it/s`. The RTX 3080 Laptop GPU was observed at about 6.5 GB VRAM used out of 16 GB, around `1770 MHz`, `81 W`, and `86 C` after the fix. LM Studio GPU processes were present during training. After completion and stop verification, parent PID `6100` and worker PID `14544` were no longer running and `nvidia-smi` showed zero training VRAM.
 
+## Product App (Upload -> MusicXML/MIDI)
+
+A real product upload app now wires the trained note-extraction path into FastAPI and a polished React workspace. This is the demo-grade upload-to-transcription surface; it is explicitly labeled demo transcription, not an official metric run.
+
+- New backend modules `src/melodious_v2/api/product_models.py` and `src/melodious_v2/api/product_service.py` add a typed product contract and a background-job extraction service. The service resolves the default full-page, tiled thin-symbol, and GNN checkpoints, persists artifacts under the ignored `runs/app/uploads/{job_id}/`, and exposes counts, model provenance, model availability, a heuristic confidence summary, an ordered note-event list, and warnings.
+- New routes in `src/melodious_v2/api/app.py`: `POST /product/transcribe-image` (multipart `UploadFile`), `POST /product/transcribe-sample`, `GET /product/jobs/{job_id}`, `GET /product/jobs/{job_id}/artifacts/{name}` (original, overlay, musicxml, midi, notes, detector_payload, relationships, bundle; supports `download`, `instrument`, `tempo_bpm`), `GET /product/models`, and `GET /product/samples`. The existing `/health`, `/version`, `/samples`, and `/transcriptions` routes are unchanged.
+- `extract_notes_from_image` gained an optional `progress_callback(stage, fraction)` hook so the API reports honest pipeline stages (`detecting_symbols`, `detecting_thin_symbols`, `building_graph`, `assembling_events`, `exporting`, `complete`) without changing extraction output.
+- `python-multipart` was added to `requirements.txt` for browser uploads.
+- The React frontend was rebuilt from the minimal scaffold into a full app: drag/drop upload, curated demo gallery, live progress timeline, original/overlay compare viewer with zoom, OpenSheetMusicDisplay engraved score, MusicXML copy/download, in-browser MIDI playback (html-midi-player) with instrument + tempo controls and a piano-roll visualizer, searchable note/event table, model-availability badge, provenance panel, confidence summary, review-notes panel, downloads, and framer-motion animations. New frontend deps: `lucide-react`, `framer-motion`, `html-midi-player`, `opensheetmusicdisplay`.
+- Verified end-to-end over HTTP: uploading `sad_romance_clearer_smooth.png` returned `status=complete`, `extractor_mode=yolo_notehead_staff_pitch+tiled_thin_symbols`, `assembly_mode=gnn`, 9 staff systems, 196 notes, 182 stem-confirmed notes, 866 relationships, and every artifact endpoint served (overlay PNG, MusicXML, MIDI, notes JSON, detector payload JSON, relationships JSON, ZIP bundle). This is demo transcription evidence, not a metric run.
+
 ## Completed
 
 - Clean V2 project structure created.
@@ -415,7 +426,7 @@ Important end-to-end caveat:
 
 ## Active Blockers
 
-- API detector runtime is still bootstrap/heuristic for uploaded images; the new YOLOv8m ONNX artifact exists but is not yet used by a non-bootstrap detector adapter.
+- The legacy `/transcriptions` upload route still uses `heuristic_bootstrap`. The new `/product/transcribe-image` route uses the real trained YOLO + tiled + GNN note-extraction path instead, but it runs CPU PyTorch (ultralytics) rather than the ONNX detector adapter, so a full page takes roughly a minute and is still labeled demo transcription, not a metric run.
 - AWS resources are not provisioned from this workspace.
 - AWS CLI was not found by `Get-Command aws -ErrorAction SilentlyContinue`, so no ECR/ECS/S3/CloudFront deployment command was run locally.
 - Account-local AWS values are unavailable and must not be committed: region/profile, execution role ARN, task role ARN, subnet IDs, security group IDs, ALB target group/listener, S3 frontend bucket, CloudFront distribution ID, and public API host.

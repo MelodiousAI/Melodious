@@ -11,5 +11,8 @@ if __name__ == "__main__":
         host="127.0.0.1",
         port=8000,
         reload=True,
+        # Only watch source code so generated upload artifacts under runs/ never
+        # trigger reloads while a long extraction job is running.
+        reload_dirs=["src"],
     )
 
