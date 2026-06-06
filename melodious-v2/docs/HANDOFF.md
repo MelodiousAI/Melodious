@@ -61,6 +61,15 @@ App-build branch audit:
 - Do not blindly copy the old product branch into V2. Port the UI ideas and adapt the API contract to `src/melodious_v2`.
 - DONE (2026-06-06): the V2 multipart `/product/transcribe-image` endpoint now exists. It saves the upload under `runs/app/uploads/{job_id}/`, calls `melodious_v2.omr.note_extraction.extract_notes_from_image`, persists MusicXML/MIDI/overlay/JSON artifacts, and returns a typed `ProductTranscription` consumed by the rebuilt React workspace. See the "2026-06-06 - Agent Handoff - Product Upload App" entry below and `docs/APP_BUILD_AUDIT.md` (Implementation Update). Backend: `src/melodious_v2/api/product_models.py`, `product_service.py`, `app.py`. Frontend: `frontend/src/App.tsx` + `frontend/src/components/*`.
 
+Product-app hardening follow-up:
+
+- Fixed MIDI instrument switching in `src/melodious_v2/api/product_service.py`. The artifact route now regenerates MIDI whenever the requested instrument differs from the job's original instrument, including switching from Flute/Guitar/Violin back to Piano.
+- Added upload validation in `src/melodious_v2/api/product_service.py`: reject files above `MELODIOUS_APP_MAX_UPLOAD_MB` (default 20 MB), unreadable image bytes, and images too small for staff notation before starting a background extraction job.
+- Added regression coverage in `tests/test_product_api.py` for invalid `.png` bytes, oversized uploads, Flute MIDI program output, and switching back to Piano MIDI program output.
+- Lazy-loaded OpenSheetMusicDisplay in `frontend/src/components/EngravedScore.tsx` and html-midi-player in `frontend/src/components/PlaybackPanel.tsx`; removed the eager MIDI-player import from `frontend/src/main.tsx`; added `frontend/src/html-midi-player.d.ts`.
+- `frontend/vite.config.ts` now sets `chunkSizeWarningLimit = 1400` because score engraving and MIDI playback are intentional lazy feature chunks. The initial app chunk is about 359 KB after this split.
+- Verification: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` passed with 72 tests and one upstream `torch_geometric` warning. `cd frontend; npm run build` passed without Vite chunk warnings.
+
 ## 2026-06-06 - Agent Handoff - Product Upload App
 
 Milestone worked:

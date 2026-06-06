@@ -25,7 +25,10 @@ import time
 import uuid
 import zipfile
 from dataclasses import dataclass, field
+from io import BytesIO
 from pathlib import Path
+
+from PIL import Image, UnidentifiedImageError
 
 from melodious_v2.api.product_models import (
     ModelAvailability,
@@ -47,17 +50,17 @@ from melodious_v2.omr.note_extraction import (
 # melodious-v2 repository root: api -> melodious_v2 -> src -> melodious-v2
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
-ALLOWED_IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".tif", ".tiff"}
+ALLOWED_IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tif", ".tiff"}
 IMAGE_MEDIA_TYPES = {
     ".png": "image/png",
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
     ".webp": "image/webp",
     ".bmp": "image/bmp",
-    ".gif": "image/gif",
     ".tif": "image/tiff",
     ".tiff": "image/tiff",
 }
+DEFAULT_MAX_UPLOAD_MB = 20
 
 # General MIDI program numbers for the instrument selector. The default app
 # instrument is Piano, which is a more natural default than the extractor's
@@ -153,6 +156,31 @@ def model_availability_snapshot() -> dict[str, bool]:
 
 def midi_program_for_instrument(instrument: str | None) -> int:
     return INSTRUMENT_PROGRAMS.get(instrument or DEFAULT_INSTRUMENT, INSTRUMENT_PROGRAMS[DEFAULT_INSTRUMENT])
+
+
+def _max_upload_bytes() -> int:
+    raw = os.getenv("MELODIOUS_APP_MAX_UPLOAD_MB")
+    try:
+        mb = float(raw) if raw else DEFAULT_MAX_UPLOAD_MB
+    except ValueError:
+        mb = DEFAULT_MAX_UPLOAD_MB
+    return max(1, int(mb * 1024 * 1024))
+
+
+def _validate_uploaded_image(image_bytes: bytes) -> None:
+    """Reject malformed or oversized files before launching extraction."""
+    max_bytes = _max_upload_bytes()
+    if len(image_bytes) > max_bytes:
+        max_mb = max_bytes / (1024 * 1024)
+        raise ValueError(f"Uploaded image is too large. Maximum size is {max_mb:g} MB.")
+    try:
+        with Image.open(BytesIO(image_bytes)) as image:
+            width, height = image.size
+            image.verify()
+    except (UnidentifiedImageError, OSError, ValueError) as exc:
+        raise ValueError("Uploaded file is not a readable image.") from exc
+    if width < 16 or height < 16:
+        raise ValueError("Uploaded image is too small to contain readable staff notation.")
 
 
 def _pitch_label(step: str, alter: int, octave: int) -> str:
@@ -436,6 +464,7 @@ def start_image_transcription(
             f"Unsupported image type '{suffix or 'unknown'}'. "
             f"Supported types: {', '.join(sorted(ALLOWED_IMAGE_SUFFIXES))}."
         )
+    _validate_uploaded_image(image_bytes)
 
     job_id = f"job_{uuid.uuid4().hex[:12]}"
     job_dir = _upload_root() / job_id
@@ -547,7 +576,7 @@ def get_artifact_response(
     if name == "midi":
         want_instrument = instrument if instrument in INSTRUMENT_PROGRAMS else None
         want_tempo = int(tempo_bpm) if tempo_bpm and 20 <= int(tempo_bpm) <= 300 else None
-        needs_custom = (want_instrument and want_instrument != DEFAULT_INSTRUMENT) or (
+        needs_custom = (want_instrument and want_instrument != job.instrument) or (
             want_tempo and want_tempo != 96
         )
         if needs_custom:

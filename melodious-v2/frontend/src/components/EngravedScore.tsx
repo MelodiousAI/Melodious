@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
+import type { OpenSheetMusicDisplay as OpenSheetMusicDisplayInstance } from 'opensheetmusicdisplay'
 import { ScrollText, Loader2 } from 'lucide-react'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 
 export function EngravedScore({ musicXml }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
-  const osmdRef = useRef<OpenSheetMusicDisplay | null>(null)
+  const osmdRef = useRef<OpenSheetMusicDisplayInstance | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle')
 
   useEffect(() => {
@@ -19,6 +19,8 @@ export function EngravedScore({ musicXml }: Props) {
       setStatus('loading')
       try {
         if (!osmdRef.current && hostRef.current) {
+          const { OpenSheetMusicDisplay } = await import('opensheetmusicdisplay')
+          if (cancelled || !hostRef.current) return
           osmdRef.current = new OpenSheetMusicDisplay(hostRef.current, {
             autoResize: true,
             backend: 'svg',

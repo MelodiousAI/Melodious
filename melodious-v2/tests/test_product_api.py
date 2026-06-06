@@ -32,6 +32,14 @@ def _synthetic_staff_png() -> bytes:
     return buffer.getvalue()
 
 
+def _first_midi_program(midi_bytes: bytes) -> int | None:
+    """Return the first channel-0 program-change value from a tiny MIDI file."""
+    for index, value in enumerate(midi_bytes[:-1]):
+        if value == 0xC0:
+            return midi_bytes[index + 1]
+    return None
+
+
 class ProductApiTests(unittest.TestCase):
     def setUp(self) -> None:
         self.client = TestClient(app)
@@ -83,6 +91,23 @@ class ProductApiTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
+    def test_invalid_image_bytes_are_rejected_before_extraction(self) -> None:
+        response = self.client.post(
+            "/product/transcribe-image",
+            files={"file": ("notes.png", b"not an image", "image/png")},
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("readable image", response.json()["detail"])
+
+    def test_oversized_upload_is_rejected_before_extraction(self) -> None:
+        with patch.object(product_service, "_max_upload_bytes", return_value=10):
+            response = self.client.post(
+                "/product/transcribe-image",
+                files={"file": ("staff.png", _synthetic_staff_png(), "image/png")},
+            )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("too large", response.json()["detail"])
+
     def test_unknown_job_returns_404(self) -> None:
         self.assertEqual(self.client.get("/product/jobs/job_missing").status_code, 404)
 
@@ -113,6 +138,13 @@ class ProductApiTests(unittest.TestCase):
         flute_midi = self.client.get(f"/product/jobs/{job_id}/artifacts/midi", params={"instrument": "Flute"})
         self.assertEqual(flute_midi.status_code, 200)
         self.assertEqual(flute_midi.headers["content-type"], "audio/midi")
+        self.assertEqual(_first_midi_program(flute_midi.content), 73)
+
+        # Switching back to Piano must regenerate instead of returning the
+        # initial Flute MIDI artifact.
+        piano_midi = self.client.get(f"/product/jobs/{job_id}/artifacts/midi", params={"instrument": "Piano"})
+        self.assertEqual(piano_midi.status_code, 200)
+        self.assertEqual(_first_midi_program(piano_midi.content), 0)
 
         # Download variant sets an attachment filename.
         download = self.client.get(
