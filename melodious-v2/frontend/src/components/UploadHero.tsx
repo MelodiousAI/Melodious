@@ -11,7 +11,6 @@ import {
   Play,
 } from 'lucide-react'
 import type { ProductSample } from '../lib/api'
-import { AudioVisualizer } from './AudioVisualizer'
 
 interface Props {
   samples: ProductSample[]
@@ -118,10 +117,7 @@ export function UploadHero({ samples, instrument, instruments, onInstrument, onF
                 <UploadCloud size={34} />
               </div>
             </div>
-            
-            <AudioVisualizer active={drag || busy} />
-
-            <h3 style={{ marginTop: '10px' }}>Drop a score image here</h3>
+            <h3>Drop a score image here</h3>
             <p>PNG, JPG or WEBP · single page works best</p>
             <div className="dz-actions">
               <button className="btn btn--primary" disabled={busy} onClick={() => inputRef.current?.click()}>

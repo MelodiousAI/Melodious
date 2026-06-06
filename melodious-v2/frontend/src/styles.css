@@ -77,32 +77,6 @@ select {
   display: flex;
   flex-direction: column;
   isolation: isolate;
-  transition: background-color 0.8s ease;
-}
-
-/* Vibe Overrides */
-.app.vibe-synthwave {
-  --accent: #ff007f;
-  --accent-2: #00ffff;
-  --accent-3: #7f00ff;
-  --surface: rgba(28, 10, 35, 0.72);
-  --bg-0: #0a0208;
-}
-
-.app.vibe-classical {
-  --accent: #d4af37;
-  --accent-2: #ffffff;
-  --accent-3: #ffd700;
-  --surface: rgba(10, 15, 30, 0.72);
-  --bg-0: #02050a;
-}
-
-.app.vibe-lofi {
-  --accent: #ff8c42;
-  --accent-2: #ff3c82;
-  --accent-3: #ffb7b2;
-  --surface: rgba(30, 20, 20, 0.72);
-  --bg-0: #0f0a0a;
 }
 
 .app-bg {
@@ -178,72 +152,6 @@ select {
 @keyframes float-orb-3 {
   0% { transform: translate(0, 0) scale(1); }
   100% { transform: translate(80px, -80px) scale(1.1); }
-}
-
-/* ---------- Ambient Background ---------- */
-.ambient-background {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  background: var(--bg-0);
-}
-
-.ambient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(140px);
-  opacity: 0.8;
-  mix-blend-mode: screen;
-}
-
-.ambient-orb.orb-1 {
-  width: 60vw;
-  height: 60vw;
-  top: -10%;
-  left: -10%;
-}
-
-.ambient-orb.orb-2 {
-  width: 50vw;
-  height: 50vw;
-  bottom: -10%;
-  right: -10%;
-}
-
-.ambient-orb.orb-3 {
-  width: 55vw;
-  height: 55vw;
-  top: 40%;
-  left: 30%;
-}
-
-.ambient-overlay {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
-  opacity: 0.8;
-}
-
-/* ---------- Audio Visualizer ---------- */
-.audio-visualizer {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 50px;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.visualizer-bar {
-  width: 6px;
-  background: linear-gradient(180deg, var(--accent-2), var(--accent));
-  border-radius: 4px;
-  opacity: 0.8;
-  box-shadow: 0 0 8px var(--accent);
 }
 
 /* ---------- Top bar ---------- */
