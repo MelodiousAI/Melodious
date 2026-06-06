@@ -68,6 +68,72 @@ npm test
 npm run build
 ```
 
+## Reproduce Results in 15 Minutes
+
+Use this section as the canonical deterministic run path for checkpoint review and rubric grading.
+
+1) **Create/activate environment (Windows PowerShell)**
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+2) **Set deterministic seeds for local reruns**
+
+```powershell
+$env:PYTHONHASHSEED="42"
+$env:CUBLAS_WORKSPACE_CONFIG=":16:8"
+```
+
+3) **Run core backend tests**
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover tests
+```
+
+Expected: all discovered tests pass.
+
+4) **Run frontend verification**
+
+```powershell
+cd frontend
+npm install
+npm test
+npm run build
+cd ..
+```
+
+Expected: test suite passes and production build succeeds.
+
+5) **Run API smoke test**
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn src.api.app:app --host 127.0.0.1 --port 8000
+```
+
+Expected: `GET /health` returns service status JSON including assembly mode information.
+
+6) **Run evaluation/export smoke**
+
+```powershell
+.\.venv\Scripts\python.exe -m src.evaluation.muscima_reference_evaluation
+.\.venv\Scripts\python.exe -m src.evaluation.muscima_training_export --limit 5
+```
+
+Expected artifacts:
+
+- `outputs/muscima_reference_integration/summary.json`
+- `data/processed/training_exports/` (page-level training export JSON files)
+
+## Documentation Source of Truth
+
+- Use `documentation.md` as the canonical experiment/results narrative.
+- Use `MODEL_CARD.md` as the canonical Responsible ML and deployment risk narrative.
+- Use `readme_correction.md` as the rubric-to-evidence grading map.
+- `docs/status/Hasan_Documentation.md` is integration/handoff status evidence for backend and graph pipeline checks.
+
 ## Current Consolidation Notes
 
 - `hassan/week-5` is the effective GitHub head for the non-eval line.
