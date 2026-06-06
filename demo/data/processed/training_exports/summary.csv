@@ -1,0 +1,6 @@
+page_id,image_path,node_count,edge_count,stem_notehead_count,beam_notegroup_count,slur_phrase_count,tie_sustained_count,no_relation_count,knn_count,same_staff_local_count,vertical_overlap_count,horizontal_neighbor_count
+CVC-MUSCIMA_W-01_N-10_D-ideal,data\processed\generated_muscima_images\CVC-MUSCIMA_W-01_N-10_D-ideal.png,478,25982,1186,210,366,0,24220,2360,1906,20762,954
+CVC-MUSCIMA_W-01_N-14_D-ideal,data\processed\generated_muscima_images\CVC-MUSCIMA_W-01_N-14_D-ideal.png,366,19616,630,214,42,0,18730,1746,1458,15682,730
+CVC-MUSCIMA_W-01_N-19_D-ideal,data\processed\generated_muscima_images\CVC-MUSCIMA_W-01_N-19_D-ideal.png,301,11186,746,130,4,28,10278,1426,1198,7962,600
+CVC-MUSCIMA_W-02_N-06_D-ideal,data\processed\generated_muscima_images\CVC-MUSCIMA_W-02_N-06_D-ideal.png,401,17894,446,34,28,74,17312,1872,1598,13624,800
+CVC-MUSCIMA_W-02_N-13_D-ideal,data\processed\generated_muscima_images\CVC-MUSCIMA_W-02_N-13_D-ideal.png,339,15234,588,72,82,4,14488,1638,1350,11570,676
