@@ -15,12 +15,10 @@ import { TopBar } from './components/TopBar'
 import { UploadHero } from './components/UploadHero'
 import { ProgressView } from './components/ProgressView'
 import { Workspace } from './components/Workspace'
-import { AmbientBackground, type Vibe } from './components/AmbientBackground'
 
 const FALLBACK_INSTRUMENTS = ['Piano', 'Electric Piano', 'Organ', 'Guitar', 'Violin', 'Strings', 'Flute', 'Music Box']
 
 export function App() {
-  const [vibe, setVibe] = useState<Vibe>('Default')
   const [models, setModels] = useState<ModelsInfo | null>(null)
   const [samples, setSamples] = useState<ProductSample[]>([])
   const [instrument, setInstrument] = useState('Piano')
@@ -112,14 +110,15 @@ export function App() {
   const showError = !!error || job?.status === 'failed'
 
   return (
-    <div className={`app vibe-${vibe.toLowerCase()}`}>
-      <AmbientBackground vibe={vibe} busy={busy} />
+    <div className="app">
+      <div className="app-bg" />
+      <div className="glowing-orb orb-1" />
+      <div className="glowing-orb orb-2" />
+      <div className="glowing-orb orb-3" />
       <TopBar
         availability={models?.availability ?? null}
         onReset={reset}
         showReset={!!job || !!error}
-        vibe={vibe}
-        onVibe={setVibe}
       />
 
       <main className="stage">
