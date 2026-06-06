@@ -51,6 +51,16 @@ Completed GNN retraining run:
 - Project-standard V2 graph eval result: positive-class macro F1 `0.707370215915676`, accuracy `0.8710092581060322`, `stem_notehead` F1 `0.6268870286899907`, `beam_notegroup` F1 `0.7878534031413612`, and `no_relation` F1 `0.9200989741739264`.
 - Recommendation: do not promote the retrained checkpoint. The existing default checkpoint still wins on the fixed V2 graph validation metric: positive-class macro F1 `0.7590456327823909`, `stem_notehead` F1 `0.6960721184803607`, and `beam_notegroup` F1 `0.8220191470844213`.
 
+App-build branch audit:
+
+- Audit document: `docs/APP_BUILD_AUDIT.md`.
+- Branches/remotes were fetched and checked. The newest remote branch by date, `origin/cursor/upload-transcription-d2d5`, only contains test-skip changes and does not contain a newer product UI/backend.
+- Best old product frontend source: `caba712` / `origin/hassan/week-5`, especially `frontend/src/pages/UploadPage.tsx`, `frontend/src/pages/WorkspacePage.tsx`, `frontend/src/components/MidiPlaybackCard.tsx`, and `frontend/src/lib/api.ts`.
+- Best old product backend source: `caba712`, especially `src/api/product_models.py`, `src/api/product_routes.py`, and `src/api/product_service.py`.
+- Best current implementation base remains `phase-04-assembly` because it has the current V2 contracts, latest note-extraction CLI, GNN integration, metrics, docs, and tests.
+- Do not blindly copy the old product branch into V2. Port the UI ideas and adapt the API contract to `src/melodious_v2`.
+- Exact next app step: add a V2 multipart `/product/transcribe-image` endpoint that saves the upload, calls `melodious_v2.omr.note_extraction`, persists MusicXML/MIDI/overlay/JSON artifacts under an ignored run directory, and returns a typed product response consumed by a richer React workspace.
+
 ## 2026-06-06 - Agent Handoff - Espresso System/Dot Fix
 
 Milestone worked:
