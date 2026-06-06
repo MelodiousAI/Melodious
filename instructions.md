@@ -1,5 +1,15 @@
 # Melodious: Optical Music Recognition Project - Instructions & Progress
 
+## Documentation Status Notice (Canonical Sources)
+
+This file includes historical planning material from earlier project phases and may contain outdated checklists or target statements.
+
+For grading and final technical truth, use:
+
+- `documentation.md` for experiments, measured metrics, and final results.
+- `MODEL_CARD.md` for Responsible ML, limitations, privacy, and deployment-risk discussion.
+- `readme_correction.md` for rubric-to-evidence mapping.
+
 ## Current Step: Step 12 - Combined Pipeline Evaluation ✅ COMPLETED
 
 ### GNN Assembler (MUSCIMA++ v2.0):
