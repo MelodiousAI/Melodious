@@ -70,6 +70,50 @@ Product-app hardening follow-up:
 - `frontend/vite.config.ts` now sets `chunkSizeWarningLimit = 1400` because score engraving and MIDI playback are intentional lazy feature chunks. The initial app chunk is about 359 KB after this split.
 - Verification: `$env:PYTHONPATH='src'; ..\.venv\Scripts\python.exe -m pytest -q` passed with 72 tests and one upstream `torch_geometric` warning. `cd frontend; npm run build` passed without Vite chunk warnings.
 
+Presentation technical review:
+
+- New study document: `docs/PRESENTATION_TECHNICAL_REVIEW.tex`.
+- Purpose: long-form LaTeX review for Ahmad before the presentation, covering the full Melodious V2 pipeline, detector/GNN/export/app architecture, model lineage, metric definitions, metric tables, class-coverage caveats, the meaning of mAP@0.5 and mAP@0.5:0.95, why 0.95 IoU is stricter than 0.5, known failures, fixes attempted, deployment story, and professor Q&A talking points.
+- Build status: source was created and inspected locally. `pdflatex` is not installed on this machine, so no PDF was generated in this workspace.
+- Next exact step if a PDF is needed: install a TeX distribution or open the source in Overleaf/VS Code with LaTeX tooling, then compile `docs/PRESENTATION_TECHNICAL_REVIEW.tex`.
+
+## 2026-06-07 - Agent Handoff - Presentation Technical Review
+
+Milestone worked:
+
+- M8 prep - Final grading/presentation technical review.
+
+Files changed:
+
+- `docs/PRESENTATION_TECHNICAL_REVIEW.tex`
+- `docs/STATUS.md`
+- `docs/HANDOFF.md`
+
+Commands run:
+
+- `git status --short` - passed; showed the new LaTeX source before documentation updates.
+- `pdflatex --version` - failed because `pdflatex` is not installed or not on PATH.
+- `Get-Content -Path docs\PRESENTATION_TECHNICAL_REVIEW.tex -TotalCount 40` - passed; inspected source header.
+- `(Get-Content -Path docs\PRESENTATION_TECHNICAL_REVIEW.tex | Measure-Object -Line -Word -Character) | Format-List` - passed; source is 938 lines and about 5841 words.
+- `rg -n "TODO|FIXME|PLACEHOLDER|TBD|TODO" docs\PRESENTATION_TECHNICAL_REVIEW.tex` - passed; no placeholder markers found.
+
+Generated artifacts:
+
+- `docs/PRESENTATION_TECHNICAL_REVIEW.tex`
+
+What is complete:
+
+- Added a detailed LaTeX technical-review document that explains the full Melodious V2 system, every major model/run, metric meanings, official metric claims, demo-path caveats, known problems, fixes, deployment story, and presentation talking points.
+- Updated status/handoff documentation so the new review document is discoverable.
+
+What is blocked:
+
+- PDF compilation is blocked locally only because a LaTeX distribution is not installed on PATH.
+
+Next exact step:
+
+- Compile `docs/PRESENTATION_TECHNICAL_REVIEW.tex` to PDF on a machine with TeX tooling, or continue M8 by creating the final demo script/rubric map from this review document.
+
 ## 2026-06-06 - Agent Handoff - Product Upload App
 
 Milestone worked:

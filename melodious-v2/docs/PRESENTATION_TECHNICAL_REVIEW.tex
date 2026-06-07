@@ -1,0 +1,1224 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.78in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\definecolor{melblue}{RGB}{24,78,119}
+\definecolor{melgreen}{RGB}{32,122,83}
+\definecolor{melorange}{RGB}{174,97,24}
+\definecolor{melgray}{RGB}{70,70,70}
+\definecolor{mellight}{RGB}{245,247,250}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=melblue,
+  urlcolor=melblue,
+  citecolor=melblue
+}
+
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\metric}[1]{\textbf{#1}}
+\newcommand{\warn}[1]{\textcolor{melorange}{\textbf{#1}}}
+\newcommand{\good}[1]{\textcolor{melgreen}{\textbf{#1}}}
+\newcommand{\todo}[1]{\textcolor{melblue}{\textbf{#1}}}
+\newcommand{\project}{Melodious V2}
+
+\setlist[itemize]{topsep=2pt,itemsep=2pt,parsep=1pt,leftmargin=1.4em}
+\setlist[enumerate]{topsep=2pt,itemsep=2pt,parsep=1pt,leftmargin=1.6em}
+\renewcommand{\arraystretch}{1.18}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\project}
+\rhead{Technical Presentation Review}
+\cfoot{\thepage}
+
+\titleformat{\section}{\Large\bfseries\color{melblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{melgray}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{melgray}}{\thesubsubsection}{0.6em}{}
+
+\begin{document}
+
+\begin{center}
+  {\Huge \textbf{\project: Technical Presentation Review}}\\[0.4em]
+  {\Large Optical Music Recognition, Detection Metrics, Graph Assembly, Export, Product App}\\[0.6em]
+  {\large Prepared as a study document for the project presentation}\\[0.4em]
+  {\large Last updated: June 7, 2026}
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{1em}
+
+\tableofcontents
+\newpage
+
+\section{Executive Summary}
+
+\project{} is an optical music recognition (OMR) system. The goal is to take an image of sheet music and produce structured digital music artifacts: detected notation symbols, inferred musical relationships, MusicXML, and MIDI. The system is no longer just a model notebook; it now has:
+
+\begin{itemize}
+  \item a full 136-class detector path based on DeepScores-style notation labels;
+  \item a graph neural network (GNN) relationship assembly path for linking symbols such as stems to noteheads and beams to note groups;
+  \item an export path that writes MusicXML and MIDI;
+  \item a local note-extraction pipeline that combines full-page YOLO detection, tiled thin-symbol inference, staff geometry, GNN relationships, and heuristic music rules;
+  \item a FastAPI product backend and React frontend where a user can upload an image and receive overlay, MusicXML, MIDI, note table, provenance, warnings, and playback controls;
+  \item a metric discipline that separates detector metrics, graph metrics, end-to-end export validity, and demo transcription evidence.
+\end{itemize}
+
+The most important detector result to present honestly is:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Best full-page validation detector run} & \code{detection_136class_yolov8m_finetune_img1536_maxdet2000_v2}\\
+\midrule
+Primary detector metric & \metric{mAP@0.5:0.95 = 0.707986237382828}\\
+Optimistic detector metric & \metric{mAP@0.5 = 0.8390674529615662}\\
+Precision at IoU 0.5 & \metric{0.8806427974719793}\\
+Recall at IoU 0.5 & \metric{0.7881733414248919}\\
+F1 at IoU 0.5 & \metric{0.8318461933668392}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The most important graph result to present honestly is:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Graph run} & \code{graph_legacy_gnn_muscima_val_v1}\\
+\midrule
+Primary graph metric & \metric{positive-class macro F1 = 0.7590456327823909}\\
+Accuracy & \metric{0.9049902436999211}\\
+stem-notehead F1 & \metric{0.6960721184803607}\\
+beam-notegroup F1 & \metric{0.8220191470844213}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The most important end-to-end export result is:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{E2E run} & \code{e2e_muscima_holdout_xml_fixture_v1}\\
+\midrule
+MusicXML validity rate & \metric{1.0}\\
+MIDI generation success rate & \metric{1.0}\\
+Page success rate & \metric{1.0}\\
+Page count & \metric{14}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\warn{Critical caveat:} the E2E export run used MUSCIMA XML-derived payload fixtures, not arbitrary uploaded images from the trained detector. It proves the export system can produce valid artifacts from structured inputs; it does not prove perfect uploaded-image transcription.
+
+\section{One-Minute Presentation Version}
+
+If asked to summarize the project quickly, say:
+
+\begin{quote}
+\project{} is an applied OMR pipeline that turns sheet-music images into MusicXML and MIDI. The system is built in stages: a YOLO detector finds notation symbols, a graph model predicts symbol relationships such as stem-to-notehead and beam-to-note-group, and an export module converts the assembled notation into MusicXML and MIDI. We measured each stage separately. The best full-page detector validation result is mAP@0.5:0.95 of 0.708 and mAP@0.5 of 0.839. The GNN relationship model reaches positive-class macro F1 of 0.759 on the natural candidate-edge validation distribution. The export path produced valid MusicXML and MIDI for all 14 MUSCIMA holdout XML-derived payload fixtures. The product app now exposes the real local extraction path through FastAPI and a React frontend with upload, overlay, MusicXML, MIDI playback, note table, provenance, and warnings.
+\end{quote}
+
+If asked what was hard:
+
+\begin{quote}
+The hardest part was that music notation has many tiny symbols. A full-page detector can learn noteheads and larger symbols, but stems, ledger lines, dots, and flags are extremely small at full-page resolution. That is why whole-page training had stem AP near zero. We addressed this with a tiled thin-symbol path, which improved tiled-validation stem mAP@0.5:0.95 to 0.735. We then use that tiled detector as a second pass in the local product pipeline.
+\end{quote}
+
+If asked whether the app result is a metric:
+
+\begin{quote}
+No. Uploaded app transcriptions are demo outputs. The official measured detector metrics are from validation runs, the graph metrics are from the MUSCIMA validation graph evaluation, and the export metrics are from fixed MUSCIMA holdout XML-derived payload fixtures. The app combines those trained components with heuristics for a live demonstration.
+\end{quote}
+
+\section{System Architecture}
+
+\subsection{High-Level Data Flow}
+
+The practical product pipeline is:
+
+\begin{enumerate}
+  \item User uploads a score image in the React frontend.
+  \item FastAPI receives the image through \code{POST /product/transcribe-image}.
+  \item The backend saves the image under \code{runs/app/uploads/{job_id}/}.
+  \item The backend starts a background extraction job.
+  \item The local extraction function \code{extract_notes_from_image} runs:
+    \begin{enumerate}
+      \item staff system detection;
+      \item full-page YOLO notehead and symbol detection;
+      \item tiled thin-symbol detection for stems, beams, flags, accidentals, and related small symbols;
+      \item optional legacy GNN relationship assembly if the checkpoint exists;
+      \item event ordering and rhythm/pitch heuristics;
+      \item MusicXML, MIDI, overlay PNG, note JSON, detector payload JSON, and relationship JSON export.
+    \end{enumerate}
+  \item The frontend polls \code{GET /product/jobs/{job_id}}.
+  \item When complete, the frontend shows:
+    \begin{itemize}
+      \item original/overlay viewer;
+      \item engraved MusicXML rendering;
+      \item raw MusicXML panel;
+      \item MIDI playback with instrument and tempo controls;
+      \item note/event table;
+      \item counts, quality summary, provenance, and warnings;
+      \item artifact downloads.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Major Modules}
+
+\begin{longtable}{p{0.28\linewidth}p{0.68\linewidth}}
+\toprule
+\textbf{Module or file} & \textbf{Role}\\
+\midrule
+\endhead
+\code{src/melodious_v2/contracts.py} & Defines the V2 detector payload contract: schema version, image size, detections, bounding boxes, taxonomy IDs, artifact records, and provenance.\\
+\code{src/melodious_v2/api/app.py} & FastAPI application. Keeps legacy sample endpoints and adds the product routes under \code{/product/*}.\\
+\code{src/melodious_v2/api/product_models.py} & Typed Pydantic response models for the product app: counts, model provenance, note events, quality summary, job status, artifact URLs.\\
+\code{src/melodious_v2/api/product_service.py} & Product upload service. Saves uploads, launches background extraction, serves artifacts, validates uploads, regenerates MIDI for selected instrument/tempo.\\
+\code{src/melodious_v2/omr/note_extraction.py} & Local note extraction pipeline. Combines staff geometry, YOLO detections, tiled thin-symbol pass, GNN relationships, pitch/rhythm heuristics, MusicXML/MIDI/overlay output.\\
+\code{src/melodious_v2/assembly/legacy_gnn.py} & Adapter around the legacy MUSCIMA GNN checkpoint. Converts V2-ish candidate data into the older graph feature contract and returns relationship predictions.\\
+\code{src/melodious_v2/export/musicxml.py} & Minimal export functions for contract-sample payloads. The richer clean-sheet local demo export is inside \code{note_extraction.py}.\\
+\code{scripts/run_detection_136class_yolo.py} & Detector training/evaluation runner. Supports resume, max detection cap, validation image size, validation augmentation, and existing dataset YAML input.\\
+\code{scripts/materialize_tiled_yolo_dataset.py} & Builds tiled datasets around thin symbols to make stems and ledger lines visible enough for YOLO training.\\
+\code{frontend/src/App.tsx} and \code{frontend/src/components/*} & React product application: upload surface, progress timeline, viewer, playback, MusicXML, note table, provenance, downloads.\\
+\bottomrule
+\end{longtable}
+
+\section{Data Sources and Why They Matter}
+
+\subsection{DeepScores 136-Class Detection Data}
+
+DeepScores-style data is used for the detector. The important point is that the detector taxonomy is large: 136 classes. These include noteheads, clefs, time signatures, rests, accidentals, beams, flags, slurs, ties, dynamics, articulations, tuplets, and staff-related symbols.
+
+Important documented facts:
+
+\begin{itemize}
+  \item The model head preserves the 136-class taxonomy.
+  \item The local labels support 115 of those 136 classes across train/validation/test.
+  \item 21 taxonomy classes have zero local labels.
+  \item Validation measures 103 classes.
+  \item Therefore, some classes cannot be learned or measured from this local dataset.
+\end{itemize}
+
+This matters in a presentation because ``136-class detector'' means the model architecture supports 136 classes, not that the local dataset has strong examples for every class. The honest claim is:
+
+\begin{quote}
+We built and trained a 136-class detector head, but the available local labels cover 115 classes and validation measures 103 classes. Full-taxonomy support is architectural; full-taxonomy performance is limited by class coverage.
+\end{quote}
+
+\subsection{MUSCIMA Graph and Export Data}
+
+MUSCIMA is used for graph relationships and export evaluation. It gives structured symbol-level annotations, which are valuable for relationship reasoning. The graph task asks questions like:
+
+\begin{itemize}
+  \item Is this stem attached to this notehead?
+  \item Is this beam related to this note group?
+  \item Is this candidate pair unrelated?
+\end{itemize}
+
+The end-to-end export run used XML-derived payload fixtures from MUSCIMA holdout pages. That is why its export validity rates are high: the input payloads are structured from ground-truth-like XML, not raw predictions from a difficult image detector.
+
+\section{Metric Foundations}
+
+\subsection{Bounding Boxes and Intersection over Union}
+
+The detector predicts bounding boxes. A predicted box is considered a match with a ground-truth box if:
+
+\begin{enumerate}
+  \item the predicted class is correct;
+  \item the predicted box overlaps enough with the ground-truth box;
+  \item the predicted box is selected after confidence thresholding and non-maximum suppression.
+\end{enumerate}
+
+The overlap measure is Intersection over Union (IoU):
+
+\[
+\mathrm{IoU} = \frac{\mathrm{area}(B_{\mathrm{pred}} \cap B_{\mathrm{gt}})}
+{\mathrm{area}(B_{\mathrm{pred}} \cup B_{\mathrm{gt}})}
+\]
+
+Interpretation:
+
+\begin{itemize}
+  \item IoU = 1.0 means perfect overlap.
+  \item IoU = 0.5 means the overlap is acceptable but not exact.
+  \item IoU = 0.95 is extremely strict; the predicted box must almost perfectly match the ground-truth box.
+\end{itemize}
+
+\subsection{Precision, Recall, and F1}
+
+For a fixed confidence threshold and IoU threshold:
+
+\[
+\mathrm{Precision} = \frac{TP}{TP+FP}
+\]
+
+\[
+\mathrm{Recall} = \frac{TP}{TP+FN}
+\]
+
+\[
+F1 = 2 \cdot \frac{\mathrm{Precision}\cdot\mathrm{Recall}}{\mathrm{Precision}+\mathrm{Recall}}
+\]
+
+Where:
+
+\begin{itemize}
+  \item TP = true positives, correct detections;
+  \item FP = false positives, detections that should not be there;
+  \item FN = false negatives, missed ground-truth objects.
+\end{itemize}
+
+Plain English:
+
+\begin{itemize}
+  \item Precision answers: ``When the model detects something, how often is it right?''
+  \item Recall answers: ``Of all the true objects, how many did the model find?''
+  \item F1 balances precision and recall into one number.
+\end{itemize}
+
+In our best full-page detector:
+
+\begin{itemize}
+  \item precision@0.5 = 0.881, meaning predictions that survive the selected threshold are often correct;
+  \item recall@0.5 = 0.788, meaning the model still misses some objects;
+  \item F1@0.5 = 0.832, the harmonic balance between those two.
+\end{itemize}
+
+\subsection{Average Precision and mAP}
+
+Average Precision (AP) is the area under a precision-recall curve for one class. Mean Average Precision (mAP) averages AP across classes.
+
+\subsubsection{mAP@0.5}
+
+\code{mAP@0.5} uses an IoU threshold of 0.5. A predicted box only needs to overlap the ground-truth box by at least 50 percent IoU to count as a possible match.
+
+This is useful because it measures whether the detector roughly found the object. It is also more optimistic. For visual demos, \code{mAP@0.5} often aligns better with ``did it find the symbol?'' than strict box exactness.
+
+\subsubsection{mAP@0.5:0.95}
+
+\code{mAP@0.5:0.95} averages AP over ten IoU thresholds:
+
+\[
+0.50,\;0.55,\;0.60,\;0.65,\;0.70,\;0.75,\;0.80,\;0.85,\;0.90,\;0.95
+\]
+
+This metric is much stricter. It rewards not only finding the object but also placing the box accurately. The 0.95 part is the hardest threshold: at IoU 0.95, the predicted box must be nearly identical to the label box. That is especially difficult for tiny notation marks such as stems, dots, ledger lines, and flags.
+
+Presentation phrasing:
+
+\begin{quote}
+mAP@0.5 is the optimistic detection metric: it asks if the model found the symbol with reasonable overlap. mAP@0.5:0.95 is stricter: it averages over increasingly demanding IoU thresholds up to 0.95, so it penalizes imprecise boxes and is the standard primary metric.
+\end{quote}
+
+\subsection{Why mAP@0.5 Can Look Much Higher}
+
+Our best full-page detector has:
+
+\begin{itemize}
+  \item mAP@0.5 = 0.839;
+  \item mAP@0.5:0.95 = 0.708.
+\end{itemize}
+
+This gap is normal. It means the detector often identifies the right symbol, but exact bounding-box placement across all classes and strict IoU thresholds is harder. In OMR, tiny symbols make this gap more visible.
+
+\subsection{Graph Metrics}
+
+The graph model predicts relationship classes between candidate symbol pairs. Its primary metric is positive-class macro F1:
+
+\[
+\mathrm{PositiveMacroF1} =
+\frac{F1_{\mathrm{stem\_notehead}} + F1_{\mathrm{beam\_notegroup}} + \cdots}{N_{\mathrm{positive\ classes}}}
+\]
+
+The reason we do not use plain accuracy as the main graph metric is class imbalance. Most candidate symbol pairs are ``no relation.'' A model can get high accuracy by predicting ``no relation'' too often. Positive-class macro F1 focuses on the relationships we actually care about.
+
+\section{Detector Models}
+
+\subsection{Detector Family: YOLOv8}
+
+The detector family is YOLOv8. YOLO predicts bounding boxes, class labels, and confidences in one pass. For our project, YOLO is used to detect music notation symbols. The detector output is converted into the V2 detector payload contract and later consumed by assembly/export logic.
+
+Why YOLO is suitable:
+
+\begin{itemize}
+  \item It is fast enough for a demo/product surface.
+  \item It is mature and well-supported.
+  \item It produces bounding boxes directly, which fits notation-symbol detection.
+  \item It can be trained with the DeepScores 136-class taxonomy.
+\end{itemize}
+
+Why YOLO alone is not enough:
+
+\begin{itemize}
+  \item Music notation is relational: a notehead, stem, beam, dot, accidental, tie, and staff position must be interpreted together.
+  \item Detection gives objects, not musical meaning.
+  \item Rhythm and pitch require post-processing and relationship reasoning.
+\end{itemize}
+
+\subsection{M3 YOLOv8s Smoke Model}
+
+Purpose:
+
+\begin{itemize}
+  \item Prove that the full 136-class training/evaluation/export path works.
+  \item Generate an early checkpoint and ONNX artifact.
+  \item Validate project plumbing before spending time on a large YOLOv8m run.
+\end{itemize}
+
+This was not the final detector. It was a smoke run. A smoke model is used to check that code, data, metrics, and artifact export work end-to-end.
+
+\subsection{M3 YOLOv8m Full 150-Epoch Detector}
+
+Run:
+
+\begin{center}
+\code{detection_136class_yolov8m_v1}
+\end{center}
+
+Facts:
+
+\begin{itemize}
+  \item Completed 150 epochs.
+  \item Selected best checkpoint.
+  \item Wrote V2 metric provenance.
+  \item Exported ONNX.
+  \item Copied model artifacts to \code{artifacts/models/detection_136class_yolov8m_v1/}.
+\end{itemize}
+
+Metrics:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+mAP@0.5:0.95 & 0.4747370751116288\\
+mAP@0.5 & 0.5853211368313491\\
+precision@0.5 & 0.8274236461250144\\
+recall@0.5 & 0.4909790740632496\\
+F1@0.5 & 0.6162725385980492\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Interpretation:
+
+\begin{itemize}
+  \item Precision was already decent, meaning many predictions were correct.
+  \item Recall was lower, meaning the detector missed many symbols.
+  \item This was a real full detector but not yet strong enough for the final claim.
+\end{itemize}
+
+\subsection{Validation-Time Resolution and Detection-Cap Sweep}
+
+Problem discovered:
+
+\begin{quote}
+Dense sheet-music pages contain many more symbols than natural-image object detection examples. The default detection cap of 300 boxes was too low for dense pages.
+\end{quote}
+
+Fix:
+
+\begin{itemize}
+  \item Evaluate with larger image sizes.
+  \item Increase \code{max_det} to 2000.
+  \item Keep validation provenance so the team does not confuse inference tuning with new training.
+\end{itemize}
+
+Important result:
+
+\begin{itemize}
+  \item The best primary validation inference configuration for the original YOLOv8m checkpoint reached mAP@0.5:0.95 = 0.6204968163150985.
+  \item This was an inference configuration result, not a newly trained model.
+\end{itemize}
+
+\subsection{M7 Fine-Tune at Image Size 1472}
+
+Run:
+
+\begin{center}
+\code{detection_136class_yolov8m_finetune_img1472_maxdet2000_v1}
+\end{center}
+
+Purpose:
+
+\begin{itemize}
+  \item Continue improving the detector from the completed YOLOv8m checkpoint.
+  \item Use better dense-page settings.
+  \item Improve recall and overall AP.
+\end{itemize}
+
+Metrics:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+mAP@0.5:0.95 & 0.6777474953487629\\
+mAP@0.5 & 0.8226206920791271\\
+precision@0.5 & 0.8457099520968777\\
+recall@0.5 & 0.7738772781467206\\
+F1@0.5 & 0.8082006373091581\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Interpretation:
+
+\begin{itemize}
+  \item This was a major jump from the original full YOLOv8m run.
+  \item Recall improved substantially.
+  \item It became a useful full-page demo checkpoint for notehead/full-page context.
+\end{itemize}
+
+\subsection{M7 Fine-Tune at Image Size 1536: Best Full-Page Detector}
+
+Run:
+
+\begin{center}
+\code{detection_136class_yolov8m_finetune_img1536_maxdet2000_v2}
+\end{center}
+
+This is the best completed original full-page detector metric.
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+mAP@0.5:0.95 & 0.707986237382828\\
+mAP@0.5 & 0.8390674529615662\\
+precision@0.5 & 0.8806427974719793\\
+recall@0.5 & 0.7881733414248919\\
+F1@0.5 & 0.8318461933668392\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Measured gain over the 1472 fine-tune:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Gain}\\
+\midrule
+mAP@0.5:0.95 & +0.0302387420340651\\
+mAP@0.5 & +0.0164467608824391\\
+precision@0.5 & +0.0349328453751016\\
+recall@0.5 & +0.0142960632781713\\
+F1@0.5 & +0.0236455560576811\\
+Small-symbol mean mAP@0.5:0.95 & +0.0224205492332619\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Important caveats:
+
+\begin{itemize}
+  \item This is validation-set performance, not final held-out test performance.
+  \item Validation only measures 103 classes.
+  \item Local labels do not cover 21 of the 136 classes.
+  \item The stem class is still 0.0 AP on original full-page validation.
+  \item Ledger line is still very low at 0.01106603897644983.
+\end{itemize}
+
+\subsection{Per-Class Reality Check}
+
+Some important rhythm-adjacent classes in the best full-page detector:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Class} & \textbf{mAP@0.5:0.95}\\
+\midrule
+stem & 0.0\\
+ledgerLine & 0.01106603897644983\\
+augmentationDot & 0.26796388729163445\\
+beam & 0.8011588011549605\\
+flag8thUp & 0.7470091255390053\\
+flag8thDown & 0.8207040444816455\\
+flag16thUp & 0.7792069978265269\\
+flag16thDown & 0.8260426843009119\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This explains why the detector can have a strong headline mAP while rhythm transcription still needs careful post-processing. Noteheads, rests, beams, flags, and many large symbols work better than stems and ledger lines at full-page scale.
+
+\section{The Stem Problem and the Tiled Detector}
+
+\subsection{Why Stem AP Was Zero}
+
+The full-page model did not learn stems well because stems are extremely thin. At image size 1536, the median projected stem width was about 0.78 model pixels. That is below what a detector can easily localize in a full-page image.
+
+In other words, the model did have many stem labels, but the stems were visually too small after resizing the entire page.
+
+\subsection{Tiling Strategy}
+
+The fix was not to blindly train longer. The engineering fix was:
+
+\begin{enumerate}
+  \item crop the full page into tiles;
+  \item focus tiles around thin symbols such as stems, ledger lines, dots, beams, and flags;
+  \item train/evaluate on tile-scale images where the thin symbols are visible;
+  \item use the tiled checkpoint as a second pass in the product extractor.
+\end{enumerate}
+
+\subsection{Tiled Dataset Counts}
+
+Full tiled dataset:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Split or count} & \textbf{Value}\\
+\midrule
+Train tiles & 88137\\
+Validation tiles & 10709\\
+Test tiles & 26019\\
+Total retained stem labels & 747473\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Sampled pilot:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Split} & \textbf{Tile count}\\
+\midrule
+Train & 12000\\
+Validation & 2500\\
+Test & 2500\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Tiled Stem Pilot Metrics}
+
+Run:
+
+\begin{center}
+\code{detection_136class_yolov8m_tiled_stem_pilot_img1024_v1}
+\end{center}
+
+Metrics on tiled validation:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+mAP@0.5:0.95 & 0.8521207647641077\\
+mAP@0.5 & 0.9082394885392849\\
+precision@0.5 & 0.9155509426073148\\
+recall@0.5 & 0.8645416741076378\\
+F1@0.5 & 0.8893154628249349\\
+stem mAP@0.5:0.95 & 0.7345783859762263\\
+ledgerLine mAP@0.5:0.95 & 0.8956514487613261\\
+augmentationDot mAP@0.5:0.95 & 0.951387713738491\\
+beam mAP@0.5:0.95 & 0.8769708350968146\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\warn{Important presentation caveat:} this is tiled-validation evidence, not original full-page validation evidence. It proves the detector can learn stems when stems are visible at tile scale. It should not be presented as the full-page detector metric.
+
+\section{Graph Neural Network Relationship Model}
+
+\subsection{Why a GNN Is Needed}
+
+Detection tells us what objects exist and where they are. Music notation requires relationships:
+
+\begin{itemize}
+  \item A stem belongs to a notehead.
+  \item A beam belongs to a note group.
+  \item A dot modifies a specific note or rest.
+  \item An accidental modifies a note or a key signature.
+  \item Slurs and ties connect note events.
+\end{itemize}
+
+The GNN is intended to classify edges between candidate symbols. Instead of looking at symbols independently, it reasons over a graph.
+
+\subsection{Legacy GNN Configuration}
+
+The current GNN checkpoint is legacy, not a newly designed V2 model. It uses:
+
+\begin{itemize}
+  \item 15 symbol classes;
+  \item 5 relationship types:
+    \begin{itemize}
+      \item \code{no_relation};
+      \item \code{stem_notehead};
+      \item \code{beam_notegroup};
+      \item \code{slur_phrase};
+      \item \code{tie_sustained}.
+    \end{itemize}
+  \item hidden dimension 64;
+  \item 3 graph attention layers;
+  \item 8 attention heads.
+\end{itemize}
+
+Checkpoint:
+
+\begin{center}
+\code{../outputs/gnn_checkpoint.pt}
+\end{center}
+
+SHA256:
+
+\begin{center}
+\code{065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab}
+\end{center}
+
+\subsection{Default GNN Evaluation}
+
+Run:
+
+\begin{center}
+\code{graph_legacy_gnn_muscima_val_v1}
+\end{center}
+
+Metrics:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+positive-class macro F1 & 0.7590456327823909\\
+accuracy & 0.9049902436999211\\
+no-relation F1 & 0.9425171440096813\\
+stem-notehead F1 & 0.6960721184803607\\
+beam-notegroup F1 & 0.8220191470844213\\
+edge count & 48174\\
+positive edge count & 6340\\
+page count & 14\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Interpretation:
+
+\begin{itemize}
+  \item Beam relationships are relatively strong.
+  \item Stem-notehead has high recall but lower precision, meaning it finds many true links but also over-predicts some links.
+  \item Accuracy is high partly because most candidate pairs are no relation, so positive macro F1 is the better headline metric.
+\end{itemize}
+
+\subsection{GNN Retraining Attempt}
+
+Run:
+
+\begin{center}
+\code{graph_legacy_gnn_muscima_retrain_20260606_eval}
+\end{center}
+
+Metrics:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+positive-class macro F1 & 0.707370215915676\\
+accuracy & 0.8710092581060322\\
+no-relation F1 & 0.9200989741739264\\
+stem-notehead F1 & 0.6268870286899907\\
+beam-notegroup F1 & 0.7878534031413612\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Conclusion:
+
+\begin{quote}
+Do not promote the retrained checkpoint. The old default checkpoint is better on the fixed V2 graph validation metric.
+\end{quote}
+
+This is an important engineering lesson: lower training loss or a completed retraining run does not automatically mean better product performance. The fixed validation evaluation decides promotion.
+
+\section{End-to-End Export Evaluation}
+
+Run:
+
+\begin{center}
+\code{e2e_muscima_holdout_xml_fixture_v1}
+\end{center}
+
+This run evaluates whether the assembly/export path can produce valid artifacts from structured MUSCIMA XML-derived detector payload fixtures.
+
+Metrics:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value}\\
+\midrule
+MusicXML validity rate & 1.0\\
+MIDI generation success rate & 1.0\\
+Page success rate & 1.0\\
+Page count & 14\\
+MusicXML valid count & 14\\
+MIDI success count & 14\\
+Relationship count total & 10637\\
+Relationship count mean & 759.7857142857143\\
+Detection count total & 6348\\
+Detection count mean & 453.42857142857144\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+What this proves:
+
+\begin{itemize}
+  \item The export code can create structurally valid MusicXML.
+  \item The MIDI generation path can produce playable output.
+  \item The system can process a fixed holdout set of 14 pages without artifact-generation failure.
+\end{itemize}
+
+What this does not prove:
+
+\begin{itemize}
+  \item It does not prove perfect uploaded-image transcription.
+  \item It does not evaluate the trained detector on arbitrary photos.
+  \item It does not measure musical correctness of every rhythm, voice, tie, or measure total.
+\end{itemize}
+
+\section{Local Note Extraction Pipeline}
+
+\subsection{Why This Pipeline Exists}
+
+The formal detector and graph metrics measure model components. But the professor will likely care about the product behavior: upload an image, get digital music. The local note extraction pipeline is the bridge between model metrics and live demo output.
+
+Function:
+
+\begin{center}
+\code{src/melodious_v2/omr/note_extraction.py: extract_notes_from_image}
+\end{center}
+
+It writes:
+
+\begin{itemize}
+  \item \code{*_notes.json};
+  \item \code{*_notes_overlay.png};
+  \item \code{*_notes.musicxml};
+  \item \code{*_notes.mid};
+  \item \code{*_detector_payload.json}, when GNN assembly payload is created;
+  \item \code{*_relationships.json}, when relationships are created.
+\end{itemize}
+
+\subsection{Pitch Estimation}
+
+Pitch is estimated from staff geometry:
+
+\begin{enumerate}
+  \item detect staff lines;
+  \item group staff lines into systems;
+  \item assign notehead vertical positions to line/space steps;
+  \item assume treble-clef style pitch mapping for the current demo path;
+  \item apply detected key signatures and explicit accidentals where possible.
+\end{enumerate}
+
+Problem faced:
+
+\begin{quote}
+The Fur Elise opening notes were initially shifted because \code{notehead*InSpace} boxes could be rounded onto staff lines. This caused E notes to appear as D. The fix was line/space pitch quantization.
+\end{quote}
+
+\subsection{Rhythm Estimation}
+
+Rhythm uses a combination of:
+
+\begin{itemize}
+  \item notehead class;
+  \item rest class;
+  \item stem presence;
+  \item beam/flag evidence;
+  \item dot evidence;
+  \item GNN relationships such as \code{stem_notehead} and \code{beam_notegroup};
+  \item geometry guards to prevent beam over-attachment.
+\end{itemize}
+
+This is still the least stable part because rhythm in notation is relational and context-dependent.
+
+\subsection{Important Demo Fixes}
+
+\begin{longtable}{p{0.25\linewidth}p{0.70\linewidth}}
+\toprule
+\textbf{Problem} & \textbf{Fix}\\
+\midrule
+\endhead
+Missing light staff systems & Improved staff detection for antialiased/light staff lines.\\
+False dotted rhythms & Disabled CV augmentation-dot guessing for YOLO-backed runs by default; tiled dot detections are also off by default.\\
+No stems in full-page checkpoint & Added tiled thin-symbol second pass using the tiled stem pilot checkpoint.\\
+Quarter/eighth/sixteenth confusion & Used stem/beam/flag evidence and geometry-capped GNN beam relationships.\\
+No rests in exported MusicXML & Added ordered rest events and MusicXML \code{<rest/>} output.\\
+Slurs and ties ignored & Retained slur/tie detector boxes and emitted MusicXML slur/tie notation.\\
+Tempo marking detected as note & Filtered annotation-like noteheads above the first staff.\\
+Tiny cue/grace notes disrupting rhythm & Filtered very small cue/grace-sized noteheads from the normal rhythmic timeline for demo stability.\\
+MusicXML reflow did not preserve staff rows & Added system breaks when moving between detected staff rows.\\
+Open-note dots missed by detector & Added narrow CV fallback for open-note augmentation dots only.\\
+\bottomrule
+\end{longtable}
+
+\subsection{Fur Elise Demo Evidence}
+
+Latest strong Fur Elise local demo:
+
+\begin{center}
+\code{runs/demo/fur_elise_pitch_accidental_fix_tiled_gnn_20260605/}
+\end{center}
+
+Evidence:
+
+\begin{itemize}
+  \item 9 staff systems.
+  \item 256 note events.
+  \item Stem-confirmed notes improved from 0 to 171.
+  \item Opening phrase extracted as E5, D\#5, E5, D\#5, E5, B4, D5, C5, A4.
+  \item This is local demo transcription evidence, not official detector metric evidence.
+\end{itemize}
+
+\subsection{Espresso Demo Evidence}
+
+Latest Espresso local demo:
+
+\begin{center}
+\code{runs/demo/espresso_screenshot_system_dotfix_20260606/}
+\end{center}
+
+Evidence:
+
+\begin{itemize}
+  \item 209 ordered events.
+  \item 192 notes.
+  \item 17 rest events.
+  \item 17 MusicXML \code{<rest/>} tags.
+  \item 186 stem-confirmed notes.
+  \item 13 dotted notes.
+  \item 38 MusicXML slur tags.
+  \item 30 tie tags and 30 tied tags.
+  \item 7 MusicXML system breaks for 8 detected staff rows.
+\end{itemize}
+
+\subsection{Sad Romance Product-App Evidence}
+
+The product app HTTP smoke uploaded:
+
+\begin{center}
+\code{sad_romance_clearer_smooth.png}
+\end{center}
+
+Observed product result:
+
+\begin{itemize}
+  \item status = complete;
+  \item extractor mode = \code{yolo_notehead_staff_pitch+tiled_thin_symbols};
+  \item assembly mode = GNN;
+  \item 9 staff systems;
+  \item 196 notes;
+  \item 182 stem-confirmed notes;
+  \item 866 relationships;
+  \item overlay, MusicXML, MIDI, notes JSON, detector payload JSON, relationships JSON, and ZIP bundle all served.
+\end{itemize}
+
+Again, this is demo transcription evidence, not a validation metric.
+
+\section{Product App}
+
+\subsection{Backend}
+
+New product endpoints:
+
+\begin{longtable}{p{0.34\linewidth}p{0.62\linewidth}}
+\toprule
+\textbf{Endpoint} & \textbf{Purpose}\\
+\midrule
+\endhead
+\code{GET /product/models} & Reports model artifact availability and instrument list.\\
+\code{GET /product/samples} & Lists curated demo samples available on the host.\\
+\code{POST /product/transcribe-image} & Accepts multipart image upload and starts a background extraction job.\\
+\code{POST /product/transcribe-sample} & Starts a job from a curated sample image.\\
+\code{GET /product/jobs/{job_id}} & Polls job status, stage, progress, result payload, counts, warnings, and artifact URLs.\\
+\code{GET /product/jobs/{job_id}/artifacts/{name}} & Serves original image, overlay, MusicXML, MIDI, notes JSON, detector payload JSON, relationships JSON, or bundle.\\
+\bottomrule
+\end{longtable}
+
+Backend hardening:
+
+\begin{itemize}
+  \item uploads are size-limited through \code{MELODIOUS_APP_MAX_UPLOAD_MB}, default 20 MB;
+  \item unreadable image bytes are rejected before extraction;
+  \item tiny images are rejected before extraction;
+  \item MIDI regenerates correctly when switching instruments, including switching back to Piano;
+  \item extraction jobs run in background threads and are serialized by a semaphore to avoid CPU/RAM thrashing;
+  \item artifacts are persisted under \code{runs/app/uploads/{job_id}/}.
+\end{itemize}
+
+\subsection{Frontend}
+
+The React app includes:
+
+\begin{itemize}
+  \item drag-and-drop upload;
+  \item curated sample gallery;
+  \item pipeline progress timeline;
+  \item original/overlay/compare score viewer;
+  \item OpenSheetMusicDisplay score rendering;
+  \item MusicXML copy/download panel;
+  \item MIDI playback using \code{html-midi-player};
+  \item instrument selector and tempo control;
+  \item piano-roll visualizer;
+  \item searchable note/event table;
+  \item model availability badges;
+  \item provenance panel;
+  \item confidence summary;
+  \item review-notes warning panel;
+  \item artifact downloads.
+\end{itemize}
+
+Performance fix:
+
+\begin{itemize}
+  \item OpenSheetMusicDisplay and html-midi-player are lazy-loaded.
+  \item Initial JS chunk was reduced from about 2.86 MB to about 359 KB.
+  \item The larger score/MIDI libraries load only when the completed workspace needs them.
+\end{itemize}
+
+\section{Deployment Story}
+
+The selected public demo path is:
+
+\begin{itemize}
+  \item backend: Dockerized FastAPI on AWS ECS/Fargate or ECS Express Mode;
+  \item model artifacts: copied or mounted in the container;
+  \item frontend: static React build on S3 + CloudFront;
+  \item CORS: controlled by \code{MELODIOUS_CORS_ORIGINS};
+  \item GNN path: controlled by \code{MELODIOUS_GNN_CHECKPOINT};
+  \item smoke test: \code{scripts/smoke_public_demo.py}.
+\end{itemize}
+
+Current blocker:
+
+\begin{quote}
+Actual AWS public deployment was not run from this workspace because AWS CLI/account-local values were unavailable. The project has a documented deployment path and local smoke tooling, but not a completed public smoke result.
+\end{quote}
+
+\section{Problems Faced and How We Solved Them}
+
+\begin{longtable}{p{0.24\linewidth}p{0.32\linewidth}p{0.36\linewidth}}
+\toprule
+\textbf{Problem} & \textbf{Why it happened} & \textbf{Solution}\\
+\midrule
+\endhead
+Default detection cap too low & Dense sheet music has many symbols, more than natural-object scenes. & Added \code{max_det=2000} validation/evaluation path.\\
+Small symbols weak & Stems/dots/ledger lines are tiny after full-page resizing. & Built tiled thin-symbol dataset and trained tiled pilot.\\
+Stem AP zero on full-page validation & Median projected stem width was about 0.78 model pixels at full-page scale. & Use tiled checkpoint as second inference pass for product extraction.\\
+False dotted notes & Tiny CV contours and tiled dot detections could over-detect dots. & Disabled broad CV/tiled dot guessing; kept narrow open-note dot fallback.\\
+Rhythm wrong in demos & Rhythm depends on stem, beam, flag, dot, rest, barline, and voice relationships. & Added rests, stem-aware rhythm, beam lane deduplication, geometry-capped GNN relationships.\\
+Pitch off by one staff step & Line/space noteheads could be quantized incorrectly. & Fixed line/space pitch quantization.\\
+GNN retraining looked promising but evaluated worse & Training validation and fixed V2 graph evaluation are not identical promotion criteria. & Kept default checkpoint; did not promote retrained GNN.\\
+Old app UI not wired to V2 & Previous product UI targeted legacy \code{src.api}. & Built new V2 product API and frontend around \code{melodious_v2}.\\
+App upload initially heuristic & Minimal API upload path used \code{heuristic_bootstrap}. & Added \code{/product/transcribe-image} using real local extractor.\\
+MIDI instrument switching bug & Base MIDI could be written with non-Piano instrument, then Piano request reused it. & Regenerate MIDI when requested instrument differs from original job instrument.\\
+Frontend bundle too large & OSMD and MIDI web components were eagerly bundled. & Lazy-loaded both feature libraries.\\
+\bottomrule
+\end{longtable}
+
+\section{How to Explain the Main Numbers}
+
+\subsection{Detector Metrics}
+
+\begin{itemize}
+  \item \metric{mAP@0.5:0.95 = 0.708}: strict primary detector quality. It averages AP across IoU thresholds from 0.5 to 0.95.
+  \item \metric{mAP@0.5 = 0.839}: optimistic detection quality. It asks whether boxes roughly overlap enough at IoU 0.5.
+  \item \metric{precision@0.5 = 0.881}: when it predicts a symbol, it is usually correct.
+  \item \metric{recall@0.5 = 0.788}: it still misses some symbols.
+  \item \metric{F1@0.5 = 0.832}: balanced precision/recall at IoU 0.5.
+\end{itemize}
+
+\subsection{Graph Metrics}
+
+\begin{itemize}
+  \item \metric{positive macro F1 = 0.759}: average F1 over positive relationship classes, avoiding dominance by no-relation edges.
+  \item \metric{stem-notehead F1 = 0.696}: useful but not perfect; precision is lower than recall.
+  \item \metric{beam-notegroup F1 = 0.822}: stronger relationship class.
+\end{itemize}
+
+\subsection{Export Metrics}
+
+\begin{itemize}
+  \item \metric{MusicXML validity rate = 1.0}: all measured pages produced parseable/valid MusicXML in the fixture run.
+  \item \metric{MIDI generation success rate = 1.0}: all measured pages produced MIDI in the fixture run.
+  \item These are artifact-validity metrics, not musical-perfectness metrics.
+\end{itemize}
+
+\section{What to Claim and What Not to Claim}
+
+\subsection{Good Claims}
+
+\begin{itemize}
+  \item We trained and evaluated a full-page YOLOv8m detector with a 136-class head.
+  \item The best full-page validation detector reaches mAP@0.5:0.95 of 0.708 and mAP@0.5 of 0.839.
+  \item We identified that thin symbols are the bottleneck and built a tiled thin-symbol strategy.
+  \item The tiled pilot improves stem detection on tiled validation to stem mAP@0.5:0.95 of 0.735.
+  \item The GNN relationship model reaches positive-class macro F1 of 0.759 on the fixed graph validation metric.
+  \item The export path generated valid MusicXML and MIDI for all 14 MUSCIMA holdout XML-derived payload fixtures.
+  \item The product app uses the real local extraction path and exposes model provenance and warnings.
+\end{itemize}
+
+\subsection{Avoid These Claims}
+
+\begin{itemize}
+  \item Do not claim all 136 classes have strong measured performance.
+  \item Do not claim the tiled pilot metric is full-page validation performance.
+  \item Do not claim demo uploads are official metric runs.
+  \item Do not claim the system perfectly transcribes arbitrary sheet music.
+  \item Do not claim rhythm is fully solved.
+  \item Do not claim AWS public deployment was completed unless a public smoke result exists.
+\end{itemize}
+
+\section{Professor Question Cheat Sheet}
+
+\subsection{Why are there two mAP numbers?}
+
+\textbf{Answer:} mAP@0.5 uses one IoU threshold and is more forgiving. mAP@0.5:0.95 averages over stricter thresholds up to 0.95. The second number is the primary metric because it rewards both finding objects and localizing them accurately.
+
+\subsection{What does 0.95 mean in mAP@0.5:0.95?}
+
+\textbf{Answer:} It is an IoU threshold. At 0.95, the predicted box must overlap the ground-truth box almost perfectly. The metric averages performance at thresholds 0.5, 0.55, ..., 0.95.
+
+\subsection{Why is mAP@0.5 higher?}
+
+\textbf{Answer:} Because it only requires 50 percent IoU overlap. It measures whether the model roughly found the symbol. The stricter metric penalizes imprecise boxes, especially on tiny notation marks.
+
+\subsection{Why did stems fail in full-page validation?}
+
+\textbf{Answer:} Stems are extremely thin. At full-page resized resolution, the median stem width was about 0.78 model pixels. The model had labels, but the visual signal was too small. Tiling makes stems larger in the model input and improves learning.
+
+\subsection{Does the GNN improve detection?}
+
+\textbf{Answer:} No. The GNN is not a detector. It works after detection and predicts relationships between detected symbols. It can improve assembly/rhythm reasoning when detections exist, but it cannot recover symbols that the detector never found.
+
+\subsection{Why not promote the retrained GNN?}
+
+\textbf{Answer:} Because the fixed V2 validation metric was worse. The default checkpoint had positive macro F1 0.759, while the retrained checkpoint had 0.707. We kept the better validated model.
+
+\subsection{Is the product app using the real model?}
+
+\textbf{Answer:} The product route \code{/product/transcribe-image} uses the local extraction path: full-page YOLO checkpoint, tiled thin-symbol checkpoint, and GNN relationship checkpoint when available. It is labeled as demo transcription and returns provenance showing which components were available/used.
+
+\subsection{Why can MusicXML be valid but still musically wrong?}
+
+\textbf{Answer:} XML validity means the file structure is acceptable. Musical correctness requires correct pitch, rhythm, voices, measures, ties, slurs, and context. The export can be structurally valid while some music interpretation is still approximate.
+
+\subsection{What is the strongest honest result?}
+
+\textbf{Answer:} For detection, the strongest full-page validation metric is mAP@0.5:0.95 = 0.708 and mAP@0.5 = 0.839. For graph assembly, positive-class macro F1 = 0.759. For export validity on fixture payloads, MusicXML and MIDI success rates are 1.0 over 14 pages.
+
+\section{Current Limitations}
+
+\begin{itemize}
+  \item Original full-page stem AP is still 0.0; the product relies on tiled thin-symbol inference for stems.
+  \item Ledger lines remain weak in the full-page detector.
+  \item Some classes have no local labels and cannot be learned from the current dataset.
+  \item Rhythm remains partly heuristic.
+  \item Voice separation and measure-level repair are not fully solved.
+  \item Uploaded demos are not official metrics.
+  \item Public AWS deployment is prepared but not completed from this workspace.
+  \item The GNN is legacy and only covers a 15-class relationship contract, not every V2 detector class.
+\end{itemize}
+
+\section{Final Presentation Narrative}
+
+A strong final narrative is:
+
+\begin{enumerate}
+  \item Start with the problem: converting sheet music images into editable/playable digital music is not just object detection; it requires detection, relationships, and export.
+  \item Explain the architecture: detector finds symbols, GNN assembles relationships, export produces MusicXML/MIDI, product app exposes the flow.
+  \item Show the detector result: best full-page validation mAP@0.5:0.95 = 0.708 and mAP@0.5 = 0.839.
+  \item Explain why the strict metric is lower: mAP@0.5:0.95 includes IoU thresholds up to 0.95.
+  \item Explain the main engineering challenge: tiny symbols, especially stems.
+  \item Show that you diagnosed it: full-page stem AP 0.0 because stems are too thin at page scale.
+  \item Show the engineered response: tiled thin-symbol detector, with tiled stem mAP@0.5:0.95 = 0.735.
+  \item Explain graph assembly: GNN positive macro F1 = 0.759, beam links stronger than stem links.
+  \item Explain export: valid MusicXML/MIDI generation on 14 holdout XML-derived fixtures.
+  \item End with product: upload app now runs the real local extraction path and returns overlay, MusicXML, MIDI, note table, provenance, and warnings.
+\end{enumerate}
+
+\section{Quick Reference Tables}
+
+\subsection{Main Model Metrics}
+
+\begin{longtable}{p{0.31\linewidth}p{0.18\linewidth}p{0.42\linewidth}}
+\toprule
+\textbf{Model / run} & \textbf{Headline metric} & \textbf{Purpose and caveat}\\
+\midrule
+\endhead
+\code{detection_136class_yolov8m_v1} & mAP@0.5:0.95 = 0.475 & First completed 150-epoch full YOLOv8m detector. Superseded by fine-tunes.\\
+\code{detection_136class_yolov8m_finetune_img1472_maxdet2000_v1} & mAP@0.5:0.95 = 0.678 & Strong fine-tune and source for default full-page demo checkpoint.\\
+\code{detection_136class_yolov8m_finetune_img1536_maxdet2000_v2} & mAP@0.5:0.95 = 0.708 & Best completed original full-page validation detector.\\
+\code{detection_136class_yolov8m_tiled_stem_pilot_img1024_v1} & stem mAP@0.5:0.95 = 0.735 & Tiled validation evidence for thin symbols; not full-page validation.\\
+\code{graph_legacy_gnn_muscima_val_v1} & positive macro F1 = 0.759 & Default relationship model on natural candidate-edge validation distribution.\\
+\code{graph_legacy_gnn_muscima_retrain_20260606_eval} & positive macro F1 = 0.707 & Retrained GNN; not promoted because it is worse.\\
+\code{e2e_muscima_holdout_xml_fixture_v1} & MusicXML validity = 1.0 & Export validity from XML-derived payload fixtures, not raw uploaded images.\\
+\bottomrule
+\end{longtable}
+
+\subsection{Artifact Locations}
+
+\begin{longtable}{p{0.34\linewidth}p{0.60\linewidth}}
+\toprule
+\textbf{Artifact} & \textbf{Location}\\
+\midrule
+\endhead
+Best full-page detector metrics & \code{runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json}\\
+Original YOLOv8m model artifact & \code{artifacts/models/detection_136class_yolov8m_v1/best.pt}\\
+Default local note extraction full-page checkpoint & \code{artifacts/models/note_extraction_default_fullpage/best.pt}\\
+Default tiled thin-symbol checkpoint & \code{artifacts/models/note_extraction_tiled_stem_pilot/best.pt}\\
+Default GNN checkpoint & \code{../outputs/gnn_checkpoint.pt}\\
+GNN validation metrics & \code{runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json}\\
+E2E export metrics & \code{runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json}\\
+Product upload artifacts & \code{runs/app/uploads/{job_id}/}\\
+Product frontend & \code{frontend/src/}\\
+Product API & \code{src/melodious_v2/api/product_service.py}\\
+\bottomrule
+\end{longtable}
+
+\section{Final Reminder}
+
+The project is strongest when presented as an honest applied ML system with measured stages:
+
+\begin{itemize}
+  \item detector stage measured by mAP/precision/recall/F1;
+  \item graph stage measured by positive relationship F1;
+  \item export stage measured by MusicXML/MIDI artifact validity;
+  \item product stage demonstrated live with provenance and warnings.
+\end{itemize}
+
+Do not oversell perfect transcription. Do emphasize engineering rigor: we found bottlenecks, measured them, built targeted fixes, and documented what improved and what remains limited.
+
+\end{document}
+
