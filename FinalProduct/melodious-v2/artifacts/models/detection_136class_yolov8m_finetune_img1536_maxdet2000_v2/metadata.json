@@ -1,0 +1,28 @@
+{
+  "artifacts": [
+    {
+      "artifact_type": "checkpoint",
+      "bytes": 52350418,
+      "exists": true,
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/best.pt",
+      "sha256": "6af61b07f388f1cc8834501ad993d9bc5ccac910d72d0ee527f13add2fb29c26",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt"
+    },
+    {
+      "artifact_type": "onnx",
+      "bytes": 103758138,
+      "exists": true,
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/best.onnx",
+      "sha256": "2bce8f32a7a7b5ef382cfbb6f24af313468720411e3ec0e7ab255731bbaaf21a",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.onnx"
+    }
+  ],
+  "extra": {
+    "export_error": null,
+    "finalize_existing_run": true,
+    "source_model": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt",
+    "ultralytics_train_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train"
+  },
+  "generated_at": "2026-06-04T00:08:39Z",
+  "run_id": "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2"
+}

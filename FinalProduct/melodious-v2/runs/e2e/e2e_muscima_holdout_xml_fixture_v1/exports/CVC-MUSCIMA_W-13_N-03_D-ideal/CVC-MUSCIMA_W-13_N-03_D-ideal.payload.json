@@ -1,0 +1,7378 @@
+{
+  "schema_version": "2.0",
+  "run_id": "e2e_muscima_holdout_xml_fixture_v1:CVC-MUSCIMA_W-13_N-03_D-ideal",
+  "model_id": "muscima_xml_ground_truth_payload_fixture",
+  "taxonomy_id": "deepscores_136",
+  "image_size": {
+    "width": 3513,
+    "height": 1940
+  },
+  "detections": [
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4587247366922858,
+        "y_center": 0.15283505154639176,
+        "width": 0.00825505266154284,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 1597.0,
+        "y1": 283.0,
+        "x2": 1626.0,
+        "y2": 310.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.35496726444634213,
+        "y_center": 0.1595360824742268,
+        "width": 0.011955593509820665,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1226.0,
+        "y1": 297.0,
+        "x2": 1268.0,
+        "y2": 322.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5448334756618275,
+        "y_center": 0.1592783505154639,
+        "width": 0.008539709649871904,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1899.0,
+        "y1": 298.0,
+        "x2": 1929.0,
+        "y2": 320.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.18360375747224594,
+        "y_center": 0.16005154639175256,
+        "width": 0.006831767719897523,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 633.0,
+        "y1": 299.0,
+        "x2": 657.0,
+        "y2": 322.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2624537432393965,
+        "y_center": 0.15979381443298968,
+        "width": 0.0062624537432393965,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 911.0,
+        "y1": 300.0,
+        "x2": 933.0,
+        "y2": 320.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.43082835183603757,
+        "y_center": 0.16056701030927836,
+        "width": 0.00654711073156846,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1502.0,
+        "y1": 300.0,
+        "x2": 1525.0,
+        "y2": 323.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4565898092798178,
+        "y_center": 0.17087628865979382,
+        "width": 0.0034158838599487617,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1598.0,
+        "y1": 306.0,
+        "x2": 1610.0,
+        "y2": 357.0
+      }
+    },
+    {
+      "class_id": 5,
+      "class_name": "clefG",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07870765727298605,
+        "y_center": 0.1925257731958763,
+        "width": 0.016794762311414746,
+        "height": 0.06855670103092784
+      },
+      "bbox_pixels": {
+        "x1": 247.0,
+        "y1": 307.0,
+        "x2": 306.0,
+        "y2": 440.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.60333048676345,
+        "y_center": 0.1770618556701031,
+        "width": 0.009393680614859094,
+        "height": 0.0365979381443299
+      },
+      "bbox_pixels": {
+        "x1": 2103.0,
+        "y1": 308.0,
+        "x2": 2136.0,
+        "y2": 379.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1551380586393396,
+        "y_center": 0.16675257731958762,
+        "width": 0.0062624537432393965,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 534.0,
+        "y1": 311.0,
+        "x2": 556.0,
+        "y2": 336.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.24352405351551382,
+        "y_center": 0.16623711340206185,
+        "width": 0.00825505266154284,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 841.0,
+        "y1": 311.0,
+        "x2": 870.0,
+        "y2": 334.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6628237973242244,
+        "y_center": 0.17577319587628865,
+        "width": 0.009393680614859094,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 2312.0,
+        "y1": 311.0,
+        "x2": 2345.0,
+        "y2": 371.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4967264446342158,
+        "y_center": 0.16675257731958762,
+        "width": 0.007970395673213778,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1731.0,
+        "y1": 312.0,
+        "x2": 1759.0,
+        "y2": 335.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5223455735838315,
+        "y_center": 0.16675257731958762,
+        "width": 0.010816965556504412,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1816.0,
+        "y1": 312.0,
+        "x2": 1854.0,
+        "y2": 335.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6228294904639909,
+        "y_center": 0.17860824742268042,
+        "width": 0.01138627953316254,
+        "height": 0.03556701030927835
+      },
+      "bbox_pixels": {
+        "x1": 2168.0,
+        "y1": 312.0,
+        "x2": 2208.0,
+        "y2": 381.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.27213208084258467,
+        "y_center": 0.1670103092783505,
+        "width": 0.00740108169655565,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 943.0,
+        "y1": 313.0,
+        "x2": 969.0,
+        "y2": 335.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19840592086535724,
+        "y_center": 0.1672680412371134,
+        "width": 0.006831767719897523,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 685.0,
+        "y1": 314.0,
+        "x2": 709.0,
+        "y2": 335.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.345288926843154,
+        "y_center": 0.1670103092783505,
+        "width": 0.0062624537432393965,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1202.0,
+        "y1": 314.0,
+        "x2": 1224.0,
+        "y2": 334.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3743239396527185,
+        "y_center": 0.16855670103092785,
+        "width": 0.013663535439795047,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1291.0,
+        "y1": 318.0,
+        "x2": 1339.0,
+        "y2": 336.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2594648448619414,
+        "y_center": 0.1847938144329897,
+        "width": 0.003700540848277825,
+        "height": 0.040721649484536084
+      },
+      "bbox_pixels": {
+        "x1": 905.0,
+        "y1": 319.0,
+        "x2": 918.0,
+        "y2": 398.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5411329348135496,
+        "y_center": 0.1788659793814433,
+        "width": 0.002846569883290635,
+        "height": 0.0288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1896.0,
+        "y1": 319.0,
+        "x2": 1906.0,
+        "y2": 375.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.18089951608311983,
+        "y_center": 0.1806701030927835,
+        "width": 0.0025619128949615714,
+        "height": 0.030412371134020618
+      },
+      "bbox_pixels": {
+        "x1": 631.0,
+        "y1": 321.0,
+        "x2": 640.0,
+        "y2": 380.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.42840876743524053,
+        "y_center": 0.18015463917525773,
+        "width": 0.002846569883290635,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1500.0,
+        "y1": 321.0,
+        "x2": 1510.0,
+        "y2": 378.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.21335041275263308,
+        "y_center": 0.17345360824742267,
+        "width": 0.00654711073156846,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 738.0,
+        "y1": 325.0,
+        "x2": 761.0,
+        "y2": 348.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1345004269854825,
+        "y_center": 0.17396907216494845,
+        "width": 0.00654711073156846,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 461.0,
+        "y1": 326.0,
+        "x2": 484.0,
+        "y2": 349.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5818388841446057,
+        "y_center": 0.17371134020618556,
+        "width": 0.00740108169655565,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 2031.0,
+        "y1": 327.0,
+        "x2": 2057.0,
+        "y2": 347.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7069456305152292,
+        "y_center": 0.17422680412371133,
+        "width": 0.00654711073156846,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 2472.0,
+        "y1": 327.0,
+        "x2": 2495.0,
+        "y2": 349.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2846569883290635,
+        "y_center": 0.17396907216494845,
+        "width": 0.0062624537432393965,
+        "height": 0.008762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 989.0,
+        "y1": 329.0,
+        "x2": 1011.0,
+        "y2": 346.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3559635639054939,
+        "y_center": 0.17422680412371133,
+        "width": 0.005408482778252206,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1241.0,
+        "y1": 329.0,
+        "x2": 1260.0,
+        "y2": 347.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.327355536578423,
+        "y_center": 0.17577319587628865,
+        "width": 0.00569313976658127,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1140.0,
+        "y1": 331.0,
+        "x2": 1160.0,
+        "y2": 351.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3818673498434387,
+        "y_center": 0.17525773195876287,
+        "width": 0.005408482778252206,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1332.0,
+        "y1": 331.0,
+        "x2": 1351.0,
+        "y2": 349.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5145175064047822,
+        "y_center": 0.17577319587628865,
+        "width": 0.00654711073156846,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1796.0,
+        "y1": 332.0,
+        "x2": 1819.0,
+        "y2": 350.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19555935098206662,
+        "y_center": 0.18505154639175259,
+        "width": 0.002846569883290635,
+        "height": 0.026804123711340205
+      },
+      "bbox_pixels": {
+        "x1": 682.0,
+        "y1": 333.0,
+        "x2": 692.0,
+        "y2": 385.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.23968118417307144,
+        "y_center": 0.18608247422680413,
+        "width": 0.003985197836606889,
+        "height": 0.0288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 835.0,
+        "y1": 333.0,
+        "x2": 849.0,
+        "y2": 389.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4935952177625961,
+        "y_center": 0.1847938144329897,
+        "width": 0.0034158838599487617,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1728.0,
+        "y1": 333.0,
+        "x2": 1740.0,
+        "y2": 384.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2705664674067748,
+        "y_center": 0.18865979381443299,
+        "width": 0.0031312268716196983,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 945.0,
+        "y1": 334.0,
+        "x2": 956.0,
+        "y2": 398.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.34258468545402787,
+        "y_center": 0.18969072164948453,
+        "width": 0.003700540848277825,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 1197.0,
+        "y1": 334.0,
+        "x2": 1210.0,
+        "y2": 402.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1524338172502135,
+        "y_center": 0.18530927835051547,
+        "width": 0.0031312268716196983,
+        "height": 0.025257731958762887
+      },
+      "bbox_pixels": {
+        "x1": 530.0,
+        "y1": 335.0,
+        "x2": 541.0,
+        "y2": 384.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6851693709080557,
+        "y_center": 0.1809278350515464,
+        "width": 0.00740108169655565,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 2394.0,
+        "y1": 337.0,
+        "x2": 2420.0,
+        "y2": 365.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4104753771705095,
+        "y_center": 0.18170103092783504,
+        "width": 0.007970395673213778,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 1428.0,
+        "y1": 339.0,
+        "x2": 1456.0,
+        "y2": 366.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.28223740392826646,
+        "y_center": 0.18969072164948453,
+        "width": 0.003700540848277825,
+        "height": 0.024742268041237112
+      },
+      "bbox_pixels": {
+        "x1": 985.0,
+        "y1": 344.0,
+        "x2": 998.0,
+        "y2": 392.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36834614289780815,
+        "y_center": 0.1827319587628866,
+        "width": 0.00569313976658127,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 1284.0,
+        "y1": 344.0,
+        "x2": 1304.0,
+        "y2": 365.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5236265300313123,
+        "y_center": 0.18170103092783504,
+        "width": 0.00654711073156846,
+        "height": 0.008762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 1828.0,
+        "y1": 344.0,
+        "x2": 1851.0,
+        "y2": 361.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2967549103330487,
+        "y_center": 0.1827319587628866,
+        "width": 0.007685738684884714,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1029.0,
+        "y1": 345.0,
+        "x2": 1056.0,
+        "y2": 364.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.35340165101053234,
+        "y_center": 0.19201030927835053,
+        "width": 0.004269854824935952,
+        "height": 0.028350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 1234.0,
+        "y1": 345.0,
+        "x2": 1249.0,
+        "y2": 400.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.21064617136350697,
+        "y_center": 0.18943298969072164,
+        "width": 0.002846569883290635,
+        "height": 0.021134020618556702
+      },
+      "bbox_pixels": {
+        "x1": 735.0,
+        "y1": 347.0,
+        "x2": 745.0,
+        "y2": 388.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.37873612297181897,
+        "y_center": 0.19639175257731958,
+        "width": 0.00654711073156846,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 1319.0,
+        "y1": 347.0,
+        "x2": 1342.0,
+        "y2": 415.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5126672359806433,
+        "y_center": 0.19278350515463918,
+        "width": 0.0034158838599487617,
+        "height": 0.027835051546391754
+      },
+      "bbox_pixels": {
+        "x1": 1795.0,
+        "y1": 347.0,
+        "x2": 1807.0,
+        "y2": 401.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.578707657272986,
+        "y_center": 0.19123711340206184,
+        "width": 0.002846569883290635,
+        "height": 0.024742268041237112
+      },
+      "bbox_pixels": {
+        "x1": 2028.0,
+        "y1": 347.0,
+        "x2": 2038.0,
+        "y2": 395.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7050953600910902,
+        "y_center": 0.19097938144329896,
+        "width": 0.0034158838599487617,
+        "height": 0.02422680412371134
+      },
+      "bbox_pixels": {
+        "x1": 2471.0,
+        "y1": 347.0,
+        "x2": 2483.0,
+        "y2": 394.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.13236549957301452,
+        "y_center": 0.1922680412371134,
+        "width": 0.002277255906632508,
+        "height": 0.02577319587628866
+      },
+      "bbox_pixels": {
+        "x1": 461.0,
+        "y1": 348.0,
+        "x2": 469.0,
+        "y2": 398.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3256475946484486,
+        "y_center": 0.19304123711340207,
+        "width": 0.002277255906632508,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1140.0,
+        "y1": 349.0,
+        "x2": 1148.0,
+        "y2": 400.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5229148875604896,
+        "y_center": 0.19510309278350516,
+        "width": 0.002277255906632508,
+        "height": 0.01907216494845361
+      },
+      "bbox_pixels": {
+        "x1": 1833.0,
+        "y1": 360.0,
+        "x2": 1841.0,
+        "y2": 397.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.29390834044975805,
+        "y_center": 0.19690721649484536,
+        "width": 0.003700540848277825,
+        "height": 0.018556701030927835
+      },
+      "bbox_pixels": {
+        "x1": 1026.0,
+        "y1": 364.0,
+        "x2": 1039.0,
+        "y2": 400.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3666382009678338,
+        "y_center": 0.19742268041237113,
+        "width": 0.0034158838599487617,
+        "height": 0.01958762886597938
+      },
+      "bbox_pixels": {
+        "x1": 1282.0,
+        "y1": 364.0,
+        "x2": 1294.0,
+        "y2": 402.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.408198121263877,
+        "y_center": 0.19922680412371135,
+        "width": 0.0034158838599487617,
+        "height": 0.023195876288659795
+      },
+      "bbox_pixels": {
+        "x1": 1428.0,
+        "y1": 364.0,
+        "x2": 1440.0,
+        "y2": 409.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6833191004839169,
+        "y_center": 0.19896907216494844,
+        "width": 0.0025619128949615714,
+        "height": 0.02268041237113402
+      },
+      "bbox_pixels": {
+        "x1": 2396.0,
+        "y1": 364.0,
+        "x2": 2405.0,
+        "y2": 408.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1130088243666382,
+        "y_center": 0.20463917525773195,
+        "width": 0.002846569883290635,
+        "height": 0.027835051546391754
+      },
+      "bbox_pixels": {
+        "x1": 392.0,
+        "y1": 370.0,
+        "x2": 402.0,
+        "y2": 424.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.27682892115001423,
+        "y_center": 0.20438144329896907,
+        "width": 0.0389980074010817,
+        "height": 0.008762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 904.0,
+        "y1": 388.0,
+        "x2": 1041.0,
+        "y2": 405.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5186450327355536,
+        "y_center": 0.2038659793814433,
+        "width": 0.015371477369769428,
+        "height": 0.005670103092783505
+      },
+      "bbox_pixels": {
+        "x1": 1795.0,
+        "y1": 390.0,
+        "x2": 1849.0,
+        "y2": 401.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3599487617421008,
+        "y_center": 0.20670103092783504,
+        "width": 0.03842869342442357,
+        "height": 0.007216494845360825
+      },
+      "bbox_pixels": {
+        "x1": 1197.0,
+        "y1": 394.0,
+        "x2": 1332.0,
+        "y2": 408.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.11058923996584116,
+        "y_center": 0.225,
+        "width": 0.005408482778252206,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 379.0,
+        "y1": 424.0,
+        "x2": 398.0,
+        "y2": 449.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4436379163108454,
+        "y_center": 0.2551546391752577,
+        "width": 0.01224025049814973,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 1537.0,
+        "y1": 481.0,
+        "x2": 1580.0,
+        "y2": 509.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5555081127241673,
+        "y_center": 0.2551546391752577,
+        "width": 0.007116424708226587,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1939.0,
+        "y1": 486.0,
+        "x2": 1964.0,
+        "y2": 504.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.23925419869057785,
+        "y_center": 0.2582474226804124,
+        "width": 0.007116424708226587,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 828.0,
+        "y1": 487.0,
+        "x2": 853.0,
+        "y2": 515.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5202106461713635,
+        "y_center": 0.26237113402061857,
+        "width": 0.009393680614859094,
+        "height": 0.016494845360824743
+      },
+      "bbox_pixels": {
+        "x1": 1811.0,
+        "y1": 493.0,
+        "x2": 1844.0,
+        "y2": 525.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6161400512382579,
+        "y_center": 0.2615979381443299,
+        "width": 0.01394819242812411,
+        "height": 0.014948453608247423
+      },
+      "bbox_pixels": {
+        "x1": 2140.0,
+        "y1": 493.0,
+        "x2": 2189.0,
+        "y2": 522.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4063478508397381,
+        "y_center": 0.27164948453608245,
+        "width": 0.008824366638200968,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 1412.0,
+        "y1": 497.0,
+        "x2": 1443.0,
+        "y2": 557.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3408767435240535,
+        "y_center": 0.2639175257731959,
+        "width": 0.00654711073156846,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 1186.0,
+        "y1": 498.0,
+        "x2": 1209.0,
+        "y2": 526.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.466552803871335,
+        "y_center": 0.26288659793814434,
+        "width": 0.01309422146313692,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1616.0,
+        "y1": 499.0,
+        "x2": 1662.0,
+        "y2": 521.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6376316538571022,
+        "y_center": 0.26443298969072165,
+        "width": 0.0062624537432393965,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 2229.0,
+        "y1": 499.0,
+        "x2": 2251.0,
+        "y2": 527.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.49032166239681185,
+        "y_center": 0.27474226804123714,
+        "width": 0.009962994591517222,
+        "height": 0.03402061855670103
+      },
+      "bbox_pixels": {
+        "x1": 1705.0,
+        "y1": 500.0,
+        "x2": 1740.0,
+        "y2": 566.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5815542271562767,
+        "y_center": 0.2649484536082474,
+        "width": 0.007970395673213778,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 2029.0,
+        "y1": 500.0,
+        "x2": 2057.0,
+        "y2": 528.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5970680330202106,
+        "y_center": 0.27422680412371137,
+        "width": 0.011101622544833475,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 2078.0,
+        "y1": 501.0,
+        "x2": 2117.0,
+        "y2": 563.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4341019072018218,
+        "y_center": 0.2654639175257732,
+        "width": 0.0062624537432393965,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1514.0,
+        "y1": 502.0,
+        "x2": 1536.0,
+        "y2": 528.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.27910617705664675,
+        "y_center": 0.27448453608247425,
+        "width": 0.009962994591517222,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 963.0,
+        "y1": 504.0,
+        "x2": 998.0,
+        "y2": 561.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19143182465129518,
+        "y_center": 0.2739690721649485,
+        "width": 0.008824366638200968,
+        "height": 0.02731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 657.0,
+        "y1": 505.0,
+        "x2": 688.0,
+        "y2": 558.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2590378593794478,
+        "y_center": 0.2657216494845361,
+        "width": 0.006831767719897523,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 898.0,
+        "y1": 505.0,
+        "x2": 922.0,
+        "y2": 526.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.32095075434101905,
+        "y_center": 0.26623711340206185,
+        "width": 0.007116424708226587,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1115.0,
+        "y1": 505.0,
+        "x2": 1140.0,
+        "y2": 528.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7086535724452036,
+        "y_center": 0.2737113402061856,
+        "width": 0.007116424708226587,
+        "height": 0.026804123711340205
+      },
+      "bbox_pixels": {
+        "x1": 2477.0,
+        "y1": 505.0,
+        "x2": 2502.0,
+        "y2": 557.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.35340165101053234,
+        "y_center": 0.26623711340206185,
+        "width": 0.005977796754910333,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 1231.0,
+        "y1": 506.0,
+        "x2": 1252.0,
+        "y2": 527.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3600910902362653,
+        "y_center": 0.27448453608247425,
+        "width": 0.009678337603188158,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1248.0,
+        "y1": 507.0,
+        "x2": 1282.0,
+        "y2": 558.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.21491602618844294,
+        "y_center": 0.2670103092783505,
+        "width": 0.006831767719897523,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 743.0,
+        "y1": 508.0,
+        "x2": 767.0,
+        "y2": 528.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5519499003700541,
+        "y_center": 0.28015463917525774,
+        "width": 0.00569313976658127,
+        "height": 0.0365979381443299
+      },
+      "bbox_pixels": {
+        "x1": 1929.0,
+        "y1": 508.0,
+        "x2": 1949.0,
+        "y2": 579.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4554511813265016,
+        "y_center": 0.2791237113402062,
+        "width": 0.009109023626530032,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1584.0,
+        "y1": 513.0,
+        "x2": 1616.0,
+        "y2": 570.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6066040421292342,
+        "y_center": 0.27139175257731957,
+        "width": 0.006831767719897523,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 2119.0,
+        "y1": 513.0,
+        "x2": 2143.0,
+        "y2": 540.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.23626530031312268,
+        "y_center": 0.28350515463917525,
+        "width": 0.002846569883290635,
+        "height": 0.03711340206185567
+      },
+      "bbox_pixels": {
+        "x1": 825.0,
+        "y1": 514.0,
+        "x2": 835.0,
+        "y2": 586.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4447765442641617,
+        "y_center": 0.27164948453608245,
+        "width": 0.00654711073156846,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1551.0,
+        "y1": 514.0,
+        "x2": 1574.0,
+        "y2": 540.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.502419584400797,
+        "y_center": 0.27319587628865977,
+        "width": 0.006831767719897523,
+        "height": 0.016494845360824743
+      },
+      "bbox_pixels": {
+        "x1": 1753.0,
+        "y1": 514.0,
+        "x2": 1777.0,
+        "y2": 546.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.616424708226587,
+        "y_center": 0.2822164948453608,
+        "width": 0.011670936521491603,
+        "height": 0.03350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 2145.0,
+        "y1": 515.0,
+        "x2": 2186.0,
+        "y2": 580.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.37588955308852834,
+        "y_center": 0.28015463917525774,
+        "width": 0.00825505266154284,
+        "height": 0.028350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 1306.0,
+        "y1": 516.0,
+        "x2": 1335.0,
+        "y2": 571.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2857956162823797,
+        "y_center": 0.2724226804123711,
+        "width": 0.0062624537432393965,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 993.0,
+        "y1": 517.0,
+        "x2": 1015.0,
+        "y2": 540.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.717620267577569,
+        "y_center": 0.27164948453608245,
+        "width": 0.005123825789923143,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 2512.0,
+        "y1": 517.0,
+        "x2": 2530.0,
+        "y2": 537.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36806148590947907,
+        "y_center": 0.272680412371134,
+        "width": 0.0062624537432393965,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1282.0,
+        "y1": 518.0,
+        "x2": 1304.0,
+        "y2": 540.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.41645317392541986,
+        "y_center": 0.27319587628865977,
+        "width": 0.006831767719897523,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1451.0,
+        "y1": 518.0,
+        "x2": 1475.0,
+        "y2": 542.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.47196128664958725,
+        "y_center": 0.2724226804123711,
+        "width": 0.0062624537432393965,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1647.0,
+        "y1": 519.0,
+        "x2": 1669.0,
+        "y2": 538.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19940222032450897,
+        "y_center": 0.2729381443298969,
+        "width": 0.005977796754910333,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 690.0,
+        "y1": 520.0,
+        "x2": 711.0,
+        "y2": 539.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5162254483347566,
+        "y_center": 0.2858247422680412,
+        "width": 0.003700540848277825,
+        "height": 0.032474226804123714
+      },
+      "bbox_pixels": {
+        "x1": 1807.0,
+        "y1": 523.0,
+        "x2": 1820.0,
+        "y2": 586.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.25761457443780245,
+        "y_center": 0.28891752577319585,
+        "width": 0.0034158838599487617,
+        "height": 0.0365979381443299
+      },
+      "bbox_pixels": {
+        "x1": 899.0,
+        "y1": 525.0,
+        "x2": 911.0,
+        "y2": 596.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.338599487617421,
+        "y_center": 0.29020618556701033,
+        "width": 0.003700540848277825,
+        "height": 0.03917525773195876
+      },
+      "bbox_pixels": {
+        "x1": 1183.0,
+        "y1": 525.0,
+        "x2": 1196.0,
+        "y2": 601.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6336464560204953,
+        "y_center": 0.29381443298969073,
+        "width": 0.00569313976658127,
+        "height": 0.04639175257731959
+      },
+      "bbox_pixels": {
+        "x1": 2216.0,
+        "y1": 525.0,
+        "x2": 2236.0,
+        "y2": 615.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2129234272701395,
+        "y_center": 0.28711340206185565,
+        "width": 0.002846569883290635,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 743.0,
+        "y1": 527.0,
+        "x2": 753.0,
+        "y2": 587.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3193851409052092,
+        "y_center": 0.29355670103092785,
+        "width": 0.002846569883290635,
+        "height": 0.04381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1117.0,
+        "y1": 527.0,
+        "x2": 1127.0,
+        "y2": 612.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3518360375747225,
+        "y_center": 0.29175257731958765,
+        "width": 0.0034158838599487617,
+        "height": 0.04020618556701031
+      },
+      "bbox_pixels": {
+        "x1": 1230.0,
+        "y1": 527.0,
+        "x2": 1242.0,
+        "y2": 605.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4332479362368346,
+        "y_center": 0.29561855670103093,
+        "width": 0.00569313976658127,
+        "height": 0.04793814432989691
+      },
+      "bbox_pixels": {
+        "x1": 1512.0,
+        "y1": 527.0,
+        "x2": 1532.0,
+        "y2": 620.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5782806717904925,
+        "y_center": 0.28685567010309276,
+        "width": 0.0031312268716196983,
+        "height": 0.030412371134020618
+      },
+      "bbox_pixels": {
+        "x1": 2026.0,
+        "y1": 527.0,
+        "x2": 2037.0,
+        "y2": 586.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.38329063478508396,
+        "y_center": 0.2811855670103093,
+        "width": 0.007685738684884714,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1333.0,
+        "y1": 534.0,
+        "x2": 1360.0,
+        "y2": 557.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.46740677483632226,
+        "y_center": 0.2981958762886598,
+        "width": 0.005123825789923143,
+        "height": 0.04587628865979381
+      },
+      "bbox_pixels": {
+        "x1": 1633.0,
+        "y1": 534.0,
+        "x2": 1651.0,
+        "y2": 623.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.625249074864788,
+        "y_center": 0.28144329896907216,
+        "width": 0.005408482778252206,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 2187.0,
+        "y1": 535.0,
+        "x2": 2206.0,
+        "y2": 557.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.46128664958724735,
+        "y_center": 0.2811855670103093,
+        "width": 0.005408482778252206,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1611.0,
+        "y1": 536.0,
+        "x2": 1630.0,
+        "y2": 555.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19755194990037006,
+        "y_center": 0.2922680412371134,
+        "width": 0.002846569883290635,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 689.0,
+        "y1": 537.0,
+        "x2": 699.0,
+        "y2": 597.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.715485340165101,
+        "y_center": 0.29716494845360825,
+        "width": 0.0025619128949615714,
+        "height": 0.040721649484536084
+      },
+      "bbox_pixels": {
+        "x1": 2509.0,
+        "y1": 537.0,
+        "x2": 2518.0,
+        "y2": 616.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2839453458582408,
+        "y_center": 0.2958762886597938,
+        "width": 0.003700540848277825,
+        "height": 0.03711340206185567
+      },
+      "bbox_pixels": {
+        "x1": 991.0,
+        "y1": 538.0,
+        "x2": 1004.0,
+        "y2": 610.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6024765157984628,
+        "y_center": 0.30051546391752576,
+        "width": 0.004269854824935952,
+        "height": 0.04639175257731959
+      },
+      "bbox_pixels": {
+        "x1": 2109.0,
+        "y1": 538.0,
+        "x2": 2124.0,
+        "y2": 628.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36564190150868203,
+        "y_center": 0.29536082474226805,
+        "width": 0.004839168801594079,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 1276.0,
+        "y1": 539.0,
+        "x2": 1293.0,
+        "y2": 607.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.441645317392542,
+        "y_center": 0.29871134020618556,
+        "width": 0.004269854824935952,
+        "height": 0.041752577319587626
+      },
+      "bbox_pixels": {
+        "x1": 1544.0,
+        "y1": 539.0,
+        "x2": 1559.0,
+        "y2": 620.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4151722174779391,
+        "y_center": 0.2981958762886598,
+        "width": 0.0025619128949615714,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 1454.0,
+        "y1": 541.0,
+        "x2": 1463.0,
+        "y2": 616.0
+      }
+    },
+    {
+      "class_id": 6,
+      "class_name": "clefCAlto",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07514944491887275,
+        "y_center": 0.30567010309278353,
+        "width": 0.02049530315969257,
+        "height": 0.05154639175257732
+      },
+      "bbox_pixels": {
+        "x1": 228.0,
+        "y1": 543.0,
+        "x2": 300.0,
+        "y2": 643.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.49928835752917733,
+        "y_center": 0.29896907216494845,
+        "width": 0.0034158838599487617,
+        "height": 0.03711340206185567
+      },
+      "bbox_pixels": {
+        "x1": 1748.0,
+        "y1": 544.0,
+        "x2": 1760.0,
+        "y2": 616.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6833191004839169,
+        "y_center": 0.2884020618556701,
+        "width": 0.007116424708226587,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 2388.0,
+        "y1": 546.0,
+        "x2": 2413.0,
+        "y2": 573.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6615428408767435,
+        "y_center": 0.2881443298969072,
+        "width": 0.0062624537432393965,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2313.0,
+        "y1": 547.0,
+        "x2": 2335.0,
+        "y2": 571.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.13393111300882438,
+        "y_center": 0.30051546391752576,
+        "width": 0.005977796754910333,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 460.0,
+        "y1": 551.0,
+        "x2": 481.0,
+        "y2": 615.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1794762311414745,
+        "y_center": 0.2994845360824742,
+        "width": 0.007685738684884714,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 617.0,
+        "y1": 551.0,
+        "x2": 644.0,
+        "y2": 611.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6211215485340165,
+        "y_center": 0.3030927835051546,
+        "width": 0.003985197836606889,
+        "height": 0.03711340206185567
+      },
+      "bbox_pixels": {
+        "x1": 2175.0,
+        "y1": 552.0,
+        "x2": 2189.0,
+        "y2": 624.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4587247366922858,
+        "y_center": 0.3033505154639175,
+        "width": 0.004269854824935952,
+        "height": 0.03556701030927835
+      },
+      "bbox_pixels": {
+        "x1": 1604.0,
+        "y1": 554.0,
+        "x2": 1619.0,
+        "y2": 623.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.38058639339595784,
+        "y_center": 0.3002577319587629,
+        "width": 0.004554511813265016,
+        "height": 0.02731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 1329.0,
+        "y1": 556.0,
+        "x2": 1345.0,
+        "y2": 609.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1511528608027327,
+        "y_center": 0.30670103092783507,
+        "width": 0.008539709649871904,
+        "height": 0.03711340206185567
+      },
+      "bbox_pixels": {
+        "x1": 516.0,
+        "y1": 559.0,
+        "x2": 546.0,
+        "y2": 631.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6586962709934528,
+        "y_center": 0.31262886597938144,
+        "width": 0.0034158838599487617,
+        "height": 0.03762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 2308.0,
+        "y1": 570.0,
+        "x2": 2320.0,
+        "y2": 643.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6799032166239681,
+        "y_center": 0.30695876288659796,
+        "width": 0.0031312268716196983,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2383.0,
+        "y1": 570.0,
+        "x2": 2394.0,
+        "y2": 621.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.11372046683746086,
+        "y_center": 0.30257731958762885,
+        "width": 0.005977796754910333,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 389.0,
+        "y1": 574.0,
+        "x2": 410.0,
+        "y2": 600.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36080273270708796,
+        "y_center": 0.30902061855670104,
+        "width": 0.04810703102761173,
+        "height": 0.007731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 1183.0,
+        "y1": 592.0,
+        "x2": 1352.0,
+        "y2": 607.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.11229718189581554,
+        "y_center": 0.31932989690721647,
+        "width": 0.0025619128949615714,
+        "height": 0.02422680412371134
+      },
+      "bbox_pixels": {
+        "x1": 390.0,
+        "y1": 596.0,
+        "x2": 399.0,
+        "y2": 643.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.450754341019072,
+        "y_center": 0.31597938144329896,
+        "width": 0.04070594933105608,
+        "height": 0.008247422680412371
+      },
+      "bbox_pixels": {
+        "x1": 1512.0,
+        "y1": 605.0,
+        "x2": 1655.0,
+        "y2": 621.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6105892399658411,
+        "y_center": 0.3213917525773196,
+        "width": 0.02049530315969257,
+        "height": 0.005670103092783505
+      },
+      "bbox_pixels": {
+        "x1": 2109.0,
+        "y1": 618.0,
+        "x2": 2181.0,
+        "y2": 629.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6093082835183604,
+        "y_center": 0.4061855670103093,
+        "width": 0.013378878451465983,
+        "height": 0.015463917525773196
+      },
+      "bbox_pixels": {
+        "x1": 2117.0,
+        "y1": 773.0,
+        "x2": 2164.0,
+        "y2": 803.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6715058354682607,
+        "y_center": 0.41675257731958765,
+        "width": 0.002846569883290635,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 2354.0,
+        "y1": 775.0,
+        "x2": 2364.0,
+        "y2": 842.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7142043837176203,
+        "y_center": 0.4074742268041237,
+        "width": 0.008539709649871904,
+        "height": 0.014948453608247423
+      },
+      "bbox_pixels": {
+        "x1": 2494.0,
+        "y1": 776.0,
+        "x2": 2524.0,
+        "y2": 805.0
+      }
+    },
+    {
+      "class_id": 6,
+      "class_name": "clefCAlto",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07244520352974665,
+        "y_center": 0.4262886597938144,
+        "width": 0.02134927412467976,
+        "height": 0.04845360824742268
+      },
+      "bbox_pixels": {
+        "x1": 217.0,
+        "y1": 780.0,
+        "x2": 292.0,
+        "y2": 874.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5074010816965556,
+        "y_center": 0.4077319587628866,
+        "width": 0.005408482778252206,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1773.0,
+        "y1": 781.0,
+        "x2": 1792.0,
+        "y2": 801.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6904355251921435,
+        "y_center": 0.40876288659793814,
+        "width": 0.00654711073156846,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2414.0,
+        "y1": 781.0,
+        "x2": 2437.0,
+        "y2": 805.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4099060631938514,
+        "y_center": 0.4097938144329897,
+        "width": 0.006831767719897523,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1428.0,
+        "y1": 783.0,
+        "x2": 1452.0,
+        "y2": 807.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3225163677768289,
+        "y_center": 0.4231958762886598,
+        "width": 0.009109023626530032,
+        "height": 0.03608247422680412
+      },
+      "bbox_pixels": {
+        "x1": 1117.0,
+        "y1": 786.0,
+        "x2": 1149.0,
+        "y2": 856.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.13193851409052093,
+        "y_center": 0.4247422680412371,
+        "width": 0.009393680614859094,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 447.0,
+        "y1": 790.0,
+        "x2": 480.0,
+        "y2": 858.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19484770851124394,
+        "y_center": 0.41365979381443296,
+        "width": 0.020210646171363505,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 649.0,
+        "y1": 791.0,
+        "x2": 720.0,
+        "y2": 814.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2695701679476231,
+        "y_center": 0.4126288659793814,
+        "width": 0.017079419299743808,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 917.0,
+        "y1": 791.0,
+        "x2": 977.0,
+        "y2": 810.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.14944491887275832,
+        "y_center": 0.4270618556701031,
+        "width": 0.009678337603188158,
+        "height": 0.03762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 508.0,
+        "y1": 792.0,
+        "x2": 542.0,
+        "y2": 865.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4890407059493311,
+        "y_center": 0.415979381443299,
+        "width": 0.007970395673213778,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1704.0,
+        "y1": 795.0,
+        "x2": 1732.0,
+        "y2": 819.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5969257045260461,
+        "y_center": 0.4162371134020619,
+        "width": 0.0062624537432393965,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2086.0,
+        "y1": 795.0,
+        "x2": 2108.0,
+        "y2": 820.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5220609165955025,
+        "y_center": 0.4154639175257732,
+        "width": 0.0062624537432393965,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1823.0,
+        "y1": 796.0,
+        "x2": 1845.0,
+        "y2": 816.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6319385140905209,
+        "y_center": 0.4172680412371134,
+        "width": 0.017079419299743808,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2190.0,
+        "y1": 797.0,
+        "x2": 2250.0,
+        "y2": 822.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.37105038428693426,
+        "y_center": 0.4175257731958763,
+        "width": 0.00654711073156846,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1292.0,
+        "y1": 798.0,
+        "x2": 1315.0,
+        "y2": 822.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4296897238827213,
+        "y_center": 0.4175257731958763,
+        "width": 0.005977796754910333,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1499.0,
+        "y1": 800.0,
+        "x2": 1520.0,
+        "y2": 820.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5037005408482779,
+        "y_center": 0.4252577319587629,
+        "width": 0.004839168801594079,
+        "height": 0.02577319587628866
+      },
+      "bbox_pixels": {
+        "x1": 1761.0,
+        "y1": 800.0,
+        "x2": 1778.0,
+        "y2": 850.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7100768573868489,
+        "y_center": 0.4311855670103093,
+        "width": 0.004269854824935952,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 2487.0,
+        "y1": 803.0,
+        "x2": 2502.0,
+        "y2": 870.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.40834044975804157,
+        "y_center": 0.4314432989690722,
+        "width": 0.003700540848277825,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 1428.0,
+        "y1": 805.0,
+        "x2": 1441.0,
+        "y2": 869.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6874466268146883,
+        "y_center": 0.42912371134020616,
+        "width": 0.0034158838599487617,
+        "height": 0.028350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 2409.0,
+        "y1": 805.0,
+        "x2": 2421.0,
+        "y2": 860.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.11542840876743524,
+        "y_center": 0.43015463917525776,
+        "width": 0.0031312268716196983,
+        "height": 0.02731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 400.0,
+        "y1": 808.0,
+        "x2": 411.0,
+        "y2": 861.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5368630799886137,
+        "y_center": 0.422680412371134,
+        "width": 0.00740108169655565,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1873.0,
+        "y1": 809.0,
+        "x2": 1899.0,
+        "y2": 831.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3417307144890407,
+        "y_center": 0.42371134020618556,
+        "width": 0.00654711073156846,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1189.0,
+        "y1": 811.0,
+        "x2": 1212.0,
+        "y2": 833.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5775690293196698,
+        "y_center": 0.4247422680412371,
+        "width": 0.00740108169655565,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2016.0,
+        "y1": 812.0,
+        "x2": 2042.0,
+        "y2": 836.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6100199259891831,
+        "y_center": 0.4244845360824742,
+        "width": 0.006831767719897523,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 2131.0,
+        "y1": 812.0,
+        "x2": 2155.0,
+        "y2": 835.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6416168516937091,
+        "y_center": 0.425,
+        "width": 0.0062624537432393965,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 2243.0,
+        "y1": 813.0,
+        "x2": 2265.0,
+        "y2": 836.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4547395388556789,
+        "y_center": 0.4244845360824742,
+        "width": 0.00654711073156846,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1586.0,
+        "y1": 814.0,
+        "x2": 1609.0,
+        "y2": 833.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5186450327355536,
+        "y_center": 0.43247422680412373,
+        "width": 0.003985197836606889,
+        "height": 0.02577319587628866
+      },
+      "bbox_pixels": {
+        "x1": 1815.0,
+        "y1": 814.0,
+        "x2": 1829.0,
+        "y2": 864.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.42712781098775976,
+        "y_center": 0.4368556701030928,
+        "width": 0.0031312268716196983,
+        "height": 0.031443298969072164
+      },
+      "bbox_pixels": {
+        "x1": 1495.0,
+        "y1": 817.0,
+        "x2": 1506.0,
+        "y2": 878.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4864787930543695,
+        "y_center": 0.4384020618556701,
+        "width": 0.003985197836606889,
+        "height": 0.03350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 1702.0,
+        "y1": 818.0,
+        "x2": 1716.0,
+        "y2": 883.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36920011386279533,
+        "y_center": 0.438659793814433,
+        "width": 0.002846569883290635,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 1292.0,
+        "y1": 820.0,
+        "x2": 1302.0,
+        "y2": 882.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.59422146313692,
+        "y_center": 0.44252577319587627,
+        "width": 0.004269854824935952,
+        "height": 0.039690721649484534
+      },
+      "bbox_pixels": {
+        "x1": 2080.0,
+        "y1": 820.0,
+        "x2": 2095.0,
+        "y2": 897.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5513805863933959,
+        "y_center": 0.43067010309278353,
+        "width": 0.0062624537432393965,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1926.0,
+        "y1": 826.0,
+        "x2": 1948.0,
+        "y2": 845.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5320239111870196,
+        "y_center": 0.44097938144329896,
+        "width": 0.003985197836606889,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1862.0,
+        "y1": 827.0,
+        "x2": 1876.0,
+        "y2": 884.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6673783091374893,
+        "y_center": 0.43221649484536084,
+        "width": 0.007116424708226587,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 2332.0,
+        "y1": 827.0,
+        "x2": 2357.0,
+        "y2": 850.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.625533731853117,
+        "y_center": 0.4329896907216495,
+        "width": 0.00654711073156846,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 2186.0,
+        "y1": 829.0,
+        "x2": 2209.0,
+        "y2": 851.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6083119840592086,
+        "y_center": 0.44432989690721647,
+        "width": 0.004554511813265016,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 2129.0,
+        "y1": 830.0,
+        "x2": 2145.0,
+        "y2": 894.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.33959578707657273,
+        "y_center": 0.44304123711340204,
+        "width": 0.002846569883290635,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1188.0,
+        "y1": 831.0,
+        "x2": 1198.0,
+        "y2": 888.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4533162539140336,
+        "y_center": 0.4420103092783505,
+        "width": 0.0025619128949615714,
+        "height": 0.02731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 1588.0,
+        "y1": 831.0,
+        "x2": 1597.0,
+        "y2": 884.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5757187588955309,
+        "y_center": 0.4422680412371134,
+        "width": 0.0031312268716196983,
+        "height": 0.026804123711340205
+      },
+      "bbox_pixels": {
+        "x1": 2017.0,
+        "y1": 832.0,
+        "x2": 2028.0,
+        "y2": 884.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6383432963279249,
+        "y_center": 0.4463917525773196,
+        "width": 0.004269854824935952,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 2235.0,
+        "y1": 836.0,
+        "x2": 2250.0,
+        "y2": 896.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5466837460859664,
+        "y_center": 0.44768041237113404,
+        "width": 0.004839168801594079,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1912.0,
+        "y1": 840.0,
+        "x2": 1929.0,
+        "y2": 897.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5239111870196413,
+        "y_center": 0.45103092783505155,
+        "width": 0.04526046114432109,
+        "height": 0.029896907216494847
+      },
+      "bbox_pixels": {
+        "x1": 1761.0,
+        "y1": 846.0,
+        "x2": 1920.0,
+        "y2": 904.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6216908625106746,
+        "y_center": 0.4536082474226804,
+        "width": 0.003985197836606889,
+        "height": 0.0288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2177.0,
+        "y1": 852.0,
+        "x2": 2191.0,
+        "y2": 908.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.11215485340165102,
+        "y_center": 0.44742268041237115,
+        "width": 0.00740108169655565,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 381.0,
+        "y1": 857.0,
+        "x2": 407.0,
+        "y2": 879.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6159977227440934,
+        "y_center": 0.46134020618556704,
+        "width": 0.04725306006262454,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 2081.0,
+        "y1": 885.0,
+        "x2": 2247.0,
+        "y2": 905.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3038713350412753,
+        "y_center": 0.49716494845360826,
+        "width": 0.09365214916026189,
+        "height": 0.01907216494845361
+      },
+      "bbox_pixels": {
+        "x1": 903.0,
+        "y1": 946.0,
+        "x2": 1232.0,
+        "y2": 983.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1910048391688016,
+        "y_center": 0.5036082474226804,
+        "width": 0.018218047253060064,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 639.0,
+        "y1": 964.0,
+        "x2": 703.0,
+        "y2": 990.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.46043267862226017,
+        "y_center": 0.5059278350515464,
+        "width": 0.00654711073156846,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 1606.0,
+        "y1": 968.0,
+        "x2": 1629.0,
+        "y2": 995.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.25377170509536007,
+        "y_center": 0.5077319587628866,
+        "width": 0.005408482778252206,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 882.0,
+        "y1": 976.0,
+        "x2": 901.0,
+        "y2": 994.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.42428124110446913,
+        "y_center": 0.5097938144329897,
+        "width": 0.00825505266154284,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1476.0,
+        "y1": 977.0,
+        "x2": 1505.0,
+        "y2": 1001.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.17904924565898092,
+        "y_center": 0.5095360824742268,
+        "width": 0.006831767719897523,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 617.0,
+        "y1": 979.0,
+        "x2": 641.0,
+        "y2": 998.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5335895246228295,
+        "y_center": 0.5105670103092783,
+        "width": 0.007116424708226587,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1862.0,
+        "y1": 979.0,
+        "x2": 1887.0,
+        "y2": 1002.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5122402504981497,
+        "y_center": 0.5136597938144329,
+        "width": 0.008824366638200968,
+        "height": 0.015979381443298968
+      },
+      "bbox_pixels": {
+        "x1": 1784.0,
+        "y1": 981.0,
+        "x2": 1815.0,
+        "y2": 1012.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36976942783945344,
+        "y_center": 0.5154639175257731,
+        "width": 0.0148021633931113,
+        "height": 0.016494845360824743
+      },
+      "bbox_pixels": {
+        "x1": 1273.0,
+        "y1": 984.0,
+        "x2": 1325.0,
+        "y2": 1016.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.15129518929689723,
+        "y_center": 0.5144329896907216,
+        "width": 0.007116424708226587,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 519.0,
+        "y1": 985.0,
+        "x2": 544.0,
+        "y2": 1011.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3376031881582693,
+        "y_center": 0.5144329896907216,
+        "width": 0.006831767719897523,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1174.0,
+        "y1": 985.0,
+        "x2": 1198.0,
+        "y2": 1011.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19740962140620552,
+        "y_center": 0.5146907216494845,
+        "width": 0.005977796754910333,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 683.0,
+        "y1": 987.0,
+        "x2": 704.0,
+        "y2": 1010.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.24025049814972957,
+        "y_center": 0.5154639175257731,
+        "width": 0.0062624537432393965,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 833.0,
+        "y1": 988.0,
+        "x2": 855.0,
+        "y2": 1012.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.48690577853686307,
+        "y_center": 0.5154639175257731,
+        "width": 0.007116424708226587,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1698.0,
+        "y1": 988.0,
+        "x2": 1723.0,
+        "y2": 1012.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2624537432393965,
+        "y_center": 0.5152061855670103,
+        "width": 0.00569313976658127,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 912.0,
+        "y1": 990.0,
+        "x2": 932.0,
+        "y2": 1009.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.45701679476231144,
+        "y_center": 0.5293814432989691,
+        "width": 0.004269854824935952,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 1598.0,
+        "y1": 993.0,
+        "x2": 1613.0,
+        "y2": 1061.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.25035582123541134,
+        "y_center": 0.5304123711340206,
+        "width": 0.007116424708226587,
+        "height": 0.03608247422680412
+      },
+      "bbox_pixels": {
+        "x1": 867.0,
+        "y1": 994.0,
+        "x2": 892.0,
+        "y2": 1064.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6019072018218047,
+        "y_center": 0.5345360824742268,
+        "width": 0.011101622544833475,
+        "height": 0.042268041237113405
+      },
+      "bbox_pixels": {
+        "x1": 2095.0,
+        "y1": 996.0,
+        "x2": 2134.0,
+        "y2": 1078.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.17634500426985483,
+        "y_center": 0.5332474226804124,
+        "width": 0.0031312268716196983,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 614.0,
+        "y1": 997.0,
+        "x2": 625.0,
+        "y2": 1072.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4210076857386849,
+        "y_center": 0.5293814432989691,
+        "width": 0.002846569883290635,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 1474.0,
+        "y1": 997.0,
+        "x2": 1484.0,
+        "y2": 1057.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5318815826928551,
+        "y_center": 0.5327319587628866,
+        "width": 0.0031312268716196983,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 1863.0,
+        "y1": 1000.0,
+        "x2": 1874.0,
+        "y2": 1067.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.27654426416168515,
+        "y_center": 0.5201030927835052,
+        "width": 0.005408482778252206,
+        "height": 0.008247422680412371
+      },
+      "bbox_pixels": {
+        "x1": 962.0,
+        "y1": 1001.0,
+        "x2": 981.0,
+        "y2": 1017.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5046968403074296,
+        "y_center": 0.520618556701031,
+        "width": 0.00569313976658127,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1763.0,
+        "y1": 1001.0,
+        "x2": 1783.0,
+        "y2": 1019.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5794192997438087,
+        "y_center": 0.5224226804123712,
+        "width": 0.005977796754910333,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2025.0,
+        "y1": 1001.0,
+        "x2": 2046.0,
+        "y2": 1026.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6242527754056362,
+        "y_center": 0.5360824742268041,
+        "width": 0.01309422146313692,
+        "height": 0.04020618556701031
+      },
+      "bbox_pixels": {
+        "x1": 2170.0,
+        "y1": 1001.0,
+        "x2": 2216.0,
+        "y2": 1079.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7097922003985198,
+        "y_center": 0.5216494845360825,
+        "width": 0.00654711073156846,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 2482.0,
+        "y1": 1001.0,
+        "x2": 2505.0,
+        "y2": 1023.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.37631653857102193,
+        "y_center": 0.5231958762886598,
+        "width": 0.0062624537432393965,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1311.0,
+        "y1": 1002.0,
+        "x2": 1333.0,
+        "y2": 1028.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2166239681184173,
+        "y_center": 0.5229381443298969,
+        "width": 0.00740108169655565,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 748.0,
+        "y1": 1003.0,
+        "x2": 774.0,
+        "y2": 1026.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1336464560204953,
+        "y_center": 0.5239690721649485,
+        "width": 0.005977796754910333,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 459.0,
+        "y1": 1005.0,
+        "x2": 480.0,
+        "y2": 1028.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.32137773982351264,
+        "y_center": 0.5234536082474227,
+        "width": 0.006831767719897523,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 1117.0,
+        "y1": 1005.0,
+        "x2": 1141.0,
+        "y2": 1026.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.34941645317392545,
+        "y_center": 0.5242268041237114,
+        "width": 0.00654711073156846,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1216.0,
+        "y1": 1005.0,
+        "x2": 1239.0,
+        "y2": 1029.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1945630515229149,
+        "y_center": 0.5391752577319587,
+        "width": 0.004269854824935952,
+        "height": 0.03917525773195876
+      },
+      "bbox_pixels": {
+        "x1": 676.0,
+        "y1": 1008.0,
+        "x2": 691.0,
+        "y2": 1084.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.26060347281525764,
+        "y_center": 0.5358247422680412,
+        "width": 0.003700540848277825,
+        "height": 0.032474226804123714
+      },
+      "bbox_pixels": {
+        "x1": 909.0,
+        "y1": 1008.0,
+        "x2": 922.0,
+        "y2": 1071.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4846285226302306,
+        "y_center": 0.5345360824742268,
+        "width": 0.0025619128949615714,
+        "height": 0.029896907216494847
+      },
+      "bbox_pixels": {
+        "x1": 1698.0,
+        "y1": 1008.0,
+        "x2": 1707.0,
+        "y2": 1066.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.14958724736692286,
+        "y_center": 0.5337628865979381,
+        "width": 0.0025619128949615714,
+        "height": 0.02731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 521.0,
+        "y1": 1009.0,
+        "x2": 530.0,
+        "y2": 1062.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.33504127526330774,
+        "y_center": 0.5420103092783505,
+        "width": 0.0034158838599487617,
+        "height": 0.04381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1171.0,
+        "y1": 1009.0,
+        "x2": 1183.0,
+        "y2": 1094.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.23825789923142612,
+        "y_center": 0.5435567010309278,
+        "width": 0.002846569883290635,
+        "height": 0.04484536082474227
+      },
+      "bbox_pixels": {
+        "x1": 832.0,
+        "y1": 1011.0,
+        "x2": 842.0,
+        "y2": 1098.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6675206376316538,
+        "y_center": 0.5404639175257732,
+        "width": 0.009109023626530032,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 2329.0,
+        "y1": 1011.0,
+        "x2": 2361.0,
+        "y2": 1086.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6874466268146883,
+        "y_center": 0.5293814432989691,
+        "width": 0.006831767719897523,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 2403.0,
+        "y1": 1014.0,
+        "x2": 2427.0,
+        "y2": 1040.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5018502704241389,
+        "y_center": 0.5435567010309278,
+        "width": 0.004554511813265016,
+        "height": 0.040721649484536084
+      },
+      "bbox_pixels": {
+        "x1": 1755.0,
+        "y1": 1015.0,
+        "x2": 1771.0,
+        "y2": 1094.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.11400512382578992,
+        "y_center": 0.5438144329896907,
+        "width": 0.009393680614859094,
+        "height": 0.04020618556701031
+      },
+      "bbox_pixels": {
+        "x1": 384.0,
+        "y1": 1016.0,
+        "x2": 417.0,
+        "y2": 1094.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2739823512667236,
+        "y_center": 0.5435567010309278,
+        "width": 0.004839168801594079,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 954.0,
+        "y1": 1017.0,
+        "x2": 971.0,
+        "y2": 1092.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3627953316253914,
+        "y_center": 0.5309278350515464,
+        "width": 0.007685738684884714,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1261.0,
+        "y1": 1018.0,
+        "x2": 1288.0,
+        "y2": 1042.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.40478223740392827,
+        "y_center": 0.5319587628865979,
+        "width": 0.008539709649871904,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1407.0,
+        "y1": 1019.0,
+        "x2": 1437.0,
+        "y2": 1045.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5145175064047822,
+        "y_center": 0.5314432989690722,
+        "width": 0.00654711073156846,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1796.0,
+        "y1": 1020.0,
+        "x2": 1819.0,
+        "y2": 1042.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.29134642755479645,
+        "y_center": 0.5306701030927835,
+        "width": 0.00654711073156846,
+        "height": 0.007731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 1012.0,
+        "y1": 1022.0,
+        "x2": 1035.0,
+        "y2": 1037.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7066609735269,
+        "y_center": 0.543041237113402,
+        "width": 0.003700540848277825,
+        "height": 0.031443298969072164
+      },
+      "bbox_pixels": {
+        "x1": 2476.0,
+        "y1": 1023.0,
+        "x2": 2489.0,
+        "y2": 1084.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.13193851409052093,
+        "y_center": 0.5458762886597938,
+        "width": 0.0025619128949615714,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 459.0,
+        "y1": 1025.0,
+        "x2": 468.0,
+        "y2": 1093.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.21448904070594932,
+        "y_center": 0.5438144329896907,
+        "width": 0.0031312268716196983,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 748.0,
+        "y1": 1025.0,
+        "x2": 759.0,
+        "y2": 1085.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3192428124110447,
+        "y_center": 0.5456185567010309,
+        "width": 0.0025619128949615714,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 1117.0,
+        "y1": 1025.0,
+        "x2": 1126.0,
+        "y2": 1092.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3481354967264446,
+        "y_center": 0.5438144329896907,
+        "width": 0.002277255906632508,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 1219.0,
+        "y1": 1025.0,
+        "x2": 1227.0,
+        "y2": 1085.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5771420438371762,
+        "y_center": 0.545360824742268,
+        "width": 0.0025619128949615714,
+        "height": 0.03402061855670103
+      },
+      "bbox_pixels": {
+        "x1": 2023.0,
+        "y1": 1025.0,
+        "x2": 2032.0,
+        "y2": 1091.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3748932536293766,
+        "y_center": 0.5458762886597938,
+        "width": 0.003985197836606889,
+        "height": 0.03402061855670103
+      },
+      "bbox_pixels": {
+        "x1": 1310.0,
+        "y1": 1026.0,
+        "x2": 1324.0,
+        "y2": 1092.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2886421861656704,
+        "y_center": 0.5487113402061856,
+        "width": 0.003985197836606889,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1007.0,
+        "y1": 1036.0,
+        "x2": 1021.0,
+        "y2": 1093.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6846000569313977,
+        "y_center": 0.5489690721649485,
+        "width": 0.002846569883290635,
+        "height": 0.0288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2400.0,
+        "y1": 1037.0,
+        "x2": 2410.0,
+        "y2": 1093.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.358952462282949,
+        "y_center": 0.5518041237113402,
+        "width": 0.0034158838599487617,
+        "height": 0.030412371134020618
+      },
+      "bbox_pixels": {
+        "x1": 1255.0,
+        "y1": 1041.0,
+        "x2": 1267.0,
+        "y2": 1100.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5130942214631369,
+        "y_center": 0.5497422680412372,
+        "width": 0.0019925989183034445,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1799.0,
+        "y1": 1041.0,
+        "x2": 1806.0,
+        "y2": 1092.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.40207799601480215,
+        "y_center": 0.5507731958762887,
+        "width": 0.0025619128949615714,
+        "height": 0.026288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1408.0,
+        "y1": 1043.0,
+        "x2": 1417.0,
+        "y2": 1094.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.269000853970965,
+        "y_center": 0.5559278350515464,
+        "width": 0.0444064901793339,
+        "height": 0.021134020618556702
+      },
+      "bbox_pixels": {
+        "x1": 867.0,
+        "y1": 1058.0,
+        "x2": 1023.0,
+        "y2": 1099.0
+      }
+    },
+    {
+      "class_id": 6,
+      "class_name": "clefCAlto",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07415314545972104,
+        "y_center": 0.572680412371134,
+        "width": 0.018502704241389126,
+        "height": 0.04536082474226804
+      },
+      "bbox_pixels": {
+        "x1": 228.0,
+        "y1": 1067.0,
+        "x2": 293.0,
+        "y2": 1155.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3413037290065471,
+        "y_center": 0.5600515463917526,
+        "width": 0.015940791346427556,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1171.0,
+        "y1": 1077.0,
+        "x2": 1227.0,
+        "y2": 1096.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3662112154853402,
+        "y_center": 0.563659793814433,
+        "width": 0.017364076288072874,
+        "height": 0.007731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 1256.0,
+        "y1": 1086.0,
+        "x2": 1317.0,
+        "y2": 1101.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5065471107315684,
+        "y_center": 0.5628865979381443,
+        "width": 0.01394819242812411,
+        "height": 0.005154639175257732
+      },
+      "bbox_pixels": {
+        "x1": 1755.0,
+        "y1": 1087.0,
+        "x2": 1804.0,
+        "y2": 1097.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.38058639339595784,
+        "y_center": 0.6061855670103092,
+        "width": 0.12354113293481354,
+        "height": 0.024742268041237112
+      },
+      "bbox_pixels": {
+        "x1": 1120.0,
+        "y1": 1152.0,
+        "x2": 1554.0,
+        "y2": 1200.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5503842869342442,
+        "y_center": 0.6185567010309279,
+        "width": 0.005408482778252206,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1924.0,
+        "y1": 1190.0,
+        "x2": 1943.0,
+        "y2": 1210.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.24594363791631085,
+        "y_center": 0.6237113402061856,
+        "width": 0.00740108169655565,
+        "height": 0.016494845360824743
+      },
+      "bbox_pixels": {
+        "x1": 851.0,
+        "y1": 1194.0,
+        "x2": 877.0,
+        "y2": 1226.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6077426700825506,
+        "y_center": 0.6252577319587629,
+        "width": 0.015940791346427556,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 2107.0,
+        "y1": 1199.0,
+        "x2": 2163.0,
+        "y2": 1227.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6373469968687732,
+        "y_center": 0.6262886597938144,
+        "width": 0.006831767719897523,
+        "height": 0.016494845360824743
+      },
+      "bbox_pixels": {
+        "x1": 2227.0,
+        "y1": 1199.0,
+        "x2": 2251.0,
+        "y2": 1231.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.45801309422146314,
+        "y_center": 0.6275773195876289,
+        "width": 0.00740108169655565,
+        "height": 0.015979381443298968
+      },
+      "bbox_pixels": {
+        "x1": 1596.0,
+        "y1": 1202.0,
+        "x2": 1622.0,
+        "y2": 1233.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7046683746085967,
+        "y_center": 0.6355670103092783,
+        "width": 0.011101622544833475,
+        "height": 0.029896907216494847
+      },
+      "bbox_pixels": {
+        "x1": 2456.0,
+        "y1": 1204.0,
+        "x2": 2495.0,
+        "y2": 1262.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4780814118986621,
+        "y_center": 0.6371134020618556,
+        "width": 0.009962994591517222,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 1662.0,
+        "y1": 1205.0,
+        "x2": 1697.0,
+        "y2": 1267.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19769427839453457,
+        "y_center": 0.6391752577319587,
+        "width": 0.01394819242812411,
+        "height": 0.03505154639175258
+      },
+      "bbox_pixels": {
+        "x1": 670.0,
+        "y1": 1206.0,
+        "x2": 719.0,
+        "y2": 1274.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.33475661827497866,
+        "y_center": 0.627319587628866,
+        "width": 0.0062624537432393965,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1165.0,
+        "y1": 1206.0,
+        "x2": 1187.0,
+        "y2": 1228.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5072587532023911,
+        "y_center": 0.6288659793814433,
+        "width": 0.00740108169655565,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 1769.0,
+        "y1": 1206.0,
+        "x2": 1795.0,
+        "y2": 1234.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5916595502419585,
+        "y_center": 0.6386597938144329,
+        "width": 0.01053230856817535,
+        "height": 0.03402061855670103
+      },
+      "bbox_pixels": {
+        "x1": 2060.0,
+        "y1": 1206.0,
+        "x2": 2097.0,
+        "y2": 1272.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.22260176487332764,
+        "y_center": 0.6280927835051546,
+        "width": 0.006831767719897523,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 770.0,
+        "y1": 1207.0,
+        "x2": 794.0,
+        "y2": 1230.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.46427554796470255,
+        "y_center": 0.627319587628866,
+        "width": 0.00569313976658127,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1621.0,
+        "y1": 1207.0,
+        "x2": 1641.0,
+        "y2": 1227.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5751494449188728,
+        "y_center": 0.6286082474226804,
+        "width": 0.007685738684884714,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2007.0,
+        "y1": 1207.0,
+        "x2": 2034.0,
+        "y2": 1232.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5469684030742955,
+        "y_center": 0.6399484536082474,
+        "width": 0.003700540848277825,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 1915.0,
+        "y1": 1208.0,
+        "x2": 1928.0,
+        "y2": 1275.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4026473099914603,
+        "y_center": 0.63840206185567,
+        "width": 0.009393680614859094,
+        "height": 0.030412371134020618
+      },
+      "bbox_pixels": {
+        "x1": 1398.0,
+        "y1": 1209.0,
+        "x2": 1431.0,
+        "y2": 1268.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3192428124110447,
+        "y_center": 0.6296391752577319,
+        "width": 0.00654711073156846,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1110.0,
+        "y1": 1210.0,
+        "x2": 1133.0,
+        "y2": 1233.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3529746655280387,
+        "y_center": 0.63840206185567,
+        "width": 0.007970395673213778,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1226.0,
+        "y1": 1210.0,
+        "x2": 1254.0,
+        "y2": 1267.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.27597495018502705,
+        "y_center": 0.6391752577319587,
+        "width": 0.007685738684884714,
+        "height": 0.0288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 956.0,
+        "y1": 1212.0,
+        "x2": 983.0,
+        "y2": 1268.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.42769712496441786,
+        "y_center": 0.6304123711340206,
+        "width": 0.005408482778252206,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1493.0,
+        "y1": 1212.0,
+        "x2": 1512.0,
+        "y2": 1234.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.26103045829775123,
+        "y_center": 0.6309278350515464,
+        "width": 0.006831767719897523,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 905.0,
+        "y1": 1213.0,
+        "x2": 929.0,
+        "y2": 1235.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.34614289780814117,
+        "y_center": 0.6311855670103093,
+        "width": 0.00569313976658127,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1206.0,
+        "y1": 1215.0,
+        "x2": 1226.0,
+        "y2": 1234.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5980643324793624,
+        "y_center": 0.6350515463917525,
+        "width": 0.00569313976658127,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 2091.0,
+        "y1": 1219.0,
+        "x2": 2111.0,
+        "y2": 1245.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7134927412467976,
+        "y_center": 0.6350515463917525,
+        "width": 0.00654711073156846,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 2495.0,
+        "y1": 1219.0,
+        "x2": 2518.0,
+        "y2": 1245.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4403643609450612,
+        "y_center": 0.6355670103092783,
+        "width": 0.006831767719897523,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1535.0,
+        "y1": 1220.0,
+        "x2": 1559.0,
+        "y2": 1246.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6037574722459437,
+        "y_center": 0.6448453608247423,
+        "width": 0.009678337603188158,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 2104.0,
+        "y1": 1220.0,
+        "x2": 2138.0,
+        "y2": 1282.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4111870196413322,
+        "y_center": 0.6353092783505154,
+        "width": 0.005977796754910333,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1434.0,
+        "y1": 1221.0,
+        "x2": 1455.0,
+        "y2": 1244.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4883290634785084,
+        "y_center": 0.6350515463917525,
+        "width": 0.005408482778252206,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1706.0,
+        "y1": 1221.0,
+        "x2": 1725.0,
+        "y2": 1243.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2838030173640763,
+        "y_center": 0.6358247422680412,
+        "width": 0.005123825789923143,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 988.0,
+        "y1": 1222.0,
+        "x2": 1006.0,
+        "y2": 1245.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36165670367207514,
+        "y_center": 0.6360824742268041,
+        "width": 0.00654711073156846,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1259.0,
+        "y1": 1222.0,
+        "x2": 1282.0,
+        "y2": 1246.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.37275832621690863,
+        "y_center": 0.6445876288659794,
+        "width": 0.01053230856817535,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 1291.0,
+        "y1": 1222.0,
+        "x2": 1328.0,
+        "y2": 1279.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2080842584685454,
+        "y_center": 0.636340206185567,
+        "width": 0.0062624537432393965,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 720.0,
+        "y1": 1223.0,
+        "x2": 742.0,
+        "y2": 1246.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.44918872758326217,
+        "y_center": 0.6448453608247423,
+        "width": 0.007970395673213778,
+        "height": 0.0288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1564.0,
+        "y1": 1223.0,
+        "x2": 1592.0,
+        "y2": 1279.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.46470253344719614,
+        "y_center": 0.6492268041237114,
+        "width": 0.0025619128949615714,
+        "height": 0.0365979381443299
+      },
+      "bbox_pixels": {
+        "x1": 1628.0,
+        "y1": 1224.0,
+        "x2": 1637.0,
+        "y2": 1295.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2448050099629946,
+        "y_center": 0.6520618556701031,
+        "width": 0.003985197836606889,
+        "height": 0.041237113402061855
+      },
+      "bbox_pixels": {
+        "x1": 853.0,
+        "y1": 1225.0,
+        "x2": 867.0,
+        "y2": 1305.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.22160546541417592,
+        "y_center": 0.6536082474226804,
+        "width": 0.004839168801594079,
+        "height": 0.042268041237113405
+      },
+      "bbox_pixels": {
+        "x1": 770.0,
+        "y1": 1227.0,
+        "x2": 787.0,
+        "y2": 1309.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.33191004839168803,
+        "y_center": 0.6494845360824743,
+        "width": 0.0034158838599487617,
+        "height": 0.03402061855670103
+      },
+      "bbox_pixels": {
+        "x1": 1160.0,
+        "y1": 1227.0,
+        "x2": 1172.0,
+        "y2": 1293.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5728721890122402,
+        "y_center": 0.6494845360824743,
+        "width": 0.003700540848277825,
+        "height": 0.030927835051546393
+      },
+      "bbox_pixels": {
+        "x1": 2006.0,
+        "y1": 1230.0,
+        "x2": 2019.0,
+        "y2": 1290.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6337887845146598,
+        "y_center": 0.6554123711340206,
+        "width": 0.003700540848277825,
+        "height": 0.042783505154639176
+      },
+      "bbox_pixels": {
+        "x1": 2220.0,
+        "y1": 1230.0,
+        "x2": 2233.0,
+        "y2": 1313.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.31682322801024765,
+        "y_center": 0.6512886597938145,
+        "width": 0.002846569883290635,
+        "height": 0.03350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 1108.0,
+        "y1": 1231.0,
+        "x2": 1118.0,
+        "y2": 1296.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5035582123541132,
+        "y_center": 0.6525773195876289,
+        "width": 0.0034158838599487617,
+        "height": 0.03608247422680412
+      },
+      "bbox_pixels": {
+        "x1": 1763.0,
+        "y1": 1231.0,
+        "x2": 1775.0,
+        "y2": 1301.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3438656419015087,
+        "y_center": 0.6530927835051547,
+        "width": 0.003985197836606889,
+        "height": 0.03608247422680412
+      },
+      "bbox_pixels": {
+        "x1": 1201.0,
+        "y1": 1232.0,
+        "x2": 1215.0,
+        "y2": 1302.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.25989183034443497,
+        "y_center": 0.652319587628866,
+        "width": 0.0034158838599487617,
+        "height": 0.03350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 907.0,
+        "y1": 1233.0,
+        "x2": 919.0,
+        "y2": 1298.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.42385425562197554,
+        "y_center": 0.6564432989690722,
+        "width": 0.005123825789923143,
+        "height": 0.041752577319587626
+      },
+      "bbox_pixels": {
+        "x1": 1480.0,
+        "y1": 1233.0,
+        "x2": 1498.0,
+        "y2": 1314.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.614574437802448,
+        "y_center": 0.6438144329896908,
+        "width": 0.006831767719897523,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 2147.0,
+        "y1": 1235.0,
+        "x2": 2171.0,
+        "y2": 1263.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3815826928551096,
+        "y_center": 0.6443298969072165,
+        "width": 0.005977796754910333,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1330.0,
+        "y1": 1240.0,
+        "x2": 1351.0,
+        "y2": 1260.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4847708511243951,
+        "y_center": 0.6587628865979381,
+        "width": 0.004554511813265016,
+        "height": 0.03917525773195876
+      },
+      "bbox_pixels": {
+        "x1": 1695.0,
+        "y1": 1240.0,
+        "x2": 1711.0,
+        "y2": 1316.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.45758610873896954,
+        "y_center": 0.6448453608247423,
+        "width": 0.004839168801594079,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1599.0,
+        "y1": 1241.0,
+        "x2": 1616.0,
+        "y2": 1261.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5962140620552234,
+        "y_center": 0.6621134020618556,
+        "width": 0.003700540848277825,
+        "height": 0.04381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 2088.0,
+        "y1": 1242.0,
+        "x2": 2101.0,
+        "y2": 1327.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.28280671790492456,
+        "y_center": 0.6605670103092783,
+        "width": 0.0031312268716196983,
+        "height": 0.039690721649484534
+      },
+      "bbox_pixels": {
+        "x1": 988.0,
+        "y1": 1243.0,
+        "x2": 999.0,
+        "y2": 1320.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7113578138343296,
+        "y_center": 0.656701030927835,
+        "width": 0.002846569883290635,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 2494.0,
+        "y1": 1243.0,
+        "x2": 2504.0,
+        "y2": 1305.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.40834044975804157,
+        "y_center": 0.6605670103092783,
+        "width": 0.0031312268716196983,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 1429.0,
+        "y1": 1244.0,
+        "x2": 1440.0,
+        "y2": 1319.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.20694563051522916,
+        "y_center": 0.6610824742268041,
+        "width": 0.0034158838599487617,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 721.0,
+        "y1": 1245.0,
+        "x2": 733.0,
+        "y2": 1320.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3582408198121264,
+        "y_center": 0.6610824742268041,
+        "width": 0.003700540848277825,
+        "height": 0.03865979381443299
+      },
+      "bbox_pixels": {
+        "x1": 1252.0,
+        "y1": 1245.0,
+        "x2": 1265.0,
+        "y2": 1320.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.43979504696840305,
+        "y_center": 0.656701030927835,
+        "width": 0.002846569883290635,
+        "height": 0.029896907216494847
+      },
+      "bbox_pixels": {
+        "x1": 1540.0,
+        "y1": 1245.0,
+        "x2": 1550.0,
+        "y2": 1303.0
+      }
+    },
+    {
+      "class_id": 6,
+      "class_name": "clefCAlto",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07372615997722744,
+        "y_center": 0.6675257731958762,
+        "width": 0.021633931113008823,
+        "height": 0.050515463917525774
+      },
+      "bbox_pixels": {
+        "x1": 221.0,
+        "y1": 1246.0,
+        "x2": 297.0,
+        "y2": 1344.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.17876458867065187,
+        "y_center": 0.6626288659793814,
+        "width": 0.009109023626530032,
+        "height": 0.039690721649484534
+      },
+      "bbox_pixels": {
+        "x1": 612.0,
+        "y1": 1247.0,
+        "x2": 644.0,
+        "y2": 1324.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6668089951608313,
+        "y_center": 0.6510309278350516,
+        "width": 0.007116424708226587,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2330.0,
+        "y1": 1251.0,
+        "x2": 2355.0,
+        "y2": 1275.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6867349843438656,
+        "y_center": 0.6512886597938145,
+        "width": 0.00654711073156846,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 2401.0,
+        "y1": 1252.0,
+        "x2": 2424.0,
+        "y2": 1275.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.376601195559351,
+        "y_center": 0.6595360824742268,
+        "width": 0.0034158838599487617,
+        "height": 0.02731958762886598
+      },
+      "bbox_pixels": {
+        "x1": 1317.0,
+        "y1": 1253.0,
+        "x2": 1329.0,
+        "y2": 1306.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.45459721036151435,
+        "y_center": 0.6582474226804124,
+        "width": 0.0034158838599487617,
+        "height": 0.020618556701030927
+      },
+      "bbox_pixels": {
+        "x1": 1591.0,
+        "y1": 1257.0,
+        "x2": 1603.0,
+        "y2": 1297.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.12894961571306576,
+        "y_center": 0.654639175257732,
+        "width": 0.0148021633931113,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 427.0,
+        "y1": 1260.0,
+        "x2": 479.0,
+        "y2": 1280.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.611870196413322,
+        "y_center": 0.6639175257731958,
+        "width": 0.0031312268716196983,
+        "height": 0.027835051546391754
+      },
+      "bbox_pixels": {
+        "x1": 2144.0,
+        "y1": 1261.0,
+        "x2": 2155.0,
+        "y2": 1315.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.683603757472246,
+        "y_center": 0.6721649484536083,
+        "width": 0.003700540848277825,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 2395.0,
+        "y1": 1273.0,
+        "x2": 2408.0,
+        "y2": 1335.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6643894107600341,
+        "y_center": 0.675,
+        "width": 0.002277255906632508,
+        "height": 0.0365979381443299
+      },
+      "bbox_pixels": {
+        "x1": 2330.0,
+        "y1": 1274.0,
+        "x2": 2338.0,
+        "y2": 1345.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4592940506689439,
+        "y_center": 0.6659793814432989,
+        "width": 0.011101622544833475,
+        "height": 0.009278350515463918
+      },
+      "bbox_pixels": {
+        "x1": 1594.0,
+        "y1": 1283.0,
+        "x2": 1633.0,
+        "y2": 1301.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3552519214346712,
+        "y_center": 0.6711340206185566,
+        "width": 0.05009962994591517,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1160.0,
+        "y1": 1292.0,
+        "x2": 1336.0,
+        "y2": 1312.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.43125533731853116,
+        "y_center": 0.6731958762886598,
+        "width": 0.019925989183034443,
+        "height": 0.008247422680412371
+      },
+      "bbox_pixels": {
+        "x1": 1480.0,
+        "y1": 1298.0,
+        "x2": 1550.0,
+        "y2": 1314.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.603045829775121,
+        "y_center": 0.6791237113402062,
+        "width": 0.017933390264730998,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 2087.0,
+        "y1": 1308.0,
+        "x2": 2150.0,
+        "y2": 1327.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5498149729575861,
+        "y_center": 0.7430412371134021,
+        "width": 0.1363506974096214,
+        "height": 0.030412371134020618
+      },
+      "bbox_pixels": {
+        "x1": 1692.0,
+        "y1": 1412.0,
+        "x2": 2171.0,
+        "y2": 1471.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4140335895246228,
+        "y_center": 0.7453608247422681,
+        "width": 0.01964133219470538,
+        "height": 0.01443298969072165
+      },
+      "bbox_pixels": {
+        "x1": 1420.0,
+        "y1": 1432.0,
+        "x2": 1489.0,
+        "y2": 1460.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.692712781098776,
+        "y_center": 0.7564432989690721,
+        "width": 0.00825505266154284,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 2419.0,
+        "y1": 1454.0,
+        "x2": 2448.0,
+        "y2": 1481.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3999430686023342,
+        "y_center": 0.7577319587628866,
+        "width": 0.007970395673213778,
+        "height": 0.015463917525773196
+      },
+      "bbox_pixels": {
+        "x1": 1391.0,
+        "y1": 1455.0,
+        "x2": 1419.0,
+        "y2": 1485.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7142043837176203,
+        "y_center": 0.7569587628865979,
+        "width": 0.007970395673213778,
+        "height": 0.013917525773195877
+      },
+      "bbox_pixels": {
+        "x1": 2495.0,
+        "y1": 1455.0,
+        "x2": 2523.0,
+        "y2": 1482.0
+      }
+    },
+    {
+      "class_id": 6,
+      "class_name": "clefCAlto",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07344150298889837,
+        "y_center": 0.7770618556701031,
+        "width": 0.02220324508966695,
+        "height": 0.052061855670103095
+      },
+      "bbox_pixels": {
+        "x1": 219.0,
+        "y1": 1457.0,
+        "x2": 297.0,
+        "y2": 1558.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5012809564474808,
+        "y_center": 0.7574742268041237,
+        "width": 0.00740108169655565,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1748.0,
+        "y1": 1457.0,
+        "x2": 1774.0,
+        "y2": 1482.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.47993168232280103,
+        "y_center": 0.7652061855670103,
+        "width": 0.0062624537432393965,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 1675.0,
+        "y1": 1472.0,
+        "x2": 1697.0,
+        "y2": 1497.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5153714773697694,
+        "y_center": 0.7644329896907216,
+        "width": 0.00654711073156846,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1799.0,
+        "y1": 1472.0,
+        "x2": 1822.0,
+        "y2": 1494.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5994876174210076,
+        "y_center": 0.7639175257731958,
+        "width": 0.006831767719897523,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 2094.0,
+        "y1": 1472.0,
+        "x2": 2118.0,
+        "y2": 1492.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.36806148590947907,
+        "y_center": 0.7652061855670103,
+        "width": 0.007970395673213778,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 1279.0,
+        "y1": 1474.0,
+        "x2": 1307.0,
+        "y2": 1495.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4967264446342158,
+        "y_center": 0.7814432989690722,
+        "width": 0.003985197836606889,
+        "height": 0.042268041237113405
+      },
+      "bbox_pixels": {
+        "x1": 1738.0,
+        "y1": 1475.0,
+        "x2": 1752.0,
+        "y2": 1557.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3222317107884999,
+        "y_center": 0.7809278350515464,
+        "width": 0.009678337603188158,
+        "height": 0.04020618556701031
+      },
+      "bbox_pixels": {
+        "x1": 1115.0,
+        "y1": 1476.0,
+        "x2": 1149.0,
+        "y2": 1554.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4221463136920011,
+        "y_center": 0.7667525773195877,
+        "width": 0.00569313976658127,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 1473.0,
+        "y1": 1477.0,
+        "x2": 1493.0,
+        "y2": 1498.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6894392257329918,
+        "y_center": 0.7780927835051547,
+        "width": 0.003985197836606889,
+        "height": 0.031443298969072164
+      },
+      "bbox_pixels": {
+        "x1": 2415.0,
+        "y1": 1479.0,
+        "x2": 2429.0,
+        "y2": 1540.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7105038428693424,
+        "y_center": 0.7801546391752577,
+        "width": 0.002846569883290635,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 2491.0,
+        "y1": 1480.0,
+        "x2": 2501.0,
+        "y2": 1547.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.39937375462567604,
+        "y_center": 0.7788659793814433,
+        "width": 0.004554511813265016,
+        "height": 0.029896907216494847
+      },
+      "bbox_pixels": {
+        "x1": 1395.0,
+        "y1": 1482.0,
+        "x2": 1411.0,
+        "y2": 1540.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.50910902362653,
+        "y_center": 0.7865979381443299,
+        "width": 0.00654711073156846,
+        "height": 0.04329896907216495
+      },
+      "bbox_pixels": {
+        "x1": 1777.0,
+        "y1": 1484.0,
+        "x2": 1800.0,
+        "y2": 1568.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5797039567321378,
+        "y_center": 0.7729381443298969,
+        "width": 0.00825505266154284,
+        "height": 0.014948453608247423
+      },
+      "bbox_pixels": {
+        "x1": 2022.0,
+        "y1": 1485.0,
+        "x2": 2051.0,
+        "y2": 1514.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5310276117278679,
+        "y_center": 0.7719072164948454,
+        "width": 0.005977796754910333,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1855.0,
+        "y1": 1486.0,
+        "x2": 1876.0,
+        "y2": 1509.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6461713635069741,
+        "y_center": 0.772680412371134,
+        "width": 0.006831767719897523,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2258.0,
+        "y1": 1487.0,
+        "x2": 2282.0,
+        "y2": 1511.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3434386564190151,
+        "y_center": 0.7731958762886598,
+        "width": 0.00825505266154284,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 1192.0,
+        "y1": 1488.0,
+        "x2": 1221.0,
+        "y2": 1512.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.611870196413322,
+        "y_center": 0.7721649484536083,
+        "width": 0.00654711073156846,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 2138.0,
+        "y1": 1488.0,
+        "x2": 2161.0,
+        "y2": 1508.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.44861941360660407,
+        "y_center": 0.7731958762886598,
+        "width": 0.006831767719897523,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1564.0,
+        "y1": 1489.0,
+        "x2": 1588.0,
+        "y2": 1511.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5956447480785654,
+        "y_center": 0.7904639175257732,
+        "width": 0.004269854824935952,
+        "height": 0.04381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 2085.0,
+        "y1": 1491.0,
+        "x2": 2100.0,
+        "y2": 1576.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3672075149444919,
+        "y_center": 0.7860824742268041,
+        "width": 0.003985197836606889,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 1283.0,
+        "y1": 1493.0,
+        "x2": 1297.0,
+        "y2": 1557.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.13079988613720467,
+        "y_center": 0.7760309278350516,
+        "width": 0.01565613435809849,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 432.0,
+        "y1": 1494.0,
+        "x2": 487.0,
+        "y2": 1517.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.19555935098206662,
+        "y_center": 0.7757731958762887,
+        "width": 0.018787361229718188,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 654.0,
+        "y1": 1494.0,
+        "x2": 720.0,
+        "y2": 1516.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.25704526046114434,
+        "y_center": 0.7755154639175258,
+        "width": 0.015371477369769428,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 876.0,
+        "y1": 1494.0,
+        "x2": 930.0,
+        "y2": 1515.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.47879305436948477,
+        "y_center": 0.7871134020618556,
+        "width": 0.003985197836606889,
+        "height": 0.031958762886597936
+      },
+      "bbox_pixels": {
+        "x1": 1675.0,
+        "y1": 1496.0,
+        "x2": 1689.0,
+        "y2": 1558.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.41986905778536865,
+        "y_center": 0.7850515463917526,
+        "width": 0.002846569883290635,
+        "height": 0.02577319587628866
+      },
+      "bbox_pixels": {
+        "x1": 1470.0,
+        "y1": 1498.0,
+        "x2": 1480.0,
+        "y2": 1548.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.524622829490464,
+        "y_center": 0.7940721649484536,
+        "width": 0.0062624537432393965,
+        "height": 0.042783505154639176
+      },
+      "bbox_pixels": {
+        "x1": 1832.0,
+        "y1": 1499.0,
+        "x2": 1854.0,
+        "y2": 1582.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6742100768573869,
+        "y_center": 0.7793814432989691,
+        "width": 0.007116424708226587,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2356.0,
+        "y1": 1500.0,
+        "x2": 2381.0,
+        "y2": 1524.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5461144321093083,
+        "y_center": 0.7786082474226804,
+        "width": 0.005408482778252206,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 1909.0,
+        "y1": 1501.0,
+        "x2": 1928.0,
+        "y2": 1520.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6290919442072302,
+        "y_center": 0.7798969072164949,
+        "width": 0.007970395673213778,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2196.0,
+        "y1": 1501.0,
+        "x2": 2224.0,
+        "y2": 1525.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6125818388841446,
+        "y_center": 0.7904639175257732,
+        "width": 0.0034158838599487617,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 2146.0,
+        "y1": 1505.0,
+        "x2": 2158.0,
+        "y2": 1562.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.643467122117848,
+        "y_center": 0.7914948453608247,
+        "width": 0.0031312268716196983,
+        "height": 0.029381443298969072
+      },
+      "bbox_pixels": {
+        "x1": 2255.0,
+        "y1": 1507.0,
+        "x2": 2266.0,
+        "y2": 1564.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.44605750071164246,
+        "y_center": 0.7945876288659793,
+        "width": 0.002846569883290635,
+        "height": 0.031443298969072164
+      },
+      "bbox_pixels": {
+        "x1": 1562.0,
+        "y1": 1511.0,
+        "x2": 1572.0,
+        "y2": 1572.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.3421576999715343,
+        "y_center": 0.7927835051546391,
+        "width": 0.0034158838599487617,
+        "height": 0.026804123711340205
+      },
+      "bbox_pixels": {
+        "x1": 1196.0,
+        "y1": 1512.0,
+        "x2": 1208.0,
+        "y2": 1564.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5772843723313408,
+        "y_center": 0.7914948453608247,
+        "width": 0.002277255906632508,
+        "height": 0.02422680412371134
+      },
+      "bbox_pixels": {
+        "x1": 2024.0,
+        "y1": 1512.0,
+        "x2": 2032.0,
+        "y2": 1559.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5432678622260176,
+        "y_center": 0.7974226804123712,
+        "width": 0.005977796754910333,
+        "height": 0.029896907216494847
+      },
+      "bbox_pixels": {
+        "x1": 1898.0,
+        "y1": 1518.0,
+        "x2": 1919.0,
+        "y2": 1576.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.670794192997438,
+        "y_center": 0.7984536082474227,
+        "width": 0.003700540848277825,
+        "height": 0.027835051546391754
+      },
+      "bbox_pixels": {
+        "x1": 2350.0,
+        "y1": 1522.0,
+        "x2": 2363.0,
+        "y2": 1576.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6261030458297752,
+        "y_center": 0.7976804123711341,
+        "width": 0.0031312268716196983,
+        "height": 0.023195876288659795
+      },
+      "bbox_pixels": {
+        "x1": 2194.0,
+        "y1": 1525.0,
+        "x2": 2205.0,
+        "y2": 1570.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5183603757472246,
+        "y_center": 0.8064432989690722,
+        "width": 0.04668374608596641,
+        "height": 0.011855670103092783
+      },
+      "bbox_pixels": {
+        "x1": 1739.0,
+        "y1": 1553.0,
+        "x2": 1903.0,
+        "y2": 1576.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6038998007401082,
+        "y_center": 0.8074742268041237,
+        "width": 0.020779960148021633,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 2085.0,
+        "y1": 1557.0,
+        "x2": 2158.0,
+        "y2": 1576.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6347850839738115,
+        "y_center": 0.8064432989690722,
+        "width": 0.019356675206376316,
+        "height": 0.006701030927835051
+      },
+      "bbox_pixels": {
+        "x1": 2196.0,
+        "y1": 1558.0,
+        "x2": 2264.0,
+        "y2": 1571.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6374893253629377,
+        "y_center": 0.8577319587628865,
+        "width": 0.11813265015656134,
+        "height": 0.01752577319587629
+      },
+      "bbox_pixels": {
+        "x1": 2032.0,
+        "y1": 1647.0,
+        "x2": 2447.0,
+        "y2": 1681.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.49074864787930544,
+        "y_center": 0.8605670103092784,
+        "width": 0.0210646171363507,
+        "height": 0.014948453608247423
+      },
+      "bbox_pixels": {
+        "x1": 1687.0,
+        "y1": 1655.0,
+        "x2": 1761.0,
+        "y2": 1684.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6016225448334757,
+        "y_center": 0.8695876288659794,
+        "width": 0.007116424708226587,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 2101.0,
+        "y1": 1676.0,
+        "x2": 2126.0,
+        "y2": 1698.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4793623683461429,
+        "y_center": 0.8701030927835052,
+        "width": 0.006831767719897523,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 1672.0,
+        "y1": 1678.0,
+        "x2": 1696.0,
+        "y2": 1698.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5159407913464276,
+        "y_center": 0.886340206185567,
+        "width": 0.014517506404782237,
+        "height": 0.03762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 1787.0,
+        "y1": 1683.0,
+        "x2": 1838.0,
+        "y2": 1756.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6288072872189012,
+        "y_center": 0.8837628865979381,
+        "width": 0.009678337603188158,
+        "height": 0.031443298969072164
+      },
+      "bbox_pixels": {
+        "x1": 2192.0,
+        "y1": 1684.0,
+        "x2": 2226.0,
+        "y2": 1745.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6754910333048676,
+        "y_center": 0.8845360824742268,
+        "width": 0.010816965556504412,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 2354.0,
+        "y1": 1684.0,
+        "x2": 2392.0,
+        "y2": 1748.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4197267292912041,
+        "y_center": 0.8868556701030927,
+        "width": 0.009962994591517222,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 1457.0,
+        "y1": 1687.0,
+        "x2": 1492.0,
+        "y2": 1754.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5798462852263023,
+        "y_center": 0.8780927835051546,
+        "width": 0.009678337603188158,
+        "height": 0.014948453608247423
+      },
+      "bbox_pixels": {
+        "x1": 2020.0,
+        "y1": 1689.0,
+        "x2": 2054.0,
+        "y2": 1718.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6152860802732707,
+        "y_center": 0.8765463917525773,
+        "width": 0.00825505266154284,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 2147.0,
+        "y1": 1690.0,
+        "x2": 2176.0,
+        "y2": 1711.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6971249644178764,
+        "y_center": 0.877319587628866,
+        "width": 0.006831767719897523,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2437.0,
+        "y1": 1690.0,
+        "x2": 2461.0,
+        "y2": 1714.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.49829205807002563,
+        "y_center": 0.877319587628866,
+        "width": 0.007116424708226587,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1738.0,
+        "y1": 1691.0,
+        "x2": 1763.0,
+        "y2": 1713.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.45004269854824935,
+        "y_center": 0.8788659793814433,
+        "width": 0.007970395673213778,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 1567.0,
+        "y1": 1692.0,
+        "x2": 1595.0,
+        "y2": 1718.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5977796754910333,
+        "y_center": 0.897680412371134,
+        "width": 0.0062624537432393965,
+        "height": 0.04793814432989691
+      },
+      "bbox_pixels": {
+        "x1": 2089.0,
+        "y1": 1695.0,
+        "x2": 2111.0,
+        "y2": 1788.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4776544264161685,
+        "y_center": 0.8914948453608248,
+        "width": 0.002846569883290635,
+        "height": 0.034536082474226806
+      },
+      "bbox_pixels": {
+        "x1": 1673.0,
+        "y1": 1696.0,
+        "x2": 1683.0,
+        "y2": 1763.0
+      }
+    },
+    {
+      "class_id": 120,
+      "class_name": "slur",
+      "semantic_group": "connector",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7348420153714774,
+        "y_center": 0.881701030927835,
+        "width": 0.018502704241389126,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 2549.0,
+        "y1": 1698.0,
+        "x2": 2614.0,
+        "y2": 1723.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6848847139197267,
+        "y_center": 0.8845360824742268,
+        "width": 0.007970395673213778,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 2392.0,
+        "y1": 1704.0,
+        "x2": 2420.0,
+        "y2": 1728.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7050953600910902,
+        "y_center": 0.8850515463917525,
+        "width": 0.009109023626530032,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 2461.0,
+        "y1": 1704.0,
+        "x2": 2493.0,
+        "y2": 1730.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6366353543979505,
+        "y_center": 0.8845360824742268,
+        "width": 0.00654711073156846,
+        "height": 0.010309278350515464
+      },
+      "bbox_pixels": {
+        "x1": 2225.0,
+        "y1": 1706.0,
+        "x2": 2248.0,
+        "y2": 1726.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6464560204953032,
+        "y_center": 0.893298969072165,
+        "width": 0.009109023626530032,
+        "height": 0.027835051546391754
+      },
+      "bbox_pixels": {
+        "x1": 2255.0,
+        "y1": 1706.0,
+        "x2": 2287.0,
+        "y2": 1760.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5286080273270709,
+        "y_center": 0.8853092783505154,
+        "width": 0.009109023626530032,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 1841.0,
+        "y1": 1707.0,
+        "x2": 1873.0,
+        "y2": 1728.0
+      }
+    },
+    {
+      "class_id": 63,
+      "class_name": "accidentalSharp",
+      "semantic_group": "accidental",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.715200683176772,
+        "y_center": 0.893298969072165,
+        "width": 0.01053230856817535,
+        "height": 0.026804123711340205
+      },
+      "bbox_pixels": {
+        "x1": 2494.0,
+        "y1": 1707.0,
+        "x2": 2531.0,
+        "y2": 1759.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.42897808141189864,
+        "y_center": 0.8860824742268041,
+        "width": 0.0062624537432393965,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1496.0,
+        "y1": 1708.0,
+        "x2": 1518.0,
+        "y2": 1730.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4965841161400512,
+        "y_center": 0.8984536082474227,
+        "width": 0.0031312268716196983,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 1739.0,
+        "y1": 1711.0,
+        "x2": 1750.0,
+        "y2": 1775.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6105892399658411,
+        "y_center": 0.9054123711340206,
+        "width": 0.00569313976658127,
+        "height": 0.04690721649484536
+      },
+      "bbox_pixels": {
+        "x1": 2135.0,
+        "y1": 1711.0,
+        "x2": 2155.0,
+        "y2": 1802.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6935667520637632,
+        "y_center": 0.8987113402061856,
+        "width": 0.00654711073156846,
+        "height": 0.03350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 2425.0,
+        "y1": 1711.0,
+        "x2": 2448.0,
+        "y2": 1776.0
+      }
+    },
+    {
+      "class_id": 8,
+      "class_name": "clefF",
+      "semantic_group": "clef",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.07586108738969542,
+        "y_center": 0.9064432989690722,
+        "width": 0.019072018218047253,
+        "height": 0.04587628865979381
+      },
+      "bbox_pixels": {
+        "x1": 233.0,
+        "y1": 1714.0,
+        "x2": 300.0,
+        "y2": 1803.0
+      }
+    },
+    {
+      "class_id": 86,
+      "class_name": "restQuarter",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.40577853686307996,
+        "y_center": 0.9041237113402062,
+        "width": 0.009962994591517222,
+        "height": 0.041237113402061855
+      },
+      "bbox_pixels": {
+        "x1": 1408.0,
+        "y1": 1714.0,
+        "x2": 1443.0,
+        "y2": 1794.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.44733845715912324,
+        "y_center": 0.902319587628866,
+        "width": 0.0031312268716196983,
+        "height": 0.03556701030927835
+      },
+      "bbox_pixels": {
+        "x1": 1566.0,
+        "y1": 1716.0,
+        "x2": 1577.0,
+        "y2": 1785.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5764304013663536,
+        "y_center": 0.9048969072164949,
+        "width": 0.0034158838599487617,
+        "height": 0.039690721649484534
+      },
+      "bbox_pixels": {
+        "x1": 2019.0,
+        "y1": 1717.0,
+        "x2": 2031.0,
+        "y2": 1794.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6558497011101623,
+        "y_center": 0.8930412371134021,
+        "width": 0.00569313976658127,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 2294.0,
+        "y1": 1722.0,
+        "x2": 2314.0,
+        "y2": 1743.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7271562766865927,
+        "y_center": 0.8930412371134021,
+        "width": 0.00654711073156846,
+        "height": 0.010824742268041237
+      },
+      "bbox_pixels": {
+        "x1": 2543.0,
+        "y1": 1722.0,
+        "x2": 2566.0,
+        "y2": 1743.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6326501565613436,
+        "y_center": 0.9074742268041237,
+        "width": 0.005408482778252206,
+        "height": 0.0365979381443299
+      },
+      "bbox_pixels": {
+        "x1": 2213.0,
+        "y1": 1725.0,
+        "x2": 2232.0,
+        "y2": 1796.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.12852263023057217,
+        "y_center": 0.8966494845360825,
+        "width": 0.016225448334756618,
+        "height": 0.01288659793814433
+      },
+      "bbox_pixels": {
+        "x1": 423.0,
+        "y1": 1727.0,
+        "x2": 480.0,
+        "y2": 1752.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.1910048391688016,
+        "y_center": 0.8969072164948454,
+        "width": 0.018787361229718188,
+        "height": 0.013402061855670102
+      },
+      "bbox_pixels": {
+        "x1": 638.0,
+        "y1": 1727.0,
+        "x2": 704.0,
+        "y2": 1753.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.2664389410760034,
+        "y_center": 0.8963917525773196,
+        "width": 0.02277255906632508,
+        "height": 0.012371134020618556
+      },
+      "bbox_pixels": {
+        "x1": 896.0,
+        "y1": 1727.0,
+        "x2": 976.0,
+        "y2": 1751.0
+      }
+    },
+    {
+      "class_id": 84,
+      "class_name": "restWhole",
+      "semantic_group": "rest",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.34614289780814117,
+        "y_center": 0.8958762886597939,
+        "width": 0.017079419299743808,
+        "height": 0.01134020618556701
+      },
+      "bbox_pixels": {
+        "x1": 1186.0,
+        "y1": 1727.0,
+        "x2": 1246.0,
+        "y2": 1749.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.5257614574437802,
+        "y_center": 0.9043814432989691,
+        "width": 0.002846569883290635,
+        "height": 0.028350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 1842.0,
+        "y1": 1727.0,
+        "x2": 1852.0,
+        "y2": 1782.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6823228010247652,
+        "y_center": 0.9072164948453608,
+        "width": 0.002846569883290635,
+        "height": 0.032989690721649485
+      },
+      "bbox_pixels": {
+        "x1": 2392.0,
+        "y1": 1728.0,
+        "x2": 2402.0,
+        "y2": 1792.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.4264161685169371,
+        "y_center": 0.9054123711340206,
+        "width": 0.002277255906632508,
+        "height": 0.028350515463917526
+      },
+      "bbox_pixels": {
+        "x1": 1494.0,
+        "y1": 1729.0,
+        "x2": 1502.0,
+        "y2": 1784.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7025334471961286,
+        "y_center": 0.9064432989690722,
+        "width": 0.005123825789923143,
+        "height": 0.030412371134020618
+      },
+      "bbox_pixels": {
+        "x1": 2459.0,
+        "y1": 1729.0,
+        "x2": 2477.0,
+        "y2": 1788.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6507258753202391,
+        "y_center": 0.9139175257731958,
+        "width": 0.00569313976658127,
+        "height": 0.03814432989690722
+      },
+      "bbox_pixels": {
+        "x1": 2276.0,
+        "y1": 1736.0,
+        "x2": 2296.0,
+        "y2": 1810.0
+      }
+    },
+    {
+      "class_id": 24,
+      "class_name": "noteheadBlackOnLine",
+      "semantic_group": "notehead",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.737973242243097,
+        "y_center": 0.9007731958762887,
+        "width": 0.005977796754910333,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 2582.0,
+        "y1": 1738.0,
+        "x2": 2603.0,
+        "y2": 1757.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7221747793908341,
+        "y_center": 0.9105670103092783,
+        "width": 0.00569313976658127,
+        "height": 0.025257731958762887
+      },
+      "bbox_pixels": {
+        "x1": 2527.0,
+        "y1": 1742.0,
+        "x2": 2547.0,
+        "y2": 1791.0
+      }
+    },
+    {
+      "class_id": 41,
+      "class_name": "stem",
+      "semantic_group": "stem",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7344150298889838,
+        "y_center": 0.915721649484536,
+        "width": 0.003985197836606889,
+        "height": 0.021134020618556702
+      },
+      "bbox_pixels": {
+        "x1": 2573.0,
+        "y1": 1756.0,
+        "x2": 2587.0,
+        "y2": 1797.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6958440079703957,
+        "y_center": 0.9131443298969072,
+        "width": 0.011101622544833475,
+        "height": 0.008762886597938144
+      },
+      "bbox_pixels": {
+        "x1": 2425.0,
+        "y1": 1763.0,
+        "x2": 2464.0,
+        "y2": 1780.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.6249644178764588,
+        "y_center": 0.9239690721649485,
+        "width": 0.06063193851409052,
+        "height": 0.00979381443298969
+      },
+      "bbox_pixels": {
+        "x1": 2089.0,
+        "y1": 1783.0,
+        "x2": 2302.0,
+        "y2": 1802.0
+      }
+    },
+    {
+      "class_id": 121,
+      "class_name": "beam",
+      "semantic_group": "beam",
+      "confidence": 1.0,
+      "bbox": {
+        "x_center": 0.7272986051807572,
+        "y_center": 0.9226804123711341,
+        "width": 0.01309422146313692,
+        "height": 0.005154639175257732
+      },
+      "bbox_pixels": {
+        "x1": 2532.0,
+        "y1": 1785.0,
+        "x2": 2578.0,
+        "y2": 1795.0
+      }
+    }
+  ],
+  "model_artifact_sha256": null,
+  "source_image_uri": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-13_N-03_D-ideal.xml",
+  "inference_ms": null,
+  "created_at": "2026-05-30T22:04:57.801807Z"
+}

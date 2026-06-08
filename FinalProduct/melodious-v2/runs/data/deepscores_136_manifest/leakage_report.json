@@ -1,0 +1,3193 @@
+{
+  "checks": {
+    "duplicate_filenames": {
+      "count": 0,
+      "duplicates": [],
+      "status": "passed"
+    },
+    "duplicate_image_ids": {
+      "count": 0,
+      "duplicates": [],
+      "status": "passed"
+    },
+    "repeated_inferred_work_groups": {
+      "count": 202,
+      "duplicates": [
+        {
+          "splits": {
+            "test": [
+              "lg-101766503886095953-aug-emmentaler--page-4.png"
+            ],
+            "train": [
+              "lg-101766503886095953-aug-beethoven--page-1.png",
+              "lg-101766503886095953-aug-beethoven--page-4.png",
+              "lg-101766503886095953-aug-gonville--page-1.png",
+              "lg-101766503886095953-aug-gonville--page-4.png"
+            ]
+          },
+          "value": "lg-101766503886095953"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-102414375-aug-beethoven--page-3.png"
+            ],
+            "train": [
+              "lg-102414375-aug-beethoven--page-2.png",
+              "lg-102414375-aug-gutenberg1939--page-3.png"
+            ]
+          },
+          "value": "lg-102414375"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-10247684-aug-emmentaler--page-2.png",
+              "lg-10247684-aug-emmentaler--page-3.png",
+              "lg-10247684-aug-gonville--page-1.png",
+              "lg-10247684-aug-gutenberg1939--page-3.png"
+            ],
+            "train": [
+              "lg-10247684-aug-beethoven--page-2.png",
+              "lg-10247684-aug-beethoven--page-3.png",
+              "lg-10247684-aug-gonville--page-3.png",
+              "lg-10247684-aug-gutenberg1939--page-1.png",
+              "lg-10247684-aug-gutenberg1939--page-2.png",
+              "lg-10247684-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-10247684-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-10247684"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-102548668-aug-beethoven--page-1.png",
+              "lg-102548668-aug-beethoven--page-4.png",
+              "lg-102548668-aug-emmentaler--page-1.png",
+              "lg-102548668-aug-emmentaler--page-4.png",
+              "lg-102548668-aug-gonville--page-4.png",
+              "lg-102548668-aug-gutenberg1939--page-1.png",
+              "lg-102548668-aug-gutenberg1939--page-4.png",
+              "lg-102548668-aug-lilyjazz--page-1.png",
+              "lg-102548668-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-102548668-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-102548668"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-10437085-aug-beethoven--page-7.png",
+              "lg-10437085-aug-gutenberg1939--page-7.png",
+              "lg-10437085-aug-lilyjazz--page-7.png"
+            ],
+            "val": [
+              "lg-10437085-aug-emmentaler--page-7.png"
+            ]
+          },
+          "value": "lg-10437085"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-105093693-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-105093693-aug-beethoven--page-2.png",
+              "lg-105093693-aug-emmentaler--page-2.png",
+              "lg-105093693-aug-gonville--page-2.png",
+              "lg-105093693-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-105093693"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-105569450-aug-beethoven--page-3.png",
+              "lg-105569450-aug-gutenberg1939--page-3.png",
+              "lg-105569450-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-105569450-aug-beethoven--page-1.png",
+              "lg-105569450-aug-emmentaler--page-1.png",
+              "lg-105569450-aug-emmentaler--page-3.png",
+              "lg-105569450-aug-emmentaler--page-4.png",
+              "lg-105569450-aug-gonville--page-1.png",
+              "lg-105569450-aug-gonville--page-3.png",
+              "lg-105569450-aug-gonville--page-4.png",
+              "lg-105569450-aug-gutenberg1939--page-1.png",
+              "lg-105569450-aug-gutenberg1939--page-4.png",
+              "lg-105569450-aug-lilyjazz--page-3.png",
+              "lg-105569450-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-105569450"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-106042016-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-106042016-aug-emmentaler--page-5.png",
+              "lg-106042016-aug-gonville--page-5.png",
+              "lg-106042016-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-106042016"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-106609182-aug-beethoven--page-2.png",
+              "lg-106609182-aug-emmentaler--page-2.png",
+              "lg-106609182-aug-gutenberg1939--page-2.png",
+              "lg-106609182-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-106609182-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-106609182"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-106810361-aug-beethoven--page-2.png",
+              "lg-106810361-aug-emmentaler--page-2.png",
+              "lg-106810361-aug-gonville--page-2.png",
+              "lg-106810361-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-106810361-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-106810361"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-110464130-aug-beethoven--page-2.png",
+              "lg-110464130-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-110464130-aug-emmentaler--page-2.png",
+              "lg-110464130-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-110464130"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-112073308-aug-beethoven--page-2.png",
+              "lg-112073308-aug-emmentaler--page-2.png",
+              "lg-112073308-aug-lilyjazz--page-2.png",
+              "lg-112073308-aug-lilyjazz--page-7.png"
+            ],
+            "val": [
+              "lg-112073308-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-112073308"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-112127305-aug-emmentaler--page-2.png"
+            ],
+            "train": [
+              "lg-112127305-aug-beethoven--page-2.png",
+              "lg-112127305-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-112127305"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-113211000-aug-emmentaler--page-2.png",
+              "lg-113211000-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-113211000-aug-beethoven--page-2.png"
+            ]
+          },
+          "value": "lg-113211000"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-113316406-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-113316406-aug-beethoven--page-2.png",
+              "lg-113316406-aug-gonville--page-2.png",
+              "lg-113316406-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-113316406"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-113404515-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-113404515-aug-emmentaler--page-1.png",
+              "lg-113404515-aug-gonville--page-1.png",
+              "lg-113404515-aug-gutenberg1939--page-1.png",
+              "lg-113404515-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-113404515"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-113626728936985838-aug-emmentaler--page-4.png"
+            ],
+            "train": [
+              "lg-113626728936985838-aug-beethoven--page-4.png",
+              "lg-113626728936985838-aug-gutenberg1939--page-4.png",
+              "lg-113626728936985838-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-113626728936985838"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-11466156-aug-beethoven--page-11.png",
+              "lg-11466156-aug-emmentaler--page-2.png",
+              "lg-11466156-aug-gonville--page-11.png"
+            ],
+            "train": [
+              "lg-11466156-aug-beethoven--page-2.png",
+              "lg-11466156-aug-emmentaler--page-11.png",
+              "lg-11466156-aug-gonville--page-2.png",
+              "lg-11466156-aug-gutenberg1939--page-11.png",
+              "lg-11466156-aug-gutenberg1939--page-2.png",
+              "lg-11466156-aug-gutenberg1939--page-3.png",
+              "lg-11466156-aug-lilyjazz--page-11.png",
+              "lg-11466156-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-11466156"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-114985838-aug-beethoven--page-27.png",
+              "lg-114985838-aug-beethoven--page-45.png",
+              "lg-114985838-aug-gutenberg1939--page-27.png"
+            ],
+            "train": [
+              "lg-114985838-aug-emmentaler--page-27.png",
+              "lg-114985838-aug-lilyjazz--page-48.png"
+            ],
+            "val": [
+              "lg-114985838-aug-emmentaler--page-45.png",
+              "lg-114985838-aug-gutenberg1939--page-45.png",
+              "lg-114985838-aug-lilyjazz--page-27.png"
+            ]
+          },
+          "value": "lg-114985838"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-117996848-aug-gutenberg1939--page-25.png"
+            ],
+            "train": [
+              "lg-117996848-aug-beethoven--page-30.png",
+              "lg-117996848-aug-emmentaler--page-29.png"
+            ]
+          },
+          "value": "lg-117996848"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-119841847-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-119841847-aug-emmentaler--page-2.png",
+              "lg-119841847-aug-gonville--page-2.png"
+            ],
+            "val": [
+              "lg-119841847-aug-beethoven--page-2.png",
+              "lg-119841847-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-119841847"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-120034259-aug-emmentaler--page-6.png"
+            ],
+            "train": [
+              "lg-120034259-aug-beethoven--page-1.png",
+              "lg-120034259-aug-beethoven--page-6.png",
+              "lg-120034259-aug-emmentaler--page-1.png",
+              "lg-120034259-aug-gonville--page-1.png",
+              "lg-120034259-aug-gutenberg1939--page-1.png",
+              "lg-120034259-aug-gutenberg1939--page-6.png",
+              "lg-120034259-aug-lilyjazz--page-1.png",
+              "lg-120034259-aug-lilyjazz--page-6.png"
+            ],
+            "val": [
+              "lg-120034259-aug-gonville--page-6.png"
+            ]
+          },
+          "value": "lg-120034259"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-12023378-aug-gonville--page-4.png"
+            ],
+            "train": [
+              "lg-12023378-aug-beethoven--page-4.png",
+              "lg-12023378-aug-gutenberg1939--page-4.png"
+            ],
+            "val": [
+              "lg-12023378-aug-emmentaler--page-4.png",
+              "lg-12023378-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-12023378"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-120452889-aug-emmentaler--page-8.png"
+            ],
+            "train": [
+              "lg-120452889-aug-gonville--page-8.png",
+              "lg-120452889-aug-gutenberg1939--page-8.png",
+              "lg-120452889-aug-lilyjazz--page-6.png",
+              "lg-120452889-aug-lilyjazz--page-8.png"
+            ],
+            "val": [
+              "lg-120452889-aug-gutenberg1939--page-6.png"
+            ]
+          },
+          "value": "lg-120452889"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-120472468-aug-beethoven--page-6.png",
+              "lg-120472468-aug-emmentaler--page-6.png"
+            ],
+            "train": [
+              "lg-120472468-aug-lilyjazz--page-6.png"
+            ],
+            "val": [
+              "lg-120472468-aug-gonville--page-6.png"
+            ]
+          },
+          "value": "lg-120472468"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-123405904-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-123405904-aug-emmentaler--page-1.png",
+              "lg-123405904-aug-gutenberg1939--page-1.png",
+              "lg-123405904-aug-lilyjazz--page-1.png"
+            ],
+            "val": [
+              "lg-123405904-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-123405904"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-124209689-aug-beethoven--page-2.png",
+              "lg-124209689-aug-emmentaler--page-2.png",
+              "lg-124209689-aug-gutenberg1939--page-2.png",
+              "lg-124209689-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-124209689-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-124209689"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-124741354-aug-beethoven--page-3.png"
+            ],
+            "train": [
+              "lg-124741354-aug-emmentaler--page-3.png",
+              "lg-124741354-aug-gonville--page-3.png",
+              "lg-124741354-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-124741354"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-124880365919323711-aug-gonville--page-4.png",
+              "lg-124880365919323711-aug-gutenberg1939--page-10.png",
+              "lg-124880365919323711-aug-gutenberg1939--page-4.png",
+              "lg-124880365919323711-aug-lilyjazz--page-10.png",
+              "lg-124880365919323711-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-124880365919323711-aug-beethoven--page-10.png",
+              "lg-124880365919323711-aug-emmentaler--page-10.png",
+              "lg-124880365919323711-aug-emmentaler--page-4.png"
+            ]
+          },
+          "value": "lg-124880365919323711"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-125588675-aug-beethoven--page-11.png",
+              "lg-125588675-aug-gutenberg1939--page-11.png"
+            ],
+            "val": [
+              "lg-125588675-aug-emmentaler--page-11.png"
+            ]
+          },
+          "value": "lg-125588675"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-130859097-aug-gonville--page-4.png"
+            ],
+            "train": [
+              "lg-130859097-aug-beethoven--page-4.png",
+              "lg-130859097-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-130859097"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-131048488-aug-gonville--page-4.png"
+            ],
+            "train": [
+              "lg-131048488-aug-beethoven--page-4.png",
+              "lg-131048488-aug-emmentaler--page-4.png",
+              "lg-131048488-aug-gutenberg1939--page-4.png",
+              "lg-131048488-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-131048488"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-134928103-aug-gonville--page-9.png"
+            ],
+            "train": [
+              "lg-134928103-aug-gutenberg1939--page-9.png"
+            ]
+          },
+          "value": "lg-134928103"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-136961156018845714-aug-gutenberg1939--page-8.png"
+            ],
+            "train": [
+              "lg-136961156018845714-aug-beethoven--page-10.png",
+              "lg-136961156018845714-aug-beethoven--page-2.png",
+              "lg-136961156018845714-aug-emmentaler--page-2.png",
+              "lg-136961156018845714-aug-emmentaler--page-9.png",
+              "lg-136961156018845714-aug-gutenberg1939--page-2.png",
+              "lg-136961156018845714-aug-lilyjazz--page-10.png",
+              "lg-136961156018845714-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-136961156018845714"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-138276217-aug-gonville--page-2.png"
+            ],
+            "train": [
+              "lg-138276217-aug-emmentaler--page-2.png",
+              "lg-138276217-aug-emmentaler--page-3.png",
+              "lg-138276217-aug-gonville--page-3.png",
+              "lg-138276217-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-138276217-aug-beethoven--page-3.png"
+            ]
+          },
+          "value": "lg-138276217"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-138508562-aug-gonville--page-1.png"
+            ],
+            "train": [
+              "lg-138508562-aug-beethoven--page-1.png",
+              "lg-138508562-aug-emmentaler--page-1.png"
+            ]
+          },
+          "value": "lg-138508562"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-139957803-aug-lilyjazz--page-4.png"
+            ],
+            "train": [
+              "lg-139957803-aug-beethoven--page-4.png",
+              "lg-139957803-aug-beethoven--page-5.png",
+              "lg-139957803-aug-emmentaler--page-4.png",
+              "lg-139957803-aug-emmentaler--page-5.png",
+              "lg-139957803-aug-gonville--page-4.png",
+              "lg-139957803-aug-gutenberg1939--page-4.png",
+              "lg-139957803-aug-gutenberg1939--page-5.png",
+              "lg-139957803-aug-lilyjazz--page-5.png"
+            ],
+            "val": [
+              "lg-139957803-aug-gonville--page-5.png"
+            ]
+          },
+          "value": "lg-139957803"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-140202857-aug-gutenberg1939--page-16.png"
+            ],
+            "train": [
+              "lg-140202857-aug-beethoven--page-16.png",
+              "lg-140202857-aug-emmentaler--page-16.png",
+              "lg-140202857-aug-gonville--page-16.png",
+              "lg-140202857-aug-lilyjazz--page-16.png"
+            ]
+          },
+          "value": "lg-140202857"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-140707771-aug-lilyjazz--page-4.png"
+            ],
+            "train": [
+              "lg-140707771-aug-beethoven--page-2.png",
+              "lg-140707771-aug-beethoven--page-4.png",
+              "lg-140707771-aug-emmentaler--page-2.png",
+              "lg-140707771-aug-emmentaler--page-4.png",
+              "lg-140707771-aug-gonville--page-2.png",
+              "lg-140707771-aug-gonville--page-4.png",
+              "lg-140707771-aug-gutenberg1939--page-2.png",
+              "lg-140707771-aug-gutenberg1939--page-4.png",
+              "lg-140707771-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-140707771"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-14121631-aug-emmentaler--page-2.png",
+              "lg-14121631-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-14121631-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-14121631"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-143361038-aug-emmentaler--page-3.png"
+            ],
+            "train": [
+              "lg-143361038-aug-gutenberg1939--page-3.png"
+            ],
+            "val": [
+              "lg-143361038-aug-beethoven--page-3.png"
+            ]
+          },
+          "value": "lg-143361038"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-144423495-aug-lilyjazz--page-13.png"
+            ],
+            "train": [
+              "lg-144423495-aug-beethoven--page-13.png",
+              "lg-144423495-aug-beethoven--page-59.png",
+              "lg-144423495-aug-emmentaler--page-13.png",
+              "lg-144423495-aug-gutenberg1939--page-13.png",
+              "lg-144423495-aug-gutenberg1939--page-59.png",
+              "lg-144423495-aug-lilyjazz--page-59.png"
+            ],
+            "val": [
+              "lg-144423495-aug-emmentaler--page-59.png"
+            ]
+          },
+          "value": "lg-144423495"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-144604277-aug-beethoven--page-3.png",
+              "lg-144604277-aug-gonville--page-1.png",
+              "lg-144604277-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-144604277-aug-beethoven--page-4.png",
+              "lg-144604277-aug-emmentaler--page-3.png",
+              "lg-144604277-aug-gonville--page-3.png",
+              "lg-144604277-aug-gonville--page-4.png",
+              "lg-144604277-aug-gutenberg1939--page-3.png",
+              "lg-144604277-aug-gutenberg1939--page-4.png",
+              "lg-144604277-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-144604277"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-146758345-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-146758345-aug-beethoven--page-2.png",
+              "lg-146758345-aug-emmentaler--page-2.png",
+              "lg-146758345-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-146758345"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-155321759598294812-aug-beethoven--page-1.png",
+              "lg-155321759598294812-aug-beethoven--page-5.png",
+              "lg-155321759598294812-aug-emmentaler--page-3.png",
+              "lg-155321759598294812-aug-gutenberg1939--page-1.png",
+              "lg-155321759598294812-aug-gutenberg1939--page-2.png",
+              "lg-155321759598294812-aug-gutenberg1939--page-4.png"
+            ],
+            "train": [
+              "lg-155321759598294812-aug-beethoven--page-3.png",
+              "lg-155321759598294812-aug-beethoven--page-4.png",
+              "lg-155321759598294812-aug-emmentaler--page-1.png",
+              "lg-155321759598294812-aug-emmentaler--page-5.png",
+              "lg-155321759598294812-aug-gutenberg1939--page-3.png",
+              "lg-155321759598294812-aug-lilyjazz--page-1.png",
+              "lg-155321759598294812-aug-lilyjazz--page-3.png",
+              "lg-155321759598294812-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-155321759598294812-aug-emmentaler--page-4.png"
+            ]
+          },
+          "value": "lg-155321759598294812"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-156462669734787890-aug-emmentaler--page-2.png",
+              "lg-156462669734787890-aug-emmentaler--page-8.png",
+              "lg-156462669734787890-aug-lilyjazz--page-1.png",
+              "lg-156462669734787890-aug-lilyjazz--page-8.png",
+              "lg-156462669734787890-aug-lilyjazz--page-9.png"
+            ],
+            "train": [
+              "lg-156462669734787890-aug-beethoven--page-1.png",
+              "lg-156462669734787890-aug-beethoven--page-2.png",
+              "lg-156462669734787890-aug-beethoven--page-6.png",
+              "lg-156462669734787890-aug-emmentaler--page-1.png",
+              "lg-156462669734787890-aug-emmentaler--page-6.png",
+              "lg-156462669734787890-aug-emmentaler--page-9.png",
+              "lg-156462669734787890-aug-gutenberg1939--page-1.png",
+              "lg-156462669734787890-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-156462669734787890"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-157274342875275536-aug-beethoven--page-2.png",
+              "lg-157274342875275536-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-157274342875275536-aug-emmentaler--page-2.png",
+              "lg-157274342875275536-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-157274342875275536"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-158018509-aug-beethoven--page-1.png",
+              "lg-158018509-aug-emmentaler--page-1.png"
+            ],
+            "val": [
+              "lg-158018509-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-158018509"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-158252154-aug-gutenberg1939--page-3.png"
+            ],
+            "train": [
+              "lg-158252154-aug-beethoven--page-3.png",
+              "lg-158252154-aug-emmentaler--page-3.png",
+              "lg-158252154-aug-gonville--page-3.png",
+              "lg-158252154-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-158252154"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-158395519-aug-gutenberg1939--page-3.png"
+            ],
+            "train": [
+              "lg-158395519-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-158395519-aug-emmentaler--page-3.png"
+            ]
+          },
+          "value": "lg-158395519"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-158795755-aug-beethoven--page-9.png",
+              "lg-158795755-aug-gonville--page-9.png"
+            ],
+            "train": [
+              "lg-158795755-aug-emmentaler--page-9.png",
+              "lg-158795755-aug-gutenberg1939--page-10.png"
+            ]
+          },
+          "value": "lg-158795755"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-162603306-aug-beethoven--page-5.png"
+            ],
+            "train": [
+              "lg-162603306-aug-gonville--page-5.png"
+            ]
+          },
+          "value": "lg-162603306"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-162931283-aug-beethoven--page-3.png",
+              "lg-162931283-aug-emmentaler--page-3.png",
+              "lg-162931283-aug-gutenberg1939--page-3.png",
+              "lg-162931283-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-162931283-aug-gonville--page-3.png"
+            ]
+          },
+          "value": "lg-162931283"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-162999963-aug-beethoven--page-2.png"
+            ],
+            "train": [
+              "lg-162999963-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-162999963"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-16336832-aug-emmentaler--page-12.png",
+              "lg-16336832-aug-emmentaler--page-15.png",
+              "lg-16336832-aug-gonville--page-16.png",
+              "lg-16336832-aug-gutenberg1939--page-1.png",
+              "lg-16336832-aug-gutenberg1939--page-14.png",
+              "lg-16336832-aug-gutenberg1939--page-16.png",
+              "lg-16336832-aug-lilyjazz--page-10.png"
+            ],
+            "train": [
+              "lg-16336832-aug-beethoven--page-12.png",
+              "lg-16336832-aug-beethoven--page-14.png",
+              "lg-16336832-aug-beethoven--page-15.png",
+              "lg-16336832-aug-beethoven--page-16.png",
+              "lg-16336832-aug-beethoven--page-19.png",
+              "lg-16336832-aug-beethoven--page-20.png",
+              "lg-16336832-aug-beethoven--page-8.png",
+              "lg-16336832-aug-beethoven--page-9.png",
+              "lg-16336832-aug-emmentaler--page-1.png",
+              "lg-16336832-aug-emmentaler--page-14.png",
+              "lg-16336832-aug-emmentaler--page-16.png",
+              "lg-16336832-aug-emmentaler--page-19.png",
+              "lg-16336832-aug-emmentaler--page-20.png",
+              "lg-16336832-aug-gonville--page-14.png",
+              "lg-16336832-aug-gonville--page-19.png",
+              "lg-16336832-aug-gonville--page-20.png",
+              "lg-16336832-aug-gutenberg1939--page-12.png",
+              "lg-16336832-aug-gutenberg1939--page-13.png",
+              "lg-16336832-aug-gutenberg1939--page-15.png",
+              "lg-16336832-aug-gutenberg1939--page-19.png",
+              "lg-16336832-aug-gutenberg1939--page-20.png",
+              "lg-16336832-aug-gutenberg1939--page-9.png",
+              "lg-16336832-aug-lilyjazz--page-15.png",
+              "lg-16336832-aug-lilyjazz--page-16.png",
+              "lg-16336832-aug-lilyjazz--page-19.png",
+              "lg-16336832-aug-lilyjazz--page-20.png",
+              "lg-16336832-aug-lilyjazz--page-8.png"
+            ],
+            "val": [
+              "lg-16336832-aug-emmentaler--page-8.png",
+              "lg-16336832-aug-gonville--page-9.png",
+              "lg-16336832-aug-lilyjazz--page-14.png"
+            ]
+          },
+          "value": "lg-16336832"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-164599457-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-164599457-aug-beethoven--page-1.png",
+              "lg-164599457-aug-emmentaler--page-1.png",
+              "lg-164599457-aug-emmentaler--page-2.png",
+              "lg-164599457-aug-gonville--page-1.png",
+              "lg-164599457-aug-gutenberg1939--page-2.png",
+              "lg-164599457-aug-lilyjazz--page-1.png",
+              "lg-164599457-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-164599457"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-165143054-aug-beethoven--page-11.png",
+              "lg-165143054-aug-beethoven--page-12.png"
+            ],
+            "train": [
+              "lg-165143054-aug-emmentaler--page-12.png",
+              "lg-165143054-aug-gonville--page-11.png",
+              "lg-165143054-aug-gonville--page-12.png",
+              "lg-165143054-aug-gutenberg1939--page-11.png",
+              "lg-165143054-aug-gutenberg1939--page-12.png",
+              "lg-165143054-aug-lilyjazz--page-11.png",
+              "lg-165143054-aug-lilyjazz--page-12.png"
+            ],
+            "val": [
+              "lg-165143054-aug-emmentaler--page-11.png"
+            ]
+          },
+          "value": "lg-165143054"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-165513972-aug-beethoven--page-11.png",
+              "lg-165513972-aug-emmentaler--page-11.png",
+              "lg-165513972-aug-lilyjazz--page-11.png"
+            ],
+            "train": [
+              "lg-165513972-aug-gonville--page-11.png",
+              "lg-165513972-aug-gutenberg1939--page-11.png"
+            ]
+          },
+          "value": "lg-165513972"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-169480697-aug-emmentaler--page-5.png",
+              "lg-169480697-aug-emmentaler--page-8.png",
+              "lg-169480697-aug-gonville--page-5.png",
+              "lg-169480697-aug-lilyjazz--page-5.png"
+            ],
+            "train": [
+              "lg-169480697-aug-beethoven--page-5.png",
+              "lg-169480697-aug-beethoven--page-8.png",
+              "lg-169480697-aug-gonville--page-8.png",
+              "lg-169480697-aug-gutenberg1939--page-5.png",
+              "lg-169480697-aug-gutenberg1939--page-7.png",
+              "lg-169480697-aug-lilyjazz--page-7.png"
+            ]
+          },
+          "value": "lg-169480697"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-170729311424586813-aug-beethoven--page-3.png",
+              "lg-170729311424586813-aug-emmentaler--page-3.png",
+              "lg-170729311424586813-aug-gutenberg1939--page-3.png",
+              "lg-170729311424586813-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-170729311424586813-aug-gonville--page-3.png"
+            ]
+          },
+          "value": "lg-170729311424586813"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-171023589-aug-beethoven--page-18.png"
+            ],
+            "train": [
+              "lg-171023589-aug-lilyjazz--page-18.png"
+            ],
+            "val": [
+              "lg-171023589-aug-emmentaler--page-18.png"
+            ]
+          },
+          "value": "lg-171023589"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-172964321-aug-gutenberg1939--page-5.png"
+            ],
+            "train": [
+              "lg-172964321-aug-beethoven--page-5.png",
+              "lg-172964321-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-172964321"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-174521423366315269-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-174521423366315269-aug-gutenberg1939--page-3.png"
+            ]
+          },
+          "value": "lg-174521423366315269"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-17501857-aug-lilyjazz--page-9.png"
+            ],
+            "train": [
+              "lg-17501857-aug-beethoven--page-3.png",
+              "lg-17501857-aug-emmentaler--page-3.png",
+              "lg-17501857-aug-gonville--page-3.png",
+              "lg-17501857-aug-gonville--page-9.png",
+              "lg-17501857-aug-gutenberg1939--page-3.png",
+              "lg-17501857-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-17501857"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-175115758-aug-beethoven--page-3.png"
+            ],
+            "train": [
+              "lg-175115758-aug-gonville--page-3.png",
+              "lg-175115758-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-175115758"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-176972328-aug-lilyjazz--page-6.png"
+            ],
+            "train": [
+              "lg-176972328-aug-beethoven--page-6.png",
+              "lg-176972328-aug-emmentaler--page-6.png",
+              "lg-176972328-aug-gutenberg1939--page-6.png"
+            ]
+          },
+          "value": "lg-176972328"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-177278865-aug-emmentaler--page-7.png"
+            ],
+            "train": [
+              "lg-177278865-aug-beethoven--page-7.png",
+              "lg-177278865-aug-gonville--page-7.png",
+              "lg-177278865-aug-gutenberg1939--page-7.png"
+            ],
+            "val": [
+              "lg-177278865-aug-lilyjazz--page-7.png"
+            ]
+          },
+          "value": "lg-177278865"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-177309215-aug-beethoven--page-2.png"
+            ],
+            "train": [
+              "lg-177309215-aug-emmentaler--page-2.png",
+              "lg-177309215-aug-gutenberg1939--page-2.png",
+              "lg-177309215-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-177309215"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-184087984-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-184087984-aug-gonville--page-2.png",
+              "lg-184087984-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-184087984"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-18501203853852890-aug-gutenberg1939--page-3.png"
+            ],
+            "train": [
+              "lg-18501203853852890-aug-beethoven--page-3.png",
+              "lg-18501203853852890-aug-emmentaler--page-3.png"
+            ]
+          },
+          "value": "lg-18501203853852890"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-187488336-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-187488336-aug-beethoven--page-2.png",
+              "lg-187488336-aug-gutenberg1939--page-2.png",
+              "lg-187488336-aug-lilyjazz--page-1.png",
+              "lg-187488336-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-187488336"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-192457327-aug-beethoven--page-5.png"
+            ],
+            "train": [
+              "lg-192457327-aug-emmentaler--page-2.png"
+            ]
+          },
+          "value": "lg-192457327"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-195450829-aug-gutenberg1939--page-1.png"
+            ],
+            "val": [
+              "lg-195450829-aug-emmentaler--page-1.png"
+            ]
+          },
+          "value": "lg-195450829"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-198200840-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-198200840-aug-emmentaler--page-1.png",
+              "lg-198200840-aug-gonville--page-1.png",
+              "lg-198200840-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-198200840"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-200573848-aug-emmentaler--page-1.png"
+            ],
+            "train": [
+              "lg-200573848-aug-gutenberg1939--page-2.png",
+              "lg-200573848-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-200573848"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-202871810-aug-gutenberg1939--page-3.png",
+              "lg-202871810-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-202871810-aug-beethoven--page-3.png"
+            ]
+          },
+          "value": "lg-202871810"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-206056464-aug-emmentaler--page-8.png"
+            ],
+            "val": [
+              "lg-206056464-aug-gutenberg1939--page-8.png"
+            ]
+          },
+          "value": "lg-206056464"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-210320460-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-210320460-aug-emmentaler--page-2.png",
+              "lg-210320460-aug-gonville--page-2.png",
+              "lg-210320460-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-210320460"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-210359136-aug-lilyjazz--page-14.png"
+            ],
+            "train": [
+              "lg-210359136-aug-beethoven--page-14.png",
+              "lg-210359136-aug-emmentaler--page-14.png",
+              "lg-210359136-aug-emmentaler--page-15.png",
+              "lg-210359136-aug-gonville--page-15.png",
+              "lg-210359136-aug-gutenberg1939--page-14.png",
+              "lg-210359136-aug-lilyjazz--page-15.png"
+            ],
+            "val": [
+              "lg-210359136-aug-beethoven--page-15.png",
+              "lg-210359136-aug-gonville--page-14.png",
+              "lg-210359136-aug-gutenberg1939--page-13.png"
+            ]
+          },
+          "value": "lg-210359136"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-210539604-aug-gonville--page-4.png"
+            ],
+            "train": [
+              "lg-210539604-aug-emmentaler--page-5.png",
+              "lg-210539604-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-210539604"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-210979928054054013-aug-emmentaler--page-2.png"
+            ],
+            "train": [
+              "lg-210979928054054013-aug-beethoven--page-1.png",
+              "lg-210979928054054013-aug-beethoven--page-2.png",
+              "lg-210979928054054013-aug-emmentaler--page-1.png",
+              "lg-210979928054054013-aug-gutenberg1939--page-1.png",
+              "lg-210979928054054013-aug-gutenberg1939--page-2.png"
+            ],
+            "val": [
+              "lg-210979928054054013-aug-lilyjazz--page-1.png",
+              "lg-210979928054054013-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-210979928054054013"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-211144057153081784-aug-emmentaler--page-8.png"
+            ],
+            "train": [
+              "lg-211144057153081784-aug-gonville--page-8.png",
+              "lg-211144057153081784-aug-gutenberg1939--page-8.png"
+            ]
+          },
+          "value": "lg-211144057153081784"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-212038609-aug-beethoven--page-4.png",
+              "lg-212038609-aug-beethoven--page-7.png",
+              "lg-212038609-aug-emmentaler--page-8.png",
+              "lg-212038609-aug-gonville--page-7.png",
+              "lg-212038609-aug-lilyjazz--page-4.png",
+              "lg-212038609-aug-lilyjazz--page-7.png"
+            ],
+            "train": [
+              "lg-212038609-aug-beethoven--page-8.png",
+              "lg-212038609-aug-emmentaler--page-20.png",
+              "lg-212038609-aug-emmentaler--page-4.png",
+              "lg-212038609-aug-emmentaler--page-7.png",
+              "lg-212038609-aug-gutenberg1939--page-4.png",
+              "lg-212038609-aug-gutenberg1939--page-7.png",
+              "lg-212038609-aug-gutenberg1939--page-8.png",
+              "lg-212038609-aug-lilyjazz--page-8.png"
+            ],
+            "val": [
+              "lg-212038609-aug-gonville--page-4.png",
+              "lg-212038609-aug-gonville--page-8.png"
+            ]
+          },
+          "value": "lg-212038609"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-212107868-aug-beethoven--page-2.png",
+              "lg-212107868-aug-gonville--page-2.png"
+            ],
+            "train": [
+              "lg-212107868-aug-emmentaler--page-2.png",
+              "lg-212107868-aug-gutenberg1939--page-2.png",
+              "lg-212107868-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-212107868-aug-emmentaler--page-1.png"
+            ]
+          },
+          "value": "lg-212107868"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-214320686-aug-emmentaler--page-2.png",
+              "lg-214320686-aug-gutenberg1939--page-2.png",
+              "lg-214320686-aug-lilyjazz--page-1.png",
+              "lg-214320686-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-214320686-aug-beethoven--page-1.png",
+              "lg-214320686-aug-beethoven--page-2.png",
+              "lg-214320686-aug-beethoven--page-3.png",
+              "lg-214320686-aug-emmentaler--page-1.png",
+              "lg-214320686-aug-emmentaler--page-3.png",
+              "lg-214320686-aug-gonville--page-1.png",
+              "lg-214320686-aug-gonville--page-2.png",
+              "lg-214320686-aug-gonville--page-3.png",
+              "lg-214320686-aug-gutenberg1939--page-1.png",
+              "lg-214320686-aug-gutenberg1939--page-3.png",
+              "lg-214320686-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-214320686"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-21461214749724266-aug-beethoven--page-2.png"
+            ],
+            "train": [
+              "lg-21461214749724266-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-21461214749724266"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-225075428842158558-aug-beethoven--page-4.png",
+              "lg-225075428842158558-aug-gonville--page-2.png",
+              "lg-225075428842158558-aug-gonville--page-4.png",
+              "lg-225075428842158558-aug-gonville--page-6.png",
+              "lg-225075428842158558-aug-lilyjazz--page-2.png",
+              "lg-225075428842158558-aug-lilyjazz--page-6.png"
+            ],
+            "train": [
+              "lg-225075428842158558-aug-beethoven--page-2.png",
+              "lg-225075428842158558-aug-beethoven--page-6.png",
+              "lg-225075428842158558-aug-emmentaler--page-2.png",
+              "lg-225075428842158558-aug-emmentaler--page-4.png",
+              "lg-225075428842158558-aug-emmentaler--page-6.png",
+              "lg-225075428842158558-aug-gutenberg1939--page-2.png",
+              "lg-225075428842158558-aug-gutenberg1939--page-6.png",
+              "lg-225075428842158558-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-225075428842158558-aug-gutenberg1939--page-4.png"
+            ]
+          },
+          "value": "lg-225075428842158558"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-2267728-aug-beethoven--page-2.png",
+              "lg-2267728-aug-emmentaler--page-2.png"
+            ],
+            "val": [
+              "lg-2267728-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-2267728"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-233786100286899765-aug-beethoven--page-2.png"
+            ],
+            "train": [
+              "lg-233786100286899765-aug-emmentaler--page-2.png",
+              "lg-233786100286899765-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-233786100286899765"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-252689430529936624-aug-beethoven--page-3.png",
+              "lg-252689430529936624-aug-emmentaler--page-3.png"
+            ],
+            "train": [
+              "lg-252689430529936624-aug-gutenberg1939--page-3.png",
+              "lg-252689430529936624-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-252689430529936624"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-25323079981267453-aug-beethoven--page-3.png",
+              "lg-25323079981267453-aug-emmentaler--page-3.png",
+              "lg-25323079981267453-aug-gonville--page-3.png",
+              "lg-25323079981267453-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-25323079981267453-aug-gutenberg1939--page-3.png"
+            ]
+          },
+          "value": "lg-25323079981267453"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-25358813-aug-lilyjazz--page-6.png"
+            ],
+            "train": [
+              "lg-25358813-aug-gonville--page-3.png",
+              "lg-25358813-aug-gonville--page-6.png"
+            ]
+          },
+          "value": "lg-25358813"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-263172443869766193-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-263172443869766193-aug-beethoven--page-2.png",
+              "lg-263172443869766193-aug-emmentaler--page-2.png",
+              "lg-263172443869766193-aug-gonville--page-2.png",
+              "lg-263172443869766193-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-263172443869766193"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-26406557-aug-emmentaler--page-1.png",
+              "lg-26406557-aug-gonville--page-1.png",
+              "lg-26406557-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-26406557-aug-beethoven--page-1.png",
+              "lg-26406557-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-26406557"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-273859961555875753-aug-beethoven--page-1.png",
+              "lg-273859961555875753-aug-gonville--page-1.png",
+              "lg-273859961555875753-aug-gutenberg1939--page-1.png",
+              "lg-273859961555875753-aug-lilyjazz--page-1.png"
+            ],
+            "val": [
+              "lg-273859961555875753-aug-emmentaler--page-1.png"
+            ]
+          },
+          "value": "lg-273859961555875753"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-288127953275479655-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-288127953275479655-aug-emmentaler--page-3.png",
+              "lg-288127953275479655-aug-gonville--page-3.png",
+              "lg-288127953275479655-aug-gutenberg1939--page-3.png"
+            ],
+            "val": [
+              "lg-288127953275479655-aug-beethoven--page-3.png"
+            ]
+          },
+          "value": "lg-288127953275479655"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-29176064-aug-emmentaler--page-3.png"
+            ],
+            "train": [
+              "lg-29176064-aug-emmentaler--page-6.png",
+              "lg-29176064-aug-gutenberg1939--page-6.png",
+              "lg-29176064-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-29176064"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-296585793483481368-aug-beethoven--page-18.png",
+              "lg-296585793483481368-aug-gutenberg1939--page-17.png"
+            ],
+            "train": [
+              "lg-296585793483481368-aug-beethoven--page-17.png",
+              "lg-296585793483481368-aug-emmentaler--page-17.png",
+              "lg-296585793483481368-aug-emmentaler--page-18.png",
+              "lg-296585793483481368-aug-gutenberg1939--page-18.png",
+              "lg-296585793483481368-aug-lilyjazz--page-17.png",
+              "lg-296585793483481368-aug-lilyjazz--page-18.png"
+            ]
+          },
+          "value": "lg-296585793483481368"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-299237139601375755-aug-gonville--page-2.png"
+            ],
+            "train": [
+              "lg-299237139601375755-aug-beethoven--page-2.png",
+              "lg-299237139601375755-aug-gutenberg1939--page-2.png",
+              "lg-299237139601375755-aug-gutenberg1939--page-4.png",
+              "lg-299237139601375755-aug-lilyjazz--page-2.png",
+              "lg-299237139601375755-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-299237139601375755"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-333206213772106215-aug-beethoven--page-2.png",
+              "lg-333206213772106215-aug-gutenberg1939--page-2.png",
+              "lg-333206213772106215-aug-lilyjazz--page-5.png"
+            ],
+            "train": [
+              "lg-333206213772106215-aug-beethoven--page-5.png",
+              "lg-333206213772106215-aug-gonville--page-5.png",
+              "lg-333206213772106215-aug-gutenberg1939--page-5.png"
+            ],
+            "val": [
+              "lg-333206213772106215-aug-emmentaler--page-5.png"
+            ]
+          },
+          "value": "lg-333206213772106215"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-345113076672233801-aug-emmentaler--page-2.png",
+              "lg-345113076672233801-aug-gutenberg1939--page-1.png",
+              "lg-345113076672233801-aug-gutenberg1939--page-2.png",
+              "lg-345113076672233801-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-345113076672233801-aug-beethoven--page-2.png"
+            ]
+          },
+          "value": "lg-345113076672233801"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-345691418736568093-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-345691418736568093-aug-beethoven--page-3.png",
+              "lg-345691418736568093-aug-beethoven--page-4.png",
+              "lg-345691418736568093-aug-beethoven--page-6.png",
+              "lg-345691418736568093-aug-emmentaler--page-1.png",
+              "lg-345691418736568093-aug-emmentaler--page-2.png",
+              "lg-345691418736568093-aug-emmentaler--page-3.png",
+              "lg-345691418736568093-aug-emmentaler--page-4.png",
+              "lg-345691418736568093-aug-gutenberg1939--page-2.png",
+              "lg-345691418736568093-aug-gutenberg1939--page-3.png",
+              "lg-345691418736568093-aug-gutenberg1939--page-5.png",
+              "lg-345691418736568093-aug-lilyjazz--page-1.png",
+              "lg-345691418736568093-aug-lilyjazz--page-2.png",
+              "lg-345691418736568093-aug-lilyjazz--page-3.png",
+              "lg-345691418736568093-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-345691418736568093-aug-beethoven--page-2.png",
+              "lg-345691418736568093-aug-emmentaler--page-6.png",
+              "lg-345691418736568093-aug-gutenberg1939--page-1.png",
+              "lg-345691418736568093-aug-gutenberg1939--page-4.png",
+              "lg-345691418736568093-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-345691418736568093"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-356113272835411132-aug-emmentaler--page-1.png"
+            ],
+            "train": [
+              "lg-356113272835411132-aug-gutenberg1939--page-1.png",
+              "lg-356113272835411132-aug-lilyjazz--page-1.png"
+            ],
+            "val": [
+              "lg-356113272835411132-aug-beethoven--page-1.png"
+            ]
+          },
+          "value": "lg-356113272835411132"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-35738800-aug-emmentaler--page-3.png",
+              "lg-35738800-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-35738800-aug-beethoven--page-1.png",
+              "lg-35738800-aug-beethoven--page-2.png",
+              "lg-35738800-aug-emmentaler--page-1.png",
+              "lg-35738800-aug-gonville--page-1.png",
+              "lg-35738800-aug-lilyjazz--page-2.png",
+              "lg-35738800-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-35738800"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-36421666-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-36421666-aug-beethoven--page-1.png",
+              "lg-36421666-aug-emmentaler--page-1.png",
+              "lg-36421666-aug-gonville--page-1.png",
+              "lg-36421666-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-36421666"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-36594892-aug-gutenberg1939--page-4.png"
+            ],
+            "train": [
+              "lg-36594892-aug-gonville--page-4.png"
+            ]
+          },
+          "value": "lg-36594892"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-36905751-aug-gonville--page-2.png"
+            ],
+            "train": [
+              "lg-36905751-aug-gutenberg1939--page-2.png",
+              "lg-36905751-aug-lilyjazz--page-1.png",
+              "lg-36905751-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-36905751"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-373194951850503594-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-373194951850503594-aug-emmentaler--page-2.png"
+            ]
+          },
+          "value": "lg-373194951850503594"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-37541267-aug-emmentaler--page-16.png"
+            ],
+            "train": [
+              "lg-37541267-aug-gonville--page-16.png",
+              "lg-37541267-aug-gutenberg1939--page-16.png",
+              "lg-37541267-aug-lilyjazz--page-16.png"
+            ]
+          },
+          "value": "lg-37541267"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-385765285187653552-aug-beethoven--page-4.png",
+              "lg-385765285187653552-aug-emmentaler--page-4.png"
+            ],
+            "train": [
+              "lg-385765285187653552-aug-gonville--page-4.png",
+              "lg-385765285187653552-aug-gutenberg1939--page-4.png",
+              "lg-385765285187653552-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-385765285187653552"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-386079998556795740-aug-beethoven--page-2.png",
+              "lg-386079998556795740-aug-gonville--page-2.png",
+              "lg-386079998556795740-aug-gutenberg1939--page-2.png",
+              "lg-386079998556795740-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-386079998556795740-aug-emmentaler--page-2.png"
+            ]
+          },
+          "value": "lg-386079998556795740"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-38639212-aug-emmentaler--page-3.png"
+            ],
+            "val": [
+              "lg-38639212-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-38639212"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-387173254084060435-aug-gutenberg1939--page-7.png"
+            ],
+            "val": [
+              "lg-387173254084060435-aug-lilyjazz--page-7.png"
+            ]
+          },
+          "value": "lg-387173254084060435"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-389830966091864022-aug-gonville--page-3.png"
+            ],
+            "train": [
+              "lg-389830966091864022-aug-beethoven--page-3.png",
+              "lg-389830966091864022-aug-emmentaler--page-1.png",
+              "lg-389830966091864022-aug-emmentaler--page-3.png",
+              "lg-389830966091864022-aug-gonville--page-1.png",
+              "lg-389830966091864022-aug-gutenberg1939--page-3.png"
+            ],
+            "val": [
+              "lg-389830966091864022-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-389830966091864022"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-390090888491475123-aug-beethoven--page-1.png",
+              "lg-390090888491475123-aug-emmentaler--page-1.png",
+              "lg-390090888491475123-aug-gutenberg1939--page-1.png",
+              "lg-390090888491475123-aug-lilyjazz--page-1.png"
+            ],
+            "val": [
+              "lg-390090888491475123-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-390090888491475123"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-39196762213683940-aug-beethoven--page-2.png",
+              "lg-39196762213683940-aug-emmentaler--page-1.png",
+              "lg-39196762213683940-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-39196762213683940-aug-beethoven--page-5.png",
+              "lg-39196762213683940-aug-emmentaler--page-2.png",
+              "lg-39196762213683940-aug-lilyjazz--page-5.png"
+            ],
+            "val": [
+              "lg-39196762213683940-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-39196762213683940"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-3948783-aug-beethoven--page-1.png",
+              "lg-3948783-aug-gonville--page-1.png"
+            ],
+            "train": [
+              "lg-3948783-aug-emmentaler--page-1.png",
+              "lg-3948783-aug-gutenberg1939--page-1.png",
+              "lg-3948783-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-3948783"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-39736411-aug-emmentaler--page-2.png",
+              "lg-39736411-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-39736411-aug-beethoven--page-1.png",
+              "lg-39736411-aug-beethoven--page-2.png",
+              "lg-39736411-aug-emmentaler--page-1.png",
+              "lg-39736411-aug-gutenberg1939--page-2.png",
+              "lg-39736411-aug-lilyjazz--page-1.png",
+              "lg-39736411-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-39736411"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-403265343820684310-aug-beethoven--page-2.png",
+              "lg-403265343820684310-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-403265343820684310-aug-emmentaler--page-2.png",
+              "lg-403265343820684310-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-403265343820684310"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-403274376762891879-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-403274376762891879-aug-gonville--page-2.png",
+              "lg-403274376762891879-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-403274376762891879"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-41246348514662715-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-41246348514662715-aug-beethoven--page-2.png",
+              "lg-41246348514662715-aug-emmentaler--page-2.png",
+              "lg-41246348514662715-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-41246348514662715"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-42047804-aug-emmentaler--page-4.png"
+            ],
+            "train": [
+              "lg-42047804-aug-beethoven--page-4.png",
+              "lg-42047804-aug-gonville--page-4.png",
+              "lg-42047804-aug-gutenberg1939--page-4.png",
+              "lg-42047804-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-42047804"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-431813849444393898-aug-gonville--page-7.png"
+            ],
+            "train": [
+              "lg-431813849444393898-aug-beethoven--page-7.png",
+              "lg-431813849444393898-aug-emmentaler--page-7.png",
+              "lg-431813849444393898-aug-gutenberg1939--page-7.png",
+              "lg-431813849444393898-aug-lilyjazz--page-7.png"
+            ]
+          },
+          "value": "lg-431813849444393898"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-431902536930230031-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-431902536930230031-aug-beethoven--page-2.png",
+              "lg-431902536930230031-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-431902536930230031"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-43269070-aug-beethoven--page-27.png"
+            ],
+            "train": [
+              "lg-43269070-aug-emmentaler--page-27.png",
+              "lg-43269070-aug-gutenberg1939--page-27.png",
+              "lg-43269070-aug-lilyjazz--page-27.png"
+            ]
+          },
+          "value": "lg-43269070"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-43843329-aug-emmentaler--page-8.png",
+              "lg-43843329-aug-gutenberg1939--page-8.png",
+              "lg-43843329-aug-lilyjazz--page-23.png"
+            ],
+            "train": [
+              "lg-43843329-aug-beethoven--page-12.png",
+              "lg-43843329-aug-beethoven--page-24.png",
+              "lg-43843329-aug-beethoven--page-25.png",
+              "lg-43843329-aug-beethoven--page-8.png",
+              "lg-43843329-aug-emmentaler--page-12.png",
+              "lg-43843329-aug-emmentaler--page-19.png",
+              "lg-43843329-aug-emmentaler--page-25.png",
+              "lg-43843329-aug-gutenberg1939--page-12.png",
+              "lg-43843329-aug-gutenberg1939--page-19.png",
+              "lg-43843329-aug-gutenberg1939--page-20.png",
+              "lg-43843329-aug-gutenberg1939--page-23.png",
+              "lg-43843329-aug-gutenberg1939--page-24.png",
+              "lg-43843329-aug-gutenberg1939--page-25.png",
+              "lg-43843329-aug-lilyjazz--page-12.png",
+              "lg-43843329-aug-lilyjazz--page-19.png",
+              "lg-43843329-aug-lilyjazz--page-25.png"
+            ],
+            "val": [
+              "lg-43843329-aug-beethoven--page-20.png",
+              "lg-43843329-aug-emmentaler--page-23.png"
+            ]
+          },
+          "value": "lg-43843329"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-439328696319116749-aug-beethoven--page-2.png",
+              "lg-439328696319116749-aug-gutenberg1939--page-2.png",
+              "lg-439328696319116749-aug-lilyjazz--page-1.png",
+              "lg-439328696319116749-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-439328696319116749-aug-beethoven--page-1.png",
+              "lg-439328696319116749-aug-emmentaler--page-1.png",
+              "lg-439328696319116749-aug-emmentaler--page-2.png",
+              "lg-439328696319116749-aug-gonville--page-1.png",
+              "lg-439328696319116749-aug-gonville--page-2.png"
+            ],
+            "val": [
+              "lg-439328696319116749-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-439328696319116749"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-450984127772237208-aug-beethoven--page-2.png",
+              "lg-450984127772237208-aug-beethoven--page-3.png",
+              "lg-450984127772237208-aug-emmentaler--page-2.png"
+            ],
+            "train": [
+              "lg-450984127772237208-aug-beethoven--page-1.png",
+              "lg-450984127772237208-aug-emmentaler--page-1.png",
+              "lg-450984127772237208-aug-emmentaler--page-3.png",
+              "lg-450984127772237208-aug-gutenberg1939--page-1.png",
+              "lg-450984127772237208-aug-gutenberg1939--page-2.png",
+              "lg-450984127772237208-aug-gutenberg1939--page-3.png",
+              "lg-450984127772237208-aug-lilyjazz--page-1.png",
+              "lg-450984127772237208-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-450984127772237208"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-45216451-aug-gonville--page-6.png",
+              "lg-45216451-aug-gutenberg1939--page-6.png",
+              "lg-45216451-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-45216451-aug-beethoven--page-3.png",
+              "lg-45216451-aug-beethoven--page-6.png",
+              "lg-45216451-aug-emmentaler--page-6.png",
+              "lg-45216451-aug-lilyjazz--page-6.png"
+            ]
+          },
+          "value": "lg-45216451"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-453177151667835320-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-453177151667835320-aug-beethoven--page-1.png",
+              "lg-453177151667835320-aug-beethoven--page-5.png",
+              "lg-453177151667835320-aug-emmentaler--page-1.png",
+              "lg-453177151667835320-aug-gonville--page-5.png",
+              "lg-453177151667835320-aug-gutenberg1939--page-5.png",
+              "lg-453177151667835320-aug-lilyjazz--page-1.png",
+              "lg-453177151667835320-aug-lilyjazz--page-5.png"
+            ],
+            "val": [
+              "lg-453177151667835320-aug-emmentaler--page-5.png"
+            ]
+          },
+          "value": "lg-453177151667835320"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-4610032-aug-beethoven--page-2.png",
+              "lg-4610032-aug-emmentaler--page-2.png",
+              "lg-4610032-aug-emmentaler--page-3.png"
+            ],
+            "val": [
+              "lg-4610032-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-4610032"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-48560814-aug-emmentaler--page-2.png",
+              "lg-48560814-aug-gutenberg1939--page-2.png",
+              "lg-48560814-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-48560814-aug-beethoven--page-2.png",
+              "lg-48560814-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-48560814"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-4991167500045005-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-4991167500045005-aug-beethoven--page-2.png",
+              "lg-4991167500045005-aug-beethoven--page-3.png",
+              "lg-4991167500045005-aug-emmentaler--page-2.png",
+              "lg-4991167500045005-aug-emmentaler--page-3.png",
+              "lg-4991167500045005-aug-gonville--page-2.png",
+              "lg-4991167500045005-aug-gonville--page-3.png",
+              "lg-4991167500045005-aug-gutenberg1939--page-2.png",
+              "lg-4991167500045005-aug-gutenberg1939--page-3.png",
+              "lg-4991167500045005-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-4991167500045005"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-499826096924778115-aug-emmentaler--page-4.png"
+            ],
+            "train": [
+              "lg-499826096924778115-aug-beethoven--page-1.png",
+              "lg-499826096924778115-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-499826096924778115"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-50270673-aug-gutenberg1939--page-3.png",
+              "lg-50270673-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-50270673-aug-beethoven--page-1.png",
+              "lg-50270673-aug-beethoven--page-3.png",
+              "lg-50270673-aug-emmentaler--page-1.png",
+              "lg-50270673-aug-gutenberg1939--page-1.png",
+              "lg-50270673-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-50270673-aug-emmentaler--page-3.png"
+            ]
+          },
+          "value": "lg-50270673"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-51156422-aug-beethoven--page-1.png"
+            ],
+            "val": [
+              "lg-51156422-aug-gutenberg1939--page-1.png",
+              "lg-51156422-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-51156422"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-522614686998158333-aug-emmentaler--page-1.png",
+              "lg-522614686998158333-aug-gonville--page-1.png"
+            ],
+            "train": [
+              "lg-522614686998158333-aug-beethoven--page-1.png",
+              "lg-522614686998158333-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-522614686998158333"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-5230237-aug-emmentaler--page-2.png",
+              "lg-5230237-aug-emmentaler--page-3.png",
+              "lg-5230237-aug-gutenberg1939--page-2.png",
+              "lg-5230237-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-5230237-aug-beethoven--page-2.png",
+              "lg-5230237-aug-beethoven--page-3.png",
+              "lg-5230237-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-5230237"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-523155381240242384-aug-beethoven--page-38.png",
+              "lg-523155381240242384-aug-beethoven--page-8.png",
+              "lg-523155381240242384-aug-emmentaler--page-15.png",
+              "lg-523155381240242384-aug-gutenberg1939--page-3.png",
+              "lg-523155381240242384-aug-gutenberg1939--page-8.png"
+            ],
+            "train": [
+              "lg-523155381240242384-aug-beethoven--page-15.png",
+              "lg-523155381240242384-aug-beethoven--page-20.png",
+              "lg-523155381240242384-aug-beethoven--page-31.png",
+              "lg-523155381240242384-aug-beethoven--page-41.png",
+              "lg-523155381240242384-aug-beethoven--page-45.png",
+              "lg-523155381240242384-aug-emmentaler--page-18.png",
+              "lg-523155381240242384-aug-emmentaler--page-20.png",
+              "lg-523155381240242384-aug-emmentaler--page-3.png",
+              "lg-523155381240242384-aug-emmentaler--page-42.png",
+              "lg-523155381240242384-aug-emmentaler--page-8.png",
+              "lg-523155381240242384-aug-gutenberg1939--page-15.png",
+              "lg-523155381240242384-aug-gutenberg1939--page-20.png",
+              "lg-523155381240242384-aug-gutenberg1939--page-38.png",
+              "lg-523155381240242384-aug-lilyjazz--page-3.png",
+              "lg-523155381240242384-aug-lilyjazz--page-38.png",
+              "lg-523155381240242384-aug-lilyjazz--page-41.png",
+              "lg-523155381240242384-aug-lilyjazz--page-45.png",
+              "lg-523155381240242384-aug-lilyjazz--page-6.png",
+              "lg-523155381240242384-aug-lilyjazz--page-8.png"
+            ],
+            "val": [
+              "lg-523155381240242384-aug-lilyjazz--page-15.png"
+            ]
+          },
+          "value": "lg-523155381240242384"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-523278177829573469-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-523278177829573469-aug-beethoven--page-1.png",
+              "lg-523278177829573469-aug-emmentaler--page-1.png",
+              "lg-523278177829573469-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-523278177829573469"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-527907832922209940-aug-beethoven--page-8.png",
+              "lg-527907832922209940-aug-emmentaler--page-5.png",
+              "lg-527907832922209940-aug-gutenberg1939--page-8.png",
+              "lg-527907832922209940-aug-lilyjazz--page-8.png"
+            ],
+            "train": [
+              "lg-527907832922209940-aug-beethoven--page-29.png",
+              "lg-527907832922209940-aug-beethoven--page-5.png",
+              "lg-527907832922209940-aug-emmentaler--page-29.png",
+              "lg-527907832922209940-aug-emmentaler--page-8.png",
+              "lg-527907832922209940-aug-gutenberg1939--page-5.png",
+              "lg-527907832922209940-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-527907832922209940"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-529393269287198133-aug-emmentaler--page-1.png"
+            ],
+            "train": [
+              "lg-529393269287198133-aug-beethoven--page-1.png",
+              "lg-529393269287198133-aug-gutenberg1939--page-1.png",
+              "lg-529393269287198133-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-529393269287198133"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-533872927082689874-aug-beethoven--page-4.png",
+              "lg-533872927082689874-aug-gutenberg1939--page-6.png",
+              "lg-533872927082689874-aug-lilyjazz--page-8.png"
+            ],
+            "train": [
+              "lg-533872927082689874-aug-beethoven--page-2.png",
+              "lg-533872927082689874-aug-beethoven--page-3.png",
+              "lg-533872927082689874-aug-beethoven--page-6.png",
+              "lg-533872927082689874-aug-beethoven--page-7.png",
+              "lg-533872927082689874-aug-beethoven--page-8.png",
+              "lg-533872927082689874-aug-emmentaler--page-2.png",
+              "lg-533872927082689874-aug-emmentaler--page-3.png",
+              "lg-533872927082689874-aug-emmentaler--page-4.png",
+              "lg-533872927082689874-aug-emmentaler--page-6.png",
+              "lg-533872927082689874-aug-emmentaler--page-7.png",
+              "lg-533872927082689874-aug-emmentaler--page-8.png",
+              "lg-533872927082689874-aug-gutenberg1939--page-2.png",
+              "lg-533872927082689874-aug-gutenberg1939--page-3.png",
+              "lg-533872927082689874-aug-gutenberg1939--page-4.png",
+              "lg-533872927082689874-aug-gutenberg1939--page-7.png",
+              "lg-533872927082689874-aug-gutenberg1939--page-8.png",
+              "lg-533872927082689874-aug-lilyjazz--page-2.png",
+              "lg-533872927082689874-aug-lilyjazz--page-3.png",
+              "lg-533872927082689874-aug-lilyjazz--page-4.png",
+              "lg-533872927082689874-aug-lilyjazz--page-7.png"
+            ],
+            "val": [
+              "lg-533872927082689874-aug-lilyjazz--page-6.png"
+            ]
+          },
+          "value": "lg-533872927082689874"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-537682038152803803-aug-beethoven--page-2.png"
+            ],
+            "train": [
+              "lg-537682038152803803-aug-emmentaler--page-2.png",
+              "lg-537682038152803803-aug-gutenberg1939--page-2.png"
+            ],
+            "val": [
+              "lg-537682038152803803-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-537682038152803803"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-54263099-aug-beethoven--page-8.png",
+              "lg-54263099-aug-emmentaler--page-8.png",
+              "lg-54263099-aug-gonville--page-8.png"
+            ],
+            "train": [
+              "lg-54263099-aug-gutenberg1939--page-8.png",
+              "lg-54263099-aug-lilyjazz--page-8.png"
+            ]
+          },
+          "value": "lg-54263099"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-54386423-aug-beethoven--page-2.png",
+              "lg-54386423-aug-gutenberg1939--page-2.png",
+              "lg-54386423-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-54386423-aug-emmentaler--page-2.png"
+            ]
+          },
+          "value": "lg-54386423"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-54975867-aug-gutenberg1939--page-8.png",
+              "lg-54975867-aug-lilyjazz--page-12.png",
+              "lg-54975867-aug-lilyjazz--page-8.png"
+            ],
+            "train": [
+              "lg-54975867-aug-beethoven--page-12.png",
+              "lg-54975867-aug-beethoven--page-8.png",
+              "lg-54975867-aug-beethoven--page-9.png",
+              "lg-54975867-aug-emmentaler--page-12.png",
+              "lg-54975867-aug-emmentaler--page-8.png",
+              "lg-54975867-aug-emmentaler--page-9.png",
+              "lg-54975867-aug-gonville--page-12.png",
+              "lg-54975867-aug-gonville--page-8.png",
+              "lg-54975867-aug-gonville--page-9.png",
+              "lg-54975867-aug-gutenberg1939--page-12.png",
+              "lg-54975867-aug-gutenberg1939--page-9.png"
+            ]
+          },
+          "value": "lg-54975867"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-55349612-aug-lilyjazz--page-16.png"
+            ],
+            "train": [
+              "lg-55349612-aug-beethoven--page-16.png",
+              "lg-55349612-aug-gutenberg1939--page-8.png"
+            ]
+          },
+          "value": "lg-55349612"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-55859018-aug-lilyjazz--page-2.png"
+            ],
+            "train": [
+              "lg-55859018-aug-beethoven--page-2.png",
+              "lg-55859018-aug-emmentaler--page-2.png",
+              "lg-55859018-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-55859018"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-566255830183312749-aug-beethoven--page-1.png",
+              "lg-566255830183312749-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-566255830183312749-aug-emmentaler--page-1.png",
+              "lg-566255830183312749-aug-gonville--page-1.png",
+              "lg-566255830183312749-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-566255830183312749"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-591826463736177508-aug-lilyjazz--page-4.png"
+            ],
+            "train": [
+              "lg-591826463736177508-aug-beethoven--page-4.png",
+              "lg-591826463736177508-aug-gutenberg1939--page-4.png"
+            ],
+            "val": [
+              "lg-591826463736177508-aug-emmentaler--page-4.png"
+            ]
+          },
+          "value": "lg-591826463736177508"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-592955063279031514-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-592955063279031514-aug-beethoven--page-1.png"
+            ]
+          },
+          "value": "lg-592955063279031514"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-593338651934119807-aug-gonville--page-2.png"
+            ],
+            "train": [
+              "lg-593338651934119807-aug-beethoven--page-2.png"
+            ]
+          },
+          "value": "lg-593338651934119807"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-596451796812895143-aug-gutenberg1939--page-2.png",
+              "lg-596451796812895143-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-596451796812895143-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-596451796812895143"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-60516219-aug-lilyjazz--page-40.png"
+            ],
+            "train": [
+              "lg-60516219-aug-gonville--page-40.png",
+              "lg-60516219-aug-gutenberg1939--page-40.png"
+            ],
+            "val": [
+              "lg-60516219-aug-emmentaler--page-40.png"
+            ]
+          },
+          "value": "lg-60516219"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-63506682-aug-beethoven--page-6.png",
+              "lg-63506682-aug-emmentaler--page-4.png",
+              "lg-63506682-aug-emmentaler--page-6.png",
+              "lg-63506682-aug-gutenberg1939--page-4.png",
+              "lg-63506682-aug-gutenberg1939--page-6.png",
+              "lg-63506682-aug-lilyjazz--page-6.png"
+            ],
+            "val": [
+              "lg-63506682-aug-lilyjazz--page-4.png"
+            ]
+          },
+          "value": "lg-63506682"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-63576306705512082-aug-emmentaler--page-1.png",
+              "lg-63576306705512082-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-63576306705512082-aug-beethoven--page-1.png",
+              "lg-63576306705512082-aug-gonville--page-1.png",
+              "lg-63576306705512082-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-63576306705512082"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-636617885343881785-aug-beethoven--page-10.png",
+              "lg-636617885343881785-aug-gutenberg1939--page-10.png"
+            ],
+            "train": [
+              "lg-636617885343881785-aug-gonville--page-10.png",
+              "lg-636617885343881785-aug-lilyjazz--page-10.png"
+            ],
+            "val": [
+              "lg-636617885343881785-aug-emmentaler--page-10.png"
+            ]
+          },
+          "value": "lg-636617885343881785"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-648395017847626711-aug-emmentaler--page-2.png"
+            ],
+            "train": [
+              "lg-648395017847626711-aug-gutenberg1939--page-2.png"
+            ],
+            "val": [
+              "lg-648395017847626711-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-648395017847626711"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-657918240718924598-aug-gonville--page-1.png"
+            ],
+            "train": [
+              "lg-657918240718924598-aug-beethoven--page-1.png",
+              "lg-657918240718924598-aug-emmentaler--page-1.png",
+              "lg-657918240718924598-aug-gutenberg1939--page-1.png",
+              "lg-657918240718924598-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-657918240718924598"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-666084489013740342-aug-emmentaler--page-5.png",
+              "lg-666084489013740342-aug-emmentaler--page-7.png"
+            ],
+            "train": [
+              "lg-666084489013740342-aug-beethoven--page-12.png",
+              "lg-666084489013740342-aug-beethoven--page-5.png",
+              "lg-666084489013740342-aug-beethoven--page-7.png",
+              "lg-666084489013740342-aug-emmentaler--page-12.png",
+              "lg-666084489013740342-aug-gutenberg1939--page-12.png",
+              "lg-666084489013740342-aug-gutenberg1939--page-5.png",
+              "lg-666084489013740342-aug-gutenberg1939--page-7.png",
+              "lg-666084489013740342-aug-lilyjazz--page-12.png",
+              "lg-666084489013740342-aug-lilyjazz--page-5.png",
+              "lg-666084489013740342-aug-lilyjazz--page-7.png"
+            ]
+          },
+          "value": "lg-666084489013740342"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-67048130-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-67048130-aug-gonville--page-1.png",
+              "lg-67048130-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-67048130"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-679697761164690564-aug-gonville--page-2.png"
+            ],
+            "train": [
+              "lg-679697761164690564-aug-beethoven--page-2.png",
+              "lg-679697761164690564-aug-emmentaler--page-2.png",
+              "lg-679697761164690564-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-679697761164690564-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-679697761164690564"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-687429493056531979-aug-emmentaler--page-1.png",
+              "lg-687429493056531979-aug-emmentaler--page-2.png",
+              "lg-687429493056531979-aug-gutenberg1939--page-33.png",
+              "lg-687429493056531979-aug-lilyjazz--page-4.png"
+            ],
+            "train": [
+              "lg-687429493056531979-aug-beethoven--page-16.png",
+              "lg-687429493056531979-aug-beethoven--page-2.png",
+              "lg-687429493056531979-aug-beethoven--page-40.png",
+              "lg-687429493056531979-aug-emmentaler--page-18.png",
+              "lg-687429493056531979-aug-emmentaler--page-31.png",
+              "lg-687429493056531979-aug-emmentaler--page-4.png",
+              "lg-687429493056531979-aug-emmentaler--page-42.png",
+              "lg-687429493056531979-aug-emmentaler--page-48.png",
+              "lg-687429493056531979-aug-gonville--page-46.png",
+              "lg-687429493056531979-aug-gutenberg1939--page-16.png",
+              "lg-687429493056531979-aug-gutenberg1939--page-2.png",
+              "lg-687429493056531979-aug-gutenberg1939--page-29.png",
+              "lg-687429493056531979-aug-gutenberg1939--page-40.png",
+              "lg-687429493056531979-aug-gutenberg1939--page-46.png",
+              "lg-687429493056531979-aug-lilyjazz--page-1.png",
+              "lg-687429493056531979-aug-lilyjazz--page-19.png",
+              "lg-687429493056531979-aug-lilyjazz--page-2.png",
+              "lg-687429493056531979-aug-lilyjazz--page-24.png",
+              "lg-687429493056531979-aug-lilyjazz--page-32.png",
+              "lg-687429493056531979-aug-lilyjazz--page-36.png",
+              "lg-687429493056531979-aug-lilyjazz--page-49.png"
+            ],
+            "val": [
+              "lg-687429493056531979-aug-beethoven--page-21.png",
+              "lg-687429493056531979-aug-beethoven--page-29.png",
+              "lg-687429493056531979-aug-beethoven--page-33.png",
+              "lg-687429493056531979-aug-beethoven--page-46.png",
+              "lg-687429493056531979-aug-emmentaler--page-35.png",
+              "lg-687429493056531979-aug-emmentaler--page-39.png",
+              "lg-687429493056531979-aug-lilyjazz--page-43.png"
+            ]
+          },
+          "value": "lg-687429493056531979"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-69678954220027474-aug-beethoven--page-174.png",
+              "lg-69678954220027474-aug-emmentaler--page-72.png",
+              "lg-69678954220027474-aug-lilyjazz--page-173.png",
+              "lg-69678954220027474-aug-lilyjazz--page-176.png"
+            ],
+            "train": [
+              "lg-69678954220027474-aug-beethoven--page-176.png",
+              "lg-69678954220027474-aug-beethoven--page-73.png",
+              "lg-69678954220027474-aug-emmentaler--page-173.png",
+              "lg-69678954220027474-aug-emmentaler--page-176.png",
+              "lg-69678954220027474-aug-gonville--page-172.png",
+              "lg-69678954220027474-aug-gonville--page-174.png",
+              "lg-69678954220027474-aug-gonville--page-71.png",
+              "lg-69678954220027474-aug-gutenberg1939--page-169.png",
+              "lg-69678954220027474-aug-lilyjazz--page-174.png"
+            ],
+            "val": [
+              "lg-69678954220027474-aug-emmentaler--page-174.png"
+            ]
+          },
+          "value": "lg-69678954220027474"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-704656477311208066-aug-emmentaler--page-6.png",
+              "lg-704656477311208066-aug-gonville--page-4.png",
+              "lg-704656477311208066-aug-lilyjazz--page-6.png"
+            ],
+            "train": [
+              "lg-704656477311208066-aug-beethoven--page-4.png",
+              "lg-704656477311208066-aug-beethoven--page-6.png",
+              "lg-704656477311208066-aug-emmentaler--page-4.png",
+              "lg-704656477311208066-aug-gonville--page-6.png",
+              "lg-704656477311208066-aug-gutenberg1939--page-4.png",
+              "lg-704656477311208066-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-704656477311208066-aug-gutenberg1939--page-6.png"
+            ]
+          },
+          "value": "lg-704656477311208066"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-737608461207107787-aug-beethoven--page-1.png"
+            ],
+            "train": [
+              "lg-737608461207107787-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-737608461207107787"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-74834086-aug-beethoven--page-6.png"
+            ],
+            "train": [
+              "lg-74834086-aug-emmentaler--page-6.png",
+              "lg-74834086-aug-gonville--page-6.png",
+              "lg-74834086-aug-gutenberg1939--page-6.png",
+              "lg-74834086-aug-lilyjazz--page-6.png"
+            ]
+          },
+          "value": "lg-74834086"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-76573570-aug-beethoven--page-1.png",
+              "lg-76573570-aug-emmentaler--page-1.png",
+              "lg-76573570-aug-gonville--page-1.png",
+              "lg-76573570-aug-lilyjazz--page-1.png",
+              "lg-76573570-aug-lilyjazz--page-12.png"
+            ],
+            "train": [
+              "lg-76573570-aug-beethoven--page-12.png",
+              "lg-76573570-aug-beethoven--page-13.png",
+              "lg-76573570-aug-emmentaler--page-12.png",
+              "lg-76573570-aug-emmentaler--page-13.png",
+              "lg-76573570-aug-gonville--page-13.png",
+              "lg-76573570-aug-gutenberg1939--page-1.png",
+              "lg-76573570-aug-gutenberg1939--page-12.png",
+              "lg-76573570-aug-gutenberg1939--page-13.png",
+              "lg-76573570-aug-lilyjazz--page-13.png"
+            ],
+            "val": [
+              "lg-76573570-aug-gonville--page-12.png"
+            ]
+          },
+          "value": "lg-76573570"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-77519672-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-77519672-aug-beethoven--page-2.png",
+              "lg-77519672-aug-emmentaler--page-2.png",
+              "lg-77519672-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-77519672"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-775988810619846624-aug-beethoven--page-2.png"
+            ],
+            "val": [
+              "lg-775988810619846624-aug-gutenberg1939--page-2.png"
+            ]
+          },
+          "value": "lg-775988810619846624"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-79013134286211325-aug-beethoven--page-2.png",
+              "lg-79013134286211325-aug-emmentaler--page-1.png"
+            ],
+            "train": [
+              "lg-79013134286211325-aug-beethoven--page-1.png",
+              "lg-79013134286211325-aug-emmentaler--page-2.png",
+              "lg-79013134286211325-aug-gonville--page-2.png",
+              "lg-79013134286211325-aug-gutenberg1939--page-1.png",
+              "lg-79013134286211325-aug-gutenberg1939--page-2.png",
+              "lg-79013134286211325-aug-lilyjazz--page-1.png",
+              "lg-79013134286211325-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-79013134286211325-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-79013134286211325"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-797958438447858728-aug-emmentaler--page-4.png",
+              "lg-797958438447858728-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-797958438447858728-aug-beethoven--page-1.png",
+              "lg-797958438447858728-aug-emmentaler--page-1.png",
+              "lg-797958438447858728-aug-gonville--page-4.png",
+              "lg-797958438447858728-aug-gutenberg1939--page-4.png",
+              "lg-797958438447858728-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-797958438447858728"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-807626261169412112-aug-emmentaler--page-2.png"
+            ],
+            "train": [
+              "lg-807626261169412112-aug-beethoven--page-3.png",
+              "lg-807626261169412112-aug-emmentaler--page-3.png",
+              "lg-807626261169412112-aug-gonville--page-3.png",
+              "lg-807626261169412112-aug-gutenberg1939--page-3.png",
+              "lg-807626261169412112-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-807626261169412112"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-808060941877946704-aug-beethoven--page-3.png",
+              "lg-808060941877946704-aug-emmentaler--page-3.png"
+            ],
+            "val": [
+              "lg-808060941877946704-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-808060941877946704"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-82076072-aug-lilyjazz--page-3.png",
+              "lg-82076072-aug-lilyjazz--page-8.png"
+            ],
+            "train": [
+              "lg-82076072-aug-beethoven--page-3.png",
+              "lg-82076072-aug-beethoven--page-8.png",
+              "lg-82076072-aug-emmentaler--page-3.png",
+              "lg-82076072-aug-emmentaler--page-8.png",
+              "lg-82076072-aug-gonville--page-2.png",
+              "lg-82076072-aug-gonville--page-3.png",
+              "lg-82076072-aug-gonville--page-8.png",
+              "lg-82076072-aug-gutenberg1939--page-3.png",
+              "lg-82076072-aug-gutenberg1939--page-8.png",
+              "lg-82076072-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-82076072"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-82966964-aug-emmentaler--page-6.png",
+              "lg-82966964-aug-lilyjazz--page-6.png"
+            ],
+            "train": [
+              "lg-82966964-aug-beethoven--page-6.png",
+              "lg-82966964-aug-gonville--page-6.png",
+              "lg-82966964-aug-gutenberg1939--page-6.png"
+            ]
+          },
+          "value": "lg-82966964"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-83301893611632707-aug-beethoven--page-2.png"
+            ],
+            "train": [
+              "lg-83301893611632707-aug-emmentaler--page-2.png",
+              "lg-83301893611632707-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-83301893611632707-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-83301893611632707"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-85088082-aug-gutenberg1939--page-1.png"
+            ],
+            "train": [
+              "lg-85088082-aug-beethoven--page-1.png",
+              "lg-85088082-aug-emmentaler--page-1.png",
+              "lg-85088082-aug-gonville--page-1.png",
+              "lg-85088082-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-85088082"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-857897929158418372-aug-gutenberg1939--page-9.png"
+            ],
+            "train": [
+              "lg-857897929158418372-aug-beethoven--page-9.png",
+              "lg-857897929158418372-aug-emmentaler--page-9.png",
+              "lg-857897929158418372-aug-gonville--page-9.png",
+              "lg-857897929158418372-aug-lilyjazz--page-9.png"
+            ]
+          },
+          "value": "lg-857897929158418372"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-86984659888703453-aug-gutenberg1939--page-1.png",
+              "lg-86984659888703453-aug-lilyjazz--page-1.png"
+            ],
+            "val": [
+              "lg-86984659888703453-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-86984659888703453"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-87475993388800767-aug-gutenberg1939--page-4.png"
+            ],
+            "train": [
+              "lg-87475993388800767-aug-beethoven--page-5.png",
+              "lg-87475993388800767-aug-emmentaler--page-5.png",
+              "lg-87475993388800767-aug-gutenberg1939--page-5.png",
+              "lg-87475993388800767-aug-lilyjazz--page-4.png",
+              "lg-87475993388800767-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-87475993388800767"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-87716918-aug-lilyjazz--page-4.png"
+            ],
+            "train": [
+              "lg-87716918-aug-beethoven--page-4.png",
+              "lg-87716918-aug-emmentaler--page-4.png",
+              "lg-87716918-aug-gonville--page-4.png",
+              "lg-87716918-aug-gutenberg1939--page-4.png"
+            ]
+          },
+          "value": "lg-87716918"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-877777775968732096-aug-gonville--page-3.png"
+            ],
+            "val": [
+              "lg-877777775968732096-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-877777775968732096"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-888745985737741992-aug-gutenberg1939--page-3.png"
+            ],
+            "train": [
+              "lg-888745985737741992-aug-beethoven--page-3.png",
+              "lg-888745985737741992-aug-emmentaler--page-3.png",
+              "lg-888745985737741992-aug-gonville--page-3.png",
+              "lg-888745985737741992-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-888745985737741992"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-88953684642305354-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-88953684642305354-aug-beethoven--page-1.png",
+              "lg-88953684642305354-aug-beethoven--page-2.png",
+              "lg-88953684642305354-aug-emmentaler--page-1.png",
+              "lg-88953684642305354-aug-emmentaler--page-2.png",
+              "lg-88953684642305354-aug-gonville--page-1.png",
+              "lg-88953684642305354-aug-gonville--page-2.png",
+              "lg-88953684642305354-aug-gutenberg1939--page-1.png",
+              "lg-88953684642305354-aug-gutenberg1939--page-2.png",
+              "lg-88953684642305354-aug-lilyjazz--page-2.png"
+            ]
+          },
+          "value": "lg-88953684642305354"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-89499401-aug-emmentaler--page-1.png",
+              "lg-89499401-aug-gutenberg1939--page-1.png",
+              "lg-89499401-aug-lilyjazz--page-1.png"
+            ],
+            "train": [
+              "lg-89499401-aug-beethoven--page-1.png"
+            ]
+          },
+          "value": "lg-89499401"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-900267602436792595-aug-lilyjazz--page-4.png"
+            ],
+            "train": [
+              "lg-900267602436792595-aug-emmentaler--page-4.png"
+            ],
+            "val": [
+              "lg-900267602436792595-aug-gutenberg1939--page-4.png"
+            ]
+          },
+          "value": "lg-900267602436792595"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-90655429-aug-beethoven--page-3.png",
+              "lg-90655429-aug-emmentaler--page-3.png"
+            ],
+            "train": [
+              "lg-90655429-aug-beethoven--page-2.png",
+              "lg-90655429-aug-beethoven--page-4.png",
+              "lg-90655429-aug-beethoven--page-8.png",
+              "lg-90655429-aug-beethoven--page-9.png",
+              "lg-90655429-aug-emmentaler--page-2.png",
+              "lg-90655429-aug-emmentaler--page-4.png",
+              "lg-90655429-aug-emmentaler--page-8.png",
+              "lg-90655429-aug-emmentaler--page-9.png",
+              "lg-90655429-aug-gonville--page-2.png",
+              "lg-90655429-aug-gonville--page-3.png",
+              "lg-90655429-aug-gonville--page-4.png",
+              "lg-90655429-aug-gonville--page-8.png",
+              "lg-90655429-aug-gonville--page-9.png",
+              "lg-90655429-aug-gutenberg1939--page-2.png",
+              "lg-90655429-aug-gutenberg1939--page-3.png",
+              "lg-90655429-aug-gutenberg1939--page-4.png",
+              "lg-90655429-aug-gutenberg1939--page-8.png",
+              "lg-90655429-aug-gutenberg1939--page-9.png",
+              "lg-90655429-aug-lilyjazz--page-2.png",
+              "lg-90655429-aug-lilyjazz--page-3.png",
+              "lg-90655429-aug-lilyjazz--page-4.png",
+              "lg-90655429-aug-lilyjazz--page-8.png",
+              "lg-90655429-aug-lilyjazz--page-9.png"
+            ]
+          },
+          "value": "lg-90655429"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-909639184239074775-aug-emmentaler--page-5.png"
+            ],
+            "train": [
+              "lg-909639184239074775-aug-lilyjazz--page-5.png"
+            ]
+          },
+          "value": "lg-909639184239074775"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-91939111-aug-beethoven--page-1.png",
+              "lg-91939111-aug-gonville--page-1.png",
+              "lg-91939111-aug-lilyjazz--page-1.png"
+            ],
+            "val": [
+              "lg-91939111-aug-gutenberg1939--page-1.png"
+            ]
+          },
+          "value": "lg-91939111"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-92144066-aug-emmentaler--page-3.png"
+            ],
+            "train": [
+              "lg-92144066-aug-beethoven--page-3.png",
+              "lg-92144066-aug-emmentaler--page-12.png",
+              "lg-92144066-aug-gonville--page-3.png",
+              "lg-92144066-aug-gutenberg1939--page-12.png",
+              "lg-92144066-aug-gutenberg1939--page-3.png",
+              "lg-92144066-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-92144066"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-92232752-aug-beethoven--page-3.png",
+              "lg-92232752-aug-lilyjazz--page-3.png"
+            ],
+            "train": [
+              "lg-92232752-aug-gutenberg1939--page-3.png"
+            ],
+            "val": [
+              "lg-92232752-aug-emmentaler--page-1.png",
+              "lg-92232752-aug-gonville--page-1.png"
+            ]
+          },
+          "value": "lg-92232752"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-94036436-aug-beethoven--page-12.png",
+              "lg-94036436-aug-emmentaler--page-12.png"
+            ],
+            "train": [
+              "lg-94036436-aug-gonville--page-12.png",
+              "lg-94036436-aug-lilyjazz--page-12.png"
+            ],
+            "val": [
+              "lg-94036436-aug-gutenberg1939--page-12.png"
+            ]
+          },
+          "value": "lg-94036436"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-94161796-aug-beethoven--page-2.png",
+              "lg-94161796-aug-gutenberg1939--page-3.png"
+            ],
+            "train": [
+              "lg-94161796-aug-beethoven--page-3.png",
+              "lg-94161796-aug-emmentaler--page-2.png",
+              "lg-94161796-aug-emmentaler--page-3.png",
+              "lg-94161796-aug-gonville--page-3.png",
+              "lg-94161796-aug-gutenberg1939--page-2.png",
+              "lg-94161796-aug-lilyjazz--page-2.png"
+            ],
+            "val": [
+              "lg-94161796-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-94161796"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-96526414-aug-gonville--page-3.png"
+            ],
+            "train": [
+              "lg-96526414-aug-beethoven--page-3.png",
+              "lg-96526414-aug-emmentaler--page-3.png",
+              "lg-96526414-aug-lilyjazz--page-3.png"
+            ],
+            "val": [
+              "lg-96526414-aug-gutenberg1939--page-3.png"
+            ]
+          },
+          "value": "lg-96526414"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-97012964-aug-beethoven--page-4.png",
+              "lg-97012964-aug-emmentaler--page-4.png",
+              "lg-97012964-aug-lilyjazz--page-4.png"
+            ],
+            "val": [
+              "lg-97012964-aug-gonville--page-4.png",
+              "lg-97012964-aug-gutenberg1939--page-4.png"
+            ]
+          },
+          "value": "lg-97012964"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-97420928-aug-gonville--page-5.png",
+              "lg-97420928-aug-lilyjazz--page-5.png"
+            ],
+            "val": [
+              "lg-97420928-aug-emmentaler--page-5.png"
+            ]
+          },
+          "value": "lg-97420928"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-97487894-aug-lilyjazz--page-5.png"
+            ],
+            "train": [
+              "lg-97487894-aug-beethoven--page-5.png",
+              "lg-97487894-aug-emmentaler--page-5.png",
+              "lg-97487894-aug-gutenberg1939--page-5.png"
+            ]
+          },
+          "value": "lg-97487894"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-98515279-aug-gutenberg1939--page-2.png"
+            ],
+            "train": [
+              "lg-98515279-aug-beethoven--page-2.png",
+              "lg-98515279-aug-emmentaler--page-2.png"
+            ],
+            "val": [
+              "lg-98515279-aug-gonville--page-2.png"
+            ]
+          },
+          "value": "lg-98515279"
+        },
+        {
+          "splits": {
+            "train": [
+              "lg-99059330-aug-beethoven--page-1.png",
+              "lg-99059330-aug-emmentaler--page-4.png",
+              "lg-99059330-aug-gutenberg1939--page-4.png"
+            ],
+            "val": [
+              "lg-99059330-aug-lilyjazz--page-1.png"
+            ]
+          },
+          "value": "lg-99059330"
+        },
+        {
+          "splits": {
+            "test": [
+              "lg-9919568-aug-beethoven--page-4.png",
+              "lg-9919568-aug-emmentaler--page-4.png"
+            ],
+            "train": [
+              "lg-9919568-aug-emmentaler--page-3.png",
+              "lg-9919568-aug-lilyjazz--page-3.png"
+            ]
+          },
+          "value": "lg-9919568"
+        }
+      ],
+      "heuristic": "DeepScores work groups are inferred from filename stems. For names like lg-<work>-aug-<style>--page-<n>.png, the group is lg-<work>. Other page-style names fall back to the prefix before a page marker.",
+      "status": "warning"
+    }
+  },
+  "dataset_id": "deepscores_136_manifest",
+  "status": "warning"
+}

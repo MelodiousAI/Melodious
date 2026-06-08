@@ -1,0 +1,1289 @@
+{
+  "best_supported_classes_by_mAP": [
+    {
+      "class_name": "articStaccatissimoAbove",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "coda",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 30
+    },
+    {
+      "class_name": "fingering0",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "flag64thDown",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 14
+    },
+    {
+      "class_name": "keyboardPedalUp",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 6
+    },
+    {
+      "class_name": "ornamentMordent",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 45
+    },
+    {
+      "class_name": "timeSig3",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 41
+    },
+    {
+      "class_name": "timeSigCommon",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 20
+    },
+    {
+      "class_name": "timeSigCutCommon",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 29
+    },
+    {
+      "class_name": "tuplet6",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 83
+    },
+    {
+      "class_name": "tuplet3",
+      "mAP@0.5:0.95": 0.9931149820217005,
+      "small_symbol": true,
+      "support": 452
+    },
+    {
+      "class_name": "clefG",
+      "mAP@0.5:0.95": 0.9923779563572894,
+      "small_symbol": false,
+      "support": 1200
+    },
+    {
+      "class_name": "keySharp",
+      "mAP@0.5:0.95": 0.9921642895394495,
+      "small_symbol": false,
+      "support": 1675
+    },
+    {
+      "class_name": "ornamentTrill",
+      "mAP@0.5:0.95": 0.990303550295858,
+      "small_symbol": true,
+      "support": 83
+    },
+    {
+      "class_name": "clefF",
+      "mAP@0.5:0.95": 0.9898789965216466,
+      "small_symbol": false,
+      "support": 773
+    },
+    {
+      "class_name": "clefCAlto",
+      "mAP@0.5:0.95": 0.9898214285714285,
+      "small_symbol": false,
+      "support": 135
+    },
+    {
+      "class_name": "timeSig8",
+      "mAP@0.5:0.95": 0.9892546144380641,
+      "small_symbol": false,
+      "support": 193
+    },
+    {
+      "class_name": "accidentalSharp",
+      "mAP@0.5:0.95": 0.9892442865830715,
+      "small_symbol": true,
+      "support": 1682
+    },
+    {
+      "class_name": "dynamicF",
+      "mAP@0.5:0.95": 0.9874783903617622,
+      "small_symbol": false,
+      "support": 1093
+    },
+    {
+      "class_name": "keyFlat",
+      "mAP@0.5:0.95": 0.9847315544729567,
+      "small_symbol": false,
+      "support": 1409
+    }
+  ],
+  "dataset_id": "deepscores_136_yolo_tiled_stem_pilot_v1",
+  "error_artifacts": [
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/BoxF1_curve.png",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/BoxP_curve.png",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/BoxPR_curve.png",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/BoxR_curve.png",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/confusion_matrix.png",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/confusion_matrix_normalized.png",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/val_batch0_labels.jpg",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/val_batch0_pred.jpg",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/val_batch1_labels.jpg",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/val_batch1_pred.jpg",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/val_batch2_labels.jpg",
+    "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/val_val/val_batch2_pred.jpg"
+  ],
+  "generated_at": "2026-06-04T19:51:37Z",
+  "notes": [
+    "This analysis is generated from metrics.json and the fixed split manifest.",
+    "Per-class mAP is available from Ultralytics validation output.",
+    "Per-class F1 is not written into metrics.json by the current M3 wrapper; use the saved BoxF1 curve and future prediction exports for deeper threshold-specific per-class F1.",
+    "The current run is a constrained smoke run unless the run manifest says smoke=false."
+  ],
+  "per_class": [
+    {
+      "class_name": "accidentalDoubleFlat",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "accidentalDoubleSharp",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "accidentalFlat",
+      "mAP@0.5:0.95": 0.9798747897061327,
+      "small_symbol": true,
+      "support": 1064
+    },
+    {
+      "class_name": "accidentalFlatSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "accidentalNatural",
+      "mAP@0.5:0.95": 0.9666697236210797,
+      "small_symbol": true,
+      "support": 1747
+    },
+    {
+      "class_name": "accidentalNaturalSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "accidentalSharp",
+      "mAP@0.5:0.95": 0.9892442865830715,
+      "small_symbol": true,
+      "support": 1682
+    },
+    {
+      "class_name": "accidentalSharpSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "arpeggiato",
+      "mAP@0.5:0.95": 0.9567467567883441,
+      "small_symbol": false,
+      "support": 99
+    },
+    {
+      "class_name": "articAccentAbove",
+      "mAP@0.5:0.95": 0.9699801490391493,
+      "small_symbol": false,
+      "support": 184
+    },
+    {
+      "class_name": "articAccentBelow",
+      "mAP@0.5:0.95": 0.9590644801223241,
+      "small_symbol": false,
+      "support": 33
+    },
+    {
+      "class_name": "articMarcatoAbove",
+      "mAP@0.5:0.95": 0.9176967423768716,
+      "small_symbol": false,
+      "support": 141
+    },
+    {
+      "class_name": "articMarcatoBelow",
+      "mAP@0.5:0.95": 0.9519627272727271,
+      "small_symbol": false,
+      "support": 89
+    },
+    {
+      "class_name": "articStaccatissimoAbove",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "articStaccatissimoBelow",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "articStaccatoAbove",
+      "mAP@0.5:0.95": 0.9316193546476251,
+      "small_symbol": true,
+      "support": 2447
+    },
+    {
+      "class_name": "articStaccatoBelow",
+      "mAP@0.5:0.95": 0.9348103755225653,
+      "small_symbol": true,
+      "support": 447
+    },
+    {
+      "class_name": "articTenutoAbove",
+      "mAP@0.5:0.95": 0.8058583559171169,
+      "small_symbol": true,
+      "support": 479
+    },
+    {
+      "class_name": "articTenutoBelow",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 62
+    },
+    {
+      "class_name": "augmentationDot",
+      "mAP@0.5:0.95": 0.951387713738491,
+      "small_symbol": true,
+      "support": 4608
+    },
+    {
+      "class_name": "beam",
+      "mAP@0.5:0.95": 0.8769708350968146,
+      "small_symbol": false,
+      "support": 16782
+    },
+    {
+      "class_name": "brace",
+      "mAP@0.5:0.95": 0.6244605139081305,
+      "small_symbol": false,
+      "support": 416
+    },
+    {
+      "class_name": "caesura",
+      "mAP@0.5:0.95": 0.8421700920287526,
+      "small_symbol": false,
+      "support": 40
+    },
+    {
+      "class_name": "clef15",
+      "mAP@0.5:0.95": 0.8955,
+      "small_symbol": false,
+      "support": 11
+    },
+    {
+      "class_name": "clef8",
+      "mAP@0.5:0.95": 0.8609607098292325,
+      "small_symbol": false,
+      "support": 182
+    },
+    {
+      "class_name": "clefCAlto",
+      "mAP@0.5:0.95": 0.9898214285714285,
+      "small_symbol": false,
+      "support": 135
+    },
+    {
+      "class_name": "clefCTenor",
+      "mAP@0.5:0.95": 0.8942116857298474,
+      "small_symbol": false,
+      "support": 108
+    },
+    {
+      "class_name": "clefF",
+      "mAP@0.5:0.95": 0.9898789965216466,
+      "small_symbol": false,
+      "support": 773
+    },
+    {
+      "class_name": "clefG",
+      "mAP@0.5:0.95": 0.9923779563572894,
+      "small_symbol": false,
+      "support": 1200
+    },
+    {
+      "class_name": "clefUnpitchedPercussion",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "coda",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 30
+    },
+    {
+      "class_name": "dynamicCrescendoHairpin",
+      "mAP@0.5:0.95": 0.7245680023290301,
+      "small_symbol": false,
+      "support": 236
+    },
+    {
+      "class_name": "dynamicDiminuendoHairpin",
+      "mAP@0.5:0.95": 0.5347896763126979,
+      "small_symbol": false,
+      "support": 236
+    },
+    {
+      "class_name": "dynamicF",
+      "mAP@0.5:0.95": 0.9874783903617622,
+      "small_symbol": false,
+      "support": 1093
+    },
+    {
+      "class_name": "dynamicM",
+      "mAP@0.5:0.95": 0.9751242646151417,
+      "small_symbol": false,
+      "support": 428
+    },
+    {
+      "class_name": "dynamicP",
+      "mAP@0.5:0.95": 0.9720864945660669,
+      "small_symbol": false,
+      "support": 1224
+    },
+    {
+      "class_name": "dynamicR",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": false,
+      "support": 14
+    },
+    {
+      "class_name": "dynamicS",
+      "mAP@0.5:0.95": 0.9690302197802199,
+      "small_symbol": false,
+      "support": 80
+    },
+    {
+      "class_name": "dynamicZ",
+      "mAP@0.5:0.95": 0.9245103529411764,
+      "small_symbol": false,
+      "support": 37
+    },
+    {
+      "class_name": "fermataAbove",
+      "mAP@0.5:0.95": 0.8922615877278879,
+      "small_symbol": false,
+      "support": 109
+    },
+    {
+      "class_name": "fermataBelow",
+      "mAP@0.5:0.95": 0.954938,
+      "small_symbol": false,
+      "support": 70
+    },
+    {
+      "class_name": "fingering0",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "fingering1",
+      "mAP@0.5:0.95": 0.8769282669813678,
+      "small_symbol": true,
+      "support": 135
+    },
+    {
+      "class_name": "fingering2",
+      "mAP@0.5:0.95": 0.8553279697460343,
+      "small_symbol": true,
+      "support": 148
+    },
+    {
+      "class_name": "fingering3",
+      "mAP@0.5:0.95": 0.912293593803868,
+      "small_symbol": true,
+      "support": 121
+    },
+    {
+      "class_name": "fingering4",
+      "mAP@0.5:0.95": 0.863711755773948,
+      "small_symbol": true,
+      "support": 117
+    },
+    {
+      "class_name": "fingering5",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "flag128thDown",
+      "mAP@0.5:0.95": 0.8771055386522427,
+      "small_symbol": true,
+      "support": 51
+    },
+    {
+      "class_name": "flag128thUp",
+      "mAP@0.5:0.95": 0.8508596491228071,
+      "small_symbol": true,
+      "support": 30
+    },
+    {
+      "class_name": "flag16thDown",
+      "mAP@0.5:0.95": 0.8974812907299483,
+      "small_symbol": true,
+      "support": 222
+    },
+    {
+      "class_name": "flag16thUp",
+      "mAP@0.5:0.95": 0.8172923253618494,
+      "small_symbol": true,
+      "support": 285
+    },
+    {
+      "class_name": "flag32ndDown",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 10
+    },
+    {
+      "class_name": "flag32ndUp",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "flag64thDown",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 14
+    },
+    {
+      "class_name": "flag64thUp",
+      "mAP@0.5:0.95": 0.8405670833333334,
+      "small_symbol": true,
+      "support": 26
+    },
+    {
+      "class_name": "flag8thDown",
+      "mAP@0.5:0.95": 0.8995411921354421,
+      "small_symbol": true,
+      "support": 2386
+    },
+    {
+      "class_name": "flag8thDownSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "flag8thUp",
+      "mAP@0.5:0.95": 0.8579518244687186,
+      "small_symbol": true,
+      "support": 2243
+    },
+    {
+      "class_name": "flag8thUpSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "graceNoteAcciaccaturaStemDown",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "graceNoteAcciaccaturaStemUp",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "graceNoteAppoggiaturaStemDown",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "graceNoteAppoggiaturaStemUp",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "keyFlat",
+      "mAP@0.5:0.95": 0.9847315544729567,
+      "small_symbol": false,
+      "support": 1409
+    },
+    {
+      "class_name": "keyNatural",
+      "mAP@0.5:0.95": 0.982309375,
+      "small_symbol": false,
+      "support": 49
+    },
+    {
+      "class_name": "keySharp",
+      "mAP@0.5:0.95": 0.9921642895394495,
+      "small_symbol": false,
+      "support": 1675
+    },
+    {
+      "class_name": "keyboardPedalPed",
+      "mAP@0.5:0.95": 0.8955,
+      "small_symbol": false,
+      "support": 4
+    },
+    {
+      "class_name": "keyboardPedalUp",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 6
+    },
+    {
+      "class_name": "ledgerLine",
+      "mAP@0.5:0.95": 0.8956514487613261,
+      "small_symbol": false,
+      "support": 24985
+    },
+    {
+      "class_name": "noteheadBlackInSpace",
+      "mAP@0.5:0.95": 0.9767823371669652,
+      "small_symbol": false,
+      "support": 34272
+    },
+    {
+      "class_name": "noteheadBlackInSpaceSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadBlackOnLine",
+      "mAP@0.5:0.95": 0.9811842171713195,
+      "small_symbol": false,
+      "support": 34496
+    },
+    {
+      "class_name": "noteheadBlackOnLineSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadDoubleWholeInSpace",
+      "mAP@0.5:0.95": 0.24198860714285714,
+      "small_symbol": false,
+      "support": 15
+    },
+    {
+      "class_name": "noteheadDoubleWholeInSpaceSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadDoubleWholeOnLine",
+      "mAP@0.5:0.95": 0.8695367132867133,
+      "small_symbol": false,
+      "support": 50
+    },
+    {
+      "class_name": "noteheadDoubleWholeOnLineSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadHalfInSpace",
+      "mAP@0.5:0.95": 0.9717054188476162,
+      "small_symbol": false,
+      "support": 2299
+    },
+    {
+      "class_name": "noteheadHalfInSpaceSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadHalfOnLine",
+      "mAP@0.5:0.95": 0.9838406182960012,
+      "small_symbol": false,
+      "support": 2344
+    },
+    {
+      "class_name": "noteheadHalfOnLineSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadWholeInSpace",
+      "mAP@0.5:0.95": 0.9420116476400235,
+      "small_symbol": false,
+      "support": 795
+    },
+    {
+      "class_name": "noteheadWholeInSpaceSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "noteheadWholeOnLine",
+      "mAP@0.5:0.95": 0.9770557639387942,
+      "small_symbol": false,
+      "support": 710
+    },
+    {
+      "class_name": "noteheadWholeOnLineSmall",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "ornamentMordent",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 45
+    },
+    {
+      "class_name": "ornamentTrill",
+      "mAP@0.5:0.95": 0.990303550295858,
+      "small_symbol": true,
+      "support": 83
+    },
+    {
+      "class_name": "ornamentTurn",
+      "mAP@0.5:0.95": 0.9824999999999999,
+      "small_symbol": true,
+      "support": 71
+    },
+    {
+      "class_name": "ornamentTurnInverted",
+      "mAP@0.5:0.95": 0.907061488095238,
+      "small_symbol": true,
+      "support": 13
+    },
+    {
+      "class_name": "ottavaBracket",
+      "mAP@0.5:0.95": 0.31454309090909094,
+      "small_symbol": false,
+      "support": 18
+    },
+    {
+      "class_name": "repeatDot",
+      "mAP@0.5:0.95": 0.9178190853768669,
+      "small_symbol": false,
+      "support": 777
+    },
+    {
+      "class_name": "rest128th",
+      "mAP@0.5:0.95": 0.9467821930757415,
+      "small_symbol": false,
+      "support": 97
+    },
+    {
+      "class_name": "rest16th",
+      "mAP@0.5:0.95": 0.9718074335474792,
+      "small_symbol": false,
+      "support": 439
+    },
+    {
+      "class_name": "rest32nd",
+      "mAP@0.5:0.95": 0.8405531255418088,
+      "small_symbol": false,
+      "support": 70
+    },
+    {
+      "class_name": "rest64th",
+      "mAP@0.5:0.95": 0.9105986692909982,
+      "small_symbol": false,
+      "support": 89
+    },
+    {
+      "class_name": "rest8th",
+      "mAP@0.5:0.95": 0.9689956520545981,
+      "small_symbol": false,
+      "support": 2428
+    },
+    {
+      "class_name": "restDoubleWhole",
+      "mAP@0.5:0.95": 0.07236363636363637,
+      "small_symbol": false,
+      "support": 7
+    },
+    {
+      "class_name": "restHBar",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": false,
+      "support": 2
+    },
+    {
+      "class_name": "restHNr",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "restHalf",
+      "mAP@0.5:0.95": 0.8445826398285942,
+      "small_symbol": false,
+      "support": 688
+    },
+    {
+      "class_name": "restQuarter",
+      "mAP@0.5:0.95": 0.9723925736990877,
+      "small_symbol": false,
+      "support": 2216
+    },
+    {
+      "class_name": "restWhole",
+      "mAP@0.5:0.95": 0.9016752073212311,
+      "small_symbol": false,
+      "support": 1322
+    },
+    {
+      "class_name": "segno",
+      "mAP@0.5:0.95": 0.8243632478632478,
+      "small_symbol": false,
+      "support": 55
+    },
+    {
+      "class_name": "slur",
+      "mAP@0.5:0.95": 0.8896792136404426,
+      "small_symbol": false,
+      "support": 3218
+    },
+    {
+      "class_name": "staff",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "stem",
+      "mAP@0.5:0.95": 0.7345783859762263,
+      "small_symbol": false,
+      "support": 62411
+    },
+    {
+      "class_name": "stringsDownBow",
+      "mAP@0.5:0.95": 0.9514562571466083,
+      "small_symbol": false,
+      "support": 121
+    },
+    {
+      "class_name": "stringsUpBow",
+      "mAP@0.5:0.95": 0.93340361116424,
+      "small_symbol": false,
+      "support": 154
+    },
+    {
+      "class_name": "tie",
+      "mAP@0.5:0.95": 0.9027352924470167,
+      "small_symbol": false,
+      "support": 2796
+    },
+    {
+      "class_name": "timeSig0",
+      "mAP@0.5:0.95": 0.965952380952381,
+      "small_symbol": false,
+      "support": 31
+    },
+    {
+      "class_name": "timeSig1",
+      "mAP@0.5:0.95": 0.9149284307432982,
+      "small_symbol": false,
+      "support": 49
+    },
+    {
+      "class_name": "timeSig2",
+      "mAP@0.5:0.95": 0.9304058840169731,
+      "small_symbol": false,
+      "support": 26
+    },
+    {
+      "class_name": "timeSig3",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 41
+    },
+    {
+      "class_name": "timeSig4",
+      "mAP@0.5:0.95": 0.9750814422538557,
+      "small_symbol": false,
+      "support": 220
+    },
+    {
+      "class_name": "timeSig5",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "timeSig6",
+      "mAP@0.5:0.95": 0.9649717514124294,
+      "small_symbol": false,
+      "support": 75
+    },
+    {
+      "class_name": "timeSig7",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": false,
+      "support": 0
+    },
+    {
+      "class_name": "timeSig8",
+      "mAP@0.5:0.95": 0.9892546144380641,
+      "small_symbol": false,
+      "support": 193
+    },
+    {
+      "class_name": "timeSig9",
+      "mAP@0.5:0.95": 0.9613545019157088,
+      "small_symbol": false,
+      "support": 60
+    },
+    {
+      "class_name": "timeSigCommon",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 20
+    },
+    {
+      "class_name": "timeSigCutCommon",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 29
+    },
+    {
+      "class_name": "tremolo1",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tremolo2",
+      "mAP@0.5:0.95": 0.8020075757575759,
+      "small_symbol": true,
+      "support": 41
+    },
+    {
+      "class_name": "tremolo3",
+      "mAP@0.5:0.95": 0.1592,
+      "small_symbol": true,
+      "support": 4
+    },
+    {
+      "class_name": "tremolo4",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tremolo5",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tuplet1",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "tuplet2",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tuplet3",
+      "mAP@0.5:0.95": 0.9931149820217005,
+      "small_symbol": true,
+      "support": 452
+    },
+    {
+      "class_name": "tuplet4",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tuplet5",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "tuplet6",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 83
+    },
+    {
+      "class_name": "tuplet7",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tuplet8",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tuplet9",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 0
+    },
+    {
+      "class_name": "tupletBracket",
+      "mAP@0.5:0.95": 0.5159126511104699,
+      "small_symbol": true,
+      "support": 73
+    }
+  ],
+  "rare_supported_classes": [
+    {
+      "class_name": "accidentalDoubleSharp",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "articStaccatissimoAbove",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "fingering0",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "flag32ndDown",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 10
+    },
+    {
+      "class_name": "keyboardPedalPed",
+      "mAP@0.5:0.95": 0.8955,
+      "small_symbol": false,
+      "support": 4
+    },
+    {
+      "class_name": "keyboardPedalUp",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": false,
+      "support": 6
+    },
+    {
+      "class_name": "restDoubleWhole",
+      "mAP@0.5:0.95": 0.07236363636363637,
+      "small_symbol": false,
+      "support": 7
+    },
+    {
+      "class_name": "restHBar",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": false,
+      "support": 2
+    },
+    {
+      "class_name": "tremolo3",
+      "mAP@0.5:0.95": 0.1592,
+      "small_symbol": true,
+      "support": 4
+    },
+    {
+      "class_name": "tuplet1",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "tuplet5",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 3
+    }
+  ],
+  "run_id": "detection_136class_yolov8m_tiled_stem_pilot_img1024_v1",
+  "small_symbol_classes": [
+    {
+      "class_name": "accidentalDoubleSharp",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "accidentalFlat",
+      "mAP@0.5:0.95": 0.9798747897061327,
+      "small_symbol": true,
+      "support": 1064
+    },
+    {
+      "class_name": "accidentalNatural",
+      "mAP@0.5:0.95": 0.9666697236210797,
+      "small_symbol": true,
+      "support": 1747
+    },
+    {
+      "class_name": "accidentalSharp",
+      "mAP@0.5:0.95": 0.9892442865830715,
+      "small_symbol": true,
+      "support": 1682
+    },
+    {
+      "class_name": "articStaccatissimoAbove",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "articStaccatoAbove",
+      "mAP@0.5:0.95": 0.9316193546476251,
+      "small_symbol": true,
+      "support": 2447
+    },
+    {
+      "class_name": "articStaccatoBelow",
+      "mAP@0.5:0.95": 0.9348103755225653,
+      "small_symbol": true,
+      "support": 447
+    },
+    {
+      "class_name": "articTenutoAbove",
+      "mAP@0.5:0.95": 0.8058583559171169,
+      "small_symbol": true,
+      "support": 479
+    },
+    {
+      "class_name": "articTenutoBelow",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 62
+    },
+    {
+      "class_name": "augmentationDot",
+      "mAP@0.5:0.95": 0.951387713738491,
+      "small_symbol": true,
+      "support": 4608
+    },
+    {
+      "class_name": "fingering0",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 6
+    },
+    {
+      "class_name": "fingering1",
+      "mAP@0.5:0.95": 0.8769282669813678,
+      "small_symbol": true,
+      "support": 135
+    },
+    {
+      "class_name": "fingering2",
+      "mAP@0.5:0.95": 0.8553279697460343,
+      "small_symbol": true,
+      "support": 148
+    },
+    {
+      "class_name": "fingering3",
+      "mAP@0.5:0.95": 0.912293593803868,
+      "small_symbol": true,
+      "support": 121
+    },
+    {
+      "class_name": "fingering4",
+      "mAP@0.5:0.95": 0.863711755773948,
+      "small_symbol": true,
+      "support": 117
+    },
+    {
+      "class_name": "flag128thDown",
+      "mAP@0.5:0.95": 0.8771055386522427,
+      "small_symbol": true,
+      "support": 51
+    },
+    {
+      "class_name": "flag128thUp",
+      "mAP@0.5:0.95": 0.8508596491228071,
+      "small_symbol": true,
+      "support": 30
+    },
+    {
+      "class_name": "flag16thDown",
+      "mAP@0.5:0.95": 0.8974812907299483,
+      "small_symbol": true,
+      "support": 222
+    },
+    {
+      "class_name": "flag16thUp",
+      "mAP@0.5:0.95": 0.8172923253618494,
+      "small_symbol": true,
+      "support": 285
+    },
+    {
+      "class_name": "flag32ndDown",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 10
+    },
+    {
+      "class_name": "flag64thDown",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 14
+    },
+    {
+      "class_name": "flag64thUp",
+      "mAP@0.5:0.95": 0.8405670833333334,
+      "small_symbol": true,
+      "support": 26
+    },
+    {
+      "class_name": "flag8thDown",
+      "mAP@0.5:0.95": 0.8995411921354421,
+      "small_symbol": true,
+      "support": 2386
+    },
+    {
+      "class_name": "flag8thUp",
+      "mAP@0.5:0.95": 0.8579518244687186,
+      "small_symbol": true,
+      "support": 2243
+    },
+    {
+      "class_name": "ornamentMordent",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 45
+    },
+    {
+      "class_name": "ornamentTrill",
+      "mAP@0.5:0.95": 0.990303550295858,
+      "small_symbol": true,
+      "support": 83
+    },
+    {
+      "class_name": "ornamentTurn",
+      "mAP@0.5:0.95": 0.9824999999999999,
+      "small_symbol": true,
+      "support": 71
+    },
+    {
+      "class_name": "ornamentTurnInverted",
+      "mAP@0.5:0.95": 0.907061488095238,
+      "small_symbol": true,
+      "support": 13
+    },
+    {
+      "class_name": "tremolo2",
+      "mAP@0.5:0.95": 0.8020075757575759,
+      "small_symbol": true,
+      "support": 41
+    },
+    {
+      "class_name": "tremolo3",
+      "mAP@0.5:0.95": 0.1592,
+      "small_symbol": true,
+      "support": 4
+    },
+    {
+      "class_name": "tuplet1",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "tuplet3",
+      "mAP@0.5:0.95": 0.9931149820217005,
+      "small_symbol": true,
+      "support": 452
+    },
+    {
+      "class_name": "tuplet5",
+      "mAP@0.5:0.95": 0.8521207647641077,
+      "small_symbol": true,
+      "support": 3
+    },
+    {
+      "class_name": "tuplet6",
+      "mAP@0.5:0.95": 0.9949999999999999,
+      "small_symbol": true,
+      "support": 83
+    },
+    {
+      "class_name": "tupletBracket",
+      "mAP@0.5:0.95": 0.5159126511104699,
+      "small_symbol": true,
+      "support": 73
+    }
+  ],
+  "source_metrics": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json",
+  "source_split_manifest": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/val_dataset_class_counts.json",
+  "split": "val",
+  "summary": {
+    "F1@0.5": 0.8893154628249349,
+    "class_count": 136,
+    "mAP@0.5": 0.9082394885392849,
+    "precision@0.5": 0.9155509426073148,
+    "primary_metric": "mAP@0.5:0.95",
+    "primary_value": 0.8521207647641077,
+    "rare_class_count_support_lte_10": 11,
+    "recall@0.5": 0.8645416741076378,
+    "small_symbol_mean_mAP@0.5:0.95": 0.8282853608976802,
+    "small_symbol_supported_class_count": 35,
+    "supported_class_count": 102,
+    "zero_map_supported_class_count": 4
+  },
+  "taxonomy_id": "deepscores_136",
+  "zero_map_supported_classes": [
+    {
+      "class_name": "articTenutoBelow",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 62
+    },
+    {
+      "class_name": "dynamicR",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": false,
+      "support": 14
+    },
+    {
+      "class_name": "restHBar",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": false,
+      "support": 2
+    },
+    {
+      "class_name": "tuplet1",
+      "mAP@0.5:0.95": 0.0,
+      "small_symbol": true,
+      "support": 3
+    }
+  ]
+}

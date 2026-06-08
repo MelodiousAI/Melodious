@@ -1,0 +1,4682 @@
+[
+  {
+    "source_idx": 5,
+    "target_idx": 17,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8019781708717346
+  },
+  {
+    "source_idx": 8,
+    "target_idx": 66,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8343720436096191
+  },
+  {
+    "source_idx": 8,
+    "target_idx": 67,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7094914317131042
+  },
+  {
+    "source_idx": 9,
+    "target_idx": 30,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8429875373840332
+  },
+  {
+    "source_idx": 9,
+    "target_idx": 67,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7225003838539124
+  },
+  {
+    "source_idx": 11,
+    "target_idx": 16,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6181504130363464
+  },
+  {
+    "source_idx": 12,
+    "target_idx": 19,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.623762309551239
+  },
+  {
+    "source_idx": 14,
+    "target_idx": 47,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7336918711662292
+  },
+  {
+    "source_idx": 16,
+    "target_idx": 11,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5610734224319458
+  },
+  {
+    "source_idx": 16,
+    "target_idx": 32,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8501039147377014
+  },
+  {
+    "source_idx": 16,
+    "target_idx": 60,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.802940309047699
+  },
+  {
+    "source_idx": 17,
+    "target_idx": 50,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9185128808021545
+  },
+  {
+    "source_idx": 17,
+    "target_idx": 5,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7691203355789185
+  },
+  {
+    "source_idx": 19,
+    "target_idx": 12,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.553112804889679
+  },
+  {
+    "source_idx": 20,
+    "target_idx": 43,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9514091610908508
+  },
+  {
+    "source_idx": 20,
+    "target_idx": 31,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9352599382400513
+  },
+  {
+    "source_idx": 22,
+    "target_idx": 31,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9269791841506958
+  },
+  {
+    "source_idx": 23,
+    "target_idx": 44,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8240116238594055
+  },
+  {
+    "source_idx": 23,
+    "target_idx": 59,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8046990036964417
+  },
+  {
+    "source_idx": 26,
+    "target_idx": 45,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6832679510116577
+  },
+  {
+    "source_idx": 26,
+    "target_idx": 61,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9286503195762634
+  },
+  {
+    "source_idx": 27,
+    "target_idx": 53,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9117235541343689
+  },
+  {
+    "source_idx": 28,
+    "target_idx": 38,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7898352742195129
+  },
+  {
+    "source_idx": 29,
+    "target_idx": 49,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9189267158508301
+  },
+  {
+    "source_idx": 30,
+    "target_idx": 52,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8060286641120911
+  },
+  {
+    "source_idx": 30,
+    "target_idx": 9,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8574926853179932
+  },
+  {
+    "source_idx": 31,
+    "target_idx": 84,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.935667872428894
+  },
+  {
+    "source_idx": 31,
+    "target_idx": 85,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5183001160621643
+  },
+  {
+    "source_idx": 31,
+    "target_idx": 22,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9044293761253357
+  },
+  {
+    "source_idx": 32,
+    "target_idx": 71,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8672556281089783
+  },
+  {
+    "source_idx": 32,
+    "target_idx": 16,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8620595932006836
+  },
+  {
+    "source_idx": 33,
+    "target_idx": 55,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.83289635181427
+  },
+  {
+    "source_idx": 34,
+    "target_idx": 56,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8322339057922363
+  },
+  {
+    "source_idx": 34,
+    "target_idx": 75,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5638613104820251
+  },
+  {
+    "source_idx": 35,
+    "target_idx": 58,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6692500710487366
+  },
+  {
+    "source_idx": 36,
+    "target_idx": 54,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6391276717185974
+  },
+  {
+    "source_idx": 38,
+    "target_idx": 28,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7930802702903748
+  },
+  {
+    "source_idx": 38,
+    "target_idx": 64,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9146640300750732
+  },
+  {
+    "source_idx": 38,
+    "target_idx": 72,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5425872206687927
+  },
+  {
+    "source_idx": 40,
+    "target_idx": 69,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.815534234046936
+  },
+  {
+    "source_idx": 41,
+    "target_idx": 73,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8718327283859253
+  },
+  {
+    "source_idx": 42,
+    "target_idx": 76,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9439907073974609
+  },
+  {
+    "source_idx": 43,
+    "target_idx": 85,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9363126754760742
+  },
+  {
+    "source_idx": 43,
+    "target_idx": 84,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8372066617012024
+  },
+  {
+    "source_idx": 43,
+    "target_idx": 20,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9457549452781677
+  },
+  {
+    "source_idx": 43,
+    "target_idx": 22,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7492855787277222
+  },
+  {
+    "source_idx": 44,
+    "target_idx": 70,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9397923350334167
+  },
+  {
+    "source_idx": 44,
+    "target_idx": 23,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8600844740867615
+  },
+  {
+    "source_idx": 45,
+    "target_idx": 74,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.813335120677948
+  },
+  {
+    "source_idx": 47,
+    "target_idx": 14,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8986446857452393
+  },
+  {
+    "source_idx": 48,
+    "target_idx": 66,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5851585865020752
+  },
+  {
+    "source_idx": 48,
+    "target_idx": 67,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8638426065444946
+  },
+  {
+    "source_idx": 48,
+    "target_idx": 30,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5619595050811768
+  },
+  {
+    "source_idx": 49,
+    "target_idx": 83,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9204618334770203
+  },
+  {
+    "source_idx": 49,
+    "target_idx": 29,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9136506915092468
+  },
+  {
+    "source_idx": 50,
+    "target_idx": 17,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9398857355117798
+  },
+  {
+    "source_idx": 52,
+    "target_idx": 30,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7839729189872742
+  },
+  {
+    "source_idx": 52,
+    "target_idx": 67,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.863909125328064
+  },
+  {
+    "source_idx": 53,
+    "target_idx": 80,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9269763827323914
+  },
+  {
+    "source_idx": 53,
+    "target_idx": 27,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8867788910865784
+  },
+  {
+    "source_idx": 54,
+    "target_idx": 87,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6911299228668213
+  },
+  {
+    "source_idx": 54,
+    "target_idx": 36,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7083398699760437
+  },
+  {
+    "source_idx": 54,
+    "target_idx": 34,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5585302114486694
+  },
+  {
+    "source_idx": 55,
+    "target_idx": 89,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9185041785240173
+  },
+  {
+    "source_idx": 55,
+    "target_idx": 33,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.909392774105072
+  },
+  {
+    "source_idx": 56,
+    "target_idx": 90,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8720216751098633
+  },
+  {
+    "source_idx": 56,
+    "target_idx": 92,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5500075817108154
+  },
+  {
+    "source_idx": 58,
+    "target_idx": 93,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8777918219566345
+  },
+  {
+    "source_idx": 59,
+    "target_idx": 23,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8081859946250916
+  },
+  {
+    "source_idx": 60,
+    "target_idx": 16,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8021004796028137
+  },
+  {
+    "source_idx": 61,
+    "target_idx": 74,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7431771755218506
+  },
+  {
+    "source_idx": 61,
+    "target_idx": 26,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9253132939338684
+  },
+  {
+    "source_idx": 63,
+    "target_idx": 92,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8781000971794128
+  },
+  {
+    "source_idx": 63,
+    "target_idx": 90,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6705006957054138
+  },
+  {
+    "source_idx": 64,
+    "target_idx": 91,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8692878484725952
+  },
+  {
+    "source_idx": 64,
+    "target_idx": 38,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9335088133811951
+  },
+  {
+    "source_idx": 66,
+    "target_idx": 48,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5782330632209778
+  },
+  {
+    "source_idx": 66,
+    "target_idx": 8,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8487426042556763
+  },
+  {
+    "source_idx": 67,
+    "target_idx": 52,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8895291686058044
+  },
+  {
+    "source_idx": 67,
+    "target_idx": 48,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8674867153167725
+  },
+  {
+    "source_idx": 67,
+    "target_idx": 9,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7771654725074768
+  },
+  {
+    "source_idx": 68,
+    "target_idx": 79,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9568493366241455
+  },
+  {
+    "source_idx": 69,
+    "target_idx": 40,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8267912268638611
+  },
+  {
+    "source_idx": 70,
+    "target_idx": 44,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.954374372959137
+  },
+  {
+    "source_idx": 71,
+    "target_idx": 32,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.874983549118042
+  },
+  {
+    "source_idx": 72,
+    "target_idx": 91,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5336378216743469
+  },
+  {
+    "source_idx": 72,
+    "target_idx": 38,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5337939262390137
+  },
+  {
+    "source_idx": 73,
+    "target_idx": 41,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8545725345611572
+  },
+  {
+    "source_idx": 74,
+    "target_idx": 45,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8288949131965637
+  },
+  {
+    "source_idx": 74,
+    "target_idx": 61,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7192795276641846
+  },
+  {
+    "source_idx": 75,
+    "target_idx": 34,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7504993081092834
+  },
+  {
+    "source_idx": 76,
+    "target_idx": 42,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9373367428779602
+  },
+  {
+    "source_idx": 79,
+    "target_idx": 68,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9534212350845337
+  },
+  {
+    "source_idx": 80,
+    "target_idx": 53,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9332740902900696
+  },
+  {
+    "source_idx": 83,
+    "target_idx": 49,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9260036945343018
+  },
+  {
+    "source_idx": 84,
+    "target_idx": 31,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9349914789199829
+  },
+  {
+    "source_idx": 84,
+    "target_idx": 43,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8755329251289368
+  },
+  {
+    "source_idx": 85,
+    "target_idx": 43,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9358042478561401
+  },
+  {
+    "source_idx": 87,
+    "target_idx": 54,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7171292901039124
+  },
+  {
+    "source_idx": 89,
+    "target_idx": 55,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9213404059410095
+  },
+  {
+    "source_idx": 90,
+    "target_idx": 56,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8637428879737854
+  },
+  {
+    "source_idx": 90,
+    "target_idx": 63,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.812842845916748
+  },
+  {
+    "source_idx": 91,
+    "target_idx": 64,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8308826684951782
+  },
+  {
+    "source_idx": 91,
+    "target_idx": 28,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5537790656089783
+  },
+  {
+    "source_idx": 92,
+    "target_idx": 63,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9341440796852112
+  },
+  {
+    "source_idx": 92,
+    "target_idx": 56,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.510008692741394
+  },
+  {
+    "source_idx": 92,
+    "target_idx": 94,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9919929504394531
+  },
+  {
+    "source_idx": 93,
+    "target_idx": 58,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8126430511474609
+  },
+  {
+    "source_idx": 93,
+    "target_idx": 95,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9963538646697998
+  },
+  {
+    "source_idx": 94,
+    "target_idx": 92,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9874337315559387
+  },
+  {
+    "source_idx": 94,
+    "target_idx": 74,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9040262699127197
+  },
+  {
+    "source_idx": 94,
+    "target_idx": 90,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9609023332595825
+  },
+  {
+    "source_idx": 95,
+    "target_idx": 93,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9961410164833069
+  },
+  {
+    "source_idx": 95,
+    "target_idx": 70,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9490748643875122
+  },
+  {
+    "source_idx": 95,
+    "target_idx": 89,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9838894605636597
+  },
+  {
+    "source_idx": 101,
+    "target_idx": 106,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5688198208808899
+  },
+  {
+    "source_idx": 104,
+    "target_idx": 116,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6148050427436829
+  },
+  {
+    "source_idx": 105,
+    "target_idx": 115,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8780298829078674
+  },
+  {
+    "source_idx": 106,
+    "target_idx": 117,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7907286882400513
+  },
+  {
+    "source_idx": 107,
+    "target_idx": 114,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8400664925575256
+  },
+  {
+    "source_idx": 112,
+    "target_idx": 125,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9451583027839661
+  },
+  {
+    "source_idx": 113,
+    "target_idx": 123,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7623791098594666
+  },
+  {
+    "source_idx": 114,
+    "target_idx": 107,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8933680653572083
+  },
+  {
+    "source_idx": 115,
+    "target_idx": 105,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8562551140785217
+  },
+  {
+    "source_idx": 116,
+    "target_idx": 104,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.516457736492157
+  },
+  {
+    "source_idx": 116,
+    "target_idx": 126,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9541775584220886
+  },
+  {
+    "source_idx": 117,
+    "target_idx": 106,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.837737500667572
+  },
+  {
+    "source_idx": 119,
+    "target_idx": 132,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.956212043762207
+  },
+  {
+    "source_idx": 120,
+    "target_idx": 140,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6371856331825256
+  },
+  {
+    "source_idx": 121,
+    "target_idx": 139,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9499189853668213
+  },
+  {
+    "source_idx": 121,
+    "target_idx": 159,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9612412452697754
+  },
+  {
+    "source_idx": 122,
+    "target_idx": 146,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9073754549026489
+  },
+  {
+    "source_idx": 123,
+    "target_idx": 113,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6892791986465454
+  },
+  {
+    "source_idx": 123,
+    "target_idx": 138,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8058851957321167
+  },
+  {
+    "source_idx": 124,
+    "target_idx": 145,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9387787580490112
+  },
+  {
+    "source_idx": 125,
+    "target_idx": 112,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9420655965805054
+  },
+  {
+    "source_idx": 125,
+    "target_idx": 141,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9611448645591736
+  },
+  {
+    "source_idx": 126,
+    "target_idx": 116,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.959670901298523
+  },
+  {
+    "source_idx": 129,
+    "target_idx": 152,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9250933527946472
+  },
+  {
+    "source_idx": 130,
+    "target_idx": 147,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7088878750801086
+  },
+  {
+    "source_idx": 130,
+    "target_idx": 152,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9299083352088928
+  },
+  {
+    "source_idx": 132,
+    "target_idx": 119,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9645171165466309
+  },
+  {
+    "source_idx": 133,
+    "target_idx": 148,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9127349257469177
+  },
+  {
+    "source_idx": 134,
+    "target_idx": 149,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7584843039512634
+  },
+  {
+    "source_idx": 136,
+    "target_idx": 151,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9592476487159729
+  },
+  {
+    "source_idx": 138,
+    "target_idx": 123,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8598479628562927
+  },
+  {
+    "source_idx": 139,
+    "target_idx": 121,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9510574340820312
+  },
+  {
+    "source_idx": 140,
+    "target_idx": 120,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7159371376037598
+  },
+  {
+    "source_idx": 140,
+    "target_idx": 155,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8260887861251831
+  },
+  {
+    "source_idx": 140,
+    "target_idx": 156,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5646125674247742
+  },
+  {
+    "source_idx": 141,
+    "target_idx": 125,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9583293795585632
+  },
+  {
+    "source_idx": 142,
+    "target_idx": 153,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9477205276489258
+  },
+  {
+    "source_idx": 143,
+    "target_idx": 150,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9245412945747375
+  },
+  {
+    "source_idx": 144,
+    "target_idx": 156,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.924582839012146
+  },
+  {
+    "source_idx": 145,
+    "target_idx": 154,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9241968989372253
+  },
+  {
+    "source_idx": 145,
+    "target_idx": 124,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9506787657737732
+  },
+  {
+    "source_idx": 146,
+    "target_idx": 122,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8987603783607483
+  },
+  {
+    "source_idx": 147,
+    "target_idx": 130,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8018002510070801
+  },
+  {
+    "source_idx": 148,
+    "target_idx": 133,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8963039517402649
+  },
+  {
+    "source_idx": 149,
+    "target_idx": 134,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7326654195785522
+  },
+  {
+    "source_idx": 150,
+    "target_idx": 143,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8991757035255432
+  },
+  {
+    "source_idx": 150,
+    "target_idx": 157,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9473174810409546
+  },
+  {
+    "source_idx": 150,
+    "target_idx": 159,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9139053821563721
+  },
+  {
+    "source_idx": 151,
+    "target_idx": 136,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9451503157615662
+  },
+  {
+    "source_idx": 151,
+    "target_idx": 158,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9615623950958252
+  },
+  {
+    "source_idx": 151,
+    "target_idx": 161,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9854846596717834
+  },
+  {
+    "source_idx": 152,
+    "target_idx": 129,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9125840067863464
+  },
+  {
+    "source_idx": 152,
+    "target_idx": 130,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9189093708992004
+  },
+  {
+    "source_idx": 153,
+    "target_idx": 142,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9498091340065002
+  },
+  {
+    "source_idx": 154,
+    "target_idx": 145,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9013806581497192
+  },
+  {
+    "source_idx": 155,
+    "target_idx": 140,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8425902724266052
+  },
+  {
+    "source_idx": 156,
+    "target_idx": 144,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9195435047149658
+  },
+  {
+    "source_idx": 156,
+    "target_idx": 140,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6022077798843384
+  },
+  {
+    "source_idx": 157,
+    "target_idx": 150,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9590728878974915
+  },
+  {
+    "source_idx": 158,
+    "target_idx": 151,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9577205181121826
+  },
+  {
+    "source_idx": 159,
+    "target_idx": 150,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8935735821723938
+  },
+  {
+    "source_idx": 159,
+    "target_idx": 121,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9603137969970703
+  },
+  {
+    "source_idx": 161,
+    "target_idx": 151,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9856235980987549
+  },
+  {
+    "source_idx": 161,
+    "target_idx": 125,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.994205892086029
+  },
+  {
+    "source_idx": 162,
+    "target_idx": 171,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6638498902320862
+  },
+  {
+    "source_idx": 162,
+    "target_idx": 170,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7432757616043091
+  },
+  {
+    "source_idx": 162,
+    "target_idx": 182,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8359784483909607
+  },
+  {
+    "source_idx": 163,
+    "target_idx": 178,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8617824912071228
+  },
+  {
+    "source_idx": 163,
+    "target_idx": 218,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7542616724967957
+  },
+  {
+    "source_idx": 164,
+    "target_idx": 173,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7104403376579285
+  },
+  {
+    "source_idx": 164,
+    "target_idx": 171,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7513028979301453
+  },
+  {
+    "source_idx": 166,
+    "target_idx": 174,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8785384297370911
+  },
+  {
+    "source_idx": 166,
+    "target_idx": 219,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6742851138114929
+  },
+  {
+    "source_idx": 169,
+    "target_idx": 181,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8992711305618286
+  },
+  {
+    "source_idx": 169,
+    "target_idx": 220,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6534349322319031
+  },
+  {
+    "source_idx": 170,
+    "target_idx": 162,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6781330704689026
+  },
+  {
+    "source_idx": 171,
+    "target_idx": 214,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.930662989616394
+  },
+  {
+    "source_idx": 171,
+    "target_idx": 162,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8590692281723022
+  },
+  {
+    "source_idx": 171,
+    "target_idx": 164,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8723953366279602
+  },
+  {
+    "source_idx": 173,
+    "target_idx": 217,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9555864334106445
+  },
+  {
+    "source_idx": 173,
+    "target_idx": 214,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7981055378913879
+  },
+  {
+    "source_idx": 173,
+    "target_idx": 164,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.889777421951294
+  },
+  {
+    "source_idx": 174,
+    "target_idx": 166,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8130470514297485
+  },
+  {
+    "source_idx": 174,
+    "target_idx": 194,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8064733147621155
+  },
+  {
+    "source_idx": 174,
+    "target_idx": 215,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5949594974517822
+  },
+  {
+    "source_idx": 175,
+    "target_idx": 191,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9428066611289978
+  },
+  {
+    "source_idx": 175,
+    "target_idx": 199,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8513352274894714
+  },
+  {
+    "source_idx": 176,
+    "target_idx": 195,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8739652037620544
+  },
+  {
+    "source_idx": 177,
+    "target_idx": 192,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9319494962692261
+  },
+  {
+    "source_idx": 178,
+    "target_idx": 163,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8824492692947388
+  },
+  {
+    "source_idx": 178,
+    "target_idx": 190,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8946340084075928
+  },
+  {
+    "source_idx": 178,
+    "target_idx": 216,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8473479151725769
+  },
+  {
+    "source_idx": 179,
+    "target_idx": 188,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9425911903381348
+  },
+  {
+    "source_idx": 179,
+    "target_idx": 198,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8887234330177307
+  },
+  {
+    "source_idx": 180,
+    "target_idx": 197,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6990812420845032
+  },
+  {
+    "source_idx": 180,
+    "target_idx": 224,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7354972958564758
+  },
+  {
+    "source_idx": 180,
+    "target_idx": 196,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7035094499588013
+  },
+  {
+    "source_idx": 181,
+    "target_idx": 169,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9222797155380249
+  },
+  {
+    "source_idx": 181,
+    "target_idx": 189,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9072617888450623
+  },
+  {
+    "source_idx": 181,
+    "target_idx": 209,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8571004271507263
+  },
+  {
+    "source_idx": 182,
+    "target_idx": 162,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8441322445869446
+  },
+  {
+    "source_idx": 182,
+    "target_idx": 164,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5797334313392639
+  },
+  {
+    "source_idx": 183,
+    "target_idx": 201,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9359566569328308
+  },
+  {
+    "source_idx": 183,
+    "target_idx": 221,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7178493738174438
+  },
+  {
+    "source_idx": 184,
+    "target_idx": 188,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5217289328575134
+  },
+  {
+    "source_idx": 184,
+    "target_idx": 199,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.941505491733551
+  },
+  {
+    "source_idx": 185,
+    "target_idx": 198,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9582834243774414
+  },
+  {
+    "source_idx": 185,
+    "target_idx": 188,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7660531997680664
+  },
+  {
+    "source_idx": 186,
+    "target_idx": 196,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6096171140670776
+  },
+  {
+    "source_idx": 187,
+    "target_idx": 202,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9615505933761597
+  },
+  {
+    "source_idx": 187,
+    "target_idx": 201,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6597011685371399
+  },
+  {
+    "source_idx": 188,
+    "target_idx": 223,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8486809134483337
+  },
+  {
+    "source_idx": 188,
+    "target_idx": 226,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8599004745483398
+  },
+  {
+    "source_idx": 188,
+    "target_idx": 184,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6271498799324036
+  },
+  {
+    "source_idx": 188,
+    "target_idx": 179,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.965212881565094
+  },
+  {
+    "source_idx": 189,
+    "target_idx": 220,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8683097958564758
+  },
+  {
+    "source_idx": 189,
+    "target_idx": 181,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9059925079345703
+  },
+  {
+    "source_idx": 190,
+    "target_idx": 218,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9038974642753601
+  },
+  {
+    "source_idx": 190,
+    "target_idx": 178,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9130153656005859
+  },
+  {
+    "source_idx": 191,
+    "target_idx": 222,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.554595410823822
+  },
+  {
+    "source_idx": 191,
+    "target_idx": 175,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9655277132987976
+  },
+  {
+    "source_idx": 192,
+    "target_idx": 177,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9406806230545044
+  },
+  {
+    "source_idx": 192,
+    "target_idx": 207,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9527770280838013
+  },
+  {
+    "source_idx": 193,
+    "target_idx": 204,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8738769888877869
+  },
+  {
+    "source_idx": 194,
+    "target_idx": 174,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8980271220207214
+  },
+  {
+    "source_idx": 194,
+    "target_idx": 219,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.652480959892273
+  },
+  {
+    "source_idx": 195,
+    "target_idx": 176,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9023491144180298
+  },
+  {
+    "source_idx": 195,
+    "target_idx": 205,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9604524374008179
+  },
+  {
+    "source_idx": 196,
+    "target_idx": 231,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7673146724700928
+  },
+  {
+    "source_idx": 196,
+    "target_idx": 186,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6584323048591614
+  },
+  {
+    "source_idx": 196,
+    "target_idx": 180,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7306092381477356
+  },
+  {
+    "source_idx": 197,
+    "target_idx": 180,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.757866382598877
+  },
+  {
+    "source_idx": 198,
+    "target_idx": 226,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9203851222991943
+  },
+  {
+    "source_idx": 198,
+    "target_idx": 185,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9650565981864929
+  },
+  {
+    "source_idx": 199,
+    "target_idx": 230,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9335423707962036
+  },
+  {
+    "source_idx": 199,
+    "target_idx": 222,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.96177077293396
+  },
+  {
+    "source_idx": 199,
+    "target_idx": 184,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9621223211288452
+  },
+  {
+    "source_idx": 199,
+    "target_idx": 175,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9276838302612305
+  },
+  {
+    "source_idx": 201,
+    "target_idx": 228,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5145686268806458
+  },
+  {
+    "source_idx": 201,
+    "target_idx": 235,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8693286180496216
+  },
+  {
+    "source_idx": 202,
+    "target_idx": 227,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9183845520019531
+  },
+  {
+    "source_idx": 202,
+    "target_idx": 228,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6139092445373535
+  },
+  {
+    "source_idx": 202,
+    "target_idx": 187,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9610611796379089
+  },
+  {
+    "source_idx": 202,
+    "target_idx": 183,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8585622906684875
+  },
+  {
+    "source_idx": 204,
+    "target_idx": 232,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6511828899383545
+  },
+  {
+    "source_idx": 204,
+    "target_idx": 193,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8667318820953369
+  },
+  {
+    "source_idx": 205,
+    "target_idx": 234,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.936705470085144
+  },
+  {
+    "source_idx": 205,
+    "target_idx": 195,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.966590404510498
+  },
+  {
+    "source_idx": 207,
+    "target_idx": 192,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9497025609016418
+  },
+  {
+    "source_idx": 209,
+    "target_idx": 220,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7670052647590637
+  },
+  {
+    "source_idx": 209,
+    "target_idx": 181,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9269055128097534
+  },
+  {
+    "source_idx": 214,
+    "target_idx": 171,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9229757189750671
+  },
+  {
+    "source_idx": 214,
+    "target_idx": 173,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7332424521446228
+  },
+  {
+    "source_idx": 215,
+    "target_idx": 219,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8191792964935303
+  },
+  {
+    "source_idx": 216,
+    "target_idx": 218,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9190220236778259
+  },
+  {
+    "source_idx": 217,
+    "target_idx": 173,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9557215571403503
+  },
+  {
+    "source_idx": 218,
+    "target_idx": 190,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9048096537590027
+  },
+  {
+    "source_idx": 218,
+    "target_idx": 216,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8840044140815735
+  },
+  {
+    "source_idx": 219,
+    "target_idx": 215,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7086505889892578
+  },
+  {
+    "source_idx": 219,
+    "target_idx": 233,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7786938548088074
+  },
+  {
+    "source_idx": 219,
+    "target_idx": 194,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6107454895973206
+  },
+  {
+    "source_idx": 219,
+    "target_idx": 166,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.619197428226471
+  },
+  {
+    "source_idx": 220,
+    "target_idx": 189,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8851776123046875
+  },
+  {
+    "source_idx": 220,
+    "target_idx": 209,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6953199505805969
+  },
+  {
+    "source_idx": 220,
+    "target_idx": 169,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7089915871620178
+  },
+  {
+    "source_idx": 221,
+    "target_idx": 235,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9526748657226562
+  },
+  {
+    "source_idx": 221,
+    "target_idx": 228,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5130914449691772
+  },
+  {
+    "source_idx": 222,
+    "target_idx": 199,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9520687460899353
+  },
+  {
+    "source_idx": 222,
+    "target_idx": 241,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.947986364364624
+  },
+  {
+    "source_idx": 223,
+    "target_idx": 188,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8300371170043945
+  },
+  {
+    "source_idx": 223,
+    "target_idx": 241,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9944111704826355
+  },
+  {
+    "source_idx": 224,
+    "target_idx": 229,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5525661110877991
+  },
+  {
+    "source_idx": 225,
+    "target_idx": 234,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9238108396530151
+  },
+  {
+    "source_idx": 226,
+    "target_idx": 198,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9268423318862915
+  },
+  {
+    "source_idx": 226,
+    "target_idx": 245,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9836433529853821
+  },
+  {
+    "source_idx": 226,
+    "target_idx": 188,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.86385178565979
+  },
+  {
+    "source_idx": 226,
+    "target_idx": 241,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.972312331199646
+  },
+  {
+    "source_idx": 227,
+    "target_idx": 202,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9320083260536194
+  },
+  {
+    "source_idx": 227,
+    "target_idx": 246,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5322044491767883
+  },
+  {
+    "source_idx": 228,
+    "target_idx": 221,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5362681746482849
+  },
+  {
+    "source_idx": 228,
+    "target_idx": 246,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9836666584014893
+  },
+  {
+    "source_idx": 228,
+    "target_idx": 202,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7750320434570312
+  },
+  {
+    "source_idx": 229,
+    "target_idx": 224,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6504622101783752
+  },
+  {
+    "source_idx": 229,
+    "target_idx": 197,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5720717310905457
+  },
+  {
+    "source_idx": 229,
+    "target_idx": 243,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9486991763114929
+  },
+  {
+    "source_idx": 230,
+    "target_idx": 199,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.929445207118988
+  },
+  {
+    "source_idx": 230,
+    "target_idx": 241,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9899994730949402
+  },
+  {
+    "source_idx": 231,
+    "target_idx": 196,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7837188243865967
+  },
+  {
+    "source_idx": 231,
+    "target_idx": 243,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7934338450431824
+  },
+  {
+    "source_idx": 232,
+    "target_idx": 204,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.680432915687561
+  },
+  {
+    "source_idx": 232,
+    "target_idx": 243,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9571536779403687
+  },
+  {
+    "source_idx": 233,
+    "target_idx": 219,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8816448450088501
+  },
+  {
+    "source_idx": 234,
+    "target_idx": 205,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9428781867027283
+  },
+  {
+    "source_idx": 234,
+    "target_idx": 225,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9017486572265625
+  },
+  {
+    "source_idx": 234,
+    "target_idx": 245,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9962390661239624
+  },
+  {
+    "source_idx": 235,
+    "target_idx": 221,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9537317752838135
+  },
+  {
+    "source_idx": 235,
+    "target_idx": 240,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8796992301940918
+  },
+  {
+    "source_idx": 235,
+    "target_idx": 246,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8950071930885315
+  },
+  {
+    "source_idx": 235,
+    "target_idx": 201,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8824681639671326
+  },
+  {
+    "source_idx": 240,
+    "target_idx": 235,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9181076288223267
+  },
+  {
+    "source_idx": 241,
+    "target_idx": 230,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.990577220916748
+  },
+  {
+    "source_idx": 241,
+    "target_idx": 223,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9929018616676331
+  },
+  {
+    "source_idx": 241,
+    "target_idx": 222,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9705532193183899
+  },
+  {
+    "source_idx": 241,
+    "target_idx": 226,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9739677309989929
+  },
+  {
+    "source_idx": 243,
+    "target_idx": 229,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9444676637649536
+  },
+  {
+    "source_idx": 243,
+    "target_idx": 250,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9670977592468262
+  },
+  {
+    "source_idx": 243,
+    "target_idx": 232,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9317233562469482
+  },
+  {
+    "source_idx": 243,
+    "target_idx": 231,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7412562370300293
+  },
+  {
+    "source_idx": 245,
+    "target_idx": 234,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9932172894477844
+  },
+  {
+    "source_idx": 245,
+    "target_idx": 226,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9821751713752747
+  },
+  {
+    "source_idx": 245,
+    "target_idx": 223,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8956014513969421
+  },
+  {
+    "source_idx": 246,
+    "target_idx": 228,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9668020606040955
+  },
+  {
+    "source_idx": 246,
+    "target_idx": 235,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8454549312591553
+  },
+  {
+    "source_idx": 248,
+    "target_idx": 250,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5052193999290466
+  },
+  {
+    "source_idx": 248,
+    "target_idx": 229,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5736070871353149
+  },
+  {
+    "source_idx": 250,
+    "target_idx": 243,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9672434329986572
+  },
+  {
+    "source_idx": 250,
+    "target_idx": 265,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.823430597782135
+  },
+  {
+    "source_idx": 251,
+    "target_idx": 263,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7989540696144104
+  },
+  {
+    "source_idx": 253,
+    "target_idx": 267,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9506618976593018
+  },
+  {
+    "source_idx": 255,
+    "target_idx": 271,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7281377911567688
+  },
+  {
+    "source_idx": 255,
+    "target_idx": 282,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9788445830345154
+  },
+  {
+    "source_idx": 255,
+    "target_idx": 296,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9768761992454529
+  },
+  {
+    "source_idx": 255,
+    "target_idx": 217,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9118360280990601
+  },
+  {
+    "source_idx": 256,
+    "target_idx": 266,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8091966509819031
+  },
+  {
+    "source_idx": 259,
+    "target_idx": 282,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9459997415542603
+  },
+  {
+    "source_idx": 259,
+    "target_idx": 296,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.949281632900238
+  },
+  {
+    "source_idx": 259,
+    "target_idx": 317,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7604904770851135
+  },
+  {
+    "source_idx": 260,
+    "target_idx": 274,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8582043051719666
+  },
+  {
+    "source_idx": 262,
+    "target_idx": 296,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9492899179458618
+  },
+  {
+    "source_idx": 262,
+    "target_idx": 282,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9459380507469177
+  },
+  {
+    "source_idx": 262,
+    "target_idx": 316,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6049425601959229
+  },
+  {
+    "source_idx": 262,
+    "target_idx": 317,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7641123533248901
+  },
+  {
+    "source_idx": 263,
+    "target_idx": 251,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8720002174377441
+  },
+  {
+    "source_idx": 264,
+    "target_idx": 275,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8475802540779114
+  },
+  {
+    "source_idx": 265,
+    "target_idx": 250,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8441774249076843
+  },
+  {
+    "source_idx": 266,
+    "target_idx": 256,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8749781250953674
+  },
+  {
+    "source_idx": 266,
+    "target_idx": 277,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.912096381187439
+  },
+  {
+    "source_idx": 267,
+    "target_idx": 253,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9413899183273315
+  },
+  {
+    "source_idx": 268,
+    "target_idx": 281,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7785468101501465
+  },
+  {
+    "source_idx": 269,
+    "target_idx": 279,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.903475284576416
+  },
+  {
+    "source_idx": 270,
+    "target_idx": 284,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9212252497673035
+  },
+  {
+    "source_idx": 271,
+    "target_idx": 255,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8322418928146362
+  },
+  {
+    "source_idx": 271,
+    "target_idx": 287,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6642476916313171
+  },
+  {
+    "source_idx": 272,
+    "target_idx": 293,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5162002444267273
+  },
+  {
+    "source_idx": 273,
+    "target_idx": 294,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8650200366973877
+  },
+  {
+    "source_idx": 274,
+    "target_idx": 260,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.877089262008667
+  },
+  {
+    "source_idx": 274,
+    "target_idx": 288,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9159427881240845
+  },
+  {
+    "source_idx": 275,
+    "target_idx": 264,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9339030981063843
+  },
+  {
+    "source_idx": 275,
+    "target_idx": 290,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9338781237602234
+  },
+  {
+    "source_idx": 276,
+    "target_idx": 289,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9226483702659607
+  },
+  {
+    "source_idx": 276,
+    "target_idx": 315,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9908891320228577
+  },
+  {
+    "source_idx": 277,
+    "target_idx": 266,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.836935818195343
+  },
+  {
+    "source_idx": 278,
+    "target_idx": 317,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7835427522659302
+  },
+  {
+    "source_idx": 279,
+    "target_idx": 269,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8971350193023682
+  },
+  {
+    "source_idx": 280,
+    "target_idx": 298,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7897046804428101
+  },
+  {
+    "source_idx": 281,
+    "target_idx": 268,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.797091543674469
+  },
+  {
+    "source_idx": 281,
+    "target_idx": 303,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7818500995635986
+  },
+  {
+    "source_idx": 282,
+    "target_idx": 259,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9433820843696594
+  },
+  {
+    "source_idx": 282,
+    "target_idx": 262,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9433990120887756
+  },
+  {
+    "source_idx": 282,
+    "target_idx": 255,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9853453040122986
+  },
+  {
+    "source_idx": 282,
+    "target_idx": 287,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9469847679138184
+  },
+  {
+    "source_idx": 283,
+    "target_idx": 299,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8975473046302795
+  },
+  {
+    "source_idx": 284,
+    "target_idx": 270,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9110438227653503
+  },
+  {
+    "source_idx": 284,
+    "target_idx": 302,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9118652939796448
+  },
+  {
+    "source_idx": 285,
+    "target_idx": 301,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.967858076095581
+  },
+  {
+    "source_idx": 286,
+    "target_idx": 305,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8254898190498352
+  },
+  {
+    "source_idx": 287,
+    "target_idx": 316,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7647647857666016
+  },
+  {
+    "source_idx": 287,
+    "target_idx": 318,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9287406802177429
+  },
+  {
+    "source_idx": 287,
+    "target_idx": 296,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9457303285598755
+  },
+  {
+    "source_idx": 287,
+    "target_idx": 317,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5109743475914001
+  },
+  {
+    "source_idx": 287,
+    "target_idx": 271,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6756603717803955
+  },
+  {
+    "source_idx": 287,
+    "target_idx": 282,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.942947268486023
+  },
+  {
+    "source_idx": 288,
+    "target_idx": 274,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8973236680030823
+  },
+  {
+    "source_idx": 289,
+    "target_idx": 276,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.888985276222229
+  },
+  {
+    "source_idx": 290,
+    "target_idx": 275,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8481826782226562
+  },
+  {
+    "source_idx": 292,
+    "target_idx": 304,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8879676461219788
+  },
+  {
+    "source_idx": 293,
+    "target_idx": 272,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6388809680938721
+  },
+  {
+    "source_idx": 294,
+    "target_idx": 273,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8697485327720642
+  },
+  {
+    "source_idx": 294,
+    "target_idx": 309,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8311984539031982
+  },
+  {
+    "source_idx": 294,
+    "target_idx": 311,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8801677823066711
+  },
+  {
+    "source_idx": 295,
+    "target_idx": 311,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9123746752738953
+  },
+  {
+    "source_idx": 295,
+    "target_idx": 314,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8344405889511108
+  },
+  {
+    "source_idx": 296,
+    "target_idx": 262,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.944663405418396
+  },
+  {
+    "source_idx": 296,
+    "target_idx": 259,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9446471929550171
+  },
+  {
+    "source_idx": 296,
+    "target_idx": 287,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9474889039993286
+  },
+  {
+    "source_idx": 296,
+    "target_idx": 255,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9815218448638916
+  },
+  {
+    "source_idx": 297,
+    "target_idx": 308,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9057583808898926
+  },
+  {
+    "source_idx": 298,
+    "target_idx": 280,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7741227746009827
+  },
+  {
+    "source_idx": 298,
+    "target_idx": 307,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7749516367912292
+  },
+  {
+    "source_idx": 299,
+    "target_idx": 283,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9239868521690369
+  },
+  {
+    "source_idx": 301,
+    "target_idx": 285,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9580790996551514
+  },
+  {
+    "source_idx": 302,
+    "target_idx": 284,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9217255115509033
+  },
+  {
+    "source_idx": 303,
+    "target_idx": 281,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7598365545272827
+  },
+  {
+    "source_idx": 304,
+    "target_idx": 292,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8909966945648193
+  },
+  {
+    "source_idx": 304,
+    "target_idx": 313,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9151238203048706
+  },
+  {
+    "source_idx": 304,
+    "target_idx": 315,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9942280054092407
+  },
+  {
+    "source_idx": 305,
+    "target_idx": 286,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7236310243606567
+  },
+  {
+    "source_idx": 305,
+    "target_idx": 311,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6808664798736572
+  },
+  {
+    "source_idx": 305,
+    "target_idx": 314,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7812977433204651
+  },
+  {
+    "source_idx": 305,
+    "target_idx": 319,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9948849081993103
+  },
+  {
+    "source_idx": 307,
+    "target_idx": 298,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7964737415313721
+  },
+  {
+    "source_idx": 308,
+    "target_idx": 297,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8993737101554871
+  },
+  {
+    "source_idx": 309,
+    "target_idx": 294,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.790076732635498
+  },
+  {
+    "source_idx": 311,
+    "target_idx": 305,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6029987931251526
+  },
+  {
+    "source_idx": 311,
+    "target_idx": 295,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9039256572723389
+  },
+  {
+    "source_idx": 311,
+    "target_idx": 294,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8709433674812317
+  },
+  {
+    "source_idx": 313,
+    "target_idx": 304,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9611299633979797
+  },
+  {
+    "source_idx": 314,
+    "target_idx": 305,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7943421602249146
+  },
+  {
+    "source_idx": 314,
+    "target_idx": 295,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8982267379760742
+  },
+  {
+    "source_idx": 315,
+    "target_idx": 304,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9910262227058411
+  },
+  {
+    "source_idx": 315,
+    "target_idx": 276,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9898808598518372
+  },
+  {
+    "source_idx": 315,
+    "target_idx": 297,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8114200234413147
+  },
+  {
+    "source_idx": 316,
+    "target_idx": 287,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.754676878452301
+  },
+  {
+    "source_idx": 317,
+    "target_idx": 259,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7564653158187866
+  },
+  {
+    "source_idx": 317,
+    "target_idx": 278,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8076407313346863
+  },
+  {
+    "source_idx": 317,
+    "target_idx": 262,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7645013332366943
+  },
+  {
+    "source_idx": 318,
+    "target_idx": 287,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.926878809928894
+  },
+  {
+    "source_idx": 318,
+    "target_idx": 262,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9273977875709534
+  },
+  {
+    "source_idx": 318,
+    "target_idx": 259,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9273743033409119
+  },
+  {
+    "source_idx": 319,
+    "target_idx": 305,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9914498925209045
+  },
+  {
+    "source_idx": 319,
+    "target_idx": 272,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9753245115280151
+  },
+  {
+    "source_idx": 319,
+    "target_idx": 362,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7391353249549866
+  },
+  {
+    "source_idx": 323,
+    "target_idx": 334,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9293160438537598
+  },
+  {
+    "source_idx": 324,
+    "target_idx": 335,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9413885474205017
+  },
+  {
+    "source_idx": 325,
+    "target_idx": 339,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9219745993614197
+  },
+  {
+    "source_idx": 326,
+    "target_idx": 337,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7124192118644714
+  },
+  {
+    "source_idx": 326,
+    "target_idx": 345,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6097319722175598
+  },
+  {
+    "source_idx": 327,
+    "target_idx": 346,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6150087118148804
+  },
+  {
+    "source_idx": 328,
+    "target_idx": 351,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.579600989818573
+  },
+  {
+    "source_idx": 328,
+    "target_idx": 341,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8659505248069763
+  },
+  {
+    "source_idx": 330,
+    "target_idx": 350,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9262149930000305
+  },
+  {
+    "source_idx": 331,
+    "target_idx": 345,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9441179633140564
+  },
+  {
+    "source_idx": 331,
+    "target_idx": 337,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9029237627983093
+  },
+  {
+    "source_idx": 331,
+    "target_idx": 299,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6160553693771362
+  },
+  {
+    "source_idx": 332,
+    "target_idx": 343,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9341480135917664
+  },
+  {
+    "source_idx": 333,
+    "target_idx": 359,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8763746023178101
+  },
+  {
+    "source_idx": 333,
+    "target_idx": 367,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8216390609741211
+  },
+  {
+    "source_idx": 334,
+    "target_idx": 323,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9318047761917114
+  },
+  {
+    "source_idx": 335,
+    "target_idx": 324,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9500788450241089
+  },
+  {
+    "source_idx": 336,
+    "target_idx": 361,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9376583695411682
+  },
+  {
+    "source_idx": 336,
+    "target_idx": 370,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9270617365837097
+  },
+  {
+    "source_idx": 336,
+    "target_idx": 377,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6738008856773376
+  },
+  {
+    "source_idx": 337,
+    "target_idx": 326,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7589459419250488
+  },
+  {
+    "source_idx": 337,
+    "target_idx": 331,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8551405668258667
+  },
+  {
+    "source_idx": 338,
+    "target_idx": 358,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9722689390182495
+  },
+  {
+    "source_idx": 338,
+    "target_idx": 384,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.988651692867279
+  },
+  {
+    "source_idx": 339,
+    "target_idx": 325,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9289394021034241
+  },
+  {
+    "source_idx": 340,
+    "target_idx": 356,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9634713530540466
+  },
+  {
+    "source_idx": 341,
+    "target_idx": 352,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9422476887702942
+  },
+  {
+    "source_idx": 341,
+    "target_idx": 328,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8903341293334961
+  },
+  {
+    "source_idx": 341,
+    "target_idx": 369,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8804588913917542
+  },
+  {
+    "source_idx": 341,
+    "target_idx": 383,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9440603852272034
+  },
+  {
+    "source_idx": 342,
+    "target_idx": 357,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9602203369140625
+  },
+  {
+    "source_idx": 342,
+    "target_idx": 383,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9951580166816711
+  },
+  {
+    "source_idx": 343,
+    "target_idx": 332,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9326838254928589
+  },
+  {
+    "source_idx": 345,
+    "target_idx": 331,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9440457224845886
+  },
+  {
+    "source_idx": 345,
+    "target_idx": 326,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6163095831871033
+  },
+  {
+    "source_idx": 346,
+    "target_idx": 327,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5058971643447876
+  },
+  {
+    "source_idx": 346,
+    "target_idx": 371,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9359144568443298
+  },
+  {
+    "source_idx": 347,
+    "target_idx": 368,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.962579607963562
+  },
+  {
+    "source_idx": 347,
+    "target_idx": 384,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9958654642105103
+  },
+  {
+    "source_idx": 348,
+    "target_idx": 370,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8712422847747803
+  },
+  {
+    "source_idx": 348,
+    "target_idx": 361,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8055220246315002
+  },
+  {
+    "source_idx": 349,
+    "target_idx": 367,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7934007048606873
+  },
+  {
+    "source_idx": 350,
+    "target_idx": 330,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8733223676681519
+  },
+  {
+    "source_idx": 350,
+    "target_idx": 374,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9107087254524231
+  },
+  {
+    "source_idx": 350,
+    "target_idx": 384,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8691924214363098
+  },
+  {
+    "source_idx": 351,
+    "target_idx": 383,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9928597211837769
+  },
+  {
+    "source_idx": 352,
+    "target_idx": 341,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9424364566802979
+  },
+  {
+    "source_idx": 356,
+    "target_idx": 340,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9627498388290405
+  },
+  {
+    "source_idx": 357,
+    "target_idx": 342,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9546157717704773
+  },
+  {
+    "source_idx": 358,
+    "target_idx": 338,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9672713875770569
+  },
+  {
+    "source_idx": 359,
+    "target_idx": 363,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8277276754379272
+  },
+  {
+    "source_idx": 359,
+    "target_idx": 333,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9094077348709106
+  },
+  {
+    "source_idx": 359,
+    "target_idx": 349,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5423240661621094
+  },
+  {
+    "source_idx": 360,
+    "target_idx": 361,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8793546557426453
+  },
+  {
+    "source_idx": 360,
+    "target_idx": 377,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8133649826049805
+  },
+  {
+    "source_idx": 360,
+    "target_idx": 370,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6426988840103149
+  },
+  {
+    "source_idx": 361,
+    "target_idx": 360,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8690869212150574
+  },
+  {
+    "source_idx": 361,
+    "target_idx": 348,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8349953293800354
+  },
+  {
+    "source_idx": 361,
+    "target_idx": 336,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9519538879394531
+  },
+  {
+    "source_idx": 362,
+    "target_idx": 378,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7951547503471375
+  },
+  {
+    "source_idx": 362,
+    "target_idx": 319,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8418844938278198
+  },
+  {
+    "source_idx": 363,
+    "target_idx": 359,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8472124338150024
+  },
+  {
+    "source_idx": 363,
+    "target_idx": 376,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8766831159591675
+  },
+  {
+    "source_idx": 363,
+    "target_idx": 385,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.992185652256012
+  },
+  {
+    "source_idx": 365,
+    "target_idx": 380,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9089945554733276
+  },
+  {
+    "source_idx": 367,
+    "target_idx": 349,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8742668628692627
+  },
+  {
+    "source_idx": 367,
+    "target_idx": 333,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8391722440719604
+  },
+  {
+    "source_idx": 368,
+    "target_idx": 347,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.958160400390625
+  },
+  {
+    "source_idx": 369,
+    "target_idx": 351,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5996875166893005
+  },
+  {
+    "source_idx": 369,
+    "target_idx": 341,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8557122349739075
+  },
+  {
+    "source_idx": 370,
+    "target_idx": 348,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9161245226860046
+  },
+  {
+    "source_idx": 370,
+    "target_idx": 360,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6905529499053955
+  },
+  {
+    "source_idx": 370,
+    "target_idx": 336,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9337913393974304
+  },
+  {
+    "source_idx": 371,
+    "target_idx": 346,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9165608882904053
+  },
+  {
+    "source_idx": 373,
+    "target_idx": 381,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.629502534866333
+  },
+  {
+    "source_idx": 373,
+    "target_idx": 385,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9965362548828125
+  },
+  {
+    "source_idx": 374,
+    "target_idx": 350,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9375107288360596
+  },
+  {
+    "source_idx": 375,
+    "target_idx": 382,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9258947968482971
+  },
+  {
+    "source_idx": 375,
+    "target_idx": 386,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.995715320110321
+  },
+  {
+    "source_idx": 376,
+    "target_idx": 373,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6029294729232788
+  },
+  {
+    "source_idx": 376,
+    "target_idx": 363,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8977738618850708
+  },
+  {
+    "source_idx": 377,
+    "target_idx": 360,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8585811853408813
+  },
+  {
+    "source_idx": 377,
+    "target_idx": 336,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8498549461364746
+  },
+  {
+    "source_idx": 378,
+    "target_idx": 362,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.768443763256073
+  },
+  {
+    "source_idx": 380,
+    "target_idx": 365,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8817327618598938
+  },
+  {
+    "source_idx": 381,
+    "target_idx": 373,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5730488300323486
+  },
+  {
+    "source_idx": 382,
+    "target_idx": 375,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9460382461547852
+  },
+  {
+    "source_idx": 383,
+    "target_idx": 351,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9892085194587708
+  },
+  {
+    "source_idx": 383,
+    "target_idx": 342,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9917592406272888
+  },
+  {
+    "source_idx": 383,
+    "target_idx": 341,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8698970079421997
+  },
+  {
+    "source_idx": 384,
+    "target_idx": 347,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9958139061927795
+  },
+  {
+    "source_idx": 384,
+    "target_idx": 338,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.987532913684845
+  },
+  {
+    "source_idx": 384,
+    "target_idx": 350,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.899100661277771
+  },
+  {
+    "source_idx": 385,
+    "target_idx": 373,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.996279776096344
+  },
+  {
+    "source_idx": 385,
+    "target_idx": 363,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9887107014656067
+  },
+  {
+    "source_idx": 385,
+    "target_idx": 333,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.958162784576416
+  },
+  {
+    "source_idx": 386,
+    "target_idx": 375,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9962033629417419
+  },
+  {
+    "source_idx": 386,
+    "target_idx": 360,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9902385473251343
+  },
+  {
+    "source_idx": 386,
+    "target_idx": 348,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9406141638755798
+  },
+  {
+    "source_idx": 388,
+    "target_idx": 394,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.683053731918335
+  },
+  {
+    "source_idx": 388,
+    "target_idx": 404,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6243764162063599
+  },
+  {
+    "source_idx": 388,
+    "target_idx": 411,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6875881552696228
+  },
+  {
+    "source_idx": 389,
+    "target_idx": 393,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8211652636528015
+  },
+  {
+    "source_idx": 389,
+    "target_idx": 392,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5937677025794983
+  },
+  {
+    "source_idx": 391,
+    "target_idx": 398,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.83841872215271
+  },
+  {
+    "source_idx": 391,
+    "target_idx": 394,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6179207563400269
+  },
+  {
+    "source_idx": 391,
+    "target_idx": 411,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6199511289596558
+  },
+  {
+    "source_idx": 392,
+    "target_idx": 389,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6082416772842407
+  },
+  {
+    "source_idx": 393,
+    "target_idx": 389,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8049553632736206
+  },
+  {
+    "source_idx": 394,
+    "target_idx": 391,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7673576474189758
+  },
+  {
+    "source_idx": 394,
+    "target_idx": 388,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7061747908592224
+  },
+  {
+    "source_idx": 394,
+    "target_idx": 395,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6811567544937134
+  },
+  {
+    "source_idx": 395,
+    "target_idx": 404,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9360499382019043
+  },
+  {
+    "source_idx": 395,
+    "target_idx": 394,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5502204298973083
+  },
+  {
+    "source_idx": 395,
+    "target_idx": 411,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5529065132141113
+  },
+  {
+    "source_idx": 396,
+    "target_idx": 414,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6438863277435303
+  },
+  {
+    "source_idx": 398,
+    "target_idx": 391,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8088917136192322
+  },
+  {
+    "source_idx": 398,
+    "target_idx": 389,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5834541320800781
+  },
+  {
+    "source_idx": 398,
+    "target_idx": 388,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5507651567459106
+  },
+  {
+    "source_idx": 400,
+    "target_idx": 409,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9514460563659668
+  },
+  {
+    "source_idx": 401,
+    "target_idx": 417,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9517497420310974
+  },
+  {
+    "source_idx": 402,
+    "target_idx": 419,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.684152364730835
+  },
+  {
+    "source_idx": 403,
+    "target_idx": 421,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.944654643535614
+  },
+  {
+    "source_idx": 404,
+    "target_idx": 395,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9268168210983276
+  },
+  {
+    "source_idx": 404,
+    "target_idx": 388,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.5817483067512512
+  },
+  {
+    "source_idx": 405,
+    "target_idx": 415,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9607449173927307
+  },
+  {
+    "source_idx": 406,
+    "target_idx": 413,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6262648105621338
+  },
+  {
+    "source_idx": 407,
+    "target_idx": 423,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9266276359558105
+  },
+  {
+    "source_idx": 408,
+    "target_idx": 420,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9427832365036011
+  },
+  {
+    "source_idx": 409,
+    "target_idx": 400,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9484341740608215
+  },
+  {
+    "source_idx": 411,
+    "target_idx": 391,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7684006690979004
+  },
+  {
+    "source_idx": 411,
+    "target_idx": 388,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7084394097328186
+  },
+  {
+    "source_idx": 411,
+    "target_idx": 395,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.6839380264282227
+  },
+  {
+    "source_idx": 412,
+    "target_idx": 418,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9569483399391174
+  },
+  {
+    "source_idx": 413,
+    "target_idx": 406,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.657069742679596
+  },
+  {
+    "source_idx": 413,
+    "target_idx": 444,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.554410457611084
+  },
+  {
+    "source_idx": 414,
+    "target_idx": 396,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6562281250953674
+  },
+  {
+    "source_idx": 414,
+    "target_idx": 426,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8720651268959045
+  },
+  {
+    "source_idx": 414,
+    "target_idx": 438,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6122484803199768
+  },
+  {
+    "source_idx": 415,
+    "target_idx": 405,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9626888632774353
+  },
+  {
+    "source_idx": 417,
+    "target_idx": 401,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9543158411979675
+  },
+  {
+    "source_idx": 417,
+    "target_idx": 448,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9560973644256592
+  },
+  {
+    "source_idx": 418,
+    "target_idx": 412,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9594489336013794
+  },
+  {
+    "source_idx": 418,
+    "target_idx": 458,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9577159285545349
+  },
+  {
+    "source_idx": 419,
+    "target_idx": 402,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7846676707267761
+  },
+  {
+    "source_idx": 419,
+    "target_idx": 442,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9279375076293945
+  },
+  {
+    "source_idx": 420,
+    "target_idx": 408,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.940285861492157
+  },
+  {
+    "source_idx": 420,
+    "target_idx": 452,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9476689100265503
+  },
+  {
+    "source_idx": 421,
+    "target_idx": 403,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9593356251716614
+  },
+  {
+    "source_idx": 421,
+    "target_idx": 446,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6250147223472595
+  },
+  {
+    "source_idx": 422,
+    "target_idx": 449,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9659264087677002
+  },
+  {
+    "source_idx": 423,
+    "target_idx": 407,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9336244463920593
+  },
+  {
+    "source_idx": 423,
+    "target_idx": 456,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5209516286849976
+  },
+  {
+    "source_idx": 425,
+    "target_idx": 457,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9425260424613953
+  },
+  {
+    "source_idx": 425,
+    "target_idx": 460,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9344991445541382
+  },
+  {
+    "source_idx": 425,
+    "target_idx": 450,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8703607320785522
+  },
+  {
+    "source_idx": 426,
+    "target_idx": 430,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5845056176185608
+  },
+  {
+    "source_idx": 426,
+    "target_idx": 440,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6086331009864807
+  },
+  {
+    "source_idx": 426,
+    "target_idx": 414,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8960551023483276
+  },
+  {
+    "source_idx": 427,
+    "target_idx": 429,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8606704473495483
+  },
+  {
+    "source_idx": 427,
+    "target_idx": 441,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7967652082443237
+  },
+  {
+    "source_idx": 429,
+    "target_idx": 427,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7467554211616516
+  },
+  {
+    "source_idx": 429,
+    "target_idx": 439,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6756575703620911
+  },
+  {
+    "source_idx": 430,
+    "target_idx": 438,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8812181353569031
+  },
+  {
+    "source_idx": 433,
+    "target_idx": 440,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7812344431877136
+  },
+  {
+    "source_idx": 434,
+    "target_idx": 446,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9430350661277771
+  },
+  {
+    "source_idx": 434,
+    "target_idx": 463,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.992267906665802
+  },
+  {
+    "source_idx": 435,
+    "target_idx": 445,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.937187910079956
+  },
+  {
+    "source_idx": 436,
+    "target_idx": 444,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8621998429298401
+  },
+  {
+    "source_idx": 436,
+    "target_idx": 464,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9663459062576294
+  },
+  {
+    "source_idx": 437,
+    "target_idx": 443,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.81842440366745
+  },
+  {
+    "source_idx": 437,
+    "target_idx": 464,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7755122780799866
+  },
+  {
+    "source_idx": 438,
+    "target_idx": 430,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.906251847743988
+  },
+  {
+    "source_idx": 438,
+    "target_idx": 414,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7204797267913818
+  },
+  {
+    "source_idx": 439,
+    "target_idx": 441,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7985705733299255
+  },
+  {
+    "source_idx": 439,
+    "target_idx": 429,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8138169646263123
+  },
+  {
+    "source_idx": 440,
+    "target_idx": 433,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7341142296791077
+  },
+  {
+    "source_idx": 440,
+    "target_idx": 453,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9021307229995728
+  },
+  {
+    "source_idx": 440,
+    "target_idx": 426,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6367160081863403
+  },
+  {
+    "source_idx": 440,
+    "target_idx": 464,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.926658570766449
+  },
+  {
+    "source_idx": 441,
+    "target_idx": 427,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8482778668403625
+  },
+  {
+    "source_idx": 441,
+    "target_idx": 439,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.813930332660675
+  },
+  {
+    "source_idx": 441,
+    "target_idx": 451,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9472941756248474
+  },
+  {
+    "source_idx": 441,
+    "target_idx": 463,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8895869255065918
+  },
+  {
+    "source_idx": 442,
+    "target_idx": 419,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9233946204185486
+  },
+  {
+    "source_idx": 443,
+    "target_idx": 437,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8305773138999939
+  },
+  {
+    "source_idx": 444,
+    "target_idx": 436,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9145195484161377
+  },
+  {
+    "source_idx": 445,
+    "target_idx": 435,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9500008225440979
+  },
+  {
+    "source_idx": 446,
+    "target_idx": 434,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9495299458503723
+  },
+  {
+    "source_idx": 448,
+    "target_idx": 417,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9536815881729126
+  },
+  {
+    "source_idx": 449,
+    "target_idx": 422,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9621682167053223
+  },
+  {
+    "source_idx": 450,
+    "target_idx": 459,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8932163119316101
+  },
+  {
+    "source_idx": 450,
+    "target_idx": 462,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8932873010635376
+  },
+  {
+    "source_idx": 450,
+    "target_idx": 461,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8933473229408264
+  },
+  {
+    "source_idx": 450,
+    "target_idx": 465,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9029186367988586
+  },
+  {
+    "source_idx": 450,
+    "target_idx": 425,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.917329728603363
+  },
+  {
+    "source_idx": 451,
+    "target_idx": 441,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9423735737800598
+  },
+  {
+    "source_idx": 452,
+    "target_idx": 420,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9410597085952759
+  },
+  {
+    "source_idx": 453,
+    "target_idx": 440,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9183073043823242
+  },
+  {
+    "source_idx": 456,
+    "target_idx": 423,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5463324189186096
+  },
+  {
+    "source_idx": 457,
+    "target_idx": 461,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8797670006752014
+  },
+  {
+    "source_idx": 457,
+    "target_idx": 462,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8829609155654907
+  },
+  {
+    "source_idx": 457,
+    "target_idx": 459,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8870766758918762
+  },
+  {
+    "source_idx": 457,
+    "target_idx": 465,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9185388088226318
+  },
+  {
+    "source_idx": 457,
+    "target_idx": 425,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9457409977912903
+  },
+  {
+    "source_idx": 458,
+    "target_idx": 418,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9586167931556702
+  },
+  {
+    "source_idx": 459,
+    "target_idx": 460,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9020349979400635
+  },
+  {
+    "source_idx": 459,
+    "target_idx": 450,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8965294361114502
+  },
+  {
+    "source_idx": 459,
+    "target_idx": 457,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8983716368675232
+  },
+  {
+    "source_idx": 460,
+    "target_idx": 459,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8974685668945312
+  },
+  {
+    "source_idx": 460,
+    "target_idx": 462,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8975264430046082
+  },
+  {
+    "source_idx": 460,
+    "target_idx": 461,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8975791931152344
+  },
+  {
+    "source_idx": 460,
+    "target_idx": 465,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9515993595123291
+  },
+  {
+    "source_idx": 460,
+    "target_idx": 425,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9278272986412048
+  },
+  {
+    "source_idx": 461,
+    "target_idx": 457,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8983986973762512
+  },
+  {
+    "source_idx": 461,
+    "target_idx": 460,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9020745754241943
+  },
+  {
+    "source_idx": 461,
+    "target_idx": 450,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8965693116188049
+  },
+  {
+    "source_idx": 462,
+    "target_idx": 460,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9020467400550842
+  },
+  {
+    "source_idx": 462,
+    "target_idx": 457,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8983801007270813
+  },
+  {
+    "source_idx": 462,
+    "target_idx": 450,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.896544873714447
+  },
+  {
+    "source_idx": 463,
+    "target_idx": 441,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8395804762840271
+  },
+  {
+    "source_idx": 463,
+    "target_idx": 434,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9923370480537415
+  },
+  {
+    "source_idx": 464,
+    "target_idx": 440,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9159640073776245
+  },
+  {
+    "source_idx": 464,
+    "target_idx": 436,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9682123064994812
+  },
+  {
+    "source_idx": 464,
+    "target_idx": 437,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.7248456478118896
+  },
+  {
+    "source_idx": 465,
+    "target_idx": 460,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9484670758247375
+  },
+  {
+    "source_idx": 465,
+    "target_idx": 457,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9086701273918152
+  },
+  {
+    "source_idx": 465,
+    "target_idx": 450,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8931915163993835
+  },
+  {
+    "source_idx": 470,
+    "target_idx": 482,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9427405595779419
+  },
+  {
+    "source_idx": 470,
+    "target_idx": 481,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9415437579154968
+  },
+  {
+    "source_idx": 471,
+    "target_idx": 479,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9545872211456299
+  },
+  {
+    "source_idx": 472,
+    "target_idx": 508,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8039690852165222
+  },
+  {
+    "source_idx": 473,
+    "target_idx": 477,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8564448356628418
+  },
+  {
+    "source_idx": 474,
+    "target_idx": 480,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9069716334342957
+  },
+  {
+    "source_idx": 475,
+    "target_idx": 490,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9600045680999756
+  },
+  {
+    "source_idx": 476,
+    "target_idx": 491,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.943092942237854
+  },
+  {
+    "source_idx": 477,
+    "target_idx": 473,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9069967269897461
+  },
+  {
+    "source_idx": 479,
+    "target_idx": 471,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9677740335464478
+  },
+  {
+    "source_idx": 479,
+    "target_idx": 499,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5973600745201111
+  },
+  {
+    "source_idx": 480,
+    "target_idx": 474,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9016435146331787
+  },
+  {
+    "source_idx": 480,
+    "target_idx": 495,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6325441598892212
+  },
+  {
+    "source_idx": 480,
+    "target_idx": 473,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5438265800476074
+  },
+  {
+    "source_idx": 481,
+    "target_idx": 470,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9353373050689697
+  },
+  {
+    "source_idx": 482,
+    "target_idx": 470,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9482526183128357
+  },
+  {
+    "source_idx": 483,
+    "target_idx": 501,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9620202779769897
+  },
+  {
+    "source_idx": 483,
+    "target_idx": 511,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.624095618724823
+  },
+  {
+    "source_idx": 483,
+    "target_idx": 524,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9450106024742126
+  },
+  {
+    "source_idx": 484,
+    "target_idx": 502,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9003131985664368
+  },
+  {
+    "source_idx": 484,
+    "target_idx": 515,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.873129665851593
+  },
+  {
+    "source_idx": 484,
+    "target_idx": 520,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5985774397850037
+  },
+  {
+    "source_idx": 485,
+    "target_idx": 510,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9044383764266968
+  },
+  {
+    "source_idx": 485,
+    "target_idx": 525,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8829044103622437
+  },
+  {
+    "source_idx": 486,
+    "target_idx": 504,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9507997035980225
+  },
+  {
+    "source_idx": 486,
+    "target_idx": 523,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9129283428192139
+  },
+  {
+    "source_idx": 487,
+    "target_idx": 505,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9618444442749023
+  },
+  {
+    "source_idx": 487,
+    "target_idx": 524,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9698635935783386
+  },
+  {
+    "source_idx": 487,
+    "target_idx": 512,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6944130063056946
+  },
+  {
+    "source_idx": 488,
+    "target_idx": 503,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9359113574028015
+  },
+  {
+    "source_idx": 488,
+    "target_idx": 514,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.680007815361023
+  },
+  {
+    "source_idx": 488,
+    "target_idx": 523,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.98269122838974
+  },
+  {
+    "source_idx": 489,
+    "target_idx": 517,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8674049377441406
+  },
+  {
+    "source_idx": 490,
+    "target_idx": 475,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9649234414100647
+  },
+  {
+    "source_idx": 491,
+    "target_idx": 476,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9481761455535889
+  },
+  {
+    "source_idx": 493,
+    "target_idx": 516,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7520945072174072
+  },
+  {
+    "source_idx": 494,
+    "target_idx": 514,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.937492847442627
+  },
+  {
+    "source_idx": 494,
+    "target_idx": 523,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9050471782684326
+  },
+  {
+    "source_idx": 495,
+    "target_idx": 510,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7405151128768921
+  },
+  {
+    "source_idx": 495,
+    "target_idx": 480,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6286154985427856
+  },
+  {
+    "source_idx": 495,
+    "target_idx": 525,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8150752782821655
+  },
+  {
+    "source_idx": 496,
+    "target_idx": 511,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9658665657043457
+  },
+  {
+    "source_idx": 496,
+    "target_idx": 524,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9932877421379089
+  },
+  {
+    "source_idx": 496,
+    "target_idx": 501,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.851594090461731
+  },
+  {
+    "source_idx": 497,
+    "target_idx": 513,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9345725178718567
+  },
+  {
+    "source_idx": 497,
+    "target_idx": 523,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9857833385467529
+  },
+  {
+    "source_idx": 498,
+    "target_idx": 512,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9599274396896362
+  },
+  {
+    "source_idx": 498,
+    "target_idx": 505,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6026479601860046
+  },
+  {
+    "source_idx": 498,
+    "target_idx": 524,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9049162268638611
+  },
+  {
+    "source_idx": 499,
+    "target_idx": 515,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.885007917881012
+  },
+  {
+    "source_idx": 499,
+    "target_idx": 479,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5444060564041138
+  },
+  {
+    "source_idx": 499,
+    "target_idx": 526,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9038037061691284
+  },
+  {
+    "source_idx": 500,
+    "target_idx": 509,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5701534748077393
+  },
+  {
+    "source_idx": 501,
+    "target_idx": 483,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.963180422782898
+  },
+  {
+    "source_idx": 501,
+    "target_idx": 496,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.869972288608551
+  },
+  {
+    "source_idx": 502,
+    "target_idx": 507,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8897126913070679
+  },
+  {
+    "source_idx": 502,
+    "target_idx": 484,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9262291193008423
+  },
+  {
+    "source_idx": 502,
+    "target_idx": 499,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6014304757118225
+  },
+  {
+    "source_idx": 503,
+    "target_idx": 488,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9369666576385498
+  },
+  {
+    "source_idx": 504,
+    "target_idx": 486,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9525226354598999
+  },
+  {
+    "source_idx": 505,
+    "target_idx": 487,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9605925679206848
+  },
+  {
+    "source_idx": 505,
+    "target_idx": 498,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.633482038974762
+  },
+  {
+    "source_idx": 506,
+    "target_idx": 518,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9653178453445435
+  },
+  {
+    "source_idx": 507,
+    "target_idx": 520,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9235575795173645
+  },
+  {
+    "source_idx": 507,
+    "target_idx": 502,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9076758623123169
+  },
+  {
+    "source_idx": 507,
+    "target_idx": 526,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9961349964141846
+  },
+  {
+    "source_idx": 508,
+    "target_idx": 472,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.865787923336029
+  },
+  {
+    "source_idx": 509,
+    "target_idx": 519,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9115899801254272
+  },
+  {
+    "source_idx": 509,
+    "target_idx": 500,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.541498601436615
+  },
+  {
+    "source_idx": 509,
+    "target_idx": 525,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9952375888824463
+  },
+  {
+    "source_idx": 510,
+    "target_idx": 495,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8141778707504272
+  },
+  {
+    "source_idx": 510,
+    "target_idx": 485,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9146265387535095
+  },
+  {
+    "source_idx": 510,
+    "target_idx": 474,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.530573308467865
+  },
+  {
+    "source_idx": 511,
+    "target_idx": 496,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9668896794319153
+  },
+  {
+    "source_idx": 511,
+    "target_idx": 483,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.659569263458252
+  },
+  {
+    "source_idx": 512,
+    "target_idx": 498,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.958560049533844
+  },
+  {
+    "source_idx": 512,
+    "target_idx": 487,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.639703631401062
+  },
+  {
+    "source_idx": 513,
+    "target_idx": 497,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9376795887947083
+  },
+  {
+    "source_idx": 514,
+    "target_idx": 494,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9417892098426819
+  },
+  {
+    "source_idx": 514,
+    "target_idx": 488,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.5585320591926575
+  },
+  {
+    "source_idx": 515,
+    "target_idx": 499,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9439101815223694
+  },
+  {
+    "source_idx": 515,
+    "target_idx": 484,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8812310099601746
+  },
+  {
+    "source_idx": 516,
+    "target_idx": 493,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6909579634666443
+  },
+  {
+    "source_idx": 516,
+    "target_idx": 521,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9127605557441711
+  },
+  {
+    "source_idx": 516,
+    "target_idx": 526,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9889097809791565
+  },
+  {
+    "source_idx": 517,
+    "target_idx": 489,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8155550360679626
+  },
+  {
+    "source_idx": 517,
+    "target_idx": 522,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.917590320110321
+  },
+  {
+    "source_idx": 517,
+    "target_idx": 525,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9236782193183899
+  },
+  {
+    "source_idx": 518,
+    "target_idx": 506,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9506826400756836
+  },
+  {
+    "source_idx": 519,
+    "target_idx": 509,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9270564913749695
+  },
+  {
+    "source_idx": 520,
+    "target_idx": 507,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9383711218833923
+  },
+  {
+    "source_idx": 520,
+    "target_idx": 484,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.6280628442764282
+  },
+  {
+    "source_idx": 521,
+    "target_idx": 516,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9405714869499207
+  },
+  {
+    "source_idx": 522,
+    "target_idx": 517,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9279702305793762
+  },
+  {
+    "source_idx": 523,
+    "target_idx": 497,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9844346642494202
+  },
+  {
+    "source_idx": 523,
+    "target_idx": 488,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9743332862854004
+  },
+  {
+    "source_idx": 523,
+    "target_idx": 486,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8695078492164612
+  },
+  {
+    "source_idx": 523,
+    "target_idx": 494,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9051669836044312
+  },
+  {
+    "source_idx": 524,
+    "target_idx": 496,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9932782053947449
+  },
+  {
+    "source_idx": 524,
+    "target_idx": 487,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9617289900779724
+  },
+  {
+    "source_idx": 524,
+    "target_idx": 483,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9263204336166382
+  },
+  {
+    "source_idx": 524,
+    "target_idx": 498,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8688932061195374
+  },
+  {
+    "source_idx": 525,
+    "target_idx": 509,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9950222969055176
+  },
+  {
+    "source_idx": 525,
+    "target_idx": 517,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.8901774883270264
+  },
+  {
+    "source_idx": 525,
+    "target_idx": 485,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9075241684913635
+  },
+  {
+    "source_idx": 526,
+    "target_idx": 507,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9962037205696106
+  },
+  {
+    "source_idx": 526,
+    "target_idx": 516,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9875713586807251
+  },
+  {
+    "source_idx": 526,
+    "target_idx": 484,
+    "relationship_type": "beam_notegroup",
+    "confidence": 0.9889284372329712
+  },
+  {
+    "source_idx": 31,
+    "target_idx": 20,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7981662750244141
+  },
+  {
+    "source_idx": 42,
+    "target_idx": 63,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7072632312774658
+  },
+  {
+    "source_idx": 44,
+    "target_idx": 35,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.7317771911621094
+  },
+  {
+    "source_idx": 63,
+    "target_idx": 42,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8445179462432861
+  },
+  {
+    "source_idx": 188,
+    "target_idx": 185,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8168952465057373
+  },
+  {
+    "source_idx": 201,
+    "target_idx": 183,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.8275342583656311
+  },
+  {
+    "source_idx": 262,
+    "target_idx": 318,
+    "relationship_type": "stem_notehead",
+    "confidence": 0.9350337982177734
+  }
+]

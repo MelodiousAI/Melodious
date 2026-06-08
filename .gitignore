@@ -55,3 +55,11 @@ yolov8s.pt
 
 # Notebooks with outputs
 notebooks/
+
+# Final submission package (curated evidence; excludes node_modules via FinalProduct/.gitignore)
+!FinalProduct/
+!FinalProduct/melodious-v2/runs/
+!FinalProduct/melodious-v2/artifacts/
+!FinalProduct/melodious-v2/frontend/dist/
+!FinalProduct/**/*.onnx
+!FinalProduct/legacy_evidence/**

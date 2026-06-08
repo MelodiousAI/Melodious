@@ -1,0 +1,46 @@
+{
+  "box_count_delta": 0,
+  "generated_at": "2026-06-04T19:51:35Z",
+  "onnx": {
+    "box_count": 27,
+    "class_counts": {
+      "0": 1,
+      "1": 1,
+      "121": 4,
+      "122": 2,
+      "24": 4,
+      "26": 1,
+      "40": 2,
+      "41": 4,
+      "5": 1,
+      "67": 6,
+      "8": 1
+    },
+    "max_confidence": 0.9809907674789429,
+    "mean_confidence": 0.880961521908089
+  },
+  "onnx_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\detection\\detection_136class_yolov8m_tiled_stem_pilot_img1024_v1\\ultralytics\\train\\weights\\best.onnx",
+  "pytorch": {
+    "box_count": 27,
+    "class_counts": {
+      "0": 1,
+      "1": 1,
+      "121": 4,
+      "122": 2,
+      "24": 4,
+      "26": 1,
+      "40": 2,
+      "41": 4,
+      "5": 1,
+      "67": 6,
+      "8": 1
+    },
+    "max_confidence": 0.9810061454772949,
+    "mean_confidence": 0.8809704515669081
+  },
+  "reason": null,
+  "run_id": "detection_136class_yolov8m_tiled_stem_pilot_img1024_v1",
+  "sample_image": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_tiled_stem_v1/images/val/lg-10247684-aug-gonville--page-2_tile_0000_x0_y0.png",
+  "split": "val",
+  "status": "passed"
+}

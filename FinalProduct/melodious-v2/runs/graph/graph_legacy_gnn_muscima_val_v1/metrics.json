@@ -1,0 +1,144 @@
+{
+  "provenance": {
+    "run_id": "graph_legacy_gnn_muscima_val_v1",
+    "commit": "ab2d550",
+    "config_path": "configs\\gnn_curriculum.yaml",
+    "dataset_id": "muscima_graph_manifest",
+    "split": "val",
+    "taxonomy_id": "semantic_omr_v2",
+    "metric_version": "v2.0",
+    "artifact_sha256": "065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab",
+    "created_at": "2026-05-30T21:48:07.773170Z"
+  },
+  "metrics": {
+    "metric_version": "graph_classification_v2.0",
+    "primary_metric": "positive_macro_f1",
+    "positive_macro_f1": 0.7590456327823909,
+    "accuracy": 0.9049902436999211,
+    "no_relation": {
+      "precision": 0.997066197258228,
+      "recall": 0.8936271931921403,
+      "f1": 0.9425171440096813,
+      "support": 41834,
+      "tp": 37384,
+      "fp": 110,
+      "fn": 4450
+    },
+    "per_class": {
+      "no_relation": {
+        "precision": 0.997066197258228,
+        "recall": 0.8936271931921403,
+        "f1": 0.9425171440096813,
+        "support": 41834,
+        "tp": 37384,
+        "fp": 110,
+        "fn": 4450
+      },
+      "stem_notehead": {
+        "precision": 0.5416510083928348,
+        "recall": 0.9736545823012835,
+        "f1": 0.6960721184803607,
+        "support": 4441,
+        "tp": 4324,
+        "fp": 3659,
+        "fn": 117
+      },
+      "beam_notegroup": {
+        "precision": 0.7004078605858362,
+        "recall": 0.9947340705634544,
+        "f1": 0.8220191470844213,
+        "support": 1899,
+        "tp": 1889,
+        "fp": 808,
+        "fn": 10
+      },
+      "slur_phrase": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "tie_sustained": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "distribution": "natural_candidate_edges",
+    "edge_count": 48174,
+    "positive_edge_count": 6340,
+    "predicted_positive_edge_count": 10680,
+    "page_count": 14,
+    "skipped_page_count": 0,
+    "candidate_graph": {
+      "builder": "legacy_gnn_k_nearest_plus_vertical_overlap",
+      "k_neighbors": 8,
+      "num_staffs": 4,
+      "negative_sampling": "none"
+    },
+    "checkpoint": {
+      "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+      "sha256": "065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab",
+      "epoch": 79,
+      "config": {
+        "num_classes": 15,
+        "hidden_dim": 64,
+        "num_relationships": 5,
+        "num_gat_layers": 3,
+        "num_heads": 8,
+        "symbol_classes": [
+          "notehead-full",
+          "notehead-half",
+          "notehead-whole",
+          "clefG",
+          "clefF",
+          "clefC",
+          "rest-8th",
+          "rest-quarter",
+          "rest-half",
+          "rest-whole",
+          "accidentalSharp",
+          "accidentalFlat",
+          "accidentalNatural",
+          "beam",
+          "stem"
+        ],
+        "relationship_types": [
+          "no_relation",
+          "stem_notehead",
+          "beam_notegroup",
+          "slur_phrase",
+          "tie_sustained"
+        ]
+      }
+    },
+    "feature_encoder": {
+      "source": "reconstructed_training_node_encoder_seed_42",
+      "seed": 42,
+      "note": "The legacy training data used a separate seeded node encoder. V2 reconstructs that encoder because the legacy checkpoint did not save it separately."
+    },
+    "positive_confusion_counts": {
+      "beam_notegroup->beam_notegroup": 1889,
+      "beam_notegroup->no_relation": 3,
+      "beam_notegroup->stem_notehead": 7,
+      "no_relation->beam_notegroup": 798,
+      "no_relation->stem_notehead": 3652,
+      "stem_notehead->beam_notegroup": 10,
+      "stem_notehead->no_relation": 107,
+      "stem_notehead->stem_notehead": 4324
+    },
+    "notes": [
+      "This is the natural candidate-edge distribution for the legacy GNN graph builder.",
+      "The legacy checkpoint was trained with negative subsampling, but this evaluation does not subsample negatives.",
+      "The legacy 15-class GNN cannot represent every V2 detector class.",
+      "The node feature encoder is reconstructed from the legacy training seed because it was not saved as a separate artifact."
+    ]
+  }
+}

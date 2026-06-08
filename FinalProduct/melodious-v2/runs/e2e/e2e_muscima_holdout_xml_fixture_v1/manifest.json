@@ -1,0 +1,1312 @@
+{
+  "run_id": "e2e_muscima_holdout_xml_fixture_v1",
+  "created_at": "2026-05-30T22:05:00.248790+00:00",
+  "source_manifest": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\data\\muscima_graph_manifest\\manifest.json",
+  "split_manifest": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\data\\muscima_graph_manifest\\holdout.json",
+  "split": "holdout",
+  "page_results": [
+    {
+      "page_id": "CVC-MUSCIMA_W-03_N-01_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-03_N-01_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 423,
+      "note_like_count": 163,
+      "relationship_count": 799,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-01_D-ideal\\CVC-MUSCIMA_W-03_N-01_D-ideal.musicxml",
+          "sha256": "9d7ae56c930f369928ebe2f9f42774221d08e9d06cc1dc53359aa17ce2f379bf",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-01_D-ideal\\CVC-MUSCIMA_W-03_N-01_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-01_D-ideal\\CVC-MUSCIMA_W-03_N-01_D-ideal.payload.json",
+          "sha256": "8b60778d6ac945b4f58625a620d58b73d7a0206244f7290c29030257acf8208e",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-01_D-ideal\\CVC-MUSCIMA_W-03_N-01_D-ideal.relationships.json",
+          "sha256": "1ae3a5ff4828b4e2be21a7daad52d3fbd3c7d2fb178fdc7a469623a03187e679",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-03_N-01_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-03_N-01_D-ideal.xml",
+        "parsed_node_count": 859,
+        "mapped_detection_count": 423,
+        "skipped_node_count": 436,
+        "mapped_class_counts": {
+          "accidentalFlat": 6,
+          "accidentalNatural": 9,
+          "accidentalSharp": 8,
+          "beam": 59,
+          "clefCAlto": 3,
+          "clefF": 5,
+          "noteheadBlackOnLine": 151,
+          "noteheadHalfOnLine": 6,
+          "rest8th": 5,
+          "restQuarter": 1,
+          "slur": 11,
+          "stem": 157,
+          "tie": 2
+        },
+        "skipped_class_counts": {
+          "articulationAccent": 1,
+          "articulationStaccato": 22,
+          "augmentationDot": 2,
+          "barline": 27,
+          "breathMark": 1,
+          "characterCapitalL": 2,
+          "characterCapitalM": 4,
+          "characterCapitalP": 2,
+          "characterCapitalR": 1,
+          "characterCapitalT": 2,
+          "characterCapitalV": 1,
+          "characterDot": 1,
+          "characterSmallA": 3,
+          "characterSmallB": 1,
+          "characterSmallC": 6,
+          "characterSmallD": 5,
+          "characterSmallE": 20,
+          "characterSmallF": 6,
+          "characterSmallI": 1,
+          "characterSmallJ": 2,
+          "characterSmallL": 3,
+          "characterSmallM": 5,
+          "characterSmallN": 2,
+          "characterSmallO": 12,
+          "characterSmallP": 12,
+          "characterSmallR": 10,
+          "characterSmallS": 11,
+          "characterSmallT": 4,
+          "characterSmallU": 4,
+          "characterSmallV": 1,
+          "characterSmallZ": 2,
+          "dynamicCrescendoHairpin": 3,
+          "dynamicLetterF": 6,
+          "dynamicLetterM": 4,
+          "dynamicLetterP": 10,
+          "dynamicLetterS": 2,
+          "dynamicsText": 14,
+          "fermataAbove": 2,
+          "flag8thDown": 5,
+          "keySignature": 6,
+          "legerLine": 58,
+          "measureSeparator": 26,
+          "numeral3": 15,
+          "numeral4": 4,
+          "numeral5": 1,
+          "numeral6": 1,
+          "numeral7": 1,
+          "numeral8": 2,
+          "otherText": 9,
+          "rest16th": 2,
+          "staff": 5,
+          "staffLine": 25,
+          "staffSpace": 30,
+          "tempoText": 5,
+          "timeSigCommon": 1,
+          "timeSignature": 7,
+          "tuple": 13,
+          "tupleBracket": 3
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-03_N-07_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-03_N-07_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 427,
+      "note_like_count": 156,
+      "relationship_count": 847,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-07_D-ideal\\CVC-MUSCIMA_W-03_N-07_D-ideal.musicxml",
+          "sha256": "80bd944a818ca2e739f12f3692154974e46eb4ff5801a9885c94222bfffac558",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-07_D-ideal\\CVC-MUSCIMA_W-03_N-07_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-07_D-ideal\\CVC-MUSCIMA_W-03_N-07_D-ideal.payload.json",
+          "sha256": "39882fca1727cad21231a41b369260bf84db8599125a0411b1da7558d50eea8a",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-07_D-ideal\\CVC-MUSCIMA_W-03_N-07_D-ideal.relationships.json",
+          "sha256": "301484c71b5a401e5981a9d3ae31184a8214a00cfb045b872ef29ca533d478d5",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-03_N-07_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-03_N-07_D-ideal.xml",
+        "parsed_node_count": 596,
+        "mapped_detection_count": 427,
+        "skipped_node_count": 169,
+        "mapped_class_counts": {
+          "accidentalNatural": 4,
+          "accidentalSharp": 12,
+          "beam": 70,
+          "clefF": 4,
+          "noteheadBlackOnLine": 154,
+          "noteheadHalfOnLine": 2,
+          "slur": 24,
+          "stem": 156,
+          "tie": 1
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 18,
+          "barline": 17,
+          "barlineHeavy": 2,
+          "characterSmallR": 5,
+          "characterSmallT": 5,
+          "flag16thDown": 1,
+          "flag16thUp": 2,
+          "flag8thDown": 3,
+          "flag8thUp": 9,
+          "keySignature": 3,
+          "legerLine": 22,
+          "measureSeparator": 16,
+          "numeral3": 1,
+          "numeral4": 1,
+          "ornamentTrill": 5,
+          "repeat": 3,
+          "repeatDot": 6,
+          "rest16th": 1,
+          "staff": 4,
+          "staffLine": 20,
+          "staffSpace": 24,
+          "timeSignature": 1
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-03_N-18_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-03_N-18_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 527,
+      "note_like_count": 228,
+      "relationship_count": 780,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-18_D-ideal\\CVC-MUSCIMA_W-03_N-18_D-ideal.musicxml",
+          "sha256": "06588b2672027887ea8fb42727a46762d73a0bf6940d7d6f688c7ef5056cdb41",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-18_D-ideal\\CVC-MUSCIMA_W-03_N-18_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-18_D-ideal\\CVC-MUSCIMA_W-03_N-18_D-ideal.payload.json",
+          "sha256": "43f946e0c617ee09fb1ed4be161ef2bc3d81a4ee81111cf86855c15b26d3915f",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-03_N-18_D-ideal\\CVC-MUSCIMA_W-03_N-18_D-ideal.relationships.json",
+          "sha256": "bde00da8c2a8f031158071ec5b8e653bf84226aac12c49678f43f65f0c15812c",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-03_N-18_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-03_N-18_D-ideal.xml",
+        "parsed_node_count": 854,
+        "mapped_detection_count": 527,
+        "skipped_node_count": 327,
+        "mapped_class_counts": {
+          "accidentalFlat": 1,
+          "accidentalNatural": 2,
+          "accidentalSharp": 81,
+          "beam": 23,
+          "clefF": 2,
+          "clefG": 6,
+          "noteheadBlackOnLine": 180,
+          "noteheadHalfOnLine": 8,
+          "rest8th": 11,
+          "restHalf": 17,
+          "restQuarter": 7,
+          "restWhole": 5,
+          "slur": 19,
+          "stem": 152,
+          "tie": 13
+        },
+        "skipped_class_counts": {
+          "accidentalDoubleSharp": 6,
+          "articulationAccent": 17,
+          "articulationStaccato": 1,
+          "augmentationDot": 18,
+          "barline": 8,
+          "brace": 3,
+          "characterSmallF": 15,
+          "characterSmallP": 1,
+          "dynamicCrescendoHairpin": 3,
+          "dynamicLetterF": 15,
+          "dynamicLetterP": 1,
+          "dynamicsText": 9,
+          "flag16thDown": 18,
+          "flag8thDown": 14,
+          "flag8thUp": 1,
+          "keySignature": 6,
+          "legerLine": 67,
+          "measureSeparator": 6,
+          "rest16th": 6,
+          "staff": 9,
+          "staffGrouping": 4,
+          "staffLine": 45,
+          "staffSpace": 54
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-09_N-06_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-09_N-06_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 452,
+      "note_like_count": 171,
+      "relationship_count": 590,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-06_D-ideal\\CVC-MUSCIMA_W-09_N-06_D-ideal.musicxml",
+          "sha256": "61717cdb5fd56e758432fcbf805865e447acd989529b807a7409965584faabf7",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-06_D-ideal\\CVC-MUSCIMA_W-09_N-06_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-06_D-ideal\\CVC-MUSCIMA_W-09_N-06_D-ideal.payload.json",
+          "sha256": "45b08cc91c0f694ed9a135e5952bb2d1c66a25f94fa22ac071475904e7fea5c4",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-06_D-ideal\\CVC-MUSCIMA_W-09_N-06_D-ideal.relationships.json",
+          "sha256": "e37b390b0e85e8723bc3cfa733b8941c39d72a3b381d53b8ec3cb647448e109f",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-09_N-06_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-09_N-06_D-ideal.xml",
+        "parsed_node_count": 956,
+        "mapped_detection_count": 452,
+        "skipped_node_count": 504,
+        "mapped_class_counts": {
+          "accidentalFlat": 43,
+          "accidentalNatural": 40,
+          "accidentalSharp": 12,
+          "beam": 25,
+          "clefCAlto": 6,
+          "noteheadBlackOnLine": 74,
+          "noteheadBlackOnLineSmall": 20,
+          "noteheadHalfOnLine": 33,
+          "rest8th": 34,
+          "restQuarter": 10,
+          "slur": 11,
+          "stem": 127,
+          "tie": 17
+        },
+        "skipped_class_counts": {
+          "articulationStaccato": 13,
+          "augmentationDot": 44,
+          "barline": 62,
+          "characterDot": 3,
+          "characterSmallA": 2,
+          "characterSmallC": 6,
+          "characterSmallD": 2,
+          "characterSmallE": 3,
+          "characterSmallF": 15,
+          "characterSmallG": 2,
+          "characterSmallI": 2,
+          "characterSmallL": 1,
+          "characterSmallM": 2,
+          "characterSmallO": 9,
+          "characterSmallP": 22,
+          "characterSmallR": 15,
+          "characterSmallS": 10,
+          "characterSmallT": 13,
+          "dynamicDiminuendoHairpin": 3,
+          "dynamicLetterF": 15,
+          "dynamicLetterP": 18,
+          "dynamicLetterS": 9,
+          "dynamicsText": 17,
+          "flag16thUp": 2,
+          "flag8thDown": 10,
+          "flag8thUp": 4,
+          "keySignature": 6,
+          "legerLine": 40,
+          "measureSeparator": 62,
+          "ornamentTrill": 13,
+          "otherText": 4,
+          "staff": 6,
+          "staffLine": 30,
+          "staffSpace": 36,
+          "wiggleTrill": 3
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-09_N-13_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-09_N-13_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 361,
+      "note_like_count": 153,
+      "relationship_count": 568,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-13_D-ideal\\CVC-MUSCIMA_W-09_N-13_D-ideal.musicxml",
+          "sha256": "81a6a8c7442d2ee44f5500f74c2c79239fa64fae0e453c007f880b00f54e7d24",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-13_D-ideal\\CVC-MUSCIMA_W-09_N-13_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-13_D-ideal\\CVC-MUSCIMA_W-09_N-13_D-ideal.payload.json",
+          "sha256": "ca7fd9cb5c487a297d2281c89932c114250d14dd0f4da8d5de160242d0d485cb",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-09_N-13_D-ideal\\CVC-MUSCIMA_W-09_N-13_D-ideal.relationships.json",
+          "sha256": "5f78aee3a3014d10ecdb7940109ae595757ec9bcd3b80b2d0d5da9233e3a92e9",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-09_N-13_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-09_N-13_D-ideal.xml",
+        "parsed_node_count": 691,
+        "mapped_detection_count": 361,
+        "skipped_node_count": 330,
+        "mapped_class_counts": {
+          "accidentalFlat": 29,
+          "accidentalNatural": 22,
+          "beam": 16,
+          "clefCAlto": 5,
+          "noteheadBlackOnLine": 114,
+          "noteheadHalfOnLine": 3,
+          "rest8th": 35,
+          "restQuarter": 1,
+          "slur": 21,
+          "stem": 115
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 5,
+          "barline": 37,
+          "characterCapitalM": 1,
+          "characterDot": 4,
+          "characterSmallA": 1,
+          "characterSmallC": 6,
+          "characterSmallD": 3,
+          "characterSmallE": 6,
+          "characterSmallF": 11,
+          "characterSmallI": 4,
+          "characterSmallM": 5,
+          "characterSmallN": 2,
+          "characterSmallO": 10,
+          "characterSmallP": 2,
+          "characterSmallR": 4,
+          "characterSmallS": 6,
+          "characterSmallT": 3,
+          "characterSmallU": 1,
+          "dottedHorizontalSpanner": 1,
+          "dynamicLetterF": 11,
+          "dynamicLetterM": 2,
+          "dynamicLetterS": 2,
+          "dynamicsText": 9,
+          "flag16thUp": 1,
+          "flag8thDown": 29,
+          "flag8thUp": 12,
+          "instrumentSpecific": 2,
+          "keySignature": 5,
+          "legerLine": 40,
+          "measureSeparator": 36,
+          "numeral2": 1,
+          "numeral4": 1,
+          "otherText": 5,
+          "staff": 5,
+          "staffLine": 25,
+          "staffSpace": 30,
+          "tempoText": 1,
+          "timeSignature": 1
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-10_N-07_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-10_N-07_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 434,
+      "note_like_count": 157,
+      "relationship_count": 807,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-10_N-07_D-ideal\\CVC-MUSCIMA_W-10_N-07_D-ideal.musicxml",
+          "sha256": "45093da2f3d6dd55e0c4f8b7bb19f47d0044cd1987baf993d5afbaa5ca0d1468",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-10_N-07_D-ideal\\CVC-MUSCIMA_W-10_N-07_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-10_N-07_D-ideal\\CVC-MUSCIMA_W-10_N-07_D-ideal.payload.json",
+          "sha256": "2112b696738a94603c93202715554ffd9e3e59d3faab37a609be74f5a266c7e4",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-10_N-07_D-ideal\\CVC-MUSCIMA_W-10_N-07_D-ideal.relationships.json",
+          "sha256": "789878bdf79221e05fbb2b7d448149374131384d2d1b84f470fb26f9909faf30",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-10_N-07_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-10_N-07_D-ideal.xml",
+        "parsed_node_count": 607,
+        "mapped_detection_count": 434,
+        "skipped_node_count": 173,
+        "mapped_class_counts": {
+          "accidentalNatural": 4,
+          "accidentalSharp": 13,
+          "beam": 71,
+          "clefF": 4,
+          "noteheadBlackOnLine": 155,
+          "noteheadHalfOnLine": 2,
+          "slur": 28,
+          "stem": 157
+        },
+        "skipped_class_counts": {
+          "articulationStaccato": 1,
+          "augmentationDot": 18,
+          "barline": 18,
+          "barlineHeavy": 2,
+          "characterSmallR": 5,
+          "characterSmallT": 5,
+          "flag16thDown": 1,
+          "flag16thUp": 1,
+          "flag8thDown": 3,
+          "flag8thUp": 10,
+          "keySignature": 4,
+          "legerLine": 22,
+          "measureSeparator": 17,
+          "numeral3": 1,
+          "numeral4": 1,
+          "ornamentTrill": 5,
+          "repeat": 3,
+          "repeatDot": 6,
+          "rest16th": 1,
+          "staff": 4,
+          "staffLine": 20,
+          "staffSpace": 24,
+          "timeSignature": 1
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-11_N-09_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-11_N-09_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 351,
+      "note_like_count": 134,
+      "relationship_count": 558,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-09_D-ideal\\CVC-MUSCIMA_W-11_N-09_D-ideal.musicxml",
+          "sha256": "803f8c605dee980d08c0f4e31d0bce949203a3564e13861e97904c01fac11dbc",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-09_D-ideal\\CVC-MUSCIMA_W-11_N-09_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-09_D-ideal\\CVC-MUSCIMA_W-11_N-09_D-ideal.payload.json",
+          "sha256": "b3a3ea2eb015708be6a047c8b6e885b2c48c1354a1319ff096bafc6c1b3916dc",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-09_D-ideal\\CVC-MUSCIMA_W-11_N-09_D-ideal.relationships.json",
+          "sha256": "a0cfbb56131af5a5348d7f6e8664a505ed6cc1cd6e98095812e56cc7d19e5e03",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-11_N-09_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-11_N-09_D-ideal.xml",
+        "parsed_node_count": 535,
+        "mapped_detection_count": 351,
+        "skipped_node_count": 184,
+        "mapped_class_counts": {
+          "accidentalFlat": 1,
+          "accidentalNatural": 4,
+          "accidentalSharp": 8,
+          "beam": 33,
+          "clefF": 4,
+          "noteheadBlackOnLine": 129,
+          "noteheadHalfOnLine": 5,
+          "slur": 33,
+          "stem": 134
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 3,
+          "barline": 26,
+          "characterSmallR": 1,
+          "characterSmallT": 1,
+          "fermataAbove": 1,
+          "keySignature": 5,
+          "legerLine": 26,
+          "measureSeparator": 24,
+          "numeral3": 1,
+          "numeral4": 1,
+          "ornamentTrill": 1,
+          "repeat": 3,
+          "repeatDot": 6,
+          "staff": 7,
+          "staffLine": 35,
+          "staffSpace": 42,
+          "timeSignature": 1
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-11_N-12_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-11_N-12_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 518,
+      "note_like_count": 189,
+      "relationship_count": 1127,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-12_D-ideal\\CVC-MUSCIMA_W-11_N-12_D-ideal.musicxml",
+          "sha256": "3bb50c13585803f6efe93ac6777108f005cb3b0a08dcf534494a002d176439a2",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-12_D-ideal\\CVC-MUSCIMA_W-11_N-12_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-12_D-ideal\\CVC-MUSCIMA_W-11_N-12_D-ideal.payload.json",
+          "sha256": "87af752387ea3b963ded8c09669a6507d0fc75d3b34c9f96d22c066d0441059f",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-11_N-12_D-ideal\\CVC-MUSCIMA_W-11_N-12_D-ideal.relationships.json",
+          "sha256": "bce6f04c99b3e55970df50b8a5b7f1525cf657a99e4fb843c9672f7e2bc8ceec",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-11_N-12_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-11_N-12_D-ideal.xml",
+        "parsed_node_count": 705,
+        "mapped_detection_count": 518,
+        "skipped_node_count": 187,
+        "mapped_class_counts": {
+          "accidentalNatural": 7,
+          "accidentalSharp": 30,
+          "beam": 74,
+          "clefCAlto": 2,
+          "clefF": 2,
+          "clefG": 4,
+          "noteheadBlackOnLine": 177,
+          "noteheadHalfOnLine": 12,
+          "slur": 5,
+          "stem": 188,
+          "tie": 17
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 7,
+          "barline": 7,
+          "barlineHeavy": 2,
+          "characterDot": 2,
+          "flag8thDown": 3,
+          "horizontalSpanner": 2,
+          "keySignature": 8,
+          "legerLine": 17,
+          "measureSeparator": 6,
+          "numeral1": 1,
+          "numeral2": 1,
+          "otherNumericSign": 2,
+          "repeat": 2,
+          "repeatDot": 16,
+          "staff": 9,
+          "staffLine": 45,
+          "staffSpace": 54,
+          "unclassified": 1,
+          "volta": 2
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-13_N-03_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-13_N-03_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 409,
+      "note_like_count": 180,
+      "relationship_count": 673,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-13_N-03_D-ideal\\CVC-MUSCIMA_W-13_N-03_D-ideal.musicxml",
+          "sha256": "072711f0858e88c035ba817e26124fa748ed1e1dcbb0dd8cfeae8b59f2337a68",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-13_N-03_D-ideal\\CVC-MUSCIMA_W-13_N-03_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-13_N-03_D-ideal\\CVC-MUSCIMA_W-13_N-03_D-ideal.payload.json",
+          "sha256": "ec6c0e4f5f4ccc6c39e040595c497ea4d074a561fcf851c577e5bcab573f8414",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-13_N-03_D-ideal\\CVC-MUSCIMA_W-13_N-03_D-ideal.relationships.json",
+          "sha256": "83636f9e341afb2aae6895523857960d7ff6e5cfbe480d276eb354f5ed86d477",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-13_N-03_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-13_N-03_D-ideal.xml",
+        "parsed_node_count": 555,
+        "mapped_detection_count": 409,
+        "skipped_node_count": 146,
+        "mapped_class_counts": {
+          "accidentalSharp": 26,
+          "beam": 22,
+          "clefCAlto": 5,
+          "clefF": 1,
+          "clefG": 1,
+          "noteheadBlackOnLine": 154,
+          "restQuarter": 16,
+          "restWhole": 10,
+          "slur": 20,
+          "stem": 154
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 4,
+          "barline": 9,
+          "brace": 1,
+          "bracket": 1,
+          "flag8thDown": 4,
+          "legerLine": 11,
+          "measureSeparator": 8,
+          "numeral3": 7,
+          "numeral4": 7,
+          "staff": 7,
+          "staffGrouping": 3,
+          "staffLine": 35,
+          "staffSpace": 42,
+          "timeSignature": 7
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-20_N-03_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-20_N-03_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 410,
+      "note_like_count": 180,
+      "relationship_count": 685,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-20_N-03_D-ideal\\CVC-MUSCIMA_W-20_N-03_D-ideal.musicxml",
+          "sha256": "889b1d2898fc3db5bb14a4cf60856493b858ff2502b32d3e886df28994601ded",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-20_N-03_D-ideal\\CVC-MUSCIMA_W-20_N-03_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-20_N-03_D-ideal\\CVC-MUSCIMA_W-20_N-03_D-ideal.payload.json",
+          "sha256": "dafa3f9c2c89ecd0106c2288a27b125bfe6bf7aa1c997c5e99a628ecd6f66aa6",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-20_N-03_D-ideal\\CVC-MUSCIMA_W-20_N-03_D-ideal.relationships.json",
+          "sha256": "a9d60b3288a7eb7037e532ec9717a5e7bebff07a756a120c476f07c31adaa0fc",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-20_N-03_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-20_N-03_D-ideal.xml",
+        "parsed_node_count": 555,
+        "mapped_detection_count": 410,
+        "skipped_node_count": 145,
+        "mapped_class_counts": {
+          "accidentalSharp": 26,
+          "beam": 22,
+          "clefCAlto": 5,
+          "clefF": 1,
+          "clefG": 1,
+          "noteheadBlackOnLine": 154,
+          "restQuarter": 16,
+          "restWhole": 10,
+          "slur": 4,
+          "stem": 154,
+          "tie": 17
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 4,
+          "barline": 8,
+          "brace": 1,
+          "bracket": 1,
+          "flag8thDown": 4,
+          "legerLine": 12,
+          "measureSeparator": 8,
+          "numeral3": 7,
+          "numeral4": 7,
+          "staff": 7,
+          "staffGrouping": 2,
+          "staffLine": 35,
+          "staffSpace": 42,
+          "timeSignature": 7
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-21_N-05_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-21_N-05_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 424,
+      "note_like_count": 178,
+      "relationship_count": 677,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-21_N-05_D-ideal\\CVC-MUSCIMA_W-21_N-05_D-ideal.musicxml",
+          "sha256": "74540b811a394f09d1ce6081d4fbac8fcd3de871c74ef81ca32e89804436c339",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-21_N-05_D-ideal\\CVC-MUSCIMA_W-21_N-05_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-21_N-05_D-ideal\\CVC-MUSCIMA_W-21_N-05_D-ideal.payload.json",
+          "sha256": "896a347ca374b532023cd50da13ad196097aed29cc5b3ef21d3ba4b43cfdc449",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-21_N-05_D-ideal\\CVC-MUSCIMA_W-21_N-05_D-ideal.relationships.json",
+          "sha256": "21172006cdaf83c88173c41bd092b0bb469bc9cdab96d94632b99126016f6719",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-21_N-05_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-21_N-05_D-ideal.xml",
+        "parsed_node_count": 690,
+        "mapped_detection_count": 424,
+        "skipped_node_count": 266,
+        "mapped_class_counts": {
+          "accidentalFlat": 16,
+          "accidentalNatural": 14,
+          "beam": 42,
+          "clefCAlto": 1,
+          "clefF": 1,
+          "clefG": 5,
+          "noteheadBlackOnLine": 159,
+          "noteheadHalfOnLine": 1,
+          "rest8th": 18,
+          "stem": 160,
+          "tie": 7
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 48,
+          "barline": 6,
+          "brace": 2,
+          "bracket": 1,
+          "characterOther": 6,
+          "characterSmallR": 3,
+          "characterSmallT": 3,
+          "flag16thDown": 8,
+          "flag16thUp": 14,
+          "flag8thDown": 30,
+          "flag8thUp": 33,
+          "keySignature": 7,
+          "legerLine": 10,
+          "measureSeparator": 4,
+          "ornamentTrill": 3,
+          "staff": 7,
+          "staffGrouping": 4,
+          "staffLine": 35,
+          "staffSpace": 42
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-23_N-06_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-23_N-06_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 454,
+      "note_like_count": 171,
+      "relationship_count": 577,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-23_N-06_D-ideal\\CVC-MUSCIMA_W-23_N-06_D-ideal.musicxml",
+          "sha256": "432e722430f2d46b54a865c0cdb1ebd327244a138fc9998cb89981d10aadc955",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-23_N-06_D-ideal\\CVC-MUSCIMA_W-23_N-06_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-23_N-06_D-ideal\\CVC-MUSCIMA_W-23_N-06_D-ideal.payload.json",
+          "sha256": "02b1aac9123a00b990e00e7f4f24a5e1e83496d665b75abcbbb840792116ad52",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-23_N-06_D-ideal\\CVC-MUSCIMA_W-23_N-06_D-ideal.relationships.json",
+          "sha256": "d5b6703c37956f570d0606fe506da212c368006218f0d6948104f87bc349253f",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-23_N-06_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-23_N-06_D-ideal.xml",
+        "parsed_node_count": 933,
+        "mapped_detection_count": 454,
+        "skipped_node_count": 479,
+        "mapped_class_counts": {
+          "accidentalFlat": 43,
+          "accidentalNatural": 44,
+          "accidentalSharp": 9,
+          "beam": 25,
+          "clefCAlto": 6,
+          "noteheadBlackOnLine": 74,
+          "noteheadBlackOnLineSmall": 20,
+          "noteheadHalfOnLine": 33,
+          "rest8th": 34,
+          "restQuarter": 10,
+          "slur": 8,
+          "stem": 127,
+          "tie": 21
+        },
+        "skipped_class_counts": {
+          "articulationStaccato": 11,
+          "augmentationDot": 42,
+          "barline": 63,
+          "characterCapitalT": 1,
+          "characterDot": 3,
+          "characterSmallA": 2,
+          "characterSmallC": 6,
+          "characterSmallD": 2,
+          "characterSmallE": 3,
+          "characterSmallF": 13,
+          "characterSmallG": 2,
+          "characterSmallI": 2,
+          "characterSmallL": 1,
+          "characterSmallM": 2,
+          "characterSmallO": 9,
+          "characterSmallP": 15,
+          "characterSmallR": 15,
+          "characterSmallS": 8,
+          "characterSmallT": 12,
+          "dynamicDiminuendoHairpin": 3,
+          "dynamicLetterF": 13,
+          "dynamicLetterP": 11,
+          "dynamicLetterS": 7,
+          "dynamicsText": 15,
+          "flag16thUp": 2,
+          "flag8thDown": 10,
+          "flag8thUp": 4,
+          "keySignature": 6,
+          "legerLine": 40,
+          "measureSeparator": 63,
+          "ornamentTrill": 13,
+          "otherText": 4,
+          "staff": 6,
+          "staffLine": 30,
+          "staffSpace": 36,
+          "tempoText": 1,
+          "wiggleTrill": 3
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-25_N-20_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-25_N-20_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 619,
+      "note_like_count": 275,
+      "relationship_count": 1107,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-25_N-20_D-ideal\\CVC-MUSCIMA_W-25_N-20_D-ideal.musicxml",
+          "sha256": "f63883671395229e2591f16090f2cc9fdf16672efcdbf4577c19212830c148c6",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-25_N-20_D-ideal\\CVC-MUSCIMA_W-25_N-20_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-25_N-20_D-ideal\\CVC-MUSCIMA_W-25_N-20_D-ideal.payload.json",
+          "sha256": "95e85b258654ac1eb1268306bce57b4c9b17ce18d5ddacd71a47ce460ee5d2c9",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-25_N-20_D-ideal\\CVC-MUSCIMA_W-25_N-20_D-ideal.relationships.json",
+          "sha256": "1d10530a351513185c947b097240f1965b2a79357c57b971b62e527f47775650",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-25_N-20_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-25_N-20_D-ideal.xml",
+        "parsed_node_count": 832,
+        "mapped_detection_count": 619,
+        "skipped_node_count": 213,
+        "mapped_class_counts": {
+          "accidentalFlat": 5,
+          "accidentalNatural": 5,
+          "accidentalSharp": 12,
+          "beam": 31,
+          "clefF": 2,
+          "clefG": 6,
+          "noteheadBlackOnLine": 213,
+          "noteheadHalfOnLine": 57,
+          "noteheadWholeOnLine": 5,
+          "slur": 48,
+          "stem": 232,
+          "tie": 3
+        },
+        "skipped_class_counts": {
+          "augmentationDot": 19,
+          "barline": 5,
+          "characterSmallF": 4,
+          "characterSmallP": 8,
+          "dynamicCrescendoHairpin": 8,
+          "dynamicDiminuendoHairpin": 16,
+          "dynamicLetterF": 4,
+          "dynamicLetterP": 8,
+          "dynamicsText": 12,
+          "flag8thDown": 9,
+          "flag8thUp": 4,
+          "legerLine": 3,
+          "measureSeparator": 3,
+          "staff": 9,
+          "staffGrouping": 2,
+          "staffLine": 45,
+          "staffSpace": 54
+        }
+      }
+    },
+    {
+      "page_id": "CVC-MUSCIMA_W-38_N-18_D-ideal",
+      "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-38_N-18_D-ideal.xml",
+      "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+      "assembly_mode": {
+        "requested_mode": "gnn",
+        "applied_mode": "gnn",
+        "fallback_applied": false,
+        "fallback_reason": null,
+        "checkpoint_ready": true,
+        "checkpoint_path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+        "adapter_name": "legacy_muscima_gat",
+        "inference_ran": true,
+        "warnings": []
+      },
+      "detection_count": 539,
+      "note_like_count": 228,
+      "relationship_count": 842,
+      "musicxml_valid": true,
+      "midi_generated": true,
+      "page_success": true,
+      "failure_reasons": [],
+      "artifacts": {
+        "musicxml": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-38_N-18_D-ideal\\CVC-MUSCIMA_W-38_N-18_D-ideal.musicxml",
+          "sha256": "7721d6800a11fb5fb6ca583386a8202bab59e0a07c1c4f2065b661e78c4d1050",
+          "content_type": "application/vnd.recordare.musicxml+xml"
+        },
+        "midi": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-38_N-18_D-ideal\\CVC-MUSCIMA_W-38_N-18_D-ideal.mid",
+          "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+          "content_type": "audio/midi"
+        },
+        "payload": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-38_N-18_D-ideal\\CVC-MUSCIMA_W-38_N-18_D-ideal.payload.json",
+          "sha256": "038df30c9a4a78bcbd910f9d6388702b20fc9a5684020b78ec3fb3f00c6c578b",
+          "content_type": "application/json"
+        },
+        "relationships": {
+          "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\e2e\\e2e_muscima_holdout_xml_fixture_v1\\exports\\CVC-MUSCIMA_W-38_N-18_D-ideal\\CVC-MUSCIMA_W-38_N-18_D-ideal.relationships.json",
+          "sha256": "67c8b1f0698ab51cfe04352d42179bdf265d7bf5ee73b1dafe55836e9664a0ae",
+          "content_type": "application/json"
+        }
+      },
+      "payload_summary": {
+        "page_id": "CVC-MUSCIMA_W-38_N-18_D-ideal",
+        "source_xml": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\data\\muscima-pp\\v2.0\\data\\annotations\\CVC-MUSCIMA_W-38_N-18_D-ideal.xml",
+        "parsed_node_count": 831,
+        "mapped_detection_count": 539,
+        "skipped_node_count": 292,
+        "mapped_class_counts": {
+          "accidentalFlat": 1,
+          "accidentalNatural": 2,
+          "accidentalSharp": 82,
+          "beam": 35,
+          "clefF": 2,
+          "clefG": 6,
+          "noteheadBlackOnLine": 180,
+          "noteheadHalfOnLine": 8,
+          "rest8th": 10,
+          "restHalf": 17,
+          "restQuarter": 7,
+          "restWhole": 6,
+          "slur": 20,
+          "stem": 150,
+          "tie": 13
+        },
+        "skipped_class_counts": {
+          "accidentalDoubleSharp": 6,
+          "articulationAccent": 16,
+          "augmentationDot": 19,
+          "barline": 7,
+          "brace": 3,
+          "bracket": 1,
+          "characterSmallF": 11,
+          "characterSmallP": 1,
+          "dynamicCrescendoHairpin": 2,
+          "dynamicLetterF": 11,
+          "dynamicLetterP": 1,
+          "dynamicsText": 7,
+          "flag16thDown": 6,
+          "flag8thDown": 13,
+          "flag8thUp": 1,
+          "keySignature": 6,
+          "legerLine": 69,
+          "measureSeparator": 6,
+          "rest16th": 6,
+          "staff": 8,
+          "staffGrouping": 4,
+          "staffLine": 40,
+          "staffSpace": 48
+        }
+      }
+    }
+  ]
+}

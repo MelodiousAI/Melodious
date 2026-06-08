@@ -1,0 +1,37 @@
+{
+    "dataset_id":  "deepscores_136_yolo_tiled_stem_pilot_v1",
+    "generated_at":  "2026-06-04T13:00:28Z",
+    "source_dataset_dir":  "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_tiled_stem_v1",
+    "dataset_yaml":  "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/dataset.yaml",
+    "sampling":  {
+                     "test_tiles":  2500,
+                     "train_tiles":  12000,
+                     "seeds":  {
+                                   "train":  4907,
+                                   "val":  4908,
+                                   "test":  4909
+                               },
+                     "val_tiles":  2500
+                 },
+    "note":  "No image or label files are duplicated. List files point to the full tiled dataset and preserve the 136-class label contract.",
+    "splits":  [
+                   {
+                       "split":  "train",
+                       "available":  88137,
+                       "selected":  12000,
+                       "list":  "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/train.txt"
+                   },
+                   {
+                       "split":  "val",
+                       "available":  10709,
+                       "selected":  2500,
+                       "list":  "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/val.txt"
+                   },
+                   {
+                       "split":  "test",
+                       "available":  26019,
+                       "selected":  2500,
+                       "list":  "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/test.txt"
+                   }
+               ]
+}

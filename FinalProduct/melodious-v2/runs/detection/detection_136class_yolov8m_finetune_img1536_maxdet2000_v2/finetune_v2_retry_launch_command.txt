@@ -1,0 +1,1 @@
+$env:PYTHONPATH='src'; & '..\.venv\Scripts\python.exe' 'scripts\run_detection_136class_yolo.py' --run-id detection_136class_yolov8m_finetune_img1536_maxdet2000_v2 --model 'runs\detection\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\ultralytics\train\weights\best.pt' --epochs 50 --imgsz 1536 --batch 1 --workers 0 --device 0 --patience 15 --max-det 2000

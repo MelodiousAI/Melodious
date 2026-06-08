@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "duplicate_page_ids": {
+      "count": 0,
+      "duplicates": [],
+      "status": "passed"
+    }
+  },
+  "dataset_id": "muscima_graph_manifest",
+  "status": "passed"
+}

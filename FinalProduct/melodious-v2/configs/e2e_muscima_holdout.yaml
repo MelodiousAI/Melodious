@@ -1,0 +1,17 @@
+run_family: e2e_muscima_holdout_export
+dataset_id: muscima_graph_manifest
+split: holdout
+payload_source: muscima_xml_ground_truth_payload_fixture
+detector_mode: ground_truth_xml_fixture
+assembly_mode: gnn
+gnn_checkpoint: ../outputs/gnn_checkpoint.pt
+export:
+  musicxml: true
+  midi: true
+metrics:
+  primary: musicxml_validity_rate
+  metric_kind: measured_export_validity_with_ground_truth_xml_payloads
+notes:
+  - This run measures export validity from fixed MUSCIMA XML-derived payload fixtures.
+  - This run does not claim trained uploaded-image detector quality.
+  - Uploaded-image detector inference remains heuristic_bootstrap until an ONNX adapter is wired and tested.

@@ -1,0 +1,601 @@
+Search complete. Found 522 matches:
+File: c:\Users\ahmad\Downloads\frontend\agent.md
+Line 69: │   │   │   ├── approvals/       # Approval workflows (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\agent.md
+Line 140: - Multi-stage approval processes (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\agent.md
+Line 142: - Document approval within stages (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\agent.md
+Line 177: - Form review and approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\agent.md
+Line 193: - Approval workflows (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\agent.md
+Line 222: - Payment approval workflows (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\CLAUDE.md
+Line 8: **Vendorsify** is a procurement and vendor management SaaS platform built with Next.js 15.2.4 (App Router), React 19.1.0, TypeScript 5, and Tailwind CSS 4. The application enables vendor relationship  (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\CLAUDE.md
+Line 39: - `/approvals` - Approval workflows (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\CLAUDE.md
+Line 250: - Multi-stage approval processes with task assignment (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\CLAUDE.md
+Line 251: - Document approval within stages (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\db-schema.md
+Line 224: onboardingFee: text("onboarding_fee"), (Matched: onboarding)
+
+File: c:\Users\ahmad\Downloads\frontend\db-schema.md
+Line 151: // === InfoSec & Risk === (Matched: infosec)
+
+File: c:\Users\ahmad\Downloads\frontend\DESIGN_RECOMMENDATIONS.md
+Line 205: ## 5) Approvals & Team Face Cards (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\DESIGN_RECOMMENDATIONS.md
+Line 207: ### 5.1 Approval stepper with avatars (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\DESIGN_RECOMMENDATIONS.md
+Line 208: - **Area**: Workflow approvals, stage review, assessment review (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\permissionssystem.md
+Line 1534: | Workflows | `/approvals` | Top-level menu | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 65: description: 'Complete 6-step wizard to add contracts without approval workflow', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 125: description: 'Set up automated approval workflows', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 133: title: 'Managing Approvals', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 134: description: 'Approve, reject, and track approval requests', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 135: href: '/guides/approvals/managing', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 405: {/* Workflow & Approvals Section */} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 410: <h2 className="text-lg font-extrabold text-slate-900 tracking-tight">Workflows & Approvals</h2> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-guides-page.js
+Line 412: <p className="text-xs text-slate-500 font-semibold tracking-wide">Set up automated workflows and manage approval processes</p> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-write.js
+Line 59: description: 'Complete 6-step wizard to add contracts without approval workflow', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-write.js
+Line 119: description: 'Set up automated approval workflows', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-write.js
+Line 127: title: 'Managing Approvals', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-write.js
+Line 128: description: 'Approve, reject, and track approval requests', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-write.js
+Line 129: href: '/guides/approvals/managing', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\temp-write.js
+Line 340: <GuideGrid title="Workflows & Approvals" description="Set up automated workflows and manage approval processes" icon={ArrowPathIcon} guides={filteredWorkflowGuides} /> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\URL_SYNC_CHANGELOG.md
+Line 107: | `src/app/(authenticated)/approvals/page.tsx` | `?modal=` | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\docs\AI_ROADMAP_LOW_COST.md
+Line 22: - Workflows and approval stages: `src/app/lib/api/workflows.ts` (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 75: "/approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 94: "Approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 107: Approvals: 2, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 195: Feature: "Approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 196: "Route/Entry Point": "/approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 198: "Expected Result": "Approval action is saved and visible immediately in approvals list.", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 199: "Update Propagation Check": "Verify approval status is consistent in approvals, workflow details, and dashboard counters.", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 209: "Update Propagation Check": "Confirm updates propagate to contracts list, vendor linked views, approvals context, dashboard views, and reports where applicable.", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 288: Feature: "Approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 289: "Route/Entry Point": "/approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 290: Scenario: "Verify approvals queue updates when workflow tasks are completed", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 292: "Update Propagation Check": "Confirm approval changes are mirrored in workflow details and dashboard task summaries.", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 595: return "Verify stage and workflow status updates are reflected in approvals and related contract context."; (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 802: if (/(vendor|contract|workflow|approval|issue|risk|procurement|sourcing|form|dashboard|report|finance)/.test(text)) { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 862: if (route.startsWith("/approvals")) { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\generate-demo-ui-test-checklist.js
+Line 863: return "Approvals"; (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\seed-home-data.js
+Line 3: Node script to create six tasks and six approvals assigned to the (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\seed-home-data.js
+Line 69: name: `Script approval #${seq}`, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\seed-home-data.js
+Line 71: type: 'Approval', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\scripts\seed-home-data.js
+Line 132: console.log('creating approval workflows...'); (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\views.json
+Line 64: "url": "/approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\views.json
+Line 429: "name": "Guide: Managing Approvals", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\views.json
+Line 430: "url": "/guides/approvals/managing", (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 8: import { fetchApprovalWorkflowsView } from '@/app/lib/api/workflows' (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 23: const ApprovalsStatusCard = dynamic(() => import('@/app/lib/components/cards/ApprovalsStatusCard'), { ssr: false }); (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 37: if (typeLower === 'new contract' || typeLower === 'approval') return { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200' }; (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 46: { id: "1", label: "All Approvals" }, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 47: { id: "2", label: "My Approvals" }, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 92: const [approvalWorkflowsData, setApprovalWorkflowsData] = useState<any>(null) (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 262: const data = await fetchApprovalWorkflowsView() (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 264: setApprovalWorkflowsData(data) (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 280: const workflowStatuses = approvalWorkflowsData?.allWorkflows?.map((workflow: any) => workflow.status?.trim() || null) || [] (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 282: }, [approvalWorkflowsData, selectedStatuses]) (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 288: const filteredApprovalWorkflow = useMemo(() => { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 289: if (!approvalWorkflowsData || !approvalWorkflowsData.allWorkflows) { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 317: (isStandard && (workflow.type === 'New Contract' || workflow.type === 'Approval')) (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 338: const filteredWorkflows = approvalWorkflowsData.allWorkflows.filter(filterWorkflow) (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 394: approvalWorkflowsData, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 406: const totalWorkflows = filteredApprovalWorkflow.flat.length (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 410: const paginatedWorkflows = filteredApprovalWorkflow.flat.slice( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 679: if(!approvalWorkflowsData) { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 698: <p className="text-slate-500 font-bold text-base tracking-tight mt-1">Track and manage all approval workflows</p> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 769: {/* View Toggle (for All Approvals tab only) */} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1011: <h3 className="text-base font-black text-slate-900 uppercase tracking-widest">Approval Analytics</h3> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1014: <ApprovalsStatusCard /> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1051: {filteredApprovalWorkflow.byDepartment.map((department, index) => ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1155: {filteredApprovalWorkflow.byDepartment.length === 0 && ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1172: {filteredApprovalWorkflow.flat.length === 0 && ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1181: {filteredApprovalWorkflow.flat.length > 0 && ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1258: {approvalWorkflowsData.mine?.map((department: any, index: number) => ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1312: {(!approvalWorkflowsData.mine || approvalWorkflowsData.mine.length === 0) && ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1330: {approvalWorkflowsData.mine?.map((department: any, index: number) => ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\approvals\page.tsx
+Line 1384: {(!approvalWorkflowsData.mine || approvalWorkflowsData.mine.length === 0) && ( (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\attributes-customizable\cards\page.tsx
+Line 48: name: "InfoSec & Risk", (Matched: infosec)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\attributes-customizable\implementation\tasks\page.tsx
+Line 75: description: "Create cards for Core Profile, Financial & Banking, InfoSec & Risk, etc.", (Matched: infosec)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 18: | Approval | ApprovalCard | Complex | dashboardData.data.workflowsCard | ✅ Active | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 205: ### 4. ApprovalCard (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 207: **Current Implementation**: `/dashboard/components/ApprovalCard.tsx` (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 218: onClick: () => window.location.href = '/approvals' (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 597: | Approval | HIGH | HIGH | 4 | Phase 3 | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 638: - [ ] Migrate Approval card (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\EXISTING_CARDS_ANALYSIS.md
+Line 804: ├── ApprovalCard.tsx              # Approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\INDEX_PAGE_GUIDE.md
+Line 100: For stakeholder approval and validation: (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 201: 'Open Invoice Count - Invoices awaiting approval', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 300: const toggleApproval = (storyId: string) => { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 318: const approvalPercentage = (approvedStories.size / USER_STORIES.length) * 100; (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 331: Feature Review & Approval - Executive Summary (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 389: {/* Approval Progress */} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 393: <span className="text-gray-600">Approval Progress</span> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 394: <span className="font-semibold text-gray-900">{approvalPercentage.toFixed(0)}%</span> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 399: style={{ width: `${approvalPercentage}%` }} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 553: onClick={() => toggleApproval(story.id)} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\page.tsx
+Line 718: <strong>Next Steps:</strong> After approval, development will begin with Phase 1 (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\README.md
+Line 19: 3. **[CEO Review Page](./page.tsx)** ⭐ - Interactive web page for CEO approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 5: An interactive web page designed for **CEO review and approval** of the Customizable Dashboard Cards feature before development begins. (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 16: - ✅ **Approval Workflow** - Click to approve each story (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 19: - ✅ **Progress Tracking** - See approval progress in real-time (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 27: - Approval progress tracker (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 90: ### Step 5: Final Approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 160: ### Approval Status (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 241: // Change approval color from green to custom (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 308: 6. **Demonstrate approval workflow** (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 313: - After approval, show development plan (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 326: ### After Approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 342: - [ ] Approval buttons work (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\REVIEW_PAGE_GUIDE.md
+Line 399: - ✅ Approval process is smooth (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\TASK_BREAKDOWN.md
+Line 365: | BE-6.4 | Create Approval card template | Backend Dev 1 | 3h | BE-2.1 | Complex composite | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\TASK_BREAKDOWN.md
+Line 401: | FE-6.9 | Test Approval card replica | Frontend Dev 2 | 2h | FE-6.6, BE-6.4 | Match original | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\USER_STORIES.md
+Line 207: - Shows count of requests by status (draft, pending approval, in review, completed) (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\USER_STORIES.md
+Line 456: **So that** I can track approval status and finalize changes (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\USER_STORIES.md
+Line 461: - Shows current approval status (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\USER_STORIES.md
+Line 519: 1. **Open Invoice Count** - Invoices awaiting approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\USER_STORIES.md
+Line 700: 2. **Processing Speed** - Fastest contract approvals (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\USER_STORIES.md
+Line 789: 3. **Approval Bottlenecks** - Where delays occur (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\definite-plan\index\page.tsx
+Line 290: User stories and compatibility analysis for stakeholder approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\COMPREHENSIVE_PLAN.md
+Line 1710: - Extensive onboarding tutorials (Matched: onboarding)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\COMPREHENSIVE_PLAN.md
+Line 42: - **ApprovalCard**: Approval workflow metrics (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\COMPREHENSIVE_PLAN.md
+Line 1133: - [ ] ApprovalCard → card config (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 18: | Approval | ApprovalCard | Complex | dashboardData.data.workflowsCard | ✅ Active | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 205: ### 4. ApprovalCard (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 207: **Current Implementation**: `/dashboard/components/ApprovalCard.tsx` (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 218: onClick: () => window.location.href = '/approvals' (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 597: | Approval | HIGH | HIGH | 4 | Phase 3 | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 638: - [ ] Migrate Approval card (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\EXISTING_CARDS_ANALYSIS.md
+Line 804: ├── ApprovalCard.tsx              # Approval (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\README.md
+Line 423: | 4 | Approval | HIGH | 3 | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\TASK_BREAKDOWN.md
+Line 365: | BE-6.4 | Create Approval card template | Backend Dev 1 | 3h | BE-2.1 | Complex composite | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\TASK_BREAKDOWN.md
+Line 401: | FE-6.9 | Test Approval card replica | Frontend Dev 2 | 2h | FE-6.6, BE-6.4 | Match original | (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-customizable\plan\USER_LEVEL_PERMISSIONS.md
+Line 18: - Cards: Sourcing, Approval workflows, Vendor risk (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 31: const ApprovalCard = dynamic(() => import('./components/ApprovalCard')); (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 48: const ApprovalsStatusCard = dynamic(() => import('@/app/lib/components/cards/ApprovalsStatusCard')); (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 406: title="Approvals" (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 412: onValueClick={() => router.push('/approvals?active=true')} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 547: {/* ── Sourcing & Approvals ── */} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 553: description="Track your sourcing requests and approval workflows" (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 556: <ApprovalsStatusCard /> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 567: <ApprovalCard (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 571: onClick={() => router.push('/approvals')} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 572: onOpenClick={() => router.push('/approvals?active=true')} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 573: onInternalClick={() => router.push('/approvals?active=true')} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\page.tsx
+Line 574: onExternalClick={() => router.push('/approvals?active=true')} (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\README.md
+Line 19: - **ApprovalCard**: Open workflows, average cycle, phase breakdown, and workflows donut chart (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\AnalyticsContent.tsx
+Line 170: title="Approval" (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\AnalyticsContent.tsx
+Line 172: open: metrics.approval.open, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\AnalyticsContent.tsx
+Line 173: averageCycle: metrics.approval.averageCycle, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\AnalyticsContent.tsx
+Line 174: phase: metrics.approval.phase, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\AnalyticsContent.tsx
+Line 175: workflows: metrics.approval.workflows, (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\ApprovalCard.tsx
+Line 14: interface ApprovalCardProps { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\ApprovalCard.tsx
+Line 24: export default function ApprovalCard({ open, averageCycle, phase, onClick, onOpenClick, onInternalClick, onExternalClick }: ApprovalCardProps) { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\ApprovalCard.tsx
+Line 97: <h3 className="text-lg font-extrabold text-white tracking-tight">Approval Workflows</h3> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\components\ChartCard.tsx
+Line 105: case 'Approval': (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\hooks\useSectionVisibility.ts
+Line 36: kpiRow: 'Contracts, vendors, approvals at a glance', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\dashboard-v2\hooks\useSectionVisibility.ts
+Line 42: sourcingActivity: 'Sourcing requests & approval workflows', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\departments\details\[id]\components\TipsTable.tsx
+Line 27: const [newType, setNewType]       = useState('Approval'); (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\departments\details\[id]\components\TipsTable.tsx
+Line 68: setNewType('Approval'); (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\departments\details\[id]\components\TipsTable.tsx
+Line 184: <option value="Approval">Approval</option> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\departments\details\[id]\components\TipsTable.tsx
+Line 228: <option value="Approval">Approval</option> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\edge-cases\workflows-edit-fixes.md
+Line 342: window.location.href = '../../approvals' (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\edge-cases\workflows-edit-fixes.md
+Line 363: router.push('/approvals')  // Use Next.js router (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\edge-cases\workflows-edit-fixes.md
+Line 371: window.location.href = '../../approvals' (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\email-templates\components\EmailTemplatePreview.tsx
+Line 22: .replace(/\{\{workflow_name\}\}/g, 'Vendor Onboarding') (Matched: onboarding)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\email-templates\components\EmailTemplatePreview.tsx
+Line 23: .replace(/\{\{approval_link\}\}/g, 'https://example.com/approve/123') (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\forms\page.tsx
+Line 26: { id: "tab4", label: "Onboarding Forms", classification: "Onboarding Form" }, (Matched: onboarding)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\forms\components\FormEditorWithFields.tsx
+Line 564: <option value="Onboarding Form">Onboarding</option> (Matched: onboarding)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\page.tsx
+Line 59: description: 'Complete 6-step wizard to add contracts without approval workflow', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\page.tsx
+Line 119: description: 'Set up automated approval workflows', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\page.tsx
+Line 127: title: 'Managing Approvals', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\page.tsx
+Line 128: description: 'Approve, reject, and track approval requests', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\page.tsx
+Line 129: href: '/guides/approvals/managing', (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\page.tsx
+Line 346: <GuideGrid title="Workflows & Approvals" description="Configure visual approval workflows across any organization hierarchy" icon={ArrowPathIcon} guides={filteredWorkflowGuides} /> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 8: export default function ManagingApprovalsGuidePage() { (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 14: <h1 className="text-3xl font-bold text-gray-900">Managing Approvals</h1> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 30: <li>How to view pending approvals</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 32: <li>How to track approval status</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 45: <h3 className="text-lg font-semibold text-gray-900 mb-3">Step 1: View Pending Approvals</h3> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 47: <li>Click <strong>"Approvals"</strong> or <strong>"Workflows"</strong> in the sidebar</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 48: <li>You'll see all items awaiting your approval</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 51: <p className="text-sm text-gray-600 mt-3">💡 You'll also receive email notifications for new approvals</p> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 57: <li>Click on the approval item to see full details</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 77: <li>Add approval comments (optional but recommended)</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 78: <li>Click <strong>"Confirm Approval"</strong></li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 118: <li>The approval is reassigned</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 131: <li>Go to <strong>"My Requests"</strong> or <strong>"Approvals"</strong></li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 135: <li><span className="text-yellow-600">Pending:</span> Awaiting approval</li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 153: <li>Click <strong>"Resubmit for Approval"</strong></li> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 172: <h3 className="text-lg font-semibold text-purple-900 mb-3">Understanding Approval Stages</h3> (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 195: <strong>Approved:</strong> All approvals complete (Matched: approval)
+
+File: c:\Users\ahmad\Downloads\frontend\src\app\(authenticated)\guides\approvals\managing\page.tsx
+Line 223: <li>• Follow up if approval is delayed</li> (Matched: approval)
+

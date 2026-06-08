@@ -1,12 +1,12 @@
 # Hasan's Current Phase & Next Steps - Melodious OMR
 
-> Drafted from the current repo state after the Week 5 Lovable-frontend integration checkpoint on April 11, 2026.
+> Updated from the current repo state during final grading package prep on June 8, 2026.
 
 ---
 
-## Current Phase: Week 5 (v0.5) - Public Product Frontend Integration
+## Current Phase: Final Grading Package Prep
 
-**Status:** Hasan-side Week 5 frontend integration is now in place on top of the completed Week 4 backend. The repo keeps the existing GNN-ready FastAPI + Streamlit MVP intact, keeps the public `/product/*` facade stable for musician-facing flows, and now uses the Lovable-derived multi-page React frontend under `frontend/` as the public product layer.
+**Status:** The v2 system has final detector validation and test evidence, a same-candidate-edge graph versus non-graph comparison, preserved non-AI detector baselines, final rubric evidence docs, Docker/API/frontend/deployment documentation, and a curated `FinalProduct/` package in progress.
 
 ---
 
@@ -66,14 +66,13 @@
 * [x] New backend and frontend tests added for the Week 5 product layer
 * [x] Frontend validation re-run on April 11, 2026 with `npm test`, `npm run build`, and `npm run lint`
 
-### Remaining work after Hasan's Week 5 integration checkpoint
+### Remaining work after final evidence prep
 
-* [ ] Plug Ahmad's real trained GNN checkpoint into the Week 4 scaffold
-* [ ] Implement the model-specific inference adapter once Ahmad shares checkpoint wiring details
-* [ ] Keep the integrated `/product/*` contract stable while public UI polish continues
-* [ ] Decide whether `/midi` should remain heuristic-driven or consume future GNN relation outputs
-* [ ] Wire real attention weights into the existing explainability surface once Ahmad's checkpoint exposes them
-* [ ] Capture final combined YOLO + GNN metrics once Ahmad's checkpoint is available
+* [ ] Finish curating the `FinalProduct/` folder with selected source, models, run evidence, baselines, presentation files, sample inputs, and omission notes
+* [ ] Re-run Python tests, metric-claim validation, and frontend build after final package assembly
+* [ ] Keep the tiled detector result labeled as tiled-validation pilot evidence unless it is separately evaluated on original full-page validation
+* [ ] If AWS account-local values become available, run one public smoke test and save the output under `runs/deploy/`
+* [ ] Keep the final presentation focused on measured detector, graph, baseline, export, and deployment evidence
 
 ---
 
@@ -91,7 +90,9 @@
 | MUSCIMA training export nodes | 58467 | `data/processed/training_exports/batch_stats.json` |
 | MUSCIMA training export edges | 2625480 | `data/processed/training_exports/batch_stats.json` |
 | Backend contract stage | `v0.4` core + `v0.5` product layer | `src/api/service.py`, `src/api/product_service.py` |
-| Last reported full test suite | Ran 36 tests, OK | Week 5 prep checkpoint, plus targeted frontend validation on April 11 |
+| Final detector test run | Completed | `melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/metrics.json` |
+| Final graph/non-graph comparison | Completed | `melodious-v2/runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, `melodious-v2/runs/graph/graph_non_graph_heuristic_muscima_val_v1/metrics.json` |
+| Last reported full v2 test suite | 72 tests passed before final docs/package prep | v2 checkpoint validation |
 
 ---
 
@@ -99,18 +100,17 @@
 
 ### Immediate
 
-1. **Keep the public `/product/*` contract stable** - let frontend polish continue without re-exposing backend/debug terminology
-2. **Get Ahmad's checkpoint path and adapter expectations** - identify what his saved checkpoint requires beyond a path on disk
-3. **Integrate the checkpoint into `src/inference/gnn_service.py`** - keep both the internal and public UI contracts stable while swapping the scaffold adapter for a real one
-4. **Decide how GNN outputs should influence export quality** - confirm whether the future model path should remain heuristic-backed or feed downstream assembly/export
+1. **Finish `FinalProduct/` assembly** - include source, selected models, selected run evidence, baseline outputs, presentation files, sample inputs, and omission notes.
+2. **Verify final package** - re-run Python tests, metric-claim validation, and frontend build.
+3. **Keep evidence labels precise** - detector mAP for detector runs, relationship F1 for graph runs, and validity/success rates for export runs.
+4. **Prepare Q&A around graph validity** - emphasize same pages, same candidate edges, same labels, and relationship prediction as the graph core.
 
 ### Blocked or dependent items
 
-* The real trained GNN checkpoint is still external
-* Any checkpoint-specific tensor decoding or model-class loading details are still external
-* Final combined YOLO + GNN metrics are still external
+* Public AWS smoke remains dependent on account-local AWS values
 * Real attention weights still depend on Ahmad's trained model exposing them
-* Public raw image upload is intentionally disabled until detector-side image ingestion exists in this repo
+* The end-to-end export metric uses XML-derived payload fixtures, not arbitrary uploaded-image detector quality
+* The legacy graph checkpoint remains a 15-class relationship model while detector evidence is 136-class
 
 ### Coordination notes
 
@@ -121,7 +121,8 @@
 * The React frontend is now the public/product-facing layer and talks only to `/product/*`
 * On April 8, 2026, the full local Python test suite passed with 36 tests after the Week 5 prep layer landed
 * On April 11, 2026, the routed Lovable-based frontend passed `npm test`, `npm run build`, and `npm run lint`
+* On June 8, 2026, final evidence docs were added under `melodious-v2/docs/`
 
 ---
 
-*Last updated: April 11, 2026*
+*Last updated: June 8, 2026*

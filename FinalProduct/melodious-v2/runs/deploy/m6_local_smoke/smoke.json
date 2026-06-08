@@ -1,0 +1,63 @@
+{
+  "api_base_url": "local-testclient",
+  "artifact_downloads": [
+    {
+      "artifact_type": "musicxml",
+      "byte_count": 721,
+      "content_type": "application/vnd.recordare.musicxml+xml",
+      "sha256": "c32f068c82057787ac0073786f39367cfc002a37ddea4dfd7e49cd0a597f438e",
+      "status_code": 200,
+      "uri": "/transcriptions/tr_a2e15be12b93/artifacts/musicxml"
+    },
+    {
+      "artifact_type": "midi",
+      "byte_count": 26,
+      "content_type": "audio/midi",
+      "sha256": "2327f10c7ed9256c82764df923a79df9025e68a2514af739d99bb0c584fe008a",
+      "status_code": 200,
+      "uri": "/transcriptions/tr_a2e15be12b93/artifacts/midi"
+    }
+  ],
+  "health": {
+    "assembly_modes": [
+      "auto",
+      "heuristic",
+      "gnn"
+    ],
+    "detector_modes": [
+      "heuristic_bootstrap",
+      "onnx_detector_pending"
+    ],
+    "environment": "local",
+    "service": "melodious-v2-api",
+    "status": "ok",
+    "version": "0.1.0"
+  },
+  "passed": true,
+  "sample_transcription": {
+    "assembly_mode": {
+      "adapter_name": null,
+      "applied_mode": "heuristic",
+      "checkpoint_path": null,
+      "checkpoint_ready": false,
+      "fallback_applied": false,
+      "fallback_reason": null,
+      "inference_ran": false,
+      "requested_mode": "auto",
+      "warnings": []
+    },
+    "detection_count": 3,
+    "detector_mode": "sample_payload",
+    "job_id": "tr_a2e15be12b93",
+    "relationship_count": 1,
+    "sample_id": "sample-notation-1",
+    "status": "complete",
+    "warnings": []
+  },
+  "version": {
+    "detector_taxonomy": "deepscores_136",
+    "schema_version": "2.0",
+    "semantic_taxonomy": "semantic_omr_v2",
+    "version": "0.1.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "generated_at": "2026-06-08T00:37:44Z",
+  "onnx_path": null,
+  "reason": "No ONNX artifact was produced.",
+  "run_id": "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final",
+  "sample_image": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_materialized/images/test/lg-101766503886095953-aug-emmentaler--page-4.png",
+  "split": "test",
+  "status": "skipped"
+}

@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-06-04T00:08:39Z",
+  "model_artifacts": {
+    "artifacts": [
+      {
+        "artifact_type": "checkpoint",
+        "bytes": 52350418,
+        "exists": true,
+        "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/best.pt",
+        "sha256": "6af61b07f388f1cc8834501ad993d9bc5ccac910d72d0ee527f13add2fb29c26",
+        "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt"
+      },
+      {
+        "artifact_type": "onnx",
+        "bytes": 103758138,
+        "exists": true,
+        "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/best.onnx",
+        "sha256": "2bce8f32a7a7b5ef382cfbb6f24af313468720411e3ec0e7ab255731bbaaf21a",
+        "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.onnx"
+      }
+    ],
+    "extra": {
+      "export_error": null,
+      "finalize_existing_run": true,
+      "source_model": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt",
+      "ultralytics_train_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train"
+    },
+    "generated_at": "2026-06-04T00:08:39Z",
+    "run_id": "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2"
+  },
+  "run_artifacts": [
+    {
+      "artifact_type": "metrics",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/metrics.json",
+      "sha256": "1adea6fa33070ab02edf2b22b14d6df04dc06b2f9049499b595b0359c62de9c3"
+    },
+    {
+      "artifact_type": "report",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/report.md",
+      "sha256": "b961fa6f0286b2ce70495ca7709f9c262abff2917cccbdf3172a010d1c3fdf6a"
+    },
+    {
+      "artifact_type": "manifest",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/manifest.json",
+      "sha256": "b72b334306527382f4fcf56fd08ffda8ebbaa771ee4e8cacdf279500a0aefde7"
+    },
+    {
+      "artifact_type": "config",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/config.yaml",
+      "sha256": "83687741074830ff78ed4d37afda38cdd61f8d2add4b8fd121e811d4ad51f70c"
+    },
+    {
+      "artifact_type": "analysis",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/analysis.json",
+      "sha256": "905fc2402170b3fd2328fc684666f225bb1671edbd7d991cf0abc3c3eaed70a3"
+    },
+    {
+      "artifact_type": "analysis_report",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/analysis.md",
+      "sha256": "96737f75160dd007feb22154aa7539a07bcb89ab3d800eb91c3842ee39f73efd"
+    },
+    {
+      "artifact_type": "onnx_parity",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/onnx_parity.json",
+      "sha256": "48b8cab120ed38c3f08783ca78e0805f27caefb0d4535555bc7e668143fb704a"
+    }
+  ],
+  "run_id": "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2"
+}

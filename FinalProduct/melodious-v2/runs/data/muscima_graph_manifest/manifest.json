@@ -1,0 +1,42 @@
+{
+  "class_summary_available": true,
+  "dataset_id": "muscima_graph_manifest",
+  "generated_at": "2026-05-11T21:20:16Z",
+  "leakage_status": "passed",
+  "outputs": {
+    "class_summary": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/muscima_graph_manifest/class_summary.json",
+    "holdout_manifest": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/muscima_graph_manifest/holdout.json",
+    "leakage_report": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/muscima_graph_manifest/leakage_report.json",
+    "run_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/muscima_graph_manifest",
+    "train_manifest": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/muscima_graph_manifest/train.json",
+    "val_manifest": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/muscima_graph_manifest/val.json"
+  },
+  "page_count": 140,
+  "seed": 42,
+  "source_paths": {
+    "annotations_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations"
+  },
+  "split_policy": {
+    "holdout_ratio": 0.1,
+    "policy": "Use all MUSCIMA XML pages and split deterministically into train/val/holdout.",
+    "train_ratio": 0.8,
+    "val_ratio": 0.1
+  },
+  "splits": {
+    "holdout": {
+      "node_count": 10199,
+      "page_count": 14,
+      "split": "holdout"
+    },
+    "train": {
+      "node_count": 82206,
+      "page_count": 112,
+      "split": "train"
+    },
+    "val": {
+      "node_count": 10509,
+      "page_count": 14,
+      "split": "val"
+    }
+  }
+}

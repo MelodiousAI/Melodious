@@ -1,0 +1,14 @@
+{
+    "launched_at":  "2026-06-04T13:22:16Z",
+    "run_id":  "detection_136class_yolov8m_tiled_stem_pilot_img1024_v1",
+    "purpose":  "Pilot tiled fine-tune to test whether cropped DeepScores tiles recover stem AP while retaining the 136-class contract.",
+    "source_checkpoint":  "runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt",
+    "dataset_yaml":  "runs/data/deepscores_136_yolo_tiled_stem_pilot_v1/dataset.yaml",
+    "train_tiles":  12000,
+    "val_tiles":  2500,
+    "test_tiles":  2500,
+    "epochs":  12,
+    "imgsz":  1024,
+    "batch":  4,
+    "max_det":  2000
+}

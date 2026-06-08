@@ -1,0 +1,105 @@
+{
+  "provenance": {
+    "run_id": "graph_non_graph_heuristic_muscima_val_v1",
+    "commit": "1153485",
+    "config_path": "configs/non_graph_muscima_heuristic.yaml",
+    "dataset_id": "muscima_graph_manifest",
+    "split": "val",
+    "taxonomy_id": "semantic_omr_v2",
+    "metric_version": "v2.0",
+    "artifact_sha256": null,
+    "created_at": "2026-06-08T00:33:21.440897Z"
+  },
+  "metrics": {
+    "metric_version": "graph_classification_v2.0",
+    "primary_metric": "positive_macro_f1",
+    "positive_macro_f1": 0.621796846824738,
+    "accuracy": 0.7601818408270021,
+    "no_relation": {
+      "precision": 0.9999669781725721,
+      "recall": 0.7238609743271024,
+      "f1": 0.8398019884354591,
+      "support": 41834,
+      "tp": 30282,
+      "fp": 1,
+      "fn": 11552
+    },
+    "per_class": {
+      "no_relation": {
+        "precision": 0.9999669781725721,
+        "recall": 0.7238609743271024,
+        "f1": 0.8398019884354591,
+        "support": 41834,
+        "tp": 30282,
+        "fp": 1,
+        "fn": 11552
+      },
+      "stem_notehead": {
+        "precision": 0.29687813356507786,
+        "recall": 1.0,
+        "f1": 0.45783505154639176,
+        "support": 4441,
+        "tp": 4441,
+        "fp": 10518,
+        "fn": 0
+      },
+      "beam_notegroup": {
+        "precision": 0.6473396998635743,
+        "recall": 0.9994734070563455,
+        "f1": 0.7857586421030842,
+        "support": 1899,
+        "tp": 1898,
+        "fp": 1034,
+        "fn": 1
+      },
+      "slur_phrase": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "tie_sustained": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "distribution": "natural_candidate_edges",
+    "edge_count": 48174,
+    "positive_edge_count": 6340,
+    "predicted_positive_edge_count": 17891,
+    "page_count": 14,
+    "skipped_page_count": 0,
+    "candidate_graph": {
+      "builder": "legacy_gnn_k_nearest_plus_vertical_overlap",
+      "k_neighbors": 8,
+      "num_staffs": 4,
+      "negative_sampling": "none"
+    },
+    "baseline": {
+      "name": "non_graph_geometry_rules_v1",
+      "uses_message_passing": false,
+      "uses_learned_edge_classifier": false,
+      "input_parity": "same_candidate_edges_as_graph_legacy_gnn_muscima_val_v1"
+    },
+    "positive_confusion_counts": {
+      "beam_notegroup->beam_notegroup": 1898,
+      "beam_notegroup->no_relation": 1,
+      "no_relation->beam_notegroup": 1034,
+      "no_relation->stem_notehead": 10518,
+      "stem_notehead->stem_notehead": 4441
+    },
+    "notes": [
+      "This is a deterministic non-graph baseline on the same candidate edges as the GNN.",
+      "It uses only local class pair and bbox geometry rules.",
+      "It is intended for TM10G graph-vs-non-graph comparison."
+    ]
+  }
+}

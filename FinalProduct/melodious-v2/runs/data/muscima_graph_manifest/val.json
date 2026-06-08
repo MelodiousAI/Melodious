@@ -1,0 +1,108 @@
+{
+  "dataset_id": "muscima_graph_manifest",
+  "node_count": 10509,
+  "page_count": 14,
+  "pages": [
+    {
+      "filename": "CVC-MUSCIMA_W-02_N-06_D-ideal.xml",
+      "node_count": 931,
+      "page_id": "CVC-MUSCIMA_W-02_N-06_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-02_N-06_D-ideal.xml",
+      "writer_id": "W-02"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-10_N-01_D-ideal.xml",
+      "node_count": 874,
+      "page_id": "CVC-MUSCIMA_W-10_N-01_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-10_N-01_D-ideal.xml",
+      "writer_id": "W-10"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-19_N-19_D-ideal.xml",
+      "node_count": 547,
+      "page_id": "CVC-MUSCIMA_W-19_N-19_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-19_N-19_D-ideal.xml",
+      "writer_id": "W-19"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-23_N-17_D-ideal.xml",
+      "node_count": 854,
+      "page_id": "CVC-MUSCIMA_W-23_N-17_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-23_N-17_D-ideal.xml",
+      "writer_id": "W-23"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-25_N-12_D-ideal.xml",
+      "node_count": 709,
+      "page_id": "CVC-MUSCIMA_W-25_N-12_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-25_N-12_D-ideal.xml",
+      "writer_id": "W-25"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-26_N-04_D-ideal.xml",
+      "node_count": 934,
+      "page_id": "CVC-MUSCIMA_W-26_N-04_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-26_N-04_D-ideal.xml",
+      "writer_id": "W-26"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-27_N-03_D-ideal.xml",
+      "node_count": 557,
+      "page_id": "CVC-MUSCIMA_W-27_N-03_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-27_N-03_D-ideal.xml",
+      "writer_id": "W-27"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-28_N-05_D-ideal.xml",
+      "node_count": 951,
+      "page_id": "CVC-MUSCIMA_W-28_N-05_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-28_N-05_D-ideal.xml",
+      "writer_id": "W-28"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-30_N-06_D-ideal.xml",
+      "node_count": 940,
+      "page_id": "CVC-MUSCIMA_W-30_N-06_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-30_N-06_D-ideal.xml",
+      "writer_id": "W-30"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-32_N-09_D-ideal.xml",
+      "node_count": 499,
+      "page_id": "CVC-MUSCIMA_W-32_N-09_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-32_N-09_D-ideal.xml",
+      "writer_id": "W-32"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-32_N-20_D-ideal.xml",
+      "node_count": 816,
+      "page_id": "CVC-MUSCIMA_W-32_N-20_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-32_N-20_D-ideal.xml",
+      "writer_id": "W-32"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-49_N-05_D-ideal.xml",
+      "node_count": 709,
+      "page_id": "CVC-MUSCIMA_W-49_N-05_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-49_N-05_D-ideal.xml",
+      "writer_id": "W-49"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-49_N-09_D-ideal.xml",
+      "node_count": 511,
+      "page_id": "CVC-MUSCIMA_W-49_N-09_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-49_N-09_D-ideal.xml",
+      "writer_id": "W-49"
+    },
+    {
+      "filename": "CVC-MUSCIMA_W-50_N-15_D-ideal.xml",
+      "node_count": 677,
+      "page_id": "CVC-MUSCIMA_W-50_N-15_D-ideal",
+      "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations/CVC-MUSCIMA_W-50_N-15_D-ideal.xml",
+      "writer_id": "W-50"
+    }
+  ],
+  "seed": 42,
+  "source_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/data/muscima-pp/v2.0/data/annotations",
+  "split": "val"
+}

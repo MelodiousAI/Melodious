@@ -1,0 +1,9 @@
+checkpoint: C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train/weights/best.pt
+probe_images: 300
+stem_class_id: 41
+stem_class_name: stem
+stem_map50_95: 0.6064157566734896
+aggregate_map50: 0.9294343515468622
+aggregate_map50_95: 0.8396302242571445
+aggregate_precision: 0.9179858591120412
+aggregate_recall: 0.8842299254635679

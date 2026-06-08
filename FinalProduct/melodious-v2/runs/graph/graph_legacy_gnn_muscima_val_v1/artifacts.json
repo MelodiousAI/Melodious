@@ -1,0 +1,19 @@
+{
+  "run_id": "graph_legacy_gnn_muscima_val_v1",
+  "checkpoint": {
+    "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\outputs\\gnn_checkpoint.pt",
+    "sha256": "065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab"
+  },
+  "feature_encoder": {
+    "source": "reconstructed_training_node_encoder_seed_42",
+    "seed": 42
+  },
+  "config": {
+    "path": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\configs\\gnn_curriculum.yaml",
+    "sha256": "1642031083d47e3e6b086260e58d19cb2944cb371b04a5c5def8099fe8ffcc89",
+    "copied_to": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\graph\\graph_legacy_gnn_muscima_val_v1\\config.yaml"
+  },
+  "metrics": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\graph\\graph_legacy_gnn_muscima_val_v1\\metrics.json",
+  "report": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\graph\\graph_legacy_gnn_muscima_val_v1\\report.md",
+  "manifest": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\graph\\graph_legacy_gnn_muscima_val_v1\\manifest.json"
+}

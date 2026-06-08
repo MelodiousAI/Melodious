@@ -1,0 +1,45 @@
+{
+  "class_count": 136,
+  "dataset_id": "deepscores_136_yolo_materialized",
+  "dataset_yaml": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_materialized/dataset.yaml",
+  "generated_at": "2026-06-08T00:36:23Z",
+  "materialization_mode": "hardlink",
+  "operation_counts": {
+    "existing": 1714,
+    "label_existing": 1714
+  },
+  "output_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_yolo_materialized",
+  "source_manifest_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_manifest",
+  "splits": {
+    "test": {
+      "image_count": 352,
+      "materialized_image_count": 352,
+      "materialized_label_count": 352,
+      "missing_images": [],
+      "missing_labels": [],
+      "source_image_list": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_manifest/generated/image_lists/test.txt",
+      "target_images": "images/test",
+      "target_labels": "labels/test"
+    },
+    "train": {
+      "image_count": 1226,
+      "materialized_image_count": 1226,
+      "materialized_label_count": 1226,
+      "missing_images": [],
+      "missing_labels": [],
+      "source_image_list": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_manifest/generated/image_lists/train.txt",
+      "target_images": "images/train",
+      "target_labels": "labels/train"
+    },
+    "val": {
+      "image_count": 136,
+      "materialized_image_count": 136,
+      "materialized_label_count": 136,
+      "missing_images": [],
+      "missing_labels": [],
+      "source_image_list": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/data/deepscores_136_manifest/generated/image_lists/val.txt",
+      "target_images": "images/val",
+      "target_labels": "labels/val"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "run_id":  "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2",
+    "launched_at":  "2026-06-03T15:49:27.8167360+03:00",
+    "pid":  7052,
+    "checkpoint":  "artifacts\\manual_checkpoints\\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\\epoch22_stop_2026-06-03_021238\\last.pt",
+    "stdout":  "resume_epoch22_stdout.log",
+    "stderr":  "resume_epoch22_stderr.log",
+    "command":  "resume_epoch22_launch_command.txt",
+    "python":  "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\.venv\\Scripts\\python.exe"
+}

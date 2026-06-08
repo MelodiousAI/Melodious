@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-06-08T00:37:44Z",
+  "model_artifacts": {
+    "artifacts": [
+      {
+        "artifact_type": "checkpoint",
+        "bytes": 52350418,
+        "exists": true,
+        "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/best.pt",
+        "sha256": "6af61b07f388f1cc8834501ad993d9bc5ccac910d72d0ee527f13add2fb29c26",
+        "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt"
+      }
+    ],
+    "extra": {
+      "export_error": null,
+      "finalize_existing_run": true,
+      "source_model": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train/weights/best.pt",
+      "ultralytics_train_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2/ultralytics/train"
+    },
+    "generated_at": "2026-06-08T00:37:44Z",
+    "run_id": "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final"
+  },
+  "run_artifacts": [
+    {
+      "artifact_type": "metrics",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/metrics.json",
+      "sha256": "c0c69aefbd435a863e4f40555dbfc2eb9c2ca9cc706efcdd03fb8646229505c5"
+    },
+    {
+      "artifact_type": "report",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/report.md",
+      "sha256": "c2f61baee50468b248248da21c8a38d4035a28a4f47ee3860973c2435b0922a4"
+    },
+    {
+      "artifact_type": "manifest",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/manifest.json",
+      "sha256": "5cfcbe69af41c6fecf31793d5cbe1a90a4c53ebaf5133ce887b5abc6706a3f18"
+    },
+    {
+      "artifact_type": "config",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/config.yaml",
+      "sha256": "83687741074830ff78ed4d37afda38cdd61f8d2add4b8fd121e811d4ad51f70c"
+    },
+    {
+      "artifact_type": "analysis",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/analysis.json",
+      "sha256": "a8a729c2513ba75777a7423183abb555dd1bb3b356d61811e35c1f171dd52e6c"
+    },
+    {
+      "artifact_type": "analysis_report",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/analysis.md",
+      "sha256": "334474555295c898f9abf2b234dfdd39d527a6df795d9b95a1eab8df25d46950"
+    },
+    {
+      "artifact_type": "onnx_parity",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/onnx_parity.json",
+      "sha256": "79bd2c1ae0bb2402c89a1884c79fbf65a8f4eb0c5ec1014e08c953450871da3d"
+    }
+  ],
+  "run_id": "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final"
+}

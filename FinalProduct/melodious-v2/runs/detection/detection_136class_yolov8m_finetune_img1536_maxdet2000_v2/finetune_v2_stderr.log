@@ -1,0 +1,12 @@
+=src : The term '=src' is not recognized as the name of a cmdlet, function, script file, or operable program. Check 
+the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ ='src'; & '..\.venv\Scripts\python.exe' 'scripts\run_detection_136cla ...
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (=src:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Traceback (most recent call last):
+  File "C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2\scripts\run_detection_136class_yolo.py", line 16, in <module>
+    from melodious_v2.contracts import MetricProvenance
+ModuleNotFoundError: No module named 'melodious_v2'

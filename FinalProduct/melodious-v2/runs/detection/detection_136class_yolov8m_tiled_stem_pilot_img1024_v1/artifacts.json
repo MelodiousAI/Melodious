@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-06-04T19:51:37Z",
+  "model_artifacts": {
+    "artifacts": [
+      {
+        "artifact_type": "checkpoint",
+        "bytes": 52266578,
+        "exists": true,
+        "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/best.pt",
+        "sha256": "ab72ff42e5ecf916bd4768b3a6413d67059ff6b51d37588375d274bf4d1b5bef",
+        "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train/weights/best.pt"
+      },
+      {
+        "artifact_type": "onnx",
+        "bytes": 103758145,
+        "exists": true,
+        "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/artifacts/models/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/best.onnx",
+        "sha256": "fb74032fcd9e99090b6b87436b3bfa04c60a1ba1187b9aef9bead512c659ea13",
+        "source_path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train/weights/best.onnx"
+      }
+    ],
+    "extra": {
+      "export_error": null,
+      "finalize_existing_run": false,
+      "source_model": "C:\\Users\\ahmad\\OneDrive\\Desktop\\Melodious_Initial_Code\\melodious-v2\\runs\\detection\\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\\ultralytics\\train\\weights\\best.pt",
+      "ultralytics_train_dir": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train"
+    },
+    "generated_at": "2026-06-04T19:51:37Z",
+    "run_id": "detection_136class_yolov8m_tiled_stem_pilot_img1024_v1"
+  },
+  "run_artifacts": [
+    {
+      "artifact_type": "metrics",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/metrics.json",
+      "sha256": "ff55bc3cc464bce883cd533204f8d4c080bde7778d86d19936e9ce76e21741bc"
+    },
+    {
+      "artifact_type": "report",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/report.md",
+      "sha256": "36b48fb148f2e89b73dc018e79e4b82fc0a4c2dc189f18df6051c08fdd31f938"
+    },
+    {
+      "artifact_type": "manifest",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/manifest.json",
+      "sha256": "e520463bea7b0907fd117538a567858aac489b3dae08258d6788aff40078d549"
+    },
+    {
+      "artifact_type": "config",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/config.yaml",
+      "sha256": "83687741074830ff78ed4d37afda38cdd61f8d2add4b8fd121e811d4ad51f70c"
+    },
+    {
+      "artifact_type": "analysis",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/analysis.json",
+      "sha256": "3a2e87436622de61e2a62c44eceeae1a4ab0a1798bd456ecef5d0e50bbf55459"
+    },
+    {
+      "artifact_type": "analysis_report",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/analysis.md",
+      "sha256": "7fd2f3e2a175fae04fa277c9ca478d7adf7474aaacbbfea4687f671b4d592c52"
+    },
+    {
+      "artifact_type": "onnx_parity",
+      "path": "C:/Users/ahmad/OneDrive/Desktop/Melodious_Initial_Code/melodious-v2/runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/onnx_parity.json",
+      "sha256": "91e9dddfd14a026d82d8dafe2d2468a55291cbd20c93a0137630bdd61523d147"
+    }
+  ],
+  "run_id": "detection_136class_yolov8m_tiled_stem_pilot_img1024_v1"
+}

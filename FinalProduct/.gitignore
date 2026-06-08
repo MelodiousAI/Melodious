@@ -1,0 +1,17 @@
+# Recreated locally — not part of the submission package
+node_modules/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+frontend/node_modules/
+frontend/.codex-run/
+**/.codex-run/
+frontend/tsconfig.tsbuildinfo
+
+# Secrets
+.env
+.env.*
+!.env.example

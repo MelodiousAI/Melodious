@@ -1,0 +1,13 @@
+{
+    "artifact_id":  "note_extraction_tiled_stem_pilot",
+    "role":  "default_local_note_extraction_thin_symbol_checkpoint",
+    "checkpoint":  "artifacts/models/note_extraction_tiled_stem_pilot/best.pt",
+    "source_checkpoint":  "runs/detection/detection_136class_yolov8m_tiled_stem_pilot_img1024_v1/ultralytics/train/weights/best.pt",
+    "source_run_id":  "detection_136class_yolov8m_tiled_stem_pilot_img1024_v1",
+    "sha256":  "ab72ff42e5ecf916bd4768b3a6413d67059ff6b51d37588375d274bf4d1b5bef",
+    "saved_at_local":  "2026-06-05 14:26:24 +03:00",
+    "notes":  [
+                  "Stable default for tiled local stem/beam/flag/dot/accidental extraction.",
+                  "Generated checkpoint artifact; not committed to git."
+              ]
+}

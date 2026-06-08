@@ -465,4 +465,33 @@ On **April 11, 2026**, the following Lovable-integration checks passed locally:
 
 ---
 
-*Last updated: April 11, 2026*
+## 12. Final Grading Evidence Package Prep
+
+**Date:** June 8, 2026
+
+The v2 package now has final-grade evidence for the strict rubric items that
+were previously risky: non-AI detector baselines, same-data graph versus
+non-graph comparison, frozen detector test evaluation, and explicit Responsible
+ML coverage.
+
+| Item | Result | Evidence |
+|-|-|-|
+| Non-AI detection baseline | Preserved measured template-matching and HOG/SVM baselines | `outputs/baseline_template_results.json`, `outputs/baseline_hog_results.json` |
+| Graph versus non-graph baseline | Added deterministic geometry-rule baseline on the same MUSCIMA candidate edges as the GNN | `melodious-v2/scripts/evaluate_non_graph_muscima.py`, `melodious-v2/runs/graph/graph_non_graph_heuristic_muscima_val_v1/metrics.json` |
+| Graph relationship model | Legacy GNN remains the primary graph metric run | `melodious-v2/runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json` |
+| Frozen detector test evaluation | Completed final test split evaluation for the selected YOLOv8m checkpoint | `melodious-v2/runs/detection/detection_136class_yolov8m_finetune_img1536_maxdet2000_v2_test_final/metrics.json` |
+| Final rubric documentation | Added reviewer-facing evidence reports | `melodious-v2/docs/FINAL_TECHNICAL_REPORT.md`, `melodious-v2/docs/FINAL_RUBRIC_EVIDENCE.md`, `melodious-v2/docs/BASELINES_AND_GRAPH_COMPARISONS.md`, `melodious-v2/docs/RESPONSIBLE_ML.md` |
+
+Current final-package caveats:
+
+* Public AWS smoke remains dependent on account-local AWS values.
+* The end-to-end export fixture run uses MUSCIMA XML-derived payloads, not an
+  arbitrary uploaded-image detector benchmark.
+* The legacy graph checkpoint is still a 15-class relationship model, while the
+  detector evidence is from the newer 136-class detector.
+* Line-like detector classes remain a known weakness, especially original
+  full-page `stem` and `ledgerLine`.
+
+---
+
+*Last updated: June 8, 2026*

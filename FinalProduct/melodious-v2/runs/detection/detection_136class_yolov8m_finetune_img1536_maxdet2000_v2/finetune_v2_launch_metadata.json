@@ -1,0 +1,15 @@
+{
+    "run_id":  "detection_136class_yolov8m_finetune_img1536_maxdet2000_v2",
+    "launched_at":  "2026-06-02T23:10:50",
+    "parent_pid":  25180,
+    "stdout":  "runs\\detection\\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\\finetune_v2_stdout.log",
+    "stderr":  "runs\\detection\\detection_136class_yolov8m_finetune_img1536_maxdet2000_v2\\finetune_v2_stderr.log",
+    "source_checkpoint":  "runs\\detection\\detection_136class_yolov8m_finetune_img1472_maxdet2000_v1\\ultralytics\\train\\weights\\best.pt",
+    "epochs":  50,
+    "imgsz":  1536,
+    "batch":  1,
+    "workers":  0,
+    "device":  "0",
+    "patience":  15,
+    "max_det":  2000
+}

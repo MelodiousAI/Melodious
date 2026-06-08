@@ -1,0 +1,40 @@
+{
+  "provenance": {
+    "run_id": "e2e_muscima_holdout_xml_fixture_v1",
+    "commit": "9c0ddc9",
+    "config_path": "configs\\e2e_muscima_holdout.yaml",
+    "dataset_id": "muscima_graph_manifest",
+    "split": "holdout",
+    "taxonomy_id": "deepscores_136_to_semantic_omr_v2",
+    "metric_version": "v2.0",
+    "artifact_sha256": "065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab",
+    "created_at": "2026-05-30T22:05:00.242282Z"
+  },
+  "metrics": {
+    "primary_metric": "musicxml_validity_rate",
+    "musicxml_validity_rate": 1.0,
+    "midi_generation_success_rate": 1.0,
+    "page_success_rate": 1.0,
+    "page_count": 14,
+    "musicxml_valid_count": 14,
+    "midi_success_count": 14,
+    "page_success_count": 14,
+    "failure_count": 0,
+    "detector_mode": "muscima_xml_ground_truth_payload_fixture",
+    "assembly_gnn_page_rate": 1.0,
+    "assembly_gnn_page_count": 14,
+    "relationship_count_total": 10637,
+    "relationship_count_mean": 759.7857142857143,
+    "detection_count_total": 6348,
+    "detection_count_mean": 453.42857142857144,
+    "note_like_count_total": 2563,
+    "note_like_count_mean": 183.07142857142858,
+    "metric_kind": "measured_export_validity_with_ground_truth_xml_payloads",
+    "failures": [],
+    "notes": [
+      "This M5 run measures export validity and artifact generation from MUSCIMA XML-derived detector payload fixtures.",
+      "It is not a measured trained-detector uploaded-image run.",
+      "Uploaded-image detector inference remains heuristic_bootstrap unless a tested ONNX adapter is added."
+    ]
+  }
+}

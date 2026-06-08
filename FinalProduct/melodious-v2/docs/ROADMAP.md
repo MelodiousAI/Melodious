@@ -1,0 +1,333 @@
+# Roadmap and Milestone Tracker
+
+This document is the project execution plan after the V2 foundation. It turns the rebuild plan into trackable milestones with evidence artifacts, acceptance criteria, and documentation updates.
+
+## Tracking Rules
+
+- Update `docs/STATUS.md` whenever a milestone starts, finishes, or gets blocked.
+- Update `docs/HANDOFF.md` before ending every coding-agent session.
+- Update `docs/EXPERIMENTS.md` only through generated run records from `runs/**/metrics.json`.
+- Update `docs/RUBRIC_MAP.md` when a new milestone creates evidence for a rubric item.
+- Update `docs/MILESTONE_HISTORY.md` with detailed milestone evidence, commands, artifacts, limits, and exact next steps.
+- Do not claim a model result unless it has a run id, config, split, metric JSON, and artifact hash.
+- Keep fallback paths explicit in API responses and docs.
+- Keep all datasets, runs, outputs, checkpoints, AWS state, and debug residue out of Git.
+
+## Big Milestones
+
+| Milestone | Status | Purpose | Main Evidence |
+|---|---|---|---|
+| M0 - V2 Foundation | Done | Clean repo, contracts, docs, tests, API/UI scaffold, AWS templates | tests pass, schema generated, local API/UI smoke |
+| M1 - Dataset Manifests | Done | Fixed DeepScores 136-class and MUSCIMA graph splits with leakage checks | manifest JSONs, class counts, leakage report |
+| M2 - Metric Reproduction | Done | Reproduce reduced-class baseline with V2 metric code | `runs/detection/detection_15class_repro_sample_v1/metrics.json`, generated report |
+| M3 - Full 136-Class Detector | Done | Train and evaluate full-taxonomy detector | `runs/detection/detection_136class_yolov8m_v1/metrics.json`, `analysis.json`, `onnx_parity.json`, model metadata |
+| M4 - Real Assembly Runtime | Done | Wire trained GNN adapter and natural-distribution graph evaluation | `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`, adapter tests, API mode proof |
+| M5 - End-to-End Export Quality | Done | Measure upload-to-MusicXML/MIDI quality on fixed holdout pages | `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`, exported artifacts |
+| M6 - AWS Public Demo | Prepared / blocked on AWS values | Deploy API and frontend publicly with smoke tests | ECS/ECR/S3/CloudFront runbook, local smoke logs, public smoke pending |
+| M7 - Detector Metric Improvement | Active | Improve professor-facing detector metrics without losing provenance | `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`, `runs/detection/detection_136class_yolov8m_eval_img1536_maxdet2000_v1/metrics.json`, `docs/METRIC_IMPROVEMENT.md` |
+| M8 - Final Grading Package | Planned | Freeze narrative, evidence map, demo script, and limitations | final docs, rubric map, presentation assets |
+
+## Completed M3 - Full 136-Class Detector
+
+Goal: deliver the main detector-side ML improvement.
+
+Final run:
+
+- Run id: `detection_136class_yolov8m_v1`.
+- Dataset: `deepscores_136_yolo_materialized`.
+- Split used for reported metrics: validation.
+- Taxonomy: `deepscores_136`.
+- Model family: YOLOv8m.
+- Training shape: 150 epochs, image size 1024, batch size 4, workers 0, device 0.
+- Selected checkpoint: `runs/detection/detection_136class_yolov8m_v1/ultralytics/train/weights/best.pt`.
+- Copied checkpoint: `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Copied ONNX: `artifacts/models/detection_136class_yolov8m_v1/best.onnx`.
+- Artifact metadata: `artifacts/models/detection_136class_yolov8m_v1/metadata.json`.
+
+Final M3 evidence:
+
+- `runs/detection/detection_136class_yolov8m_v1/metrics.json`.
+- `runs/detection/detection_136class_yolov8m_v1/report.md`.
+- `runs/detection/detection_136class_yolov8m_v1/manifest.json`.
+- `runs/detection/detection_136class_yolov8m_v1/artifacts.json`.
+- `runs/detection/detection_136class_yolov8m_v1/analysis.json`.
+- `runs/detection/detection_136class_yolov8m_v1/analysis.md`.
+- `runs/detection/detection_136class_yolov8m_v1/onnx_parity.json`.
+- `artifacts/models/detection_136class_yolov8m_v1/metadata.json`.
+
+Detector metrics from `metrics.json`:
+
+- Primary `mAP@0.5:0.95`: 0.4747370751116288.
+- Secondary `mAP@0.5`: 0.5853211368313491.
+- `precision@0.5`: 0.8274236461250144.
+- `recall@0.5`: 0.4909790740632496.
+- `F1@0.5`: 0.6162725385980492.
+
+Detector analysis:
+
+- Validation-supported classes: 103 of 136.
+- Rare supported classes with support <= 10: 14.
+- Supported classes with zero mAP: 16.
+- Supported small-symbol classes: 35.
+- Small-symbol mean `mAP@0.5:0.95`: 0.3194606161321027.
+- Important zero-mAP classes include `ledgerLine`, `stem`, and `ottavaBracket`; these should remain explicit limitations.
+
+ONNX parity:
+
+- `onnx_parity.json` passed on one fixed validation image.
+- PyTorch and ONNX both returned 300 boxes with identical class-count totals.
+- Local ONNX Runtime used CPU fallback because `onnxruntime-gpu` is not installed.
+
+M3 acceptance status:
+
+- Full configured detector `metrics.json` exists with provenance.
+- Model artifact metadata and SHA256 hashes exist.
+- ONNX export exists.
+- Analysis artifacts exist.
+- API detector wiring is still bootstrap/heuristic. This is documented as a follow-up because the M3 prompt allowed precise blocker documentation instead of forcing detector adapter work into the training milestone.
+
+## Completed M4 - Real Assembly Runtime
+
+Goal: replace graph/assembly scaffold risk with a real relationship runtime and a measured graph result.
+
+Final graph run:
+
+- Run id: `graph_legacy_gnn_muscima_val_v1`.
+- Dataset: `muscima_graph_manifest`.
+- Split used for reported metrics: validation.
+- Taxonomy: `semantic_omr_v2`.
+- Metric distribution: natural candidate-edge distribution with no negative subsampling.
+- Candidate graph: legacy k-nearest plus vertical-overlap graph, `k_neighbors=8`.
+- Pages evaluated: 14.
+- Candidate edges: 48174.
+- Positive candidate edges: 6340.
+- Predicted positive candidate edges: 10680.
+
+GNN checkpoint evidence:
+
+- Source checkpoint: `..\outputs\gnn_checkpoint.pt`.
+- Checkpoint SHA256: `065a6881645c080605eb58742cc3f004322b6fca3e712f8bb2953ddb7f038eab`.
+- Runtime adapter: `src/melodious_v2/assembly/legacy_gnn.py`.
+- Evaluation script: `scripts/evaluate_gnn_muscima.py`.
+- Feature encoder: reconstructed from legacy training seed `42` because the legacy checkpoint did not save the separate node encoder used to build training tensors.
+
+Graph metrics from `metrics.json`:
+
+- Primary `positive_macro_f1`: 0.7590456327823909.
+- Separate `no_relation` precision: 0.997066197258228.
+- Separate `no_relation` recall: 0.8936271931921403.
+- Separate `no_relation` F1: 0.9425171440096813.
+- Separate `no_relation` support: 41834.
+- `stem_notehead` F1: 0.6960721184803607.
+- `beam_notegroup` F1: 0.8220191470844213.
+- `slur_phrase` and `tie_sustained` have zero support in this legacy 15-class validation contract.
+
+API/runtime proof:
+
+- `assemble_payload` only reports `applied_mode = "gnn"` when checkpoint inference runs.
+- Missing checkpoint requests report `applied_mode = "checkpoint_missing"` and return heuristic fallback relationships.
+- Bad checkpoint or inference errors report `heuristic_fallback`.
+- API sample smoke with `MELODIOUS_GNN_CHECKPOINT=..\outputs\gnn_checkpoint.pt` returned `applied_mode=gnn`, `fallback_applied=False`, `checkpoint_ready=True`, `inference_ran=True`, `adapter_name=legacy_muscima_gat`, and `relationship_count=4`.
+
+M4 acceptance status:
+
+- A real GNN/relationship checkpoint is loaded through the V2 adapter.
+- Graph evaluation emits `runs/graph/graph_legacy_gnn_muscima_val_v1/metrics.json`.
+- API response metadata includes relationship outputs and truthful runtime mode metadata.
+- Positive-class macro F1 is the graph headline metric, with `no_relation` reported separately.
+- Tests and metric-claim validation pass.
+
+## Completed M5 - End-to-End Export Quality
+
+Goal: make the product export claim measurable instead of sample-only.
+
+Final end-to-end run:
+
+- Run id: `e2e_muscima_holdout_xml_fixture_v1`.
+- Dataset: `muscima_graph_manifest`.
+- Split used for reported metrics: holdout.
+- Payload source: MUSCIMA XML-derived detector payload fixtures.
+- Requested assembly mode: `gnn`.
+- Export artifacts: MusicXML, MIDI, detector payload JSON, and relationship JSON per page under `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/exports/`.
+- Metrics: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- Report: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/report.md`.
+- Manifest: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/manifest.json`.
+- Artifacts index: `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/artifacts.json`.
+
+M5 metrics from `metrics.json`:
+
+- Primary `musicxml_validity_rate`: 1.0.
+- `midi_generation_success_rate`: 1.0.
+- `page_success_rate`: 1.0.
+- `page_count`: 14.
+- `musicxml_valid_count`: 14.
+- `midi_success_count`: 14.
+- `failure_count`: 0.
+- `detection_count_total`: 6348.
+- `note_like_count_total`: 2563.
+- `relationship_count_total`: 10637.
+- `assembly_gnn_page_count`: 14.
+
+M5 acceptance status:
+
+- Fixed end-to-end run emits `runs/e2e/e2e_muscima_holdout_xml_fixture_v1/metrics.json`.
+- MusicXML and MIDI generation success are measured and backed by artifacts.
+- Failure list exists; the completed run had no export failures.
+- API sample path still works locally.
+- Tests and metric-claim validation pass.
+
+M5 caveat:
+
+- This run measures export validity and artifact generation from fixed ground-truth XML-derived payload fixtures. It is not trained detector uploaded-image quality.
+- Uploaded-image detector inference remains `heuristic_bootstrap` until a tested ONNX detector adapter is implemented.
+
+## Immediate Next Work
+
+### M6 - AWS Public Demo
+
+Goal: satisfy deployment evidence with a stable, low-cost public system.
+
+Current M6 state:
+
+- Deployment path is prepared in `infra/aws/README.md`.
+- API CORS can be configured for a public frontend through `MELODIOUS_CORS_ORIGINS`.
+- ECS task-template placeholders exist for the public frontend origin and `MELODIOUS_GNN_CHECKPOINT`.
+- Python smoke tooling exists at `scripts/smoke_public_demo.py`.
+- PowerShell smoke tooling exists at `infra/aws/smoke_test.ps1`.
+- Local smoke can verify `/health`, `/version`, sample transcription, MusicXML download, and MIDI download.
+- Actual AWS deployment remains blocked until AWS CLI access and account-local ECS/ECR/S3/CloudFront values are available.
+
+Implementation tasks:
+
+- Done: document the ECR/ECS/Fargate backend path.
+- Done: document the S3/CloudFront frontend path.
+- Done: document CloudWatch log group usage.
+- Done: document cost controls and shutdown steps.
+- Done: add local/public API smoke tooling.
+- Pending: create account-local ECR repository and ECS service.
+- Pending: deploy the FastAPI container.
+- Pending: build frontend with the public API URL and publish to S3/CloudFront.
+- Pending: run public smoke and save output under ignored `runs/deploy/m6_public_smoke/`.
+- Deferred: private S3 artifact storage with short-lived links. The current demo artifact routes use in-memory job state and are acceptable only for a short public demo.
+
+Acceptance criteria:
+
+- Prepared: exact public API smoke command is documented.
+- Prepared: exact frontend build/publish command is documented.
+- Prepared: shutdown and scale-to-zero commands are documented.
+- Pending: public frontend URL loads.
+- Pending: public API `/health` and `/version` pass.
+- Pending: sample transcription completes through the public service.
+- Pending: uploaded-image transcription completes through the public service with `heuristic_bootstrap` provenance unless a detector adapter is added.
+- Pending: public smoke-test output is saved as deployment evidence.
+
+Exact next action:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\smoke_public_demo.py --local-testclient --output runs\deploy\m6_local_smoke\smoke.json
+```
+
+Then install/configure AWS CLI or move to an environment with AWS access, fill `infra/aws/generated/task-definition.json` from the template, and follow `infra/aws/README.md`.
+
+### M7 - Detector Metric Improvement
+
+Goal: raise the measured detector result while preserving metric provenance and validation/test separation.
+
+Current M7 result:
+
+- Best primary run: `detection_136class_yolov8m_eval_img1472_maxdet2000_v1`.
+- Primary metric source: `runs/detection/detection_136class_yolov8m_eval_img1472_maxdet2000_v1/metrics.json`.
+- Primary `mAP@0.5:0.95`: 0.6204968163150985.
+- Secondary `mAP@0.5` on that run: 0.7833788545364062.
+- Best secondary `mAP@0.5` run: `detection_136class_yolov8m_eval_img1536_maxdet2000_v1`.
+- Best secondary `mAP@0.5`: 0.7920129156176505.
+- `F1@0.5` on the best primary run: 0.7746130448554269.
+- Improvement type: validation-time dense-page inference sweep on the existing YOLOv8m checkpoint.
+- Sweep ledger: `docs/METRIC_IMPROVEMENT.md` and `configs/detection_136class_eval_resolution_sweep.yaml`.
+
+Implementation tasks:
+
+- Done: run validation-only inference-resolution sweep at 1152, 1248, 1280, and 1536.
+- Done: test validation-time augmentation at 1280; it regressed.
+- Done: identify that the default 300 detection cap is too low for dense pages and add `--max-det`.
+- Done: run validation-only dense-page cap sweep at `max_det=2000`.
+- Done: add `--nms-iou` and test 1536 with NMS IoU 0.8; it regressed.
+- Done: regenerate `docs/EXPERIMENTS.md`.
+- Pending: decide whether to launch real 1472/max-det fine-tuning from `artifacts/models/detection_136class_yolov8m_v1/best.pt`.
+- Pending: if fine-tuning completes, compare validation metrics and update model card/status/handoff.
+- Pending: freeze one final model/inference configuration before any test-set evaluation.
+
+Acceptance criteria:
+
+- Every metric improvement has a `runs/**/metrics.json` artifact.
+- Validation-selected inference/training choices are documented.
+- Test split remains untouched until final model freeze.
+- Remaining weaknesses such as `ledgerLine` and `stem` are still documented.
+
+Exact next action:
+
+```powershell
+cd C:\Users\ahmad\OneDrive\Desktop\Melodious_Initial_Code\melodious-v2
+$env:PYTHONPATH='src'
+..\.venv\Scripts\python.exe scripts\run_detection_136class_yolo.py `
+  --run-id detection_136class_yolov8m_finetune_img1472_maxdet2000_v1 `
+  --model artifacts\models\detection_136class_yolov8m_v1\best.pt `
+  --epochs 50 `
+  --imgsz 1472 `
+  --batch 1 `
+  --workers 0 `
+  --device 0 `
+  --patience 15 `
+  --max-det 2000
+```
+
+### M8 - Final Grading Package
+
+Goal: make the professor see a coherent story and evidence trail.
+
+Implementation tasks:
+
+- Freeze `README.md`, `MODEL_CARD.md`, `docs/RUBRIC_MAP.md`, `docs/STATUS.md`, and `docs/EXPERIMENTS.md`.
+- Add final demo script and Q&A prep.
+- Add screenshots of AWS service, UI, metric reports, and artifacts.
+- Write limitations honestly: full taxonomy, small symbols, handwritten transfer, graph errors, export limits, deployment constraints.
+- Prepare a concise presentation narrative around V2 improvements over V1.
+
+Acceptance criteria:
+
+- All local tests pass.
+- Frontend build passes.
+- Metric-claim validator passes.
+- Public demo smoke passes or a documented fallback runbook exists.
+- Rubric evidence map points to concrete files, runs, tests, and artifacts.
+
+## Decision Log
+
+| Decision | Current Default | Reason |
+|---|---|---|
+| Project track | Track A applied/deployment | Best fit for AWS demo and product flow |
+| Detector taxonomy | Full DeepScores 136 classes | Major improvement over V1 15-class limit |
+| Current detector artifact | YOLOv8m full run `detection_136class_yolov8m_v1` | Full configured run has V2 metrics, ONNX, and artifact hashes |
+| Assembly taxonomy | `semantic_omr_v2` grouping | Keeps MusicXML/GNN practical without losing detector detail |
+| Detector primary metric | `mAP@0.5:0.95` | Standard object detection metric |
+| Graph primary metric | positive-class macro F1 | Prevents `no_relation` inflation |
+| Deployment path | ECS/Fargate/ECR, S3, CloudFront | Low-cost public demo path |
+| Current upload detector | `heuristic_bootstrap` | Integration-only path until trained ONNX detector adapter is wired |
+| Current assembly runtime | `legacy_muscima_gat` via `MELODIOUS_GNN_CHECKPOINT` | Real checkpoint path exists; legacy 15-class contract remains a limitation |
+
+## Weekly Operating Rhythm
+
+1. Start a milestone branch.
+2. Update `docs/STATUS.md` with the active milestone.
+3. Implement code and tests.
+4. Generate run artifacts if the milestone involves metrics.
+5. Regenerate `docs/EXPERIMENTS.md` from runs.
+6. Update `docs/RUBRIC_MAP.md` if new grading evidence exists.
+7. Run tests, frontend build when relevant, and metric-claim validation.
+8. Record blockers and next steps in `docs/HANDOFF.md` before switching context.
+
+## Agent Prompt Source
+
+Use `docs/AGENT_PROMPTS.md` to start future coding-agent sessions. It contains the exact current M7 prompt and archived prompts for prior milestones. See `docs/MILESTONE_HISTORY.md` for detailed evidence and next-step context across M1 through M8.

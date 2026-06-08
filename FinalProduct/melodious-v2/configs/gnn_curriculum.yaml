@@ -1,0 +1,21 @@
+run_family: graph_natural_curriculum
+taxonomy_id: semantic_omr_v2
+model:
+  family: gat_edge_classifier
+  hidden_dim: 64
+  layers: 3
+  heads: 8
+training:
+  seed: 42
+  epochs: 100
+  negative_sampling_schedule:
+    - epoch_start: 1
+      neg_ratio: 3.0
+    - epoch_start: 35
+      neg_ratio: 8.0
+    - epoch_start: 70
+      neg_ratio: natural
+metrics:
+  primary: positive_macro_f1
+  report_no_relation_separately: true
+

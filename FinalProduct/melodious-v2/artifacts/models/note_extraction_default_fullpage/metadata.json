@@ -1,0 +1,13 @@
+{
+    "artifact_id":  "note_extraction_default_fullpage",
+    "role":  "default_local_note_extraction_checkpoint",
+    "checkpoint":  "artifacts/models/note_extraction_default_fullpage/best.pt",
+    "source_checkpoint":  "runs/detection/detection_136class_yolov8m_finetune_img1472_maxdet2000_v1/ultralytics/train/weights/best.pt",
+    "source_run_id":  "detection_136class_yolov8m_finetune_img1472_maxdet2000_v1",
+    "sha256":  "8e4eb9f898c781c32d332b5c5b998a4882dbb343daa856563bf3b88ce6de211a",
+    "saved_at_local":  "2026-06-05 13:08:28 +03:00",
+    "notes":  [
+                  "Stable default for local full-page note-extraction demo/transcription runs.",
+                  "Generated checkpoint artifact; not committed to git."
+              ]
+}
