@@ -1,4 +1,6 @@
-# Melodious V2
+# Melodious
+
+> **You are in the active product folder.** Repository root: [`../README.md`](../README.md) · Legacy archive (ignore): [`../Legacy version (Ignore)/`](../Legacy%20version%20(Ignore)/)
 
 Melodious V2 is a clean rebuild of the original OMR project. It targets a full-grade applied/deployment project: full-taxonomy detection, measured graph assembly, real upload-to-export service behavior, and cloud-ready deployment.
 

@@ -63,3 +63,8 @@ notebooks/
 !FinalProduct/melodious-v2/frontend/dist/
 !FinalProduct/**/*.onnx
 !FinalProduct/legacy_evidence/**
+
+# Local transfer artifacts
+*.bundle
+Melodious-Submission.zip
+.cursor/
